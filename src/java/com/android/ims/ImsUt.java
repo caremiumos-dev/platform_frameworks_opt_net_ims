@@ -535,13 +535,10 @@ public class ImsUt implements ImsUtInterface {
             return;
         }
 
-        String errorString;
-        // If ImsReasonInfo object does not have a String error code, use a
-        // default error string.
-        if (error.mExtraMessage == null) {
-            errorString = new String("IMS UT exception");
-        }
-        else {
+        String errorString = null;
+        // If ImsReasonInfo object have a String error code, use it.
+        // Else let ImsPhoneMmiCode use default error string.
+        if (error.mExtraMessage != null) {
             errorString = new String(error.mExtraMessage);
         }
         AsyncResult.forMessage(result, null, new ImsException(errorString, error.mCode));
