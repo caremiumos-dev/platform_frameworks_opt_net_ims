@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "548b02a3_9ce61c00",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1060461
+      },
+      "writtenOn": "2016-02-01T18:26:37Z",
+      "side": 1,
+      "message": "Will be called every time",
+      "range": {
+        "startLine": 205,
+        "startChar": 12,
+        "endLine": 205,
+        "endChar": 39
+      },
+      "revId": "b593de07e44c8445be279893c163c18945c1b419",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
