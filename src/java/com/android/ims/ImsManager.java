@@ -513,6 +513,13 @@ public class ImsManager {
      */
     private boolean updateVolteFeatureValue() throws ImsException {
         boolean available = isVolteEnabledByPlatform(mContext);
+        // If user can't edit Enhanced 4G LTE Mode, it assumes Enhanced 4G LTE Mode is always true.
+        // If user changes SIM from editable mode to uneditable mode, need to set Enhanced 4G LTE
+        // to default.
+        if (available && !getBooleanCarrierConfig(mContext,
+                    CarrierConfigManager.KEY_EDITABLE_ENHANCED_4G_LTE_BOOL)) {
+            setEnhanced4gLteModeSetting(mContext, true);
+        }
         boolean enabled = isEnhanced4gLteModeSettingEnabledByUser(mContext);
         boolean isNonTty = isNonTtyOrTtyOnVolteEnabled(mContext);
         boolean turnOn = available && enabled && isNonTty;
