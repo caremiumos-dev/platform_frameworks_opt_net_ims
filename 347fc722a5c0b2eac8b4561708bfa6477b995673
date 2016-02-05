@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11543cb0_e37b32c4",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1060461
+      },
+      "writtenOn": "2016-02-05T18:35:43Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right either",
+      "range": {
+        "startLine": 521,
+        "startChar": 12,
+        "endLine": 521,
+        "endChar": 39
+      },
+      "revId": "347fc722a5c0b2eac8b4561708bfa6477b995673",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
