@@ -109,6 +109,14 @@ public class ImsManager {
             "com.android.ims.IMS_SERVICE_UP";
 
     /**
+     * Action to broadcast when ImsPhone create.
+     * Internal use only.
+     * @hide
+     */
+    public static final String ACTION_IMS_PHONE_CREATED =
+            "org.codeaurora.ims.IMS_PHONE_CREATED";
+
+    /**
      * Action to broadcast when ImsService is down.
      * Internal use only.
      * @deprecated
