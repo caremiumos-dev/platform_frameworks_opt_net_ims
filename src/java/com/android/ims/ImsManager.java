@@ -307,7 +307,9 @@ public class ImsManager {
     public static boolean isWfcEnabledByUser(Context context) {
         int enabled = android.provider.Settings.Global.getInt(context.getContentResolver(),
                 android.provider.Settings.Global.WFC_IMS_ENABLED,
-                ImsConfig.FeatureValueConstants.OFF);
+                getBooleanCarrierConfig(context, CarrierConfigManager.KEY_WFC_ENABLED_DEFAULT_BOOL)
+                        ? ImsConfig.FeatureValueConstants.ON
+                        : ImsConfig.FeatureValueConstants.OFF);
         return (enabled == 1) ? true : false;
     }
 
@@ -355,7 +357,7 @@ public class ImsManager {
     public static int getWfcMode(Context context) {
         int setting = android.provider.Settings.Global.getInt(context.getContentResolver(),
                 android.provider.Settings.Global.WFC_IMS_MODE,
-                ImsConfig.WfcModeFeatureValueConstants.WIFI_PREFERRED);
+                getIntCarrierConfig(context, CarrierConfigManager.KEY_WFC_MODE_DEFAULT_INT));
         if (DBG) log("getWfcMode - setting=" + setting);
         return setting;
     }
@@ -967,6 +969,28 @@ public class ImsManager {
         } else {
             // Return static default defined in CarrierConfigManager.
             return CarrierConfigManager.getDefaultConfig().getBoolean(key);
+        }
+    }
+
+    /**
+     * Get the integer config from carrier config manager.
+     *
+     * @param context the context to get carrier service
+     * @param key config key defined in CarrierConfigManager
+     * @return integer value of corresponding key.
+     */
+    private static int getIntCarrierConfig(Context context, String key) {
+        CarrierConfigManager configManager = (CarrierConfigManager) context.getSystemService(
+                Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle b = null;
+        if (configManager != null) {
+            b = configManager.getConfig();
+        }
+        if (b != null) {
+            return b.getInt(key);
+        } else {
+            // Return static default defined in CarrierConfigManager.
+            return CarrierConfigManager.getDefaultConfig().getInt(key);
         }
     }
 
