@@ -291,6 +291,16 @@ public class ImsManager {
         return isProvisioned;
     }
 
+    /* Stub function for compatibility */
+    public static boolean isVtProvisionedOnDevice(Context context) {
+        return false;
+    }
+
+    /* Stub function for compatibility */
+    public static boolean isWfcProvisionedOnDevice(Context context) {
+        return true;
+    }
+
     /**
      * Returns a platform configuration for VT which may override the user setting.
      *
