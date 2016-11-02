@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6b43e48_d47df294",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2016-11-02T03:14:41Z",
+      "side": 1,
+      "message": "Why stubs?  We can\u0027t determine actual values here?",
+      "range": {
+        "startLine": 294,
+        "startChar": 4,
+        "endLine": 302,
+        "endChar": 5
+      },
+      "revId": "79ff2233f2cd5d504e238462d25894190d169496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
