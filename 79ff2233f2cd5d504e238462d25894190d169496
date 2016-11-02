@@ -22,6 +22,30 @@
       "revId": "79ff2233f2cd5d504e238462d25894190d169496",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a6b43e48_7484065a",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2016-11-02T04:26:12Z",
+      "side": 1,
+      "message": "Well, it\u0027s a tale of multiple cherry picks. In order to make my very simple addition of the IMS Status, I had to cherry pick a CL into AOSP that had substantial changes to RadioInfo to make the changes on top. That CL depends on these functions, which were also only implemented after the cut for this branch. Unfortunately, those functions were implemented on top of a major change in ImsManager to properly cache values across threads, and I recall that then requires changes in CarrierConfigManager (and maybe elsewhere in settings) that are only present post-NYC. In N, there was no concept of WFC provisioning since we hadn\u0027t needed it, and there was no support for VT, so these values are always constant. The cleanest way to break the sad cycle of cherry picks is to just stub these functions out with a DO NOT MERGE since this is *only* a problem on AOSP that will disappear with the next push. The alternative is to put all this in Master and remember to cherry pick it out after the next AOSP push, which in hindsight would have been the path of least resistance.",
+      "parentUuid": "a6b43e48_d47df294",
+      "range": {
+        "startLine": 294,
+        "startChar": 4,
+        "endLine": 302,
+        "endChar": 5
+      },
+      "revId": "79ff2233f2cd5d504e238462d25894190d169496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
