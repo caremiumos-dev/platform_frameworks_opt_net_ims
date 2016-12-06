@@ -26,6 +26,7 @@ import java.util.Set;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.telecom.ConferenceParticipant;
@@ -73,6 +74,8 @@ public class ImsCall implements ICall {
     // TODO: Set this flag to FORCE_DEBUG once the new conference call logic gets more mileage
     // across different IMS implementations.
     private static final boolean CONF_DBG = true;
+
+    private static final boolean DBG_BUILD = !Build.TYPE.equals("user");
 
     private List<ConferenceParticipant> mConferenceParticipants;
     /**
@@ -729,8 +732,11 @@ public class ImsCall implements ICall {
      */
     public List<ConferenceParticipant> getConferenceParticipants() {
         synchronized(mLockObj) {
-            logi("getConferenceParticipants :: mConferenceParticipants"
-                    + mConferenceParticipants);
+            // Refrain from logging user personal information like phone number in user build.
+            if (DBG_BUILD) {
+                logi("getConferenceParticipants :: mConferenceParticipants"
+                        + mConferenceParticipants);
+            }
             if (mConferenceParticipants == null) {
                 return null;
             }
@@ -1037,7 +1043,10 @@ public class ImsCall implements ICall {
      */
     public void start(ImsCallSession session, String callee)
             throws ImsException {
-        logi("start(1) :: session=" + session);
+        // Refrain from logging user personal information like phone number in user build.
+        if (DBG_BUILD) {
+            logi("start(1) :: session=" + session);
+        }
 
         synchronized(mLockObj) {
             mSession = session;
@@ -1062,7 +1071,10 @@ public class ImsCall implements ICall {
      */
     public void start(ImsCallSession session, String[] participants)
             throws ImsException {
-        logi("start(n) :: session=" + session);
+        // Refrain from logging user personal information like phone number in user build.
+        if (DBG_BUILD) {
+            logi("start(n) :: session=" + session);
+        }
 
         synchronized(mLockObj) {
             mSession = session;
@@ -1677,11 +1689,16 @@ public class ImsCall implements ICall {
             String endpoint = confInfo.getString(ImsConferenceState.ENDPOINT);
 
             if (CONF_DBG) {
-                logi("notifyConferenceStateUpdated :: key=" + key +
-                        ", status=" + status +
-                        ", user=" + user +
-                        ", displayName= " + displayName +
-                        ", endpoint=" + endpoint);
+                // Refrain from logging user personal information like phone number in user build.
+                if (DBG_BUILD) {
+                    logi("notifyConferenceStateUpdated :: key=" + key +
+                            ", status=" + status +
+                            ", user=" + user +
+                            ", displayName= " + displayName +
+                            ", endpoint=" + endpoint);
+                } else {
+                    logi("notifyConferenceStateUpdated :: status=" + status);
+                }
             }
 
             Uri handle = Uri.parse(user);
