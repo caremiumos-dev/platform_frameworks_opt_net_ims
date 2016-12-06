@@ -21,6 +21,7 @@ import java.util.Map;
 
 import android.os.AsyncResult;
 import android.os.Bundle;
+import android.os.Build;
 import android.os.Message;
 import android.os.RemoteException;
 import android.telephony.Rlog;
@@ -65,6 +66,7 @@ public class ImsUt implements ImsUtInterface {
 
     private static final String TAG = "ImsUt";
     private static final boolean DBG = true;
+    private static final boolean DBG_BUILD = !Build.TYPE.equals("user");
 
     // For synchronization of private variables
     private Object mLockObj = new Object();
@@ -148,8 +150,13 @@ public class ImsUt implements ImsUtInterface {
     @Override
     public void queryCallForward(int condition, String number, Message result) {
         if (DBG) {
-            log("queryCallForward :: Ut=" + miUt + ", condition=" + condition
-                    + ", number=" + number);
+            // Refrain from logging user personal information like phone number in user build.
+            if (DBG_BUILD) {
+                log("queryCallForward :: Ut=" + miUt + ", condition=" + condition
+                        + ", number=" + number);
+            } else {
+                log("queryCallForward :: Ut=" + miUt + ", condition=" + condition);
+            }
         }
 
         synchronized(mLockObj) {
@@ -348,9 +355,16 @@ public class ImsUt implements ImsUtInterface {
     public void updateCallForward(int action, int condition, String number,
             int serviceClass, int timeSeconds, Message result) {
         if (DBG) {
-            log("updateCallForward :: Ut=" + miUt + ", action=" + action
-                    + ", condition=" + condition + ", number=" + number
-                    +  ", serviceClass=" + serviceClass + ", timeSeconds=" + timeSeconds);
+            // Refrain from logging user personal information like phone number in user build.
+            if (DBG_BUILD) {
+                log("updateCallForward :: Ut=" + miUt + ", action=" + action
+                        + ", condition=" + condition + ", number=" + number
+                        + ", serviceClass=" + serviceClass + ", timeSeconds=" + timeSeconds);
+            } else {
+                log("updateCallForward :: Ut=" + miUt + ", action=" + action
+                        + ", condition=" + condition + ", serviceClass="
+                        + serviceClass + ", timeSeconds=" + timeSeconds);
+            }
         }
 
         synchronized(mLockObj) {
