@@ -32,6 +32,7 @@ import android.provider.Settings;
 import android.telecom.TelecomManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.Rlog;
+import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsServiceProxy;
@@ -2213,7 +2214,7 @@ public class ImsManager {
     /**
      * Adapter class for {@link IImsRegistrationListener}.
      */
-    private class ImsRegistrationListenerProxy extends IImsRegistrationListener.Stub {
+    private static class ImsRegistrationListenerProxy extends IImsRegistrationListener.Stub {
         private int mServiceClass;
         private ImsConnectionStateListener mListener;
 
@@ -2234,7 +2235,7 @@ public class ImsManager {
             }
 
             if (mListener != null) {
-                mListener.onImsConnected();
+                mListener.onImsConnected(ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN);
             }
         }
 
@@ -2245,7 +2246,7 @@ public class ImsManager {
             }
 
             if (mListener != null) {
-                mListener.onImsProgressing();
+                mListener.onImsProgressing(ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN);
             }
         }
 
@@ -2258,7 +2259,6 @@ public class ImsManager {
             }
 
             if (mListener != null) {
-                mListener.onImsConnected();
                 mListener.onImsConnected(imsRadioTech);
             }
         }
@@ -2272,7 +2272,7 @@ public class ImsManager {
             }
 
             if (mListener != null) {
-                mListener.onImsProgressing();
+                mListener.onImsProgressing(imsRadioTech);
             }
         }
 
@@ -2317,7 +2317,7 @@ public class ImsManager {
                     serviceClass + ", event=" + event);
 
             if (mListener != null) {
-                mListener.onImsConnected();
+                mListener.onImsConnected(ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN);
             }
         }
 
