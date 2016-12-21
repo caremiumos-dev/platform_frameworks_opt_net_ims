@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.concurrent.CountDownLatch;
