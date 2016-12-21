@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97c12e20_6627c7cb",
+        "filename": "tests/src/com/android/ims/ImsTestBase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2016-12-21T01:42:51Z",
+      "side": 1,
+      "message": "Should just call waitForHandlerActionDelayed with a delay of 0",
+      "range": {
+        "startLine": 48,
+        "startChar": 25,
+        "endLine": 48,
+        "endChar": 45
+      },
+      "revId": "3abff8367abb58f0dee5482cce340d323c4cc341",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
