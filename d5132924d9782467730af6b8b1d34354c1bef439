@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "885bce3e_9ce1117e",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-01-19T18:19:43Z",
+      "side": 1,
+      "message": "sub?",
+      "range": {
+        "startLine": 143,
+        "startChar": 60,
+        "endLine": 143,
+        "endChar": 64
+      },
+      "revId": "d5132924d9782467730af6b8b1d34354c1bef439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_5caa7916",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-01-19T18:19:43Z",
+      "side": 1,
+      "message": "Suggest: mBoundServicesLock",
+      "range": {
+        "startLine": 189,
+        "startChar": 25,
+        "endLine": 189,
+        "endChar": 30
+      },
+      "revId": "d5132924d9782467730af6b8b1d34354c1bef439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_3c9fc5f4",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-01-19T18:19:43Z",
+      "side": 1,
+      "message": "nit space.",
+      "range": {
+        "startLine": 190,
+        "startChar": 3,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "d5132924d9782467730af6b8b1d34354c1bef439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_dc9549d1",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-01-19T18:19:43Z",
+      "side": 1,
+      "message": "Array",
+      "range": {
+        "startLine": 218,
+        "startChar": 7,
+        "endLine": 218,
+        "endChar": 11
+      },
+      "revId": "d5132924d9782467730af6b8b1d34354c1bef439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_bc9295e5",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-01-19T18:19:43Z",
+      "side": 1,
+      "message": "One too many Is. :)",
+      "range": {
+        "startLine": 220,
+        "startChar": 73,
+        "endLine": 220,
+        "endChar": 74
+      },
+      "revId": "d5132924d9782467730af6b8b1d34354c1bef439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_1c59a16c",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-01-19T18:19:43Z",
+      "side": 1,
+      "message": "Suggest: getImsServiceController",
+      "range": {
+        "startLine": 273,
+        "startChar": 33,
+        "endLine": 273,
+        "endChar": 46
+      },
+      "revId": "d5132924d9782467730af6b8b1d34354c1bef439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_9c647125",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2017-01-19T18:19:43Z",
+      "side": 1,
+      "message": "Just in case, should handle slotId \u003c 0.",
+      "range": {
+        "startLine": 275,
+        "startChar": 11,
+        "endLine": 275,
+        "endChar": 31
+      },
+      "revId": "d5132924d9782467730af6b8b1d34354c1bef439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
