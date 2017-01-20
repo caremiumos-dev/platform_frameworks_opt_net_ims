@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "885bce3e_33a5a6a3",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-01-20T21:43:56Z",
+      "side": 1,
+      "message": "getters shouldn\u0027t have side effects.",
+      "range": {
+        "startLine": 277,
+        "startChar": 33,
+        "endLine": 277,
+        "endChar": 56
+      },
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_e28f3911",
+        "filename": "src/java/com/android/ims/ImsServiceController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-01-20T21:43:56Z",
+      "side": 1,
+      "message": "Unset mIsBound and mIsBinding here?",
+      "range": {
+        "startLine": 94,
+        "startChar": 22,
+        "endLine": 94,
+        "endChar": 27
+      },
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_ce910173",
+        "filename": "src/java/com/android/ims/ImsServiceController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-01-20T21:43:56Z",
+      "side": 1,
+      "message": "nit: extra space",
+      "range": {
+        "startLine": 125,
+        "startChar": 28,
+        "endLine": 125,
+        "endChar": 29
+      },
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_cec22134",
+        "filename": "src/java/com/android/ims/ImsServiceController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-01-20T21:43:56Z",
+      "side": 1,
+      "message": "Should be moved inside the synchronized block above. otherwise there\u0027s the potential for a race condition where if bind() is called after the above synch block but before cleanupService, it\u0027ll see mIsBound as true",
+      "range": {
+        "startLine": 241,
+        "startChar": 8,
+        "endLine": 241,
+        "endChar": 22
+      },
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_f85ec620",
+        "filename": "src/java/com/android/ims/ImsServiceController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-01-20T21:43:56Z",
+      "side": 1,
+      "message": "This eventually tries to acquire the mBoundServices lock in ImsResolver, but it\u0027s called from within the mLock in ImsServiceController. Potential deadlock.\n\n(the opposite order of lock acquisition is in ImsResolver#getImsServiceController -\u003e ImsServiceController#addImsServiceFeatureListener)",
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_aefa4d96",
+        "filename": "src/java/com/android/ims/ImsServiceController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-01-20T21:43:56Z",
+      "side": 1,
+      "message": "should you also stop the handler thread here?",
+      "range": {
+        "startLine": 388,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 30
+      },
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
