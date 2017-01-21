@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "885bce3e_31a5998a",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-21T01:28:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "885bce3e_33a5a6a3",
+      "range": {
+        "startLine": 277,
+        "startChar": 33,
+        "endLine": 277,
+        "endChar": 56
+      },
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "885bce3e_e28f3911",
         "filename": "src/java/com/android/ims/ImsServiceController.java",
         "patchSetId": 9
@@ -36,6 +60,30 @@
       "writtenOn": "2017-01-20T21:43:56Z",
       "side": 1,
       "message": "Unset mIsBound and mIsBinding here?",
+      "range": {
+        "startLine": 94,
+        "startChar": 22,
+        "endLine": 94,
+        "endChar": 27
+      },
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_b1e2a9b4",
+        "filename": "src/java/com/android/ims/ImsServiceController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-21T01:28:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "885bce3e_e28f3911",
       "range": {
         "startLine": 94,
         "startChar": 22,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "885bce3e_d1399d44",
+        "filename": "src/java/com/android/ims/ImsServiceController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-21T01:28:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "885bce3e_ce910173",
+      "range": {
+        "startLine": 125,
+        "startChar": 28,
+        "endLine": 125,
+        "endChar": 29
+      },
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "885bce3e_cec22134",
         "filename": "src/java/com/android/ims/ImsServiceController.java",
         "patchSetId": 9
@@ -82,6 +154,30 @@
       "writtenOn": "2017-01-20T21:43:56Z",
       "side": 1,
       "message": "Should be moved inside the synchronized block above. otherwise there\u0027s the potential for a race condition where if bind() is called after the above synch block but before cleanupService, it\u0027ll see mIsBound as true",
+      "range": {
+        "startLine": 241,
+        "startChar": 8,
+        "endLine": 241,
+        "endChar": 22
+      },
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_71dc31f5",
+        "filename": "src/java/com/android/ims/ImsServiceController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-21T01:28:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "885bce3e_cec22134",
       "range": {
         "startLine": 241,
         "startChar": 8,
@@ -111,6 +207,24 @@
     },
     {
       "key": {
+        "uuid": "885bce3e_3196b9dd",
+        "filename": "src/java/com/android/ims/ImsServiceController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-21T01:28:39Z",
+      "side": 1,
+      "message": "I will change the lock in getImsServiceController to end synchronization at:\nImsServiceController controller \u003d services.get(feature);\n\nTherefore, when addImsServiceFeatureListener is called, i no longer have the lock.",
+      "parentUuid": "885bce3e_f85ec620",
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "885bce3e_aefa4d96",
         "filename": "src/java/com/android/ims/ImsServiceController.java",
         "patchSetId": 9
@@ -122,6 +236,30 @@
       "writtenOn": "2017-01-20T21:43:56Z",
       "side": 1,
       "message": "should you also stop the handler thread here?",
+      "range": {
+        "startLine": 388,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 30
+      },
+      "revId": "6f82f1cf5a191c05eaab960e603d88a189857848",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "885bce3e_51448db2",
+        "filename": "src/java/com/android/ims/ImsServiceController.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-01-21T01:28:39Z",
+      "side": 1,
+      "message": "No, there are cases when cleanUpService is called where the handler is still needed, such as when DeathRecipient.binderDied is called. In that case, we post a message to rebind.",
+      "parentUuid": "885bce3e_aefa4d96",
       "range": {
         "startLine": 388,
         "startChar": 0,
