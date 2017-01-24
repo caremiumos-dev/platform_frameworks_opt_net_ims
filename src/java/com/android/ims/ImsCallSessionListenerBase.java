@@ -239,5 +239,22 @@ public abstract class ImsCallSessionListenerBase extends IImsCallSessionListener
             ImsSuppServiceNotification suppSrvNotification) {
         // no-op
     }
+
+    /**
+     * Received RTT modify request from other party
+     */
+    @Override
+    public void callSessionRttModifyRequestReceived(IImsCallSession session) {
+        // no-op
+    }
+
+    /**
+     * Received response for RTT modify request
+     */
+    @Override
+    public void callSessionRttModifyResponseReceived(int status) {
+        // no -op
+    }
+
 }
 

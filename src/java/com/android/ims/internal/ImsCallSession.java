@@ -402,6 +402,15 @@ public class ImsCallSession {
         public void callSessionSuppServiceReceived(ImsCallSession session,
                 ImsSuppServiceNotification suppServiceInfo) {
         }
+
+        public void callSessionRttModifyRequestReceived(ImsCallSession session) {
+            // no-op
+        }
+
+        public void callSessionRttModifyResponseReceived(int status) {
+            // no-op
+        }
+
     }
 
     private final IImsCallSession miSession;
@@ -1265,6 +1274,25 @@ public class ImsCallSession {
             }
         }
 
+        /**
+         * Received RTT modify request from other party
+         */
+        @Override
+        public void callSessionRttModifyRequestReceived(IImsCallSession session) {
+            if (mListener != null) {
+                mListener.callSessionRttModifyRequestReceived(ImsCallSession.this);
+            }
+        }
+
+        /**
+         * Received response for RTT modify request
+         */
+        @Override
+        public void callSessionRttModifyResponseReceived(int status) {
+            if (mListener != null) {
+                mListener.callSessionRttModifyResponseReceived(status);
+            }
+        }
     }
 
     /**
