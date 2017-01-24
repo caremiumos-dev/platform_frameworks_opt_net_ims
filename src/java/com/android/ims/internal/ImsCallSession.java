@@ -402,6 +402,28 @@ public class ImsCallSession {
         public void callSessionSuppServiceReceived(ImsCallSession session,
                 ImsSuppServiceNotification suppServiceInfo) {
         }
+
+        /**
+         * Received RTT modify request from Remote Party
+         */
+        public void callSessionRttModifyRequestReceived(ImsCallSession session,
+            ImsCallProfile callProfile) {
+            // no-op
+        }
+
+        /**
+         * Received response for RTT modify request
+         */
+        public void callSessionRttModifyResponseReceived(int status) {
+            // no -op
+        }
+
+        /**
+         * Device received RTT message from Remote UE
+         */
+        public void callSessionRttMessageReceived(String rttMessage) {
+            // no-op
+        }
     }
 
     private final IImsCallSession miSession;
@@ -1262,6 +1284,37 @@ public class ImsCallSession {
                 ImsSuppServiceNotification suppServiceInfo ) {
             if (mListener != null) {
                 mListener.callSessionSuppServiceReceived(ImsCallSession.this, suppServiceInfo);
+            }
+        }
+
+        /**
+         * Received RTT modify request from remote party
+         */
+        @Override
+        public void callSessionRttModifyRequestReceived(IImsCallSession session,
+                ImsCallProfile callProfile) {
+            if (mListener != null) {
+                mListener.callSessionRttModifyRequestReceived(ImsCallSession.this, callProfile);
+            }
+        }
+
+        /**
+         * Received response for RTT modify request
+         */
+        @Override
+        public void callSessionRttModifyResponseReceived(int status) {
+            if (mListener != null) {
+                mListener.callSessionRttModifyResponseReceived(status);
+            }
+        }
+
+        /**
+         * RTT Message received
+         */
+        @Override
+        public void callSessionRttMessageReceived(String rttMessage) {
+            if (mListener != null) {
+                mListener.callSessionRttMessageReceived(rttMessage);
             }
         }
 
