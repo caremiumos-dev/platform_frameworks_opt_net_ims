@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea0d7add_45762346",
+        "filename": "src/java/com/android/ims/ImsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1135723
+      },
+      "writtenOn": "2017-01-31T21:44:59Z",
+      "side": 1,
+      "message": "This could very well be part of FeatureConstants but currently since feature is not tied with any RAT, placed it here.",
+      "range": {
+        "startLine": 482,
+        "startChar": 32,
+        "endLine": 482,
+        "endChar": 51
+      },
+      "revId": "0685b3947f8fcbf7fb25d2f253f7a42b4655b771",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
