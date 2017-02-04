@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd232d34_968caab5",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2017-02-04T00:36:39Z",
+      "side": 1,
+      "message": "I suppose the listener must have been added by addRegistrationListener. Could we specify this assumption and the behavior if not met?",
+      "range": {
+        "startLine": 997,
+        "startChar": 14,
+        "endLine": 997,
+        "endChar": 22
+      },
+      "revId": "39ff0d8d2b08079c262374876d8fe93ba7ca9119",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4a5d341_a52f2f9d",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2017-02-04T00:36:39Z",
+      "side": 1,
+      "message": "Just curious: is it OK to created a new object instead of re-using the one passed to addRegistrationListener?",
+      "range": {
+        "startLine": 1012,
+        "startChar": 20,
+        "endLine": 1012,
+        "endChar": 51
+      },
+      "revId": "39ff0d8d2b08079c262374876d8fe93ba7ca9119",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
