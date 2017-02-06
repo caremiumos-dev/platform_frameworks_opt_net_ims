@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f5c98bd8_f8a078f9",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-02-06T18:21:37Z",
+      "side": 1,
+      "message": "Will update comments",
+      "parentUuid": "dd232d34_968caab5",
+      "range": {
+        "startLine": 997,
+        "startChar": 14,
+        "endLine": 997,
+        "endChar": 22
+      },
+      "revId": "39ff0d8d2b08079c262374876d8fe93ba7ca9119",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4a5d341_a52f2f9d",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-02-04T00:36:39Z",
       "side": 1,
       "message": "Just curious: is it OK to created a new object instead of re-using the one passed to addRegistrationListener?",
+      "range": {
+        "startLine": 1012,
+        "startChar": 20,
+        "endLine": 1012,
+        "endChar": 51
+      },
+      "revId": "39ff0d8d2b08079c262374876d8fe93ba7ca9119",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "555826fb_31402b0e",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-02-06T18:21:37Z",
+      "side": 1,
+      "message": "Good catch, i forgot that we are creating a proxy... i may have to hold the proxies in a set and then get the listener proxy that corresponds with the listener provided. Otherwise, the ImsService will never remove any of the listeners because they are different.",
+      "parentUuid": "b4a5d341_a52f2f9d",
       "range": {
         "startLine": 1012,
         "startChar": 20,
