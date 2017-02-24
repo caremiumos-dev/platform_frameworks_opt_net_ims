@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c2216e6_a1d6073d",
+        "filename": "src/java/com/android/ims/ImsCallSessionListenerBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-02-24T01:53:46Z",
+      "side": 1,
+      "message": "Update comment to indicate that the requested RTT status will be in ImsCallProfile",
+      "range": {
+        "startLine": 245,
+        "startChar": 53,
+        "endLine": 245,
+        "endChar": 73
+      },
+      "revId": "2280af1ad092acf4d96ef08b01e8a6e1583691b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
