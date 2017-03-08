@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "14251696_cece8656",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-08T17:46:51Z",
+      "side": 1,
+      "message": "Hasn\u0027t been implemented yet",
+      "parentUuid": "f642a7c5_f77a93c1",
+      "revId": "cb8d6130769b01e1c0f0954311f3e361f36adef4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a8892e9_22ea2bc0",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "2f39d3bc_3d543882",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-08T17:46:51Z",
+      "side": 1,
+      "message": "I touched on this in the doc. I outlined the settings/system properties that would need to have a slot or sub id attached. I am unable to do the work needed to separate each of these settings at this time for MSIM. \n\nBy separating each of these methods into a \"ForSlot\" variant, I was able to outline which methods would need to be changed for MSIM to work correctly.",
+      "parentUuid": "0a8892e9_22ea2bc0",
+      "range": {
+        "startLine": 272,
+        "startChar": 33,
+        "endLine": 272,
+        "endChar": 73
+      },
+      "revId": "cb8d6130769b01e1c0f0954311f3e361f36adef4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1d83e37_74cc9d79",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 1
@@ -53,6 +95,24 @@
       "writtenOn": "2017-03-08T02:23:50Z",
       "side": 1,
       "message": "Was it intentional to leave out the logic in lines 1835 -1839, in this method?",
+      "revId": "cb8d6130769b01e1c0f0954311f3e361f36adef4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "367706b6_8bcd633e",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1885,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-08T17:46:51Z",
+      "side": 1,
+      "message": "Good catch! Updating patch...",
+      "parentUuid": "e1d83e37_74cc9d79",
       "revId": "cb8d6130769b01e1c0f0954311f3e361f36adef4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
