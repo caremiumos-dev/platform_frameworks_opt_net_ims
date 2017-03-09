@@ -142,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "80fb4bc4_dd5c4c3c",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-09T00:30:03Z",
+      "side": 1,
+      "message": "Good point, by default, isNetworkRoaming() uses the default sub id. Instead, i should be using isNetworkRoaming(subid)",
+      "parentUuid": "aa1786bf_ffae874a",
+      "range": {
+        "startLine": 879,
+        "startChar": 26,
+        "endLine": 879,
+        "endChar": 42
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74ab3ec5_86bc3120",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 2
@@ -153,6 +177,30 @@
       "writtenOn": "2017-03-09T00:02:15Z",
       "side": 1,
       "message": "nit: append space\n\nalso this code looks like dark magic",
+      "range": {
+        "startLine": 1070,
+        "startChar": 28,
+        "endLine": 1070,
+        "endChar": 34
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e47445f_a84d0f76",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-09T00:30:03Z",
+      "side": 1,
+      "message": "I agree.",
+      "parentUuid": "74ab3ec5_86bc3120",
       "range": {
         "startLine": 1070,
         "startChar": 28,
@@ -188,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "350f05b8_6d6b1727",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-09T00:30:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6071e859_f28ccfcc",
+      "range": {
+        "startLine": 1830,
+        "startChar": 0,
+        "endLine": 1830,
+        "endChar": 56
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dcb64f9f_03343f1d",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 2
@@ -199,6 +271,30 @@
       "writtenOn": "2017-03-09T00:02:15Z",
       "side": 1,
       "message": "bundle?",
+      "range": {
+        "startLine": 1842,
+        "startChar": 49,
+        "endLine": 1842,
+        "endChar": 55
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0bba1a28_29873849",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1842,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-09T00:30:03Z",
+      "side": 1,
+      "message": "yerp",
+      "parentUuid": "dcb64f9f_03343f1d",
       "range": {
         "startLine": 1842,
         "startChar": 49,
