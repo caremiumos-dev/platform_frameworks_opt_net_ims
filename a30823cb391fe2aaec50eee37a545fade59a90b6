@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "4ea77229_b11f5f0f",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-09T17:51:18Z",
+      "side": 1,
+      "message": "I will add the check, good idea! \n\nIt looks like the MobileNetworkSettings, which uses this code, checks KEY_EDITABLE_ENHANCED_4G_LTE_BOOL manually before setting, but that doesn\u0027t mean a misbehaving service couldn\u0027t change the setting.",
+      "parentUuid": "94d0a130_95a1454f",
+      "range": {
+        "startLine": 305,
+        "startChar": 16,
+        "endLine": 305,
+        "endChar": 50
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "008ff1b9_13245fc6",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 2
