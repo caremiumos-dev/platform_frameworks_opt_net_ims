@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a564cc7_d521d88b",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-03-09T00:02:15Z",
+      "side": 1,
+      "message": "Should you check KEY_EDITABLE_ENHANCED_4G_LTE_BOOL before setting it?",
+      "range": {
+        "startLine": 305,
+        "startChar": 16,
+        "endLine": 305,
+        "endChar": 50
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "008ff1b9_13245fc6",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-03-09T00:02:15Z",
+      "side": 1,
+      "message": "what",
+      "range": {
+        "startLine": 530,
+        "startChar": 15,
+        "endLine": 530,
+        "endChar": 45
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a71b77b_1ecf256a",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-03-09T00:02:15Z",
+      "side": 1,
+      "message": "Is there a per-slot notion for turning IMS on/off? I notice that there\u0027s a setting to control whether it\u0027s allowed per slot.",
+      "range": {
+        "startLine": 725,
+        "startChar": 16,
+        "endLine": 725,
+        "endChar": 25
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aa1786bf_ffae874a",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-03-09T00:02:15Z",
+      "side": 1,
+      "message": "Does this depend on slot? If you had a canada sim and a USA sim, one of them could be roaming but the other one wouldn\u0027t be",
+      "range": {
+        "startLine": 879,
+        "startChar": 26,
+        "endLine": 879,
+        "endChar": 42
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "74ab3ec5_86bc3120",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-03-09T00:02:15Z",
+      "side": 1,
+      "message": "nit: append space\n\nalso this code looks like dark magic",
+      "range": {
+        "startLine": 1070,
+        "startChar": 28,
+        "endLine": 1070,
+        "endChar": 34
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6071e859_f28ccfcc",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-03-09T00:02:15Z",
+      "side": 1,
+      "message": "remove @param. here and below too",
+      "range": {
+        "startLine": 1830,
+        "startChar": 0,
+        "endLine": 1830,
+        "endChar": 56
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcb64f9f_03343f1d",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1842,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-03-09T00:02:15Z",
+      "side": 1,
+      "message": "bundle?",
+      "range": {
+        "startLine": 1842,
+        "startChar": 49,
+        "endLine": 1842,
+        "endChar": 55
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
