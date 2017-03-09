@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "0d1906f1_f21aee7e",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-09T00:26:36Z",
+      "side": 1,
+      "message": "I didn\u0027t write it. :|",
+      "parentUuid": "008ff1b9_13245fc6",
+      "range": {
+        "startLine": 530,
+        "startChar": 15,
+        "endLine": 530,
+        "endChar": 45
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a71b77b_1ecf256a",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 2
@@ -59,6 +83,30 @@
       "writtenOn": "2017-03-09T00:02:15Z",
       "side": 1,
       "message": "Is there a per-slot notion for turning IMS on/off? I notice that there\u0027s a setting to control whether it\u0027s allowed per slot.",
+      "range": {
+        "startLine": 725,
+        "startChar": 16,
+        "endLine": 725,
+        "endChar": 25
+      },
+      "revId": "a30823cb391fe2aaec50eee37a545fade59a90b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "38ed44a2_2ac1852c",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-09T00:26:36Z",
+      "side": 1,
+      "message": "This is already being called on a per slot basis. Each slot has a \"turnOnIms\" and \"turnOffIms\" API.",
+      "parentUuid": "9a71b77b_1ecf256a",
       "range": {
         "startLine": 725,
         "startChar": 16,
