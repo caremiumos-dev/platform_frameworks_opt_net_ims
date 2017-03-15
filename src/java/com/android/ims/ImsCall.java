@@ -3392,6 +3392,8 @@ public class ImsCall implements ICall {
         sb.append(mWasVideoCall ? "Y" : "N");
         sb.append(" isWifi: ");
         sb.append(isWifiCall() ? "Y" : "N");
+        sb.append(" isVolte: ");
+        sb.append(isVolteCall() ? "Y" : "N");
         sb.append(" session:");
         sb.append(mSession);
         sb.append(" transientSession:");
@@ -3491,6 +3493,25 @@ public class ImsCall implements ICall {
             }
 
             return radioTechnology;
+        }
+    }
+
+    /**
+     * Determines if the current call radio access technology is over LTE.
+     * Note: This depends on the RIL exposing the {@link ImsCallProfile#EXTRA_CALL_RAT_TYPE} extra.
+     * This method is primarily intended to be used for marking call as volte call and showing
+     * volte icon for this call, that is {@link android.telecom.Connection#PROPERTY_LTE} and
+     * {@link android.telecom.Call.Details#PROPERTY_LTE}.
+     *
+     * @return {@code true} if the call is over LTE, {@code false} otherwise.
+     */
+    public boolean isVolteCall() {
+        synchronized(mLockObj) {
+            if (mCallProfile == null) {
+                return false;
+            }
+            int radioTechnology = getRadioTechnology();
+            return radioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_LTE;
         }
     }
 
