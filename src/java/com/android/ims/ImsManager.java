@@ -492,6 +492,10 @@ public class ImsManager {
      * {@link CarrierConfigManager#KEY_ENHANCED_4G_LTE_ON_BY_DEFAULT_BOOL}.
      */
     public void setEnhanced4gLteModeSetting(boolean enabled) {
+        if (enabled && !isVolteProvisionedOnDevice()) {
+            log("setEnhanced4gLteModeSetting: Not possible to enable VoLTE due to provisioning.");
+            return;
+        }
         int subId = getSubId();
         // If editable=false or hidden=true, we must keep default advanced 4G mode.
         if (!getBooleanCarrierConfig(CarrierConfigManager.KEY_EDITABLE_ENHANCED_4G_LTE_BOOL) ||
@@ -783,6 +787,11 @@ public class ImsManager {
      * Change persistent VT enabled setting for slot.
      */
     public void setVtSetting(boolean enabled) {
+        if (enabled && !isVtProvisionedOnDevice()) {
+            log("setVtSetting: Not possible to enable Vt due to provisioning.");
+            return;
+        }
+
         int subId = getSubId();
         if (isSubIdValid(subId)) {
             SubscriptionManager.setSubscriptionProperty(subId, SubscriptionManager.VT_IMS_ENABLED,
@@ -900,6 +909,11 @@ public class ImsManager {
      * Change persistent WFC enabled setting for slot.
      */
     public void setWfcSetting(boolean enabled) {
+        if (enabled && !isWfcProvisionedOnDevice()) {
+            log("setWfcSetting: Not possible to enable WFC due to provisioning.");
+            return;
+        }
+
         int subId = getSubId();
         if (isSubIdValid(subId)) {
             SubscriptionManager.setSubscriptionProperty(subId, SubscriptionManager.WFC_IMS_ENABLED,
@@ -920,6 +934,10 @@ public class ImsManager {
      * @param wfcMode The WFC preference if WFC is enabled
      */
     public void setWfcNonPersistent(boolean enabled, int wfcMode) {
+        if (enabled && !isWfcProvisionedOnDevice()) {
+            log("setWfcNonPersistent: Not possible to enable WFC due to provisioning.");
+            return;
+        }
         // Force IMS to register over LTE when turning off WFC
         int imsWfcModeFeatureValue =
                 enabled ? wfcMode : ImsConfig.WfcModeFeatureValueConstants.CELLULAR_PREFERRED;
