@@ -45,6 +45,7 @@ import android.telephony.ims.aidl.IImsSmsListener;
 import android.telephony.ims.feature.CapabilityChangeRequest;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.feature.MmTelFeature;
+import android.telephony.ims.stub.ImsConfigImplBase;
 import android.util.Log;
 
 import com.android.ims.internal.IImsCallSession;
@@ -492,6 +493,10 @@ public class ImsManager {
      * {@link CarrierConfigManager#KEY_ENHANCED_4G_LTE_ON_BY_DEFAULT_BOOL}.
      */
     public void setEnhanced4gLteModeSetting(boolean enabled) {
+        if (enabled && !isVolteProvisionedOnDevice()) {
+            log("setEnhanced4gLteModeSetting: Not possible to enable VoLTE due to provisioning.");
+            return;
+        }
         int subId = getSubId();
         // If editable=false or hidden=true, we must keep default advanced 4G mode.
         if (!getBooleanCarrierConfig(CarrierConfigManager.KEY_EDITABLE_ENHANCED_4G_LTE_BOOL) ||
@@ -783,6 +788,11 @@ public class ImsManager {
      * Change persistent VT enabled setting for slot.
      */
     public void setVtSetting(boolean enabled) {
+        if (enabled && !isVtProvisionedOnDevice()) {
+            log("setVtSetting: Not possible to enable Vt due to provisioning.");
+            return;
+        }
+
         int subId = getSubId();
         if (isSubIdValid(subId)) {
             SubscriptionManager.setSubscriptionProperty(subId, SubscriptionManager.VT_IMS_ENABLED,
@@ -900,6 +910,11 @@ public class ImsManager {
      * Change persistent WFC enabled setting for slot.
      */
     public void setWfcSetting(boolean enabled) {
+        if (enabled && !isWfcProvisionedOnDevice()) {
+            log("setWfcSetting: Not possible to enable WFC due to provisioning.");
+            return;
+        }
+
         int subId = getSubId();
         if (isSubIdValid(subId)) {
             SubscriptionManager.setSubscriptionProperty(subId, SubscriptionManager.WFC_IMS_ENABLED,
@@ -920,6 +935,10 @@ public class ImsManager {
      * @param wfcMode The WFC preference if WFC is enabled
      */
     public void setWfcNonPersistent(boolean enabled, int wfcMode) {
+        if (enabled && !isWfcProvisionedOnDevice()) {
+            log("setWfcNonPersistent: Not possible to enable WFC due to provisioning.");
+            return;
+        }
         // Force IMS to register over LTE when turning off WFC
         int imsWfcModeFeatureValue =
                 enabled ? wfcMode : ImsConfig.WfcModeFeatureValueConstants.CELLULAR_PREFERRED;
@@ -1490,6 +1509,28 @@ public class ImsManager {
         mImsConfigListener = listener;
     }
 
+    private final ImsConfigImplBase.Callback mConfigCallback = new ImsConfigImplBase.Callback() {
+        @Override
+        public void onConfigChanged(int item, int value) {
+            if (item == ImsConfig.ConfigConstants.VOICE_OVER_WIFI_SETTING_ENABLED
+                    && !isWfcProvisionedOnDevice()) {
+                if (DBG) log("onConfigChanged: Disabling WFC due to provisioning policy.");
+                setWfcSetting(false);
+            }
+
+            if (item == ImsConfig.ConfigConstants.VLT_SETTING_ENABLED
+                    && !isVolteProvisionedOnDevice()) {
+                if (DBG) log("onConfigChanged: Disabling VoLTE due to provisioning policy.");
+                setEnhanced4gLteModeSetting(false);
+            }
+
+            if (item == ImsConfig.ConfigConstants.LVC_SETTING_ENABLED
+                    && !isVtProvisionedOnDevice()) {
+                if (DBG) log("onConfigChanged: Disabling VT due to provisioning policy.");
+                setVtSetting(false);
+            }
+        }
+    };
 
     /**
      * Adds a callback for status changed events if the binder is already available. If it is not,
@@ -1540,6 +1581,13 @@ public class ImsManager {
             mMmTelFeatureConnection.openConnection(listener);
         } catch (RemoteException e) {
             throw new ImsException("open()", e, ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
+        }
+
+        // Register callback for ImsConfig
+        try {
+            getConfigInterface().addConfigCallback(mConfigCallback);
+        } catch (ImsException e) {
+            loge("open: Failed to call addConfigCallback: ", e);
         }
     }
 
@@ -1761,6 +1809,14 @@ public class ImsManager {
         if (mMmTelFeatureConnection != null) {
             mMmTelFeatureConnection.closeConnection();
         }
+
+        // Remove callback for ImsConfig
+        try {
+            getConfigInterface().removeConfigCallback(mConfigCallback);
+        } catch (ImsException e) {
+            loge("close: Failed to call removeConfigCallback: " + e);
+        }
+
         mUt = null;
         mEcbm = null;
         mMultiEndpoint = null;
