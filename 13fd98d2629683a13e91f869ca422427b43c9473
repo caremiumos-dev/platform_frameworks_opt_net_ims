@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfc77e4e_8ad9d1ed",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-23T21:03:31Z",
+      "side": 1,
+      "message": "Can you also change the ImsException to not append the code to the errorString? Having a non-localized english \"code\" is also an issue.\n\nPerhaps instead, in the ImsException constructor, have:\nsuper(message + \" (\" + code + \" )\")",
+      "range": {
+        "startLine": 549,
+        "startChar": 49,
+        "endLine": 549,
+        "endChar": 61
+      },
+      "revId": "13fd98d2629683a13e91f869ca422427b43c9473",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
