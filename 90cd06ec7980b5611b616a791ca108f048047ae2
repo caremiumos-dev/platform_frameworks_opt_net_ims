@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f72a0ee_1b2b21b6",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-28T16:08:29Z",
+      "side": 1,
+      "message": "Should this be public if it is \"Internal\"?",
+      "range": {
+        "startLine": 739,
+        "startChar": 16,
+        "endLine": 739,
+        "endChar": 44
+      },
+      "revId": "90cd06ec7980b5611b616a791ca108f048047ae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
