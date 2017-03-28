@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "ee4c789a_610d9251",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-28T16:53:45Z",
+      "side": 1,
+      "message": "enabled",
+      "range": {
+        "startLine": 735,
+        "startChar": 35,
+        "endLine": 735,
+        "endChar": 42
+      },
+      "revId": "90cd06ec7980b5611b616a791ca108f048047ae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d291c413_621b9834",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-28T16:53:45Z",
+      "side": 1,
+      "message": "and WFC Mode",
+      "range": {
+        "startLine": 735,
+        "startChar": 51,
+        "endLine": 735,
+        "endChar": 69
+      },
+      "revId": "90cd06ec7980b5611b616a791ca108f048047ae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f72a0ee_1b2b21b6",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 1
@@ -37,6 +83,30 @@
       "side": 1,
       "message": "This method is to be used by one of my carrier WFC app. I should come up with a better naming, like setWfcSettingNonPersistentForSlot ?",
       "parentUuid": "4f72a0ee_1b2b21b6",
+      "range": {
+        "startLine": 739,
+        "startChar": 16,
+        "endLine": 739,
+        "endChar": 44
+      },
+      "revId": "90cd06ec7980b5611b616a791ca108f048047ae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc25d669_8fa1ed3b",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-03-28T16:53:45Z",
+      "side": 1,
+      "message": "Hmm You can probably get rid of \"Setting,\" since it is not setting anything persistently anyways... How about:\nsetWfcNonPersistentForSlot()",
+      "parentUuid": "192f55cd_ccb8cc91",
       "range": {
         "startLine": 739,
         "startChar": 16,
