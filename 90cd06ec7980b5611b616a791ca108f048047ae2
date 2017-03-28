@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "f789ea02_4f89bf3e",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2017-03-28T18:15:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d291c413_621b9834",
+      "range": {
+        "startLine": 735,
+        "startChar": 51,
+        "endLine": 735,
+        "endChar": 69
+      },
+      "revId": "90cd06ec7980b5611b616a791ca108f048047ae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0166c05a_e590f4f1",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2017-03-28T18:15:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee4c789a_610d9251",
+      "range": {
+        "startLine": 735,
+        "startChar": 35,
+        "endLine": 735,
+        "endChar": 42
+      },
+      "revId": "90cd06ec7980b5611b616a791ca108f048047ae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f72a0ee_1b2b21b6",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 1
@@ -107,6 +155,30 @@
       "side": 1,
       "message": "Hmm You can probably get rid of \"Setting,\" since it is not setting anything persistently anyways... How about:\nsetWfcNonPersistentForSlot()",
       "parentUuid": "192f55cd_ccb8cc91",
+      "range": {
+        "startLine": 739,
+        "startChar": 16,
+        "endLine": 739,
+        "endChar": 44
+      },
+      "revId": "90cd06ec7980b5611b616a791ca108f048047ae2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5bcfb25_cd69e34e",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2017-03-28T18:15:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc25d669_8fa1ed3b",
       "range": {
         "startLine": 739,
         "startChar": 16,
