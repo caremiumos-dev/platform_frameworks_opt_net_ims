@@ -1832,8 +1832,6 @@ public class ImsManager {
     }
 
     public int getImsServiceStatus() throws ImsException {
-        checkAndThrowExceptionIfServiceUnavailable();
-
         return mImsServiceProxy.getFeatureStatus();
     }
 
@@ -2041,9 +2039,13 @@ public class ImsManager {
     private ImsCallSession createCallSession(int serviceId,
             ImsCallProfile profile) throws ImsException {
         try {
+            // Throws an exception if the ImsService Feature is not ready to accept commands.
             return new ImsCallSession(mImsServiceProxy.createCallSession(serviceId, profile, null));
         } catch (RemoteException e) {
-            return null;
+            Rlog.w(TAG, "CreateCallSession: Error, remote exception: " + e.getMessage());
+            throw new ImsException("createCallSession()", e,
+                    ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
+
         }
     }
 
