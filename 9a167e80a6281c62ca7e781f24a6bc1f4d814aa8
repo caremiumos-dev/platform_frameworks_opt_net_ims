@@ -22,6 +22,29 @@
       "revId": "9a167e80a6281c62ca7e781f24a6bc1f4d814aa8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7df554b_39a9ba6e",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-04-20T17:30:13Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 465,
+        "startChar": 26,
+        "endLine": 465,
+        "endChar": 70
+      },
+      "revId": "9a167e80a6281c62ca7e781f24a6bc1f4d814aa8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
