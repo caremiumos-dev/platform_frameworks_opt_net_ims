@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cef33500_5ec1730a",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-04-20T17:29:01Z",
+      "side": 1,
+      "message": "KEY_CARRIER_VOLTE_OVERRIDE_WFC_PROVISIONING_BOOL?",
+      "range": {
+        "startLine": 436,
+        "startChar": 26,
+        "endLine": 436,
+        "endChar": 70
+      },
+      "revId": "9a167e80a6281c62ca7e781f24a6bc1f4d814aa8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
