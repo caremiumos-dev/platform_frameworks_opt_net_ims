@@ -22,7 +22,9 @@ import java.util.Map;
 import android.content.res.Resources;
 import android.os.AsyncResult;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
+import android.os.Registrant;
 import android.os.RemoteException;
 import android.telephony.Rlog;
 
@@ -72,6 +74,7 @@ public class ImsUt implements ImsUtInterface {
     private final IImsUt miUt;
     private HashMap<Integer, Message> mPendingCmds =
             new HashMap<Integer, Message>();
+    private Registrant mSsIndicationRegistrant;
 
     public ImsUt(IImsUt iUt) {
         miUt = iUt;
@@ -105,6 +108,14 @@ public class ImsUt implements ImsUtInterface {
                 mPendingCmds.clear();
             }
         }
+    }
+
+    public void registerForSuppServiceIndication(Handler h, int what, Object obj) {
+        mSsIndicationRegistrant = new Registrant (h, what, obj);
+    }
+
+    public void unregisterForSuppServiceIndication(Handler h) {
+        mSsIndicationRegistrant.clear();
     }
 
     /**
@@ -676,6 +687,16 @@ public class ImsUt implements ImsUtInterface {
             synchronized(mLockObj) {
                 sendSuccessReport(mPendingCmds.get(key), cwInfo);
                 mPendingCmds.remove(key);
+            }
+        }
+
+        /**
+         * Notifies client when STK CC Supplementary Service indication is received
+         */
+        @Override
+        public void onSupplementaryServiceIndication(ImsSsData ssData) {
+            if (mSsIndicationRegistrant != null) {
+                mSsIndicationRegistrant.notifyResult(new AsyncResult (null, ssData, null));
             }
         }
     }
