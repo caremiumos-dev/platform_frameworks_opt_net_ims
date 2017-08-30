@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab60560f_db83402b",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-08-30T20:25:52Z",
+      "side": 1,
+      "message": "This should be a private method unless it is being used elsewhere.",
+      "range": {
+        "startLine": 840,
+        "startChar": 4,
+        "endLine": 840,
+        "endChar": 10
+      },
+      "revId": "06adc9aec79ab4d9ec4808cdb4c6a934deeb5775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "33f73939_eb3f1c2b",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-08-30T20:25:52Z",
+      "side": 1,
+      "message": "Remove \"ForSlot\" for private method",
+      "range": {
+        "startLine": 840,
+        "startChar": 36,
+        "endLine": 840,
+        "endChar": 43
+      },
+      "revId": "06adc9aec79ab4d9ec4808cdb4c6a934deeb5775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61d1302a_a50510ef",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-08-30T20:25:52Z",
+      "side": 1,
+      "message": "Add a comment to this method along the lines of \"Changes the WFC mode to its default value for Carriers with non-editable WFC settings.\"",
+      "range": {
+        "startLine": 840,
+        "startChar": 16,
+        "endLine": 840,
+        "endChar": 43
+      },
+      "revId": "06adc9aec79ab4d9ec4808cdb4c6a934deeb5775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d76af768_e9e44a6f",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-08-30T20:25:52Z",
+      "side": 1,
+      "message": "Should you be calling setWFCModeForSlot(...) instead?",
+      "range": {
+        "startLine": 844,
+        "startChar": 12,
+        "endLine": 846,
+        "endChar": 88
+      },
+      "revId": "06adc9aec79ab4d9ec4808cdb4c6a934deeb5775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
