@@ -91,6 +91,30 @@
       "revId": "06adc9aec79ab4d9ec4808cdb4c6a934deeb5775",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1c4087_d67cec1e",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1124113
+      },
+      "writtenOn": "2017-09-01T03:14:24Z",
+      "side": 1,
+      "message": "Thank you for your comments. I uploaded patch set3 based on your advice.",
+      "parentUuid": "d76af768_e9e44a6f",
+      "range": {
+        "startLine": 844,
+        "startChar": 12,
+        "endLine": 846,
+        "endChar": 88
+      },
+      "revId": "06adc9aec79ab4d9ec4808cdb4c6a934deeb5775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
