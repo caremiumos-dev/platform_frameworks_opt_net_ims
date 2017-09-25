@@ -29,44 +29,71 @@
 
 package com.android.ims;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.ref.WeakReference;
 
-import android.os.AsyncResult;
-import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.telephony.Rlog;
+import android.telephony.ims.ImsServiceProxy;
 
 import com.android.ims.internal.IImsEcbm;
 import com.android.ims.internal.IImsEcbmListener;
-import com.android.ims.ImsEcbmStateListener;
 
 /**
- * Provides APIs for the supplementary service settings using IMS (Ut interface).
- * It is created from 3GPP TS 24.623 (XCAP(XML Configuration Access Protocol)
- * over the Ut interface for manipulating supplementary services).
+ * Provides framework interface APIs for managing Emergency Callback Mode for IMS.
  *
+ * This object is cleaned up after {@link #onBinderNotAvailable()} is called and the IImsEcbm
+ * connection is invalidated.
  * @hide
  */
-public class ImsEcbm {
+public class ImsEcbm extends ImsServiceProxy.CallbackManager<ImsEcbmStateListener> {
     private static final String TAG = "ImsEcbm";
     private static final boolean DBG = true;
 
     private final IImsEcbm miEcbm;
+    private ImsEcbmListenerProxy mProxy;
+    private EcbmHandler mEcbmHandler;
+
+    private static final int HANDLER_ENTERED_ECBM = 0;
+    private static final int HANDLER_EXITED_ECBM = 1;
+
+    // Static to ensure we do not accidentally leak ImsEcbm when it is supposed to be GC'ed
+    private static class EcbmHandler extends Handler {
+
+        private final WeakReference<ImsEcbm> mEcbmRef;
+
+        EcbmHandler(ImsEcbm ecbm) {
+            mEcbmRef = new WeakReference<>(ecbm);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            ImsEcbm ecbm = mEcbmRef.get();
+            if (ecbm == null) {
+                return;
+            }
+            switch(msg.what) {
+                case HANDLER_ENTERED_ECBM: {
+                    ecbm.notifyCallback(ImsEcbmStateListener::onECBMEntered);
+                    break;
+                }
+                case HANDLER_EXITED_ECBM: {
+                    ecbm.notifyCallback(ImsEcbmStateListener::onECBMExited);
+                    break;
+                }
+            }
+        }
+    }
 
     public ImsEcbm(IImsEcbm iEcbm) {
         if (DBG) Rlog.d(TAG, "ImsEcbm created");
         miEcbm = iEcbm;
+        mEcbmHandler = new EcbmHandler(this);
     }
 
     public void setEcbmStateListener(ImsEcbmStateListener ecbmListener) throws ImsException {
-        try {
-            miEcbm.setListener(new ImsEcbmListenerProxy(ecbmListener));
-        } catch (RemoteException e) {
-            throw new ImsException("setEcbmStateListener()", e,
-                    ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
-        }
+        addCallback(ecbmListener);
     }
 
     public void exitEmergencyCallbackMode() throws ImsException {
@@ -79,25 +106,47 @@ public class ImsEcbm {
     }
 
     public boolean isBinderAlive() {
-        return miEcbm.asBinder().isBinderAlive();
+        return miEcbm != null && miEcbm.asBinder().isBinderAlive();
     }
+
+    @Override
+    protected boolean createCallbackBinder() {
+        try {
+            mProxy = new ImsEcbmListenerProxy(mEcbmHandler);
+            miEcbm.setListener(mProxy);
+        } catch (RemoteException e) {
+            Rlog.e(TAG, "createCallbackBinder: error - " + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected void onBinderNotAvailable() {
+        mProxy.cleanup();
+    }
+
 
     /**
      * Adapter class for {@link IImsEcbmListener}.
+     *
+     * Defined as a static class to ensure that the ImsEcbm class is not kept around until the
+     * ECBM listener is garbage collected in another process.
      */
-    private class ImsEcbmListenerProxy extends IImsEcbmListener.Stub {
-        private ImsEcbmStateListener mListener;
+    private static class ImsEcbmListenerProxy extends IImsEcbmListener.Stub {
+        private WeakReference<Handler> mHandler;
 
-        public ImsEcbmListenerProxy(ImsEcbmStateListener listener) {
-            mListener = listener;
+        public ImsEcbmListenerProxy(Handler handler) {
+            mHandler = new WeakReference<>(handler);
         }
 
         @Override
         public void enteredECBM() {
             if (DBG) Rlog.d(TAG, "enteredECBM ::");
 
-            if (mListener != null) {
-                mListener.onECBMEntered();
+            Handler h = mHandler.get();
+            if (h != null) {
+                h.obtainMessage(HANDLER_ENTERED_ECBM).sendToTarget();
             }
         }
 
@@ -105,9 +154,14 @@ public class ImsEcbm {
         public void exitedECBM() {
             if (DBG) Rlog.d(TAG, "exitedECBM ::");
 
-            if (mListener != null) {
-                mListener.onECBMExited();
+            Handler h = mHandler.get();
+            if (h != null) {
+                h.obtainMessage(HANDLER_EXITED_ECBM).sendToTarget();
             }
+        }
+
+        public void cleanup() {
+            mHandler.clear();
         }
     }
 }

@@ -66,8 +66,6 @@ import java.util.Set;
  * the operator's IMS network. This class is the starting point for any IMS actions.
  * You can acquire an instance of it with {@link #getInstance getInstance()}.</p>
  * <p>The APIs in this class allows you to:</p>
- *
- * @hide
  */
 public class ImsManager {
 
@@ -183,7 +181,7 @@ public class ImsManager {
     private CarrierConfigManager mConfigManager;
     private int mPhoneId;
     private final boolean mConfigDynamicBind;
-    private ImsServiceProxyCompat mImsServiceProxy = null;
+    private ImsServiceProxy mImsServiceProxy = null;
     private ImsServiceDeathRecipient mDeathRecipient = new ImsServiceDeathRecipient();
     // Ut interface for the supplementary service configuration
     private ImsUt mUt = null;
@@ -198,7 +196,8 @@ public class ImsManager {
 
     private ImsMultiEndpoint mMultiEndpoint = null;
 
-    private Set<ImsServiceProxy.INotifyStatusChanged> mStatusCallbacks = new HashSet<>();
+    // Set of StatusCallbacks that will be forwarded Status from ImsServiceProxy.
+    private Set<FeatureStatusCallback> mStatusCallbacks = new HashSet<>();
 
     // Keep track of the ImsRegistrationListenerProxys that have been created so that we can
     // remove them from the ImsService.
@@ -237,6 +236,27 @@ public class ImsManager {
     private static final long BACKOFF_MAX_DELAY_MS = 300000;
     // Multiplier for exponential delay
     private static final int BACKOFF_MULTIPLIER = 2;
+
+    /**
+     * Implement to receive notifications when the ImsFeature status has changed.
+     */
+    public static class FeatureStatusCallback {
+        /**
+         * The Feature's state (Defined in {@link ImsFeature}) has changed. Query
+         * {@link ImsFeature#getFeatureState()} to get the new state.
+         */
+        public void onFeatureStateChanged() {
+            // Default Implementation
+        }
+
+        /**
+         * The feature has become unavailable due to the service crashing or switching to another
+         * ImsService.
+         */
+        public void onFeatureUnavailable() {
+            // Default Implementation
+        }
+    }
 
 
     /**
@@ -1379,7 +1399,7 @@ public class ImsManager {
      * Adds a callback for status changed events if the binder is already available. If it is not,
      * this method will throw an ImsException.
      */
-    public void addNotifyStatusChangedCallbackIfAvailable(ImsServiceProxy.INotifyStatusChanged c)
+    public void addNotifyStatusChangedCallbackIfAvailable(FeatureStatusCallback c)
             throws ImsException {
         if (!mImsServiceProxy.isBinderAlive()) {
             throw new ImsException("Binder is not active!",
@@ -1958,8 +1978,18 @@ public class ImsManager {
         TelephonyManager tm = (TelephonyManager)
                 mContext.getSystemService(Context.TELEPHONY_SERVICE);
         ImsServiceProxy serviceProxy = new ImsServiceProxy(mPhoneId, ImsFeature.MMTEL);
-        serviceProxy.setStatusCallback(() ->  mStatusCallbacks.forEach(
-                ImsServiceProxy.INotifyStatusChanged::notifyStatusChanged));
+        // Forward status callbacks from ImsServiceProxy to local ImsManager callbacks.
+        serviceProxy.addStatusCallback(new ImsServiceProxy.StatusCallback() {
+            @Override
+            public void onFeatureStateChanged() {
+                mStatusCallbacks.forEach(FeatureStatusCallback::onFeatureStateChanged);
+            }
+
+            @Override
+            public void onFeatureUnavailable() {
+                mStatusCallbacks.forEach(FeatureStatusCallback::onFeatureUnavailable);
+            }
+        });
         // Returns null if the service is not available.
         IImsServiceController b = tm.getImsServiceControllerAndListen(mPhoneId,
                 ImsFeature.MMTEL, serviceProxy.getListener());
