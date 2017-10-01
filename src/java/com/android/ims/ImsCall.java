@@ -1094,6 +1094,7 @@ public class ImsCall implements ICall {
         logi("start(n) :: session=" + session);
 
         synchronized(mLockObj) {
+            mIsConferenceHost = true;
             mSession = session;
 
             try {
