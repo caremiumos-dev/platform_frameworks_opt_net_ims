@@ -293,7 +293,9 @@ public class ImsManager {
         int enabled = android.provider.Settings.Global.getInt(
                 mContext.getContentResolver(),
                 android.provider.Settings.Global.ENHANCED_4G_MODE_ENABLED,
-                ImsConfig.FeatureValueConstants.ON);
+                getBooleanCarrierConfig(
+                        CarrierConfigManager.KEY_ENHANCED_4G_LTE_ON_BY_DEFAULT_BOOL) ?
+                        ImsConfig.FeatureValueConstants.ON : ImsConfig.FeatureValueConstants.OFF);
         return (enabled == 1);
     }
 
@@ -2385,7 +2387,9 @@ public class ImsManager {
         // Set VoLTE to default
         android.provider.Settings.Global.putInt(mContext.getContentResolver(),
                 android.provider.Settings.Global.ENHANCED_4G_MODE_ENABLED,
-                ImsConfig.FeatureValueConstants.ON);
+                getBooleanCarrierConfig(
+                        CarrierConfigManager.KEY_ENHANCED_4G_LTE_ON_BY_DEFAULT_BOOL) ?
+                        ImsConfig.FeatureValueConstants.ON : ImsConfig.FeatureValueConstants.OFF);
 
         // Set VoWiFi to default
         android.provider.Settings.Global.putInt(mContext.getContentResolver(),
