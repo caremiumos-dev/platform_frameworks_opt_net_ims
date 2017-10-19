@@ -36,7 +36,7 @@ package com.android.ims;
  *
  * @hide
  */
-public class ImsEcbmStateListener {
+public class ImsEcbmStateCallback {
     /**
      * Called when the device enters Emergency Callback Mode
      */

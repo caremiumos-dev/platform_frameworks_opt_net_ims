@@ -37,8 +37,6 @@ import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
-import android.telephony.ims.ImsServiceProxy;
-import android.telephony.ims.ImsServiceProxyCompat;
 import android.telephony.ims.feature.ImsFeature;
 import android.util.Log;
 
@@ -60,6 +58,7 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Provides APIs for IMS services, such as initiating IMS calls, and provides access to
@@ -236,6 +235,11 @@ public class ImsManager {
     private static final long BACKOFF_MAX_DELAY_MS = 300000;
     // Multiplier for exponential delay
     private static final int BACKOFF_MULTIPLIER = 2;
+
+    // List of CallbackManagers that will be notified when the ImsServiceProxy has become
+    // unavailable.
+    private CopyOnWriteArraySet<ImsServiceProxy.CallbackManager> mCallbackManagers
+            = new CopyOnWriteArraySet<>();
 
     /**
      * Implement to receive notifications when the ImsFeature status has changed.
@@ -1360,6 +1364,16 @@ public class ImsManager {
                     BACKOFF_MAX_DELAY_MS, BACKOFF_MULTIPLIER,
                     new Handler(Looper.getMainLooper()), this::handleUpdateProvisionedValues);
         }
+        mStatusCallbacks.add(new FeatureStatusCallback() {
+            @Override
+            public void onFeatureUnavailable() {
+                if (!mCallbackManagers.isEmpty()) {
+                    mCallbackManagers.forEach(
+                            ImsServiceProxy.CallbackManager::notifyBinderNotAvailable);
+                }
+                mCallbackManagers.clear();
+            }
+        });
         createImsService();
     }
 
@@ -2336,11 +2350,10 @@ public class ImsManager {
     /**
      * Gets the ECBM interface to request ECBM exit.
      *
-     * @param serviceId a service id which is obtained from {@link ImsManager#open}
      * @return the ECBM interface instance
      * @throws ImsException if getting the ECBM interface results in an error
      */
-    public ImsEcbm getEcbmInterface(int serviceId) throws ImsException {
+    public ImsEcbm getEcbmInterface() throws ImsException {
         if (mEcbm != null && mEcbm.isBinderAlive()) {
             return mEcbm;
         }
@@ -2354,6 +2367,7 @@ public class ImsManager {
                         ImsReasonInfo.CODE_ECBM_NOT_SUPPORTED);
             }
             mEcbm = new ImsEcbm(iEcbm);
+            mCallbackManagers.add(mEcbm);
         } catch (RemoteException e) {
             throw new ImsException("getEcbmInterface()", e,
                     ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);

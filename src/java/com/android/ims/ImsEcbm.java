@@ -35,7 +35,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.telephony.Rlog;
-import android.telephony.ims.ImsServiceProxy;
 
 import com.android.ims.internal.IImsEcbm;
 import com.android.ims.internal.IImsEcbmListener;
@@ -47,13 +46,15 @@ import com.android.ims.internal.IImsEcbmListener;
  * connection is invalidated.
  * @hide
  */
-public class ImsEcbm extends ImsServiceProxy.CallbackManager<ImsEcbmStateListener> {
+public class ImsEcbm extends ImsServiceProxy.CallbackManager<ImsEcbmStateCallback> {
     private static final String TAG = "ImsEcbm";
     private static final boolean DBG = true;
 
-    private final IImsEcbm miEcbm;
+    private IImsEcbm miEcbm;
     private ImsEcbmListenerProxy mProxy;
     private EcbmHandler mEcbmHandler;
+
+    private final Object mLock = new Object();
 
     private static final int HANDLER_ENTERED_ECBM = 0;
     private static final int HANDLER_EXITED_ECBM = 1;
@@ -75,11 +76,11 @@ public class ImsEcbm extends ImsServiceProxy.CallbackManager<ImsEcbmStateListene
             }
             switch(msg.what) {
                 case HANDLER_ENTERED_ECBM: {
-                    ecbm.notifyCallback(ImsEcbmStateListener::onECBMEntered);
+                    ecbm.notifyCallback(ImsEcbmStateCallback::onECBMEntered);
                     break;
                 }
                 case HANDLER_EXITED_ECBM: {
-                    ecbm.notifyCallback(ImsEcbmStateListener::onECBMExited);
+                    ecbm.notifyCallback(ImsEcbmStateCallback::onECBMExited);
                     break;
                 }
             }
@@ -92,13 +93,20 @@ public class ImsEcbm extends ImsServiceProxy.CallbackManager<ImsEcbmStateListene
         mEcbmHandler = new EcbmHandler(this);
     }
 
-    public void setEcbmStateListener(ImsEcbmStateListener ecbmListener) throws ImsException {
-        addCallback(ecbmListener);
+    public void addEcbmStateCallback(ImsEcbmStateCallback ecbmCallback) throws ImsException {
+        addCallback(ecbmCallback);
     }
 
     public void exitEmergencyCallbackMode() throws ImsException {
         try {
-            miEcbm.exitEmergencyCallbackMode();
+            synchronized (mLock) {
+                if (isBinderAlive()) {
+                    miEcbm.exitEmergencyCallbackMode();
+                } else {
+                    throw new ImsException("exitEmergencyCallbackMode()",
+                            ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
+                }
+            }
         } catch (RemoteException e) {
             throw new ImsException("exitEmergencyCallbackMode()", e,
                     ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
@@ -106,14 +114,23 @@ public class ImsEcbm extends ImsServiceProxy.CallbackManager<ImsEcbmStateListene
     }
 
     public boolean isBinderAlive() {
-        return miEcbm != null && miEcbm.asBinder().isBinderAlive();
+        synchronized (mLock) {
+            return miEcbm != null && miEcbm.asBinder().isBinderAlive();
+        }
     }
 
     @Override
     protected boolean createCallbackBinder() {
         try {
             mProxy = new ImsEcbmListenerProxy(mEcbmHandler);
-            miEcbm.setListener(mProxy);
+            synchronized (mLock) {
+                if (isBinderAlive()) {
+                    miEcbm.setListener(mProxy);
+                } else {
+                    Rlog.e(TAG, "createCallbackBinder: error - not alive.");
+                    return false;
+                }
+            }
         } catch (RemoteException e) {
             Rlog.e(TAG, "createCallbackBinder: error - " + e.getMessage());
             return false;
@@ -123,6 +140,9 @@ public class ImsEcbm extends ImsServiceProxy.CallbackManager<ImsEcbmStateListene
 
     @Override
     protected void onBinderNotAvailable() {
+        synchronized (mLock) {
+            miEcbm = null;
+        }
         mProxy.cleanup();
     }
 
