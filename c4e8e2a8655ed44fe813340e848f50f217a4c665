@@ -46,6 +46,53 @@
       "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4a74039f_835baa6f",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-20T18:04:48Z",
+      "side": 1,
+      "message": "I see",
+      "parentUuid": "26add089_5c99895f",
+      "range": {
+        "startLine": 287,
+        "startChar": 11,
+        "endLine": 288,
+        "endChar": 90
+      },
+      "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27caf598_bab0e337",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-20T18:04:48Z",
+      "side": 1,
+      "message": "Should this value also check KEY_CARRIER_DEFAULT_ENHANCED_4G_LTE_ENABLED_BOOL?",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 17
+      },
+      "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
