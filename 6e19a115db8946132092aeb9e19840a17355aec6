@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9a1cb39_216af40f",
+        "filename": "src/java/com/android/ims/ImsEcbm.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-10-20T21:02:45Z",
+      "side": 1,
+      "message": "wat",
+      "range": {
+        "startLine": 2,
+        "startChar": 23,
+        "endLine": 2,
+        "endChar": 43
+      },
+      "revId": "6e19a115db8946132092aeb9e19840a17355aec6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62e55b21_e83588b4",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2017-10-20T21:02:45Z",
+      "side": 1,
+      "message": "How is this different from StatusCallback in ImsServiceProxy?",
+      "range": {
+        "startLine": 243,
+        "startChar": 24,
+        "endLine": 243,
+        "endChar": 45
+      },
+      "revId": "6e19a115db8946132092aeb9e19840a17355aec6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
