@@ -22,6 +22,30 @@
       "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26add089_5c99895f",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-10-20T12:44:06Z",
+      "side": 1,
+      "message": "Yes, this comment is still true.\n\nThis method should return \"true\" if KEY_EDITABLE_ENHANCED_4G_LTE_BOOL is false even if KEY_CARRIER_DEFAULT_ENHANCED_4G_LTE_ENABLED_BOOL is false. Otherwise user cannot use VoLTE forever. \n\nIf an operator don\u0027t allow to edit the setting and set OFF by default, KEY_CARRIER_VOLTE_AVAILABLE_BOOL should be false and hide the menu. Because user can\u0027t edit it and can\u0027t use it at all.",
+      "parentUuid": "4e522b5c_5f52cb6d",
+      "range": {
+        "startLine": 287,
+        "startChar": 11,
+        "endLine": 288,
+        "endChar": 90
+      },
+      "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
