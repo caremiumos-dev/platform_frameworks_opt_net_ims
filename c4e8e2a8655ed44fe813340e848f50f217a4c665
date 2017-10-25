@@ -93,6 +93,30 @@
       "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8da31378_8ff7f2fd",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-10-25T03:04:12Z",
+      "side": 1,
+      "message": "I don\u0027t think we should check  KEY_CARRIER_DEFAULT_ENHANCED_4G_LTE_ENABLED_BOOL here. Because value should be true if KEY_EDITABLE_ENHANCED_4G_LTE_BOOL is false. Otherwise user cannot use VoLTE forever.",
+      "parentUuid": "27caf598_bab0e337",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 17
+      },
+      "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
