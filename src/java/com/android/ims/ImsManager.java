@@ -20,10 +20,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.PersistableBundle;
@@ -50,15 +47,14 @@ import com.android.ims.internal.IImsServiceController;
 import com.android.ims.internal.IImsUt;
 import com.android.ims.internal.ImsCallSession;
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.telephony.ExponentialBackoff;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * Provides APIs for IMS services, such as initiating IMS calls, and provides access to
@@ -172,6 +168,8 @@ public class ImsManager {
      */
     public static final String EXTRA_IS_UNKNOWN_CALL = "android:isUnknown";
 
+    private static final int SYSTEM_PROPERTY_NOT_SET = -1;
+
     private static final String TAG = "ImsManager";
     private static final boolean DBG = true;
 
@@ -211,10 +209,6 @@ public class ImsManager {
     private boolean mHasRegisteredForProxy = false;
     private final Object mHasRegisteredLock = new Object();
 
-    // SystemProperties used as cache
-    private static final String VOLTE_PROVISIONED_PROP = "net.lte.ims.volte.provisioned";
-    private static final String WFC_PROVISIONED_PROP = "net.lte.ims.wfc.provisioned";
-    private static final String VT_PROVISIONED_PROP = "net.lte.ims.vt.provisioned";
     // Flag indicating data enabled or not. This flag should be in sync with
     // DcTracker.isDataEnabled(). The flag will be set later during boot up.
     private static final String DATA_ENABLED_PROP = "net.lte.ims.data.enabled";
@@ -226,17 +220,6 @@ public class ImsManager {
     private static final int MAX_RECENT_DISCONNECT_REASONS = 16;
     private ConcurrentLinkedDeque<ImsReasonInfo> mRecentDisconnectReasons =
             new ConcurrentLinkedDeque<>();
-
-    // Exponential backoff for provisioning cache update. May be null for instances of ImsManager
-    // that are not on a thread supporting a looper.
-    private ExponentialBackoff mProvisionBackoff;
-    // Initial Provisioning check delay in ms
-    private static final long BACKOFF_INITIAL_DELAY_MS = 500;
-    // Max Provisioning check delay in ms (5 Minutes)
-    private static final long BACKOFF_MAX_DELAY_MS = 300000;
-    // Multiplier for exponential delay
-    private static final int BACKOFF_MULTIPLIER = 2;
-
 
     /**
      * Gets a manager instance.
@@ -411,15 +394,20 @@ public class ImsManager {
      * basis.
      */
     public boolean isVolteEnabledByPlatform() {
-        if (SystemProperties.getInt(PROPERTY_DBG_VOLTE_AVAIL_OVERRIDE,
-                PROPERTY_DBG_VOLTE_AVAIL_OVERRIDE_DEFAULT) == 1) {
+        // We first read the per slot value. If doesn't exist, we read the general value. If still
+        // doesn't exist, we use the hardcoded default value.
+        if (SystemProperties.getInt(
+                PROPERTY_DBG_VOLTE_AVAIL_OVERRIDE + Integer.toString(mPhoneId),
+                SYSTEM_PROPERTY_NOT_SET) == 1 ||
+                SystemProperties.getInt(PROPERTY_DBG_VOLTE_AVAIL_OVERRIDE,
+                        SYSTEM_PROPERTY_NOT_SET) == 1) {
             return true;
         }
 
         return mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_device_volte_available)
                 && getBooleanCarrierConfig(
-                        CarrierConfigManager.KEY_CARRIER_VOLTE_AVAILABLE_BOOL)
+                CarrierConfigManager.KEY_CARRIER_VOLTE_AVAILABLE_BOOL)
                 && isGbaValid();
     }
 
@@ -546,8 +534,12 @@ public class ImsManager {
      * which must be done correctly).
      */
     public boolean isVtEnabledByPlatform() {
-        if (SystemProperties.getInt(PROPERTY_DBG_VT_AVAIL_OVERRIDE,
-                PROPERTY_DBG_VT_AVAIL_OVERRIDE_DEFAULT) == 1) {
+        // We first read the per slot value. If doesn't exist, we read the general value. If still
+        // doesn't exist, we use the hardcoded default value.
+        if (SystemProperties.getInt(PROPERTY_DBG_VT_AVAIL_OVERRIDE +
+                Integer.toString(mPhoneId), SYSTEM_PROPERTY_NOT_SET) == 1  ||
+                SystemProperties.getInt(
+                        PROPERTY_DBG_VT_AVAIL_OVERRIDE, SYSTEM_PROPERTY_NOT_SET) == 1) {
             return true;
         }
 
@@ -649,10 +641,15 @@ public class ImsManager {
      * The platform property may override the carrier config.
      */
     private boolean isTurnOffImsAllowedByPlatform() {
-        if (SystemProperties.getInt(PROPERTY_DBG_ALLOW_IMS_OFF_OVERRIDE,
-                PROPERTY_DBG_ALLOW_IMS_OFF_OVERRIDE_DEFAULT) == 1) {
+        // We first read the per slot value. If doesn't exist, we read the general value. If still
+        // doesn't exist, we use the hardcoded default value.
+        if (SystemProperties.getInt(PROPERTY_DBG_ALLOW_IMS_OFF_OVERRIDE +
+                Integer.toString(mPhoneId), SYSTEM_PROPERTY_NOT_SET) == 1  ||
+                SystemProperties.getInt(
+                        PROPERTY_DBG_ALLOW_IMS_OFF_OVERRIDE, SYSTEM_PROPERTY_NOT_SET) == 1) {
             return true;
         }
+
         return getBooleanCarrierConfig(
                 CarrierConfigManager.KEY_CARRIER_ALLOW_TURNOFF_IMS_BOOL);
     }
@@ -1022,8 +1019,12 @@ public class ImsManager {
      * configuration settings which must be done correctly).
      */
     public boolean isWfcEnabledByPlatform() {
-        if (SystemProperties.getInt(PROPERTY_DBG_WFC_AVAIL_OVERRIDE,
-                PROPERTY_DBG_WFC_AVAIL_OVERRIDE_DEFAULT) == 1) {
+        // We first read the per slot value. If doesn't exist, we read the general value. If still
+        // doesn't exist, we use the hardcoded default value.
+        if (SystemProperties.getInt(PROPERTY_DBG_WFC_AVAIL_OVERRIDE +
+                Integer.toString(mPhoneId), SYSTEM_PROPERTY_NOT_SET) == 1  ||
+                SystemProperties.getInt(
+                        PROPERTY_DBG_WFC_AVAIL_OVERRIDE, SYSTEM_PROPERTY_NOT_SET) == 1) {
             return true;
         }
 
@@ -1058,116 +1059,28 @@ public class ImsManager {
     }
 
     /**
-     * This function should be called when ImsConfig.ACTION_IMS_CONFIG_CHANGED is received.
-     *
-     * We cannot register receiver in ImsManager because this would lead to resource leak.
-     * ImsManager can be created in different processes and it is not notified when that process
-     * is about to be terminated.
-     *
-     * @hide
-     * */
-    public static void onProvisionedValueChanged(Context context, int item, String value) {
-        if (DBG) Rlog.d(TAG, "onProvisionedValueChanged: item=" + item + " val=" + value);
-        ImsManager mgr = ImsManager.getInstance(context,
-                SubscriptionManager.getDefaultVoicePhoneId());
-
-        switch (item) {
-            case ImsConfig.ConfigConstants.VLT_SETTING_ENABLED:
-                mgr.setVolteProvisionedProperty(value.equals("1"));
-                if (DBG) Rlog.d(TAG,"isVoLteProvisioned = " + mgr.isVolteProvisioned());
-                break;
-
-            case ImsConfig.ConfigConstants.VOICE_OVER_WIFI_SETTING_ENABLED:
-                mgr.setWfcProvisionedProperty(value.equals("1"));
-                if (DBG) Rlog.d(TAG,"isWfcProvisioned = " + mgr.isWfcProvisioned());
-                break;
-
-            case ImsConfig.ConfigConstants.LVC_SETTING_ENABLED:
-                mgr.setVtProvisionedProperty(value.equals("1"));
-                if (DBG) Rlog.d(TAG,"isVtProvisioned = " + mgr.isVtProvisioned());
-                break;
-
+     * Will return with config value or throw an ImsException if we receive an error from
+     * ImsConfig for that value.
+     */
+    private boolean getProvisionedBool(ImsConfig config, int item) throws ImsException {
+        int value = config.getProvisionedValue(item);
+        if (value == ImsConfig.OperationStatusConstants.UNKNOWN) {
+            throw new ImsException("getProvisionedBool failed with error for item: " + item,
+                    ImsReasonInfo.CODE_LOCAL_INTERNAL_ERROR);
         }
-    }
-
-    private class AsyncUpdateProvisionedValues extends AsyncTask<Void, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // disable on any error
-            setVolteProvisionedProperty(false);
-            setWfcProvisionedProperty(false);
-            setVtProvisionedProperty(false);
-
-            try {
-                ImsConfig config = getConfigInterface();
-                if (config != null) {
-                    setVolteProvisionedProperty(getProvisionedBool(config,
-                            ImsConfig.ConfigConstants.VLT_SETTING_ENABLED));
-                    if (DBG) Rlog.d(TAG, "isVoLteProvisioned = " + isVolteProvisioned());
-
-                    setWfcProvisionedProperty(getProvisionedBool(config,
-                            ImsConfig.ConfigConstants.VOICE_OVER_WIFI_SETTING_ENABLED));
-                    if (DBG) Rlog.d(TAG, "isWfcProvisioned = " + isWfcProvisioned());
-
-                    setVtProvisionedProperty(getProvisionedBool(config,
-                            ImsConfig.ConfigConstants.LVC_SETTING_ENABLED));
-                    if (DBG) Rlog.d(TAG, "isVtProvisioned = " + isVtProvisioned());
-
-                }
-            } catch (ImsException ie) {
-                Rlog.e(TAG, "AsyncUpdateProvisionedValues error: ", ie);
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean completed) {
-            if (mProvisionBackoff == null) {
-                return;
-            }
-            if (!completed) {
-                mProvisionBackoff.notifyFailed();
-            } else {
-                mProvisionBackoff.stop();
-            }
-        }
-
-        /**
-         * Will return with config value or throw an ImsException if we receive an error from
-         * ImsConfig for that value.
-         */
-        private boolean getProvisionedBool(ImsConfig config, int item) throws ImsException {
-            int value = config.getProvisionedValue(item);
-            if (value == ImsConfig.FeatureValueConstants.ERROR) {
-                throw new ImsException("getProvisionedBool failed with error for item: " + item,
-                        ImsReasonInfo.CODE_LOCAL_INTERNAL_ERROR);
-            }
-            return config.getProvisionedValue(item) == ImsConfig.FeatureValueConstants.ON;
-        }
-    }
-
-    // used internally only, use #updateProvisionedValues instead.
-    private void handleUpdateProvisionedValues() {
-        if (getBooleanCarrierConfig(
-                CarrierConfigManager.KEY_CARRIER_VOLTE_PROVISIONING_REQUIRED_BOOL)) {
-
-            new AsyncUpdateProvisionedValues().execute();
-        }
+        return config.getProvisionedValue(item) == ImsConfig.FeatureValueConstants.ON;
     }
 
     /**
-     * Asynchronously get VoLTE, WFC, VT provisioning statuses. If ImsConfig is not available, we
-     * will retry with exponential backoff.
+     * Will return with config value or return false if we receive an error from
+     * ImsConfig for that value.
      */
-    private void updateProvisionedValues() {
-        // Start trying to receive provisioning status after BACKOFF_INITIAL_DELAY_MS.
-        if (mProvisionBackoff != null) {
-            mProvisionBackoff.start();
-        } else {
-            // bypass and launch async thread once without backoff.
-            handleUpdateProvisionedValues();
+    private boolean getProvisionedBoolNoException(int item) {
+        try {
+            ImsConfig config = getConfigInterface();
+            return getProvisionedBool(config, item);
+        } catch (ImsException ex) {
+            return false;
         }
     }
 
@@ -1192,8 +1105,6 @@ public class ImsManager {
     /**
      * Sync carrier config and user settings with ImsConfig.
      *
-     * @param context for the manager object
-     * @param phoneId phone id
      * @param force update
      */
     public void updateImsServiceConfig(boolean force) {
@@ -1208,8 +1119,6 @@ public class ImsManager {
 
         if (!mConfigUpdated || force) {
             try {
-                updateProvisionedValues();
-
                 // TODO: Extend ImsConfig API and set all feature values in single function call.
 
                 // Note: currently the order of updates is set to produce different order of
@@ -1347,11 +1256,6 @@ public class ImsManager {
                 com.android.internal.R.bool.config_dynamic_bind_ims);
         mConfigManager = (CarrierConfigManager) context.getSystemService(
                 Context.CARRIER_CONFIG_SERVICE);
-        if (Looper.getMainLooper() != null) {
-            mProvisionBackoff = new ExponentialBackoff(BACKOFF_INITIAL_DELAY_MS,
-                    BACKOFF_MAX_DELAY_MS, BACKOFF_MULTIPLIER,
-                    new Handler(Looper.getMainLooper()), this::handleUpdateProvisionedValues);
-        }
         createImsService();
     }
 
@@ -2450,27 +2354,18 @@ public class ImsManager {
     }
 
     private boolean isVolteProvisioned() {
-        return SystemProperties.getBoolean(VOLTE_PROVISIONED_PROP, true);
-    }
-
-    private void setVolteProvisionedProperty(boolean provisioned) {
-        SystemProperties.set(VOLTE_PROVISIONED_PROP, provisioned ? TRUE : FALSE);
+        return getProvisionedBoolNoException(
+                ImsConfig.ConfigConstants.VLT_SETTING_ENABLED);
     }
 
     private boolean isWfcProvisioned() {
-        return SystemProperties.getBoolean(WFC_PROVISIONED_PROP, true);
-    }
-
-    private void setWfcProvisionedProperty(boolean provisioned) {
-        SystemProperties.set(WFC_PROVISIONED_PROP, provisioned ? TRUE : FALSE);
+        return getProvisionedBoolNoException(
+                ImsConfig.ConfigConstants.VOICE_OVER_WIFI_SETTING_ENABLED);
     }
 
     private boolean isVtProvisioned() {
-        return SystemProperties.getBoolean(VT_PROVISIONED_PROP, true);
-    }
-
-    private void setVtProvisionedProperty(boolean provisioned) {
-        SystemProperties.set(VT_PROVISIONED_PROP, provisioned ? TRUE : FALSE);
+        return getProvisionedBoolNoException(
+                ImsConfig.ConfigConstants.LVC_SETTING_ENABLED);
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
