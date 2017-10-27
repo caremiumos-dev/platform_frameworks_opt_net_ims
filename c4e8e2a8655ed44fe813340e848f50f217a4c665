@@ -96,6 +96,29 @@
     },
     {
       "key": {
+        "uuid": "026696f2_652fe091",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-10-27T09:11:05Z",
+      "side": 1,
+      "message": "I kept this specification.",
+      "range": {
+        "startLine": 318,
+        "startChar": 7,
+        "endLine": 320,
+        "endChar": 38
+      },
+      "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27caf598_bab0e337",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 2
@@ -155,6 +178,30 @@
       "side": 1,
       "message": "Why should value be true when editable\u003dfalse?\nI thought KEY_ENHANCED_4G_LTE_ON_BY_DEFAULT_BOOL specified the default value. If editable\u003dfalse then shouldn\u0027t we set value to the default?",
       "parentUuid": "8da31378_8ff7f2fd",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 17
+      },
+      "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "12c584fa_2bb0d329",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-10-27T09:11:05Z",
+      "side": 1,
+      "message": "I understand this method specification is that always sets the setting to true if EDITABLE_ENHANCED_4G_LTE_BOOL is false. That is explained in this method\u0027s comment. So, I kept the specification not to return value of KEY_ENHANCED_4G_LTE_ON_BY_DEFAULT_BOOL.\n\nI also understand your thought. I think it depends on the method specification. Should we change the method specification in case EDITABLE_ENHANCED_4G_LTE_BOOL is false?",
+      "parentUuid": "64f3130d_7391f562",
       "range": {
         "startLine": 325,
         "startChar": 12,
