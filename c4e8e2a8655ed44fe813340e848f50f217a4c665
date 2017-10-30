@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "6d39e7c3_0592556c",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-30T18:33:39Z",
+      "side": 1,
+      "message": "This behavior was introduced in https://android-review.googlesource.com/#/c/platform/frameworks/opt/net/ims/+/349175, I\u0027ll add breadley@ to comment on if this behavior change seems okay but from context I think it will work.\n\nThe only consumer of the method seems to be packages/services/Telephony/src/com/android/phone/MobileNetworkSettings.java#onPreferenceChange()\n\nFor this consumer I do think it makes sense to use the new default value. Let\u0027s change the spec to reflect that. How about:\n\nChange persistent Enhanced 4G LTE Mode setting. If the the option is not editable ({@link CarrierConfigManager#KEY_EDITABLE_ENHANCED_4G_LTE_BOOL} is false), this method will set the setting to the default value specified by {@link CarrierConfigManager#KEY_ENHANCED_4G_LTE_ON_BY_DEFAULT_BOOL}.\n\nAnother possible route is to just do nothing if editable\u003dfalse.",
+      "parentUuid": "12c584fa_2bb0d329",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 17
+      },
+      "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f992ce75_5a5d47db",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 2
