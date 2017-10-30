@@ -262,6 +262,30 @@
     },
     {
       "key": {
+        "uuid": "4333e277_833b22a7",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-30T18:41:22Z",
+      "side": 1,
+      "message": "Just spoke to breadley@, seems like there may have been a case where we needed this to be on-and-uneditable but never off-and-uneditable. Since the old behavior is a strict subset of the new allowed behavior, I think it\u0027s okay to change the documentation and behavior here.",
+      "parentUuid": "6d39e7c3_0592556c",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 17
+      },
+      "revId": "c4e8e2a8655ed44fe813340e848f50f217a4c665",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f992ce75_5a5d47db",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 2
