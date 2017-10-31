@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff1dec21_6231b490",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2392,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-10-31T18:52:23Z",
+      "side": 1,
+      "message": "I think factoryReset() should remove the setting, not insert the value from carrier config. This way if a factory reset occurs and then the carrier updates it\u0027s CarrierConfig value we will still use the value from the carrier instead of the old value that\u0027s been inserted into the SettingsProvider. What do you think?",
+      "range": {
+        "startLine": 2390,
+        "startChar": 16,
+        "endLine": 2392,
+        "endChar": 98
+      },
+      "revId": "1a6936abfa42d9b273ccb1e5195c015861d59101",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
