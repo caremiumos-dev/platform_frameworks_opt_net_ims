@@ -22,6 +22,30 @@
       "revId": "cc3139cea77d6f4debc0883111374cac1ec08cfc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fbd10952_29239db6",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-11-04T02:15:04Z",
+      "side": 1,
+      "message": "Published comments in change, this is taken care with change https://android-review.googlesource.com/#/c/platform/frameworks/base/+/529056/",
+      "parentUuid": "133db2ba_97ab1f91",
+      "range": {
+        "startLine": 1369,
+        "startChar": 15,
+        "endLine": 1369,
+        "endChar": 31
+      },
+      "revId": "cc3139cea77d6f4debc0883111374cac1ec08cfc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
