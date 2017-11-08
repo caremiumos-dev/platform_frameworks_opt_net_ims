@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "20c71bec_e5e10ca7",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-11-08T11:49:08Z",
+      "side": 1,
+      "message": "Will update.",
+      "parentUuid": "aacefa78_3ee00bc8",
+      "range": {
+        "startLine": 113,
+        "startChar": 16,
+        "endLine": 113,
+        "endChar": 40
+      },
+      "revId": "a5cbb0cbe3942a630fb1a2d10f59fd51bf42e6e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2c756bd_a75fe571",
         "filename": "src/java/com/android/ims/ImsUt.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "97fda249_4fb76aae",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-11-08T11:49:08Z",
+      "side": 1,
+      "message": "Will update.",
+      "parentUuid": "f2c756bd_a75fe571",
+      "range": {
+        "startLine": 117,
+        "startChar": 16,
+        "endLine": 117,
+        "endChar": 42
+      },
+      "revId": "a5cbb0cbe3942a630fb1a2d10f59fd51bf42e6e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "971036b5_233b196b",
         "filename": "src/java/com/android/ims/ImsUt.java",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2017-11-07T21:23:26Z",
       "side": 1,
       "message": "Seems you can just use Registrant#notifyResult(Object result)",
+      "range": {
+        "startLine": 699,
+        "startChar": 40,
+        "endLine": 699,
+        "endChar": 95
+      },
+      "revId": "a5cbb0cbe3942a630fb1a2d10f59fd51bf42e6e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc65e6ce_3c63ac1e",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-11-08T11:49:08Z",
+      "side": 1,
+      "message": "Will update.",
+      "parentUuid": "971036b5_233b196b",
       "range": {
         "startLine": 699,
         "startChar": 40,
