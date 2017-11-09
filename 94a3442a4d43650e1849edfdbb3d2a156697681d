@@ -22,6 +22,30 @@
       "revId": "94a3442a4d43650e1849edfdbb3d2a156697681d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "37e301e5_c8df5a0a",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2017-11-09T12:24:41Z",
+      "side": 1,
+      "message": "I updated it in the patchset5.",
+      "parentUuid": "b2c4c874_00cb3e05",
+      "range": {
+        "startLine": 330,
+        "startChar": 0,
+        "endLine": 330,
+        "endChar": 36
+      },
+      "revId": "94a3442a4d43650e1849edfdbb3d2a156697681d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
