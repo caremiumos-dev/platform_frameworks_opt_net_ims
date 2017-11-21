@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90162bff_f1437092",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-21T21:58:07Z",
+      "side": 1,
+      "message": "This will cause us to query every time, even if the override+slot exists... We should only do this if we know that the other version does not exist.\n\nSame with other methods.",
+      "range": {
+        "startLine": 536,
+        "startChar": 16,
+        "endLine": 537,
+        "endChar": 63
+      },
+      "revId": "fd423b26efc3decbc73411b8e26c52b48fc956b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d68f649_e00ef9aa",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-21T21:58:07Z",
+      "side": 1,
+      "message": "Slot ID is mPhoneId in this case.",
+      "range": {
+        "startLine": 890,
+        "startChar": 4,
+        "endLine": 892,
+        "endChar": 5
+      },
+      "revId": "fd423b26efc3decbc73411b8e26c52b48fc956b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a1367be5_c5613adf",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-21T21:58:07Z",
+      "side": 1,
+      "message": "Is this used anywhere?",
+      "range": {
+        "startLine": 1063,
+        "startChar": 20,
+        "endLine": 1063,
+        "endChar": 38
+      },
+      "revId": "fd423b26efc3decbc73411b8e26c52b48fc956b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
