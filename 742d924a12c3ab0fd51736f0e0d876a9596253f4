@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80161227_f102b512",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2017-11-21T01:34:32Z",
+      "side": 1,
+      "message": "nit: change to \"does not\".\n\nAlso you can probably add how this will be useful, i.e. to query call forwarding information for Video calls differently from Voice calls",
+      "revId": "742d924a12c3ab0fd51736f0e0d876a9596253f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
