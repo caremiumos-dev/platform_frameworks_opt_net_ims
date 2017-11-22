@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc6db48a_c425a4df",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-22T17:31:31Z",
+      "side": 1,
+      "message": "nit: please reformat to only go to the next line if the previous line doesn\u0027t fit under the line limit.\n\nDo you use Android studio with the \"AndroidStyle\" formatting?\n\nPlease also fix new code below.",
+      "range": {
+        "startLine": 398,
+        "startChar": 0,
+        "endLine": 404,
+        "endChar": 45
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e646366_54514cb0",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-22T17:31:31Z",
+      "side": 1,
+      "message": "We also want to use the default code if the override is set to 0 to keep the same functionality as before.\n\nPlease also fix the code below.",
+      "range": {
+        "startLine": 407,
+        "startChar": 12,
+        "endLine": 407,
+        "endChar": 46
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aaeea236_09e32ce3",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-22T17:31:31Z",
+      "side": 1,
+      "message": "Can you change this to OperationStatusConstants.UNKNOWN? I messed up when writing this originally and used the wrong value.",
+      "range": {
+        "startLine": 1089,
+        "startChar": 21,
+        "endLine": 1089,
+        "endChar": 58
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
