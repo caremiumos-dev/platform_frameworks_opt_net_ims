@@ -46,6 +46,30 @@
       "revId": "2335b7020d66b25ee22bc414faf2847582fb8290",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f87dc353_6757b245",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-22T16:59:51Z",
+      "side": 0,
+      "message": "Hmm you are right, we shouldn\u0027t have to worry about it anymore, since it is not set in ImsManager cache.",
+      "parentUuid": "149d8739_ad95773c",
+      "range": {
+        "startLine": 1092,
+        "startChar": 18,
+        "endLine": 1092,
+        "endChar": 46
+      },
+      "revId": "2335b7020d66b25ee22bc414faf2847582fb8290",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
