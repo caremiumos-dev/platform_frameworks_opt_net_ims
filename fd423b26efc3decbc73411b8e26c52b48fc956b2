@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "865b849a_4854d674",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-22T01:25:21Z",
+      "side": 1,
+      "message": "Will fix. Also, what if the system property is set to be 0? Seems we should return false here but not. Or is there logic behind it?",
+      "parentUuid": "90162bff_f1437092",
+      "range": {
+        "startLine": 536,
+        "startChar": 16,
+        "endLine": 537,
+        "endChar": 63
+      },
+      "revId": "fd423b26efc3decbc73411b8e26c52b48fc956b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d68f649_e00ef9aa",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6aac73d8_e4f869f2",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-22T01:25:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d68f649_e00ef9aa",
+      "range": {
+        "startLine": 890,
+        "startChar": 4,
+        "endLine": 892,
+        "endChar": 5
+      },
+      "revId": "fd423b26efc3decbc73411b8e26c52b48fc956b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a1367be5_c5613adf",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2017-11-21T21:58:07Z",
       "side": 1,
       "message": "Is this used anywhere?",
+      "range": {
+        "startLine": 1063,
+        "startChar": 20,
+        "endLine": 1063,
+        "endChar": 38
+      },
+      "revId": "fd423b26efc3decbc73411b8e26c52b48fc956b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "119228d3_430aeb5b",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-22T01:25:21Z",
+      "side": 1,
+      "message": "No, but that\u0027s a mistake. I planned to have getProvisionedBoolNoException to make use of it.",
+      "parentUuid": "a1367be5_c5613adf",
       "range": {
         "startLine": 1063,
         "startChar": 20,

@@ -22,6 +22,30 @@
       "revId": "2335b7020d66b25ee22bc414faf2847582fb8290",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "149d8739_ad95773c",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-22T01:25:21Z",
+      "side": 0,
+      "message": "Right, but now even if it\u0027s not set (in cache), it\u0027s OK because we\u0027ll just query it from modem. So that\u0027s why I making sure the values are cached during init is no longer necessary. Or am I missing somehting?",
+      "parentUuid": "83d4119d_c27acad6",
+      "range": {
+        "startLine": 1092,
+        "startChar": 18,
+        "endLine": 1092,
+        "endChar": 46
+      },
+      "revId": "2335b7020d66b25ee22bc414faf2847582fb8290",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
