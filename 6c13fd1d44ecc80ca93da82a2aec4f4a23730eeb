@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7d42843c_dbfd4525",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1127148
+      },
+      "writtenOn": "2017-11-22T22:42:18Z",
+      "side": 1,
+      "message": "For all the \u0027isEnabled\u0027/\u0027isAllowed\u0027 APIs in ImsManager, it would be really helpful to log the return values. So whenever one or more of these APIs is used in functional flows, like in GsmCdmaPhone\u0027s dial method, there wouldn\u0027t be a need to log the values of all these \u0027gatekeeping\u0027 APIs for IMS features every time.",
+      "range": {
+        "startLine": 395,
+        "startChar": 19,
+        "endLine": 395,
+        "endChar": 45
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc6db48a_c425a4df",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 3
