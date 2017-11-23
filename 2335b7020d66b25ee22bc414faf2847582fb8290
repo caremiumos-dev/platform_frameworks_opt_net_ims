@@ -70,6 +70,29 @@
       "revId": "2335b7020d66b25ee22bc414faf2847582fb8290",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "856abbaf_cffc7ff2",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1127148
+      },
+      "writtenOn": "2017-11-23T00:13:57Z",
+      "side": 0,
+      "message": "When IMS Manager APIs were converted to their non-static counterparts, there was a \u0027ForSlot\u0027 suffix added. When was this changed?",
+      "range": {
+        "startLine": 412,
+        "startChar": 19,
+        "endLine": 412,
+        "endChar": 45
+      },
+      "revId": "2335b7020d66b25ee22bc414faf2847582fb8290",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }

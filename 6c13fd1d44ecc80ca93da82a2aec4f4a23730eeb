@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ed5296da_93023b8e",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1127148
+      },
+      "writtenOn": "2017-11-23T00:13:57Z",
+      "side": 1,
+      "message": "As per the design document, isn\u0027t this property to be removed as well?",
+      "range": {
+        "startLine": 213,
+        "startChar": 32,
+        "endLine": 213,
+        "endChar": 49
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d42843c_dbfd4525",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 3
