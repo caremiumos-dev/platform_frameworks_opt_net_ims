@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5529b5e5_d7e83f41",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-27T23:40:38Z",
+      "side": 1,
+      "message": "Good point. I missed it. Will look into it.",
+      "parentUuid": "ed5296da_93023b8e",
+      "range": {
+        "startLine": 213,
+        "startChar": 32,
+        "endLine": 213,
+        "endChar": 49
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d42843c_dbfd4525",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-11-22T22:42:18Z",
       "side": 1,
       "message": "For all the \u0027isEnabled\u0027/\u0027isAllowed\u0027 APIs in ImsManager, it would be really helpful to log the return values. So whenever one or more of these APIs is used in functional flows, like in GsmCdmaPhone\u0027s dial method, there wouldn\u0027t be a need to log the values of all these \u0027gatekeeping\u0027 APIs for IMS features every time.",
+      "range": {
+        "startLine": 395,
+        "startChar": 19,
+        "endLine": 395,
+        "endChar": 45
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ebd26ee_2c3b0b46",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-27T23:40:38Z",
+      "side": 1,
+      "message": "It could be too verbose. Some client might call \nImsManager.is**EnabledByPlatform \u0026\u0026 ImsManager.is**EnabledByUser \u0026\u0026 ...\nquite often, which would generate too many repeated logs. @Brad what do you think?",
+      "parentUuid": "7d42843c_dbfd4525",
       "range": {
         "startLine": 395,
         "startChar": 19,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "cbbb5ea3_5b03148d",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-27T23:40:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc6db48a_c425a4df",
+      "range": {
+        "startLine": 398,
+        "startChar": 0,
+        "endLine": 404,
+        "endChar": 45
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e646366_54514cb0",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "2918be3a_8f040d31",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-27T23:40:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e646366_54514cb0",
+      "range": {
+        "startLine": 407,
+        "startChar": 12,
+        "endLine": 407,
+        "endChar": 46
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aaeea236_09e32ce3",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 3
@@ -105,6 +201,30 @@
       "writtenOn": "2017-11-22T17:31:31Z",
       "side": 1,
       "message": "Can you change this to OperationStatusConstants.UNKNOWN? I messed up when writing this originally and used the wrong value.",
+      "range": {
+        "startLine": 1089,
+        "startChar": 21,
+        "endLine": 1089,
+        "endChar": 58
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9dc8b32_38cd536c",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-27T23:40:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aaeea236_09e32ce3",
       "range": {
         "startLine": 1089,
         "startChar": 21,

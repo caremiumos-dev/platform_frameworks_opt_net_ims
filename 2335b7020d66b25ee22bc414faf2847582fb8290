@@ -93,6 +93,30 @@
       "revId": "2335b7020d66b25ee22bc414faf2847582fb8290",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f133aa0f_fe4c8c50",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-27T23:40:38Z",
+      "side": 0,
+      "message": "They are removed sometime (about a few months) ago.",
+      "parentUuid": "856abbaf_cffc7ff2",
+      "range": {
+        "startLine": 412,
+        "startChar": 19,
+        "endLine": 412,
+        "endChar": 45
+      },
+      "revId": "2335b7020d66b25ee22bc414faf2847582fb8290",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
