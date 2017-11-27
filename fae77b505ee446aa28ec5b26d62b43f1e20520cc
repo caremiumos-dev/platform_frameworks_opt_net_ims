@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4bfbbd1_1b6c842e",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2017-11-27T20:48:58Z",
+      "side": 1,
+      "message": "Maybe the order of these could be flipped? Also could you add a comment linking to the similar definition of these in CommandsInterface",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 52
+      },
+      "revId": "fae77b505ee446aa28ec5b26d62b43f1e20520cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
