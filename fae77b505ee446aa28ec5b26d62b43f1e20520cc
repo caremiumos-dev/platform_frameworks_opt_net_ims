@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "47a58b37_924be63c",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-29T23:39:03Z",
+      "side": 1,
+      "message": "If we are looking at moving to the new method, add a @deprecated tag to the javadoc for this method.",
+      "range": {
+        "startLine": 125,
+        "startChar": 16,
+        "endLine": 125,
+        "endChar": 32
+      },
+      "revId": "fae77b505ee446aa28ec5b26d62b43f1e20520cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7100f77_b390286e",
         "filename": "src/java/com/android/ims/ImsUt.java",
         "patchSetId": 1
@@ -41,6 +64,29 @@
         "startChar": 45,
         "endLine": 138,
         "endChar": 61
+      },
+      "revId": "fae77b505ee446aa28ec5b26d62b43f1e20520cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2b50862f_8b3cbd79",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-11-29T23:39:03Z",
+      "side": 1,
+      "message": "Add @deprecated",
+      "range": {
+        "startLine": 325,
+        "startChar": 7,
+        "endLine": 325,
+        "endChar": 54
       },
       "revId": "fae77b505ee446aa28ec5b26d62b43f1e20520cc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
