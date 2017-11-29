@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1a145f7e_ea3283af",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-29T21:52:48Z",
+      "side": 1,
+      "message": "To remove it, we need a dependency of another bug. So we\u0027ll do it there. b/69814555",
+      "parentUuid": "5529b5e5_d7e83f41",
+      "range": {
+        "startLine": 213,
+        "startChar": 32,
+        "endLine": 213,
+        "endChar": 49
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d42843c_dbfd4525",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 3
@@ -93,6 +117,30 @@
       "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c01abd8_714616bd",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2017-11-29T21:52:48Z",
+      "side": 1,
+      "message": "I think it could be too verbose. The caller can log the result if they want.",
+      "parentUuid": "3ebd26ee_2c3b0b46",
+      "range": {
+        "startLine": 395,
+        "startChar": 19,
+        "endLine": 395,
+        "endChar": 45
+      },
+      "revId": "6c13fd1d44ecc80ca93da82a2aec4f4a23730eeb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
