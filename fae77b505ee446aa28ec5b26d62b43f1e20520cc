@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d2dda5af_63b700f8",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1135337
+      },
+      "writtenOn": "2017-11-30T12:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4bfbbd1_1b6c842e",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 52
+      },
+      "revId": "fae77b505ee446aa28ec5b26d62b43f1e20520cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47a58b37_924be63c",
         "filename": "src/java/com/android/ims/ImsUt.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-11-29T23:39:03Z",
       "side": 1,
       "message": "If we are looking at moving to the new method, add a @deprecated tag to the javadoc for this method.",
+      "range": {
+        "startLine": 125,
+        "startChar": 16,
+        "endLine": 125,
+        "endChar": 32
+      },
+      "revId": "fae77b505ee446aa28ec5b26d62b43f1e20520cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "78566131_9ad0cc74",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1135337
+      },
+      "writtenOn": "2017-11-30T12:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47a58b37_924be63c",
       "range": {
         "startLine": 125,
         "startChar": 16,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b2d47070_11f1fdcf",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1135337
+      },
+      "writtenOn": "2017-11-30T12:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7100f77_b390286e",
+      "range": {
+        "startLine": 138,
+        "startChar": 45,
+        "endLine": 138,
+        "endChar": 61
+      },
+      "revId": "fae77b505ee446aa28ec5b26d62b43f1e20520cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b50862f_8b3cbd79",
         "filename": "src/java/com/android/ims/ImsUt.java",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "feebc8c9_b9f25cea",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1135337
+      },
+      "writtenOn": "2017-11-30T12:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b50862f_8b3cbd79",
+      "range": {
+        "startLine": 325,
+        "startChar": 7,
+        "endLine": 325,
+        "endChar": 54
+      },
+      "revId": "fae77b505ee446aa28ec5b26d62b43f1e20520cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a467a7b_990a6538",
         "filename": "src/java/com/android/ims/ImsUt.java",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2017-11-27T20:49:56Z",
       "side": 1,
       "message": "Same",
+      "range": {
+        "startLine": 336,
+        "startChar": 58,
+        "endLine": 336,
+        "endChar": 74
+      },
+      "revId": "fae77b505ee446aa28ec5b26d62b43f1e20520cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7793264c_4b5b0440",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1135337
+      },
+      "writtenOn": "2017-11-30T12:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a467a7b_990a6538",
       "range": {
         "startLine": 336,
         "startChar": 58,
