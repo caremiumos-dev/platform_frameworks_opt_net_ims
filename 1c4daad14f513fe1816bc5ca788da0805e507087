@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3de65019_e6c99d67",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-12-04T23:27:50Z",
+      "side": 1,
+      "message": "Add a comment to this method documenting usage, along the lines of:\n\n/**\n * Registers a handler for Supplementary Service Indications. The \n * result is returned in the {@link AsyncResult#result) field \n * of the {@link AsyncResult} object returned by {@link Message.obj}.\n */",
+      "range": {
+        "startLine": 113,
+        "startChar": 16,
+        "endLine": 113,
+        "endChar": 48
+      },
+      "revId": "1c4daad14f513fe1816bc5ca788da0805e507087",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
