@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "18e02d72_ca21e51b",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:11:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3de65019_e6c99d67",
+      "range": {
+        "startLine": 113,
+        "startChar": 16,
+        "endLine": 113,
+        "endChar": 48
+      },
+      "revId": "1c4daad14f513fe1816bc5ca788da0805e507087",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "54ae219e_161460fd",
         "filename": "src/java/com/android/ims/ImsUt.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-04T23:30:12Z",
       "side": 1,
       "message": "These don\u0027t need to be STK specific. Please remove",
+      "range": {
+        "startLine": 694,
+        "startChar": 32,
+        "endLine": 694,
+        "endChar": 38
+      },
+      "revId": "1c4daad14f513fe1816bc5ca788da0805e507087",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae0729e_fd6e0372",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1228381
+      },
+      "writtenOn": "2017-12-05T16:11:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54ae219e_161460fd",
       "range": {
         "startLine": 694,
         "startChar": 32,
