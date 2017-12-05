@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef14c135_c21f4dae",
+        "filename": "src/java/com/android/ims/ImsUt.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2017-12-05T17:34:01Z",
+      "side": 1,
+      "message": "ImsSsData",
+      "range": {
+        "startLine": 121,
+        "startChar": 55,
+        "endLine": 121,
+        "endChar": 65
+      },
+      "revId": "79e5ef16b40da8cd41f6ef11abd8707fcac1a4c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
