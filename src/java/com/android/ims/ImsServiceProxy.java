@@ -17,9 +17,12 @@
 package com.android.ims;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
+import android.telephony.Rlog;
+import android.telephony.TelephonyManager;
 import android.telephony.ims.feature.ImsFeature;
 import android.util.Log;
 
@@ -29,6 +32,7 @@ import com.android.ims.internal.IImsConfig;
 import com.android.ims.internal.IImsEcbm;
 import com.android.ims.internal.IImsMMTelFeature;
 import com.android.ims.internal.IImsMultiEndpoint;
+import com.android.ims.internal.IImsRegistration;
 import com.android.ims.internal.IImsRegistrationListener;
 import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.ims.internal.IImsUt;
@@ -41,10 +45,11 @@ import com.android.ims.internal.IImsUt;
 
 public class ImsServiceProxy {
 
-    protected String LOG_TAG = "ImsServiceProxy";
+    protected static final String LOG_TAG = "ImsServiceProxy";
     protected final int mSlotId;
     protected IBinder mBinder;
     private final int mSupportedFeature;
+    private Context mContext;
 
     // Start by assuming the proxy is available for usage.
     private boolean mIsAvailable = true;
@@ -52,6 +57,26 @@ public class ImsServiceProxy {
     private Integer mFeatureStatusCached = null;
     private ImsServiceProxy.INotifyStatusChanged mStatusCallback;
     private final Object mLock = new Object();
+
+    public static ImsServiceProxy create(Context context , int slotId) {
+        ImsServiceProxy serviceProxy = new ImsServiceProxy(context, slotId, ImsFeature.MMTEL);
+
+        // Returns null if the service is not available.
+        IImsMMTelFeature b = getTelephonyManager(context).getImsMMTelFeatureAndListen(slotId,
+                serviceProxy.getListener());
+        if (b != null) {
+            serviceProxy.setBinder(b.asBinder());
+            // Trigger the cache to be updated for feature status.
+            serviceProxy.getFeatureStatus();
+        } else {
+            Rlog.w(LOG_TAG, "getServiceProxy: b is null! Phone Id: " + slotId);
+        }
+        return serviceProxy;
+    }
+
+    public static TelephonyManager getTelephonyManager(Context context) {
+        return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    }
 
     public interface INotifyStatusChanged {
         void notifyStatusChanged();
@@ -104,8 +129,13 @@ public class ImsServiceProxy {
         mSupportedFeature = featureType;
     }
 
-    public ImsServiceProxy(int slotId, int featureType) {
+    public ImsServiceProxy(Context context, int slotId, int featureType) {
         this(slotId, null, featureType);
+        mContext = context;
+    }
+
+    public IImsRegistration getRegistration() {
+        return getTelephonyManager(mContext).getImsRegistration(mSlotId, ImsFeature.MMTEL);
     }
 
     public IImsServiceFeatureCallback getListener() {
