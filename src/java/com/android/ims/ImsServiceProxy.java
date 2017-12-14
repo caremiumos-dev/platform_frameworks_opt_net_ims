@@ -16,10 +16,14 @@
 
 package com.android.ims;
 
+import android.annotation.Nullable;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
+import android.telephony.Rlog;
+import android.telephony.TelephonyManager;
 import android.telephony.ims.feature.ImsFeature;
 import android.util.Log;
 
@@ -29,6 +33,7 @@ import com.android.ims.internal.IImsConfig;
 import com.android.ims.internal.IImsEcbm;
 import com.android.ims.internal.IImsMMTelFeature;
 import com.android.ims.internal.IImsMultiEndpoint;
+import com.android.ims.internal.IImsRegistration;
 import com.android.ims.internal.IImsRegistrationListener;
 import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.ims.internal.IImsUt;
@@ -41,20 +46,52 @@ import com.android.ims.internal.IImsUt;
 
 public class ImsServiceProxy {
 
-    protected String LOG_TAG = "ImsServiceProxy";
+    protected static final String TAG = "ImsServiceProxy";
     protected final int mSlotId;
     protected IBinder mBinder;
     private final int mSupportedFeature;
+    private Context mContext;
 
     // Start by assuming the proxy is available for usage.
     private boolean mIsAvailable = true;
     // ImsFeature Status from the ImsService. Cached.
     private Integer mFeatureStatusCached = null;
-    private ImsServiceProxy.INotifyStatusChanged mStatusCallback;
+    private IFeatureUpdate mStatusCallback;
     private final Object mLock = new Object();
 
-    public interface INotifyStatusChanged {
-        void notifyStatusChanged();
+    public static ImsServiceProxy create(Context context , int slotId) {
+        ImsServiceProxy serviceProxy = new ImsServiceProxy(context, slotId, ImsFeature.MMTEL);
+
+        TelephonyManager tm  = getTelephonyManager(context);
+        // Returns null if the service is not available.
+        IImsMMTelFeature binder = tm != null ? tm.getImsMMTelFeatureAndListen(slotId,
+                serviceProxy.getListener()) : null;
+        if (binder != null) {
+            serviceProxy.setBinder(binder.asBinder());
+            // Trigger the cache to be updated for feature status.
+            serviceProxy.getFeatureStatus();
+        } else {
+            Rlog.w(TAG, "getServiceProxy: binder is null! Phone Id: " + slotId);
+        }
+        return serviceProxy;
+    }
+
+    public static TelephonyManager getTelephonyManager(Context context) {
+        return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    }
+
+    public interface IFeatureUpdate {
+        /**
+         * Called when the ImsFeature has changed its state. Use
+         * {@link ImsFeature#getFeatureState()} to get the new state.
+         */
+        void notifyStateChanged();
+
+        /**
+         * Called when the ImsFeature has become unavailable due to the binder switching or app
+         * crashing. A new ImsServiceProxy should be requested for that feature.
+         */
+        void notifyUnavailable();
     }
 
     private final IImsServiceFeatureCallback mListenerBinder =
@@ -65,7 +102,7 @@ public class ImsServiceProxy {
             // The feature has been re-enabled. This may happen when the service crashes.
             synchronized (mLock) {
                 if (!mIsAvailable && mSlotId == slotId && feature == mSupportedFeature) {
-                    Log.i(LOG_TAG, "Feature enabled on slotId: " + slotId + " for feature: " +
+                    Log.i(TAG, "Feature enabled on slotId: " + slotId + " for feature: " +
                             feature);
                     mIsAvailable = true;
                 }
@@ -76,9 +113,12 @@ public class ImsServiceProxy {
         public void imsFeatureRemoved(int slotId, int feature) throws RemoteException {
             synchronized (mLock) {
                 if (mIsAvailable && mSlotId == slotId && feature == mSupportedFeature) {
-                    Log.i(LOG_TAG, "Feature disabled on slotId: " + slotId + " for feature: " +
+                    Log.i(TAG, "Feature disabled on slotId: " + slotId + " for feature: " +
                             feature);
                     mIsAvailable = false;
+                    if (mStatusCallback != null) {
+                        mStatusCallback.notifyUnavailable();
+                    }
                 }
             }
         }
@@ -86,12 +126,12 @@ public class ImsServiceProxy {
         @Override
         public void imsStatusChanged(int slotId, int feature, int status) throws RemoteException {
             synchronized (mLock) {
-                Log.i(LOG_TAG, "imsStatusChanged: slot: " + slotId + " feature: " + feature +
+                Log.i(TAG, "imsStatusChanged: slot: " + slotId + " feature: " + feature +
                         " status: " + status);
                 if (mSlotId == slotId && feature == mSupportedFeature) {
                     mFeatureStatusCached = status;
                     if (mStatusCallback != null) {
-                        mStatusCallback.notifyStatusChanged();
+                        mStatusCallback.notifyStateChanged();
                     }
                 }
             }
@@ -104,8 +144,14 @@ public class ImsServiceProxy {
         mSupportedFeature = featureType;
     }
 
-    public ImsServiceProxy(int slotId, int featureType) {
+    public ImsServiceProxy(Context context, int slotId, int featureType) {
         this(slotId, null, featureType);
+        mContext = context;
+    }
+
+    public @Nullable IImsRegistration getRegistration() {
+        TelephonyManager tm = getTelephonyManager(mContext);
+        return tm != null ? tm.getImsRegistration(mSlotId, ImsFeature.MMTEL) : null;
     }
 
     public IImsServiceFeatureCallback getListener() {
@@ -246,7 +292,7 @@ public class ImsServiceProxy {
     public int getFeatureStatus() {
         synchronized (mLock) {
             if (isBinderAlive() && mFeatureStatusCached != null) {
-                Log.i(LOG_TAG, "getFeatureStatus - returning cached: " + mFeatureStatusCached);
+                Log.i(TAG, "getFeatureStatus - returning cached: " + mFeatureStatusCached);
                 return mFeatureStatusCached;
             }
         }
@@ -259,7 +305,7 @@ public class ImsServiceProxy {
             // Cache only non-null value for feature status.
             mFeatureStatusCached = status;
         }
-        Log.i(LOG_TAG, "getFeatureStatus - returning " + status);
+        Log.i(TAG, "getFeatureStatus - returning " + status);
         return status;
     }
 
@@ -280,7 +326,7 @@ public class ImsServiceProxy {
     /**
      * @param c Callback that will fire when the feature status has changed.
      */
-    public void setStatusCallback(INotifyStatusChanged c) {
+    public void setStatusCallback(IFeatureUpdate c) {
         mStatusCallback = c;
     }
 
