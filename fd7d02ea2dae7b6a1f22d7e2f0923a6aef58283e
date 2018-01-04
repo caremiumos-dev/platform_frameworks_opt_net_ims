@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d44bfb74_3aa1fb17",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1125174
+      },
+      "writtenOn": "2018-01-04T03:39:52Z",
+      "side": 1,
+      "message": "Do we need to clean up mProposedCallProfile or mUpdateRequest here?",
+      "revId": "fd7d02ea2dae7b6a1f22d7e2f0923a6aef58283e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
