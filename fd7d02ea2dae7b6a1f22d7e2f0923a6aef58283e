@@ -16,6 +16,24 @@
       "revId": "fd7d02ea2dae7b6a1f22d7e2f0923a6aef58283e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20b76e28_213b3007",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1140173
+      },
+      "writtenOn": "2018-01-08T12:54:12Z",
+      "side": 1,
+      "message": "Call deflect is like reject, so we could clean up mProposedCallProfile or mUpdateRequest here.\nBut, I see that the code @line 1202-1213 won\u0027t be executed (since, mInCall is FALSE always and never set to TRUE). \n\nHence, I have not included the clean up code.",
+      "parentUuid": "d44bfb74_3aa1fb17",
+      "revId": "fd7d02ea2dae7b6a1f22d7e2f0923a6aef58283e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
