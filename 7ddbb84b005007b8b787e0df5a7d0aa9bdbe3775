@@ -48,6 +48,144 @@
     },
     {
       "key": {
+        "uuid": "37a9d654_29e1251d",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-11T18:51:14Z",
+      "side": 1,
+      "message": "I vote against the one-letter variable name, especially an \"l\", or is it a \"I\" or is it a \"1\"? Which font am I reading in? Who knows!",
+      "range": {
+        "startLine": 1510,
+        "startChar": 67,
+        "endLine": 1510,
+        "endChar": 68
+      },
+      "revId": "7ddbb84b005007b8b787e0df5a7d0aa9bdbe3775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70eab97e_fc5d24c5",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1963,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-11T18:51:14Z",
+      "side": 1,
+      "message": "One thing I\u0027ve noticed in old comments that helps me is if there is code that is \"TODO: remove\" putting a sunset date on it is kind of nice. In this case \"Deprecated: remove in 2019\" Then when someone else comes along and sees it or wants to use it, they are on notice.\n\nLikewise, TODO tags can help find all the touch points and may also be useful, like \"TODO(imsapimigrate)\" will help find all the places that are going to change when we require the new ims to be used...\n\nno action required for this comment, just thoughts.",
+      "range": {
+        "startLine": 1963,
+        "startChar": 15,
+        "endLine": 1963,
+        "endChar": 43
+      },
+      "revId": "7ddbb84b005007b8b787e0df5a7d0aa9bdbe3775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df0c73fa_253f3019",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2326,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-11T18:51:14Z",
+      "side": 1,
+      "message": "this can just go on one line.",
+      "range": {
+        "startLine": 2324,
+        "startChar": 12,
+        "endLine": 2326,
+        "endChar": 13
+      },
+      "revId": "7ddbb84b005007b8b787e0df5a7d0aa9bdbe3775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a49ea03_20cdaac0",
+        "filename": "src/java/com/android/ims/ImsServiceProxy.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-11T18:51:14Z",
+      "side": 1,
+      "message": "conventionally just \"TAG\". meh.",
+      "range": {
+        "startLine": 48,
+        "startChar": 34,
+        "endLine": 48,
+        "endChar": 41
+      },
+      "revId": "7ddbb84b005007b8b787e0df5a7d0aa9bdbe3775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3044a0e1_393dede5",
+        "filename": "src/java/com/android/ims/ImsServiceProxy.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-11T18:51:14Z",
+      "side": 1,
+      "message": "why is this \"b\"? was there an \"a\" at some point? I must protest.",
+      "range": {
+        "startLine": 65,
+        "startChar": 25,
+        "endLine": 65,
+        "endChar": 26
+      },
+      "revId": "7ddbb84b005007b8b787e0df5a7d0aa9bdbe3775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a670e82c_ae77edb7",
+        "filename": "src/java/com/android/ims/ImsServiceProxy.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-11T18:51:14Z",
+      "side": 1,
+      "message": "local variable name in debug log.",
+      "range": {
+        "startLine": 72,
+        "startChar": 46,
+        "endLine": 72,
+        "endChar": 47
+      },
+      "revId": "7ddbb84b005007b8b787e0df5a7d0aa9bdbe3775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33c99a01_c2270675",
         "filename": "src/java/com/android/ims/ImsServiceProxy.java",
         "patchSetId": 9
@@ -68,6 +206,53 @@
       "revId": "7ddbb84b005007b8b787e0df5a7d0aa9bdbe3775",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52b551f8_9cbebd1c",
+        "filename": "src/java/com/android/ims/ImsServiceProxy.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-11T18:51:14Z",
+      "side": 1,
+      "message": "If the phone process crashed then telephony would return null and NPE this. would a crashed IMS service be a problem here? I\u0027d expect this to return null (in which case @Nullable) would be nice as would a comment.",
+      "parentUuid": "33c99a01_c2270675",
+      "range": {
+        "startLine": 151,
+        "startChar": 45,
+        "endLine": 151,
+        "endChar": 63
+      },
+      "revId": "7ddbb84b005007b8b787e0df5a7d0aa9bdbe3775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33ddf845_eb0ee60e",
+        "filename": "src/java/com/android/ims/ImsServiceProxyCompat.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-11T18:51:14Z",
+      "side": 1,
+      "message": "do we really want to silently catch a remote exception here?  If the process we bind to is already dead... how should the caller notice and handle that? I am guessing the right thing is to return null.",
+      "range": {
+        "startLine": 63,
+        "startChar": 12,
+        "endLine": 63,
+        "endChar": 41
+      },
+      "revId": "7ddbb84b005007b8b787e0df5a7d0aa9bdbe3775",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
