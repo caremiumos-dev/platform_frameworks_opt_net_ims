@@ -196,18 +196,12 @@ public class ImsServiceProxy {
 
     public void addRegistrationListener(IImsRegistrationListener listener)
     throws RemoteException {
-        synchronized (mLock) {
-            checkServiceIsReady();
-            getServiceInterface(mBinder).addRegistrationListener(listener);
-        }
+        // Base Implementation is a no-op, only used for compat layer.
     }
 
     public void removeRegistrationListener(IImsRegistrationListener listener)
             throws RemoteException {
-        synchronized (mLock) {
-            checkServiceIsReady();
-            getServiceInterface(mBinder).removeRegistrationListener(listener);
-        }
+        // Base Implementation is a no-op, only used for compat layer.
     }
 
     public ImsCallProfile createCallProfile(int sessionId, int callServiceType, int callType)

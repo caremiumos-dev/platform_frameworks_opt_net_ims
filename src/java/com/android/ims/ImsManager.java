@@ -1516,7 +1516,7 @@ public class ImsManager {
             if (!mHasRegisteredForProxy) {
                 try {
                     checkAndThrowExceptionIfServiceUnavailable();
-                    // TODO: Remove once new MmTelFeature is merged in
+                    // Only used for compatibility with devices that do not use dynamic binding
                     mImsServiceProxy.addRegistrationListener(mImsRegistrationListenerProxy);
                     mImsServiceProxy.getRegistration().addRegistrationCallback(
                             mRegistrationCallback);
