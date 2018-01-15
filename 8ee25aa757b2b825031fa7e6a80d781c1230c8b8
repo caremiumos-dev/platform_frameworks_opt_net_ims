@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af0f1d20_019f5faf",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-15T22:03:04Z",
+      "side": 1,
+      "message": "Why would/should/could anybody pass null here? Is that a programming error? If so... suggest to flag it with a nasty note.",
+      "range": {
+        "startLine": 1421,
+        "startChar": 12,
+        "endLine": 1421,
+        "endChar": 13
+      },
+      "revId": "8ee25aa757b2b825031fa7e6a80d781c1230c8b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "693578e3_85e3a156",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-15T22:03:04Z",
+      "side": 1,
+      "message": "-__-",
+      "range": {
+        "startLine": 1541,
+        "startChar": 14,
+        "endLine": 1541,
+        "endChar": 15
+      },
+      "revId": "8ee25aa757b2b825031fa7e6a80d781c1230c8b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51d5ece2_2da4ec96",
+        "filename": "src/java/com/android/ims/ImsServiceProxy.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-15T22:03:04Z",
+      "side": 1,
+      "message": "as written, we\u0027d get this warning if TM is null, which is a bit misleading. I suggest returning null if TM is null and giving that a distinct warning/error.",
+      "range": {
+        "startLine": 74,
+        "startChar": 13,
+        "endLine": 74,
+        "endChar": 80
+      },
+      "revId": "8ee25aa757b2b825031fa7e6a80d781c1230c8b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cd002aa2_132cf3ab",
+        "filename": "src/java/com/android/ims/ImsServiceProxyCompat.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2018-01-15T22:03:04Z",
+      "side": 1,
+      "message": "will not return one of these with a null binder? I think i might have asked this before and forgotten the answer. If so, I apologize. Maybe a comment stating that it\u0027s ok to build a compat with a null binder?",
+      "range": {
+        "startLine": 67,
+        "startChar": 19,
+        "endLine": 67,
+        "endChar": 40
+      },
+      "revId": "8ee25aa757b2b825031fa7e6a80d781c1230c8b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
