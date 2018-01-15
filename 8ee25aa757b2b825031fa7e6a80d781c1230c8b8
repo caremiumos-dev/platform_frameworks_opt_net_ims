@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a7f4f9b0_5fabd0ba",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-01-15T22:17:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af0f1d20_019f5faf",
+      "range": {
+        "startLine": 1421,
+        "startChar": 12,
+        "endLine": 1421,
+        "endChar": 13
+      },
+      "revId": "8ee25aa757b2b825031fa7e6a80d781c1230c8b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "693578e3_85e3a156",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 12
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "696bbffb_19c2ee32",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-01-15T22:17:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "693578e3_85e3a156",
+      "range": {
+        "startLine": 1541,
+        "startChar": 14,
+        "endLine": 1541,
+        "endChar": 15
+      },
+      "revId": "8ee25aa757b2b825031fa7e6a80d781c1230c8b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51d5ece2_2da4ec96",
         "filename": "src/java/com/android/ims/ImsServiceProxy.java",
         "patchSetId": 12
@@ -59,6 +107,30 @@
       "writtenOn": "2018-01-15T22:03:04Z",
       "side": 1,
       "message": "as written, we\u0027d get this warning if TM is null, which is a bit misleading. I suggest returning null if TM is null and giving that a distinct warning/error.",
+      "range": {
+        "startLine": 74,
+        "startChar": 13,
+        "endLine": 74,
+        "endChar": 80
+      },
+      "revId": "8ee25aa757b2b825031fa7e6a80d781c1230c8b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0cd019d9_fbba6329",
+        "filename": "src/java/com/android/ims/ImsServiceProxy.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-01-15T22:17:42Z",
+      "side": 1,
+      "message": "Not gonna return null, but I will return a different error (this method wasn\u0027t built to return null).",
+      "parentUuid": "51d5ece2_2da4ec96",
       "range": {
         "startLine": 74,
         "startChar": 13,
