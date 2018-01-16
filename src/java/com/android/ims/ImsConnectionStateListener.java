@@ -17,7 +17,11 @@
 package com.android.ims;
 
 import android.net.Uri;
+import android.telephony.ims.feature.ImsFeature;
+import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
+
+import java.util.Arrays;
 
 /**
  * Listener for receiving notifications about changes to the IMS connection.
@@ -52,6 +56,64 @@ public class ImsConnectionStateListener extends ImsRegistrationImplBase.Callback
     @Override
     public void onSubscriberAssociatedUriChanged(Uri[] uris) {
         registrationAssociatedUriChanged(uris);
+    }
+
+    /**
+     * Used to convert from the new capabilities structure to the old features structure for
+     * backwards compatibility.
+     * @param c
+     */
+    public void onFeatureCapabilityChangedAdapter(
+            @ImsRegistrationImplBase.ImsRegistrationTech int imsRadioTech,
+            ImsFeature.Capabilities c) {
+        // Size of ImsConfig.FeatureConstants
+        int[] enabledCapabilities = new int[6];
+        // Apparently means disabled...?
+        Arrays.fill(enabledCapabilities, ImsConfig.FeatureConstants.FEATURE_TYPE_UNKNOWN);
+        int[] disabledCapabilities = new int[6];
+        Arrays.fill(disabledCapabilities, ImsConfig.FeatureConstants.FEATURE_TYPE_UNKNOWN);
+        // populate enabledCapabilities
+        switch (imsRadioTech) {
+            case ImsRegistrationImplBase.REGISTRATION_TECH_LTE: {
+                if (c.isCapable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE)) {
+                    // enabled means equal to its own integer value.
+                    enabledCapabilities[ImsConfig.FeatureConstants.FEATURE_TYPE_VOICE_OVER_LTE] =
+                            ImsConfig.FeatureConstants.FEATURE_TYPE_VOICE_OVER_LTE;
+                }
+                if (c.isCapable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VIDEO)) {
+                    enabledCapabilities[ImsConfig.FeatureConstants.FEATURE_TYPE_VIDEO_OVER_LTE] =
+                            ImsConfig.FeatureConstants.FEATURE_TYPE_VIDEO_OVER_LTE;
+                }
+                if (c.isCapable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_UT)) {
+                    enabledCapabilities[ImsConfig.FeatureConstants.FEATURE_TYPE_UT_OVER_LTE] =
+                            ImsConfig.FeatureConstants.FEATURE_TYPE_UT_OVER_LTE;
+                }
+                break;
+            }
+            case ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN: {
+                if (c.isCapable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE)) {
+                    enabledCapabilities[ImsConfig.FeatureConstants.FEATURE_TYPE_VOICE_OVER_WIFI] =
+                            ImsConfig.FeatureConstants.FEATURE_TYPE_VOICE_OVER_WIFI;
+                }
+                if (c.isCapable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VIDEO)) {
+                    enabledCapabilities[ImsConfig.FeatureConstants.FEATURE_TYPE_VIDEO_OVER_WIFI] =
+                            ImsConfig.FeatureConstants.FEATURE_TYPE_VOICE_OVER_WIFI;
+                }
+                if (c.isCapable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_UT)) {
+                    enabledCapabilities[ImsConfig.FeatureConstants.FEATURE_TYPE_UT_OVER_WIFI] =
+                            ImsConfig.FeatureConstants.FEATURE_TYPE_UT_OVER_WIFI;
+                }
+                break;
+            }
+        }
+        // make disabledCapabilities  the opposite of enabledCapabilities
+        for (int i = 0; i < enabledCapabilities.length; i++) {
+            if (enabledCapabilities[i] != i) {
+                disabledCapabilities[i] = i;
+            }
+        }
+        onFeatureCapabilityChanged(ImsServiceClass.MMTEL, enabledCapabilities,
+                disabledCapabilities);
     }
     /**
      * Called when the device is connected to the IMS network with {@param imsRadioTech}.
