@@ -1964,7 +1964,7 @@ public class ImsManager {
         if (!mConfigDynamicBind) {
             // Deprecated method of binding
             Rlog.i(TAG, "Creating ImsService using ServiceManager");
-            mImsServiceProxy = ImsServiceProxyCompat.create(mPhoneId, mDeathRecipient);
+            mImsServiceProxy = ImsServiceProxyCompat.create(mContext, mPhoneId, mDeathRecipient);
         } else {
             Rlog.i(TAG, "Creating ImsService using ImsResolver");
             mImsServiceProxy = ImsServiceProxy.create(mContext, mPhoneId);
