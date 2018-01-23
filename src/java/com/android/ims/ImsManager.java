@@ -1349,7 +1349,8 @@ public class ImsManager {
      */
     @VisibleForTesting
     public ImsManager(Context context, int phoneId) {
-        mContext = context;
+        Context appContext = context.getApplicationContext();
+        mContext = appContext != null ? appContext : context;
         mPhoneId = phoneId;
         mConfigDynamicBind = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_dynamic_bind_ims);
