@@ -73,6 +73,11 @@ public class MmTelFeatureConnection {
     private IImsRegistration mRegistrationBinder;
     private IImsConfig mConfigBinder;
 
+    private IBinder.DeathRecipient mDeathRecipient = () -> {
+            Log.w(TAG, "DeathRecipient triggered, binder died.");
+            onRemovedOrDied();
+    };
+
     private abstract class CallbackAdapterManager<T> {
         private static final String TAG = "CallbackAdapterManager";
 
@@ -333,14 +338,8 @@ public class MmTelFeatureConnection {
                 }
                 switch (feature) {
                     case ImsFeature.FEATURE_MMTEL: {
-                        if (mIsAvailable) {
-                            Log.i(TAG, "MmTel disabled on slotId: " + slotId);
-                            mIsAvailable = false;
-                            mmTelFeatureRemoved();
-                            if (mStatusCallback != null) {
-                                mStatusCallback.notifyUnavailable();
-                            }
-                        }
+                        Log.i(TAG, "MmTel removed on slotId: " + slotId);
+                        onRemovedOrDied();
                         break;
                     }
                     case ImsFeature.FEATURE_EMERGENCY_MMTEL : {
@@ -372,12 +371,23 @@ public class MmTelFeatureConnection {
         mContext = context;
     }
 
-    // Called when the MmTelFeatureConnection has received an unavailable notification.
-    private void mmTelFeatureRemoved() {
+    /**
+     * Called when the MmTelFeature has either been removed by Telephony or crashed.
+     */
+    private void onRemovedOrDied() {
         synchronized (mLock) {
-            // invalidate caches.
-            mRegistrationBinder = null;
-            mConfigBinder = null;
+            if (mIsAvailable) {
+                mIsAvailable = false;
+                // invalidate caches.
+                mRegistrationBinder = null;
+                mConfigBinder = null;
+                if (mBinder != null) {
+                    mBinder.unlinkToDeath(mDeathRecipient, 0);
+                }
+                if (mStatusCallback != null) {
+                    mStatusCallback.notifyUnavailable();
+                }
+            }
         }
     }
 
@@ -430,7 +440,16 @@ public class MmTelFeatureConnection {
     }
 
     public void setBinder(IBinder binder) {
-        mBinder = binder;
+        synchronized (mLock) {
+            mBinder = binder;
+            try {
+                if (mBinder != null) {
+                    mBinder.linkToDeath(mDeathRecipient, 0);
+                }
+            } catch (RemoteException e) {
+                // No need to do anything if the binder is already dead.
+            }
+        }
     }
 
     /**
