@@ -46,6 +46,30 @@
       "revId": "8c6b700c15705fe6fefeb2f1c84811c89f440891",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14b4b509_2c0b9b7f",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-05-04T21:26:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5c0adfd_c96d5afb",
+      "range": {
+        "startLine": 1407,
+        "startChar": 8,
+        "endLine": 1407,
+        "endChar": 26
+      },
+      "revId": "8c6b700c15705fe6fefeb2f1c84811c89f440891",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
