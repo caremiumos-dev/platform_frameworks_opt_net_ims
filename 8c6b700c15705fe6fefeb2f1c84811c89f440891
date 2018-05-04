@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6dea1804_3517d42f",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1010218
+      },
+      "writtenOn": "2018-05-04T06:47:42Z",
+      "side": 1,
+      "message": "Need to use setWfcModeInternal(mode) instead of setWfcModeInternal(mContext, mode).\n\nAPI setWfcModeInternal(mContext, mode) is static due to which will not pick correct phone Id in case of multi sim configuration.",
+      "range": {
+        "startLine": 1407,
+        "startChar": 8,
+        "endLine": 1407,
+        "endChar": 26
+      },
+      "revId": "8c6b700c15705fe6fefeb2f1c84811c89f440891",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
