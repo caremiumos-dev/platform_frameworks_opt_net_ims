@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0a0879f_928cf5a7",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-06-11T20:28:58Z",
+      "side": 1,
+      "message": "Hashing it will not make a difference, It will still be unique, just a longer number :) We can remove the logging of the actual DTMF character all together, its only important to log that it happened, not which number.\n\nYou can remove the \"code\" portion of this logging statement.\n\nSame with below.",
+      "range": {
+        "startLine": 1578,
+        "startChar": 35,
+        "endLine": 1578,
+        "endChar": 51
+      },
+      "revId": "95e208f5531226e840993d79de500b43784afb64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
