@@ -22,6 +22,30 @@
       "revId": "95e208f5531226e840993d79de500b43784afb64",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a12018_911c550f",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2018-06-12T08:15:55Z",
+      "side": 1,
+      "message": "I agree with you. I removed it.",
+      "parentUuid": "a0a0879f_928cf5a7",
+      "range": {
+        "startLine": 1578,
+        "startChar": 35,
+        "endLine": 1578,
+        "endChar": 51
+      },
+      "revId": "95e208f5531226e840993d79de500b43784afb64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
