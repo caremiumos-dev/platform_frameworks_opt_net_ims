@@ -476,6 +476,7 @@ public class ImsCall implements ICall {
         }
 
         /**
+<<<<<<< HEAD
          * Called when rtt call audio indicator has changed.
          *
          * @param imsCall ImsCall object
@@ -491,6 +492,15 @@ public class ImsCall implements ICall {
          * @param callQuality the updated CallQuality
          */
         public void onCallQualityChanged(ImsCall imsCall, CallQuality callQuality) {
+=======
+         * Called when the call session property has changed
+         *
+         * @param imsCall ImsCall object
+         * @param int property - an integer containing masks for different properties
+         * {e.g. @see Connection#PROPERTY_RTT_AUDIO_SPEECH}
+         */
+        public void onCallSessionPropertyChanged(ImsCall imsCall, int property) {
+>>>>>>> 923f536... IMS: Propagate call session property changed message
         }
     }
 
@@ -3206,7 +3216,11 @@ public class ImsCall implements ICall {
         }
 
         @Override
+<<<<<<< HEAD
         public void callSessionRttAudioIndicatorChanged(ImsStreamMediaProfile profile) {
+=======
+        public void callSessionPropertyChanged(int property) {
+>>>>>>> 923f536... IMS: Propagate call session property changed message
             ImsCall.Listener listener;
 
             synchronized(ImsCall.this) {
@@ -3215,6 +3229,7 @@ public class ImsCall implements ICall {
 
             if (listener != null) {
                 try {
+<<<<<<< HEAD
                     listener.onRttAudioIndicatorChanged(ImsCall.this, profile);
                 } catch (Throwable t) {
                     loge("callSessionRttAudioIndicatorChanged:: ", t);
@@ -3235,6 +3250,11 @@ public class ImsCall implements ICall {
                     listener.onCallQualityChanged(ImsCall.this, callQuality);
                 } catch (Throwable t) {
                     loge("callQualityChanged:: ", t);
+=======
+                    listener.onCallSessionPropertyChanged(ImsCall.this, property);
+                } catch (Throwable t) {
+                    loge("callSessionPropertyChanged:: ", t);
+>>>>>>> 923f536... IMS: Propagate call session property changed message
                 }
             }
         }
