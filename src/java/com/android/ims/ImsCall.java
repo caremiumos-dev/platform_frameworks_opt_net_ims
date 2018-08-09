@@ -493,6 +493,27 @@ public class ImsCall implements ICall {
          */
         public void onCallQualityChanged(ImsCall imsCall, CallQuality callQuality) {
         }
+
+        /**
+         * Called when the explicit call transfer is transferred.
+         * The default implementation calls {@link #onCallStateChanged}.
+         *
+         * @param call the call object that carries out the IMS call
+         */
+        public void onCallExplicitCallTransferred(ImsCall call) {
+            onCallStateChanged(call);
+        }
+
+        /**
+         * Called when the explicit call transfer is failed.
+         * The default implementation calls {@link #onCallError}.
+         *
+         * @param call the call object that carries out the IMS call
+         * @param reasonInfo detailed reason of the call update failure
+         */
+        public void onCallExplicitCallTransferFailed(ImsCall call, ImsReasonInfo reasonInfo) {
+            onCallError(call, reasonInfo);
+        }
     }
 
     // List of update operation for IMS call control
@@ -503,6 +524,7 @@ public class ImsCall implements ICall {
     private static final int UPDATE_MERGE = 4;
     private static final int UPDATE_EXTEND_TO_CONFERENCE = 5;
     private static final int UPDATE_UNSPECIFIED = 6;
+    private static final int UPDATE_EXPLICIT_CALL_TRANSFER = 7;
 
     // For synchronization of private variables
     private Object mLockObj = new Object();
@@ -1726,6 +1748,34 @@ public class ImsCall implements ICall {
                 return;
             }
             mSession.sendRttModifyResponse(status);
+        }
+    }
+
+    /**
+     * Connects the two calls and disconnects the subscriber from both calls.
+     *
+     * @see Listener#onCallExplicitCallTransferred, Listener#onCallExplicitCallTransferFailed
+     * @throws ImsException if the IMS service fails to transfer the call
+     */
+    public void explicitCallTransfer() throws ImsException {
+        logi("explicitCallTransfer :: ");
+
+        synchronized(mLockObj) {
+            if (mUpdateRequest != UPDATE_NONE) {
+                loge("explicitCallTransfer :: update is in progress; request=" +
+                        updateRequestToString(mUpdateRequest));
+                throw new ImsException("Call update is in progress",
+                        ImsReasonInfo.CODE_LOCAL_ILLEGAL_STATE);
+            }
+
+            if (mSession == null) {
+                loge("explicitCallTransfer :: ");
+                throw new ImsException("No call session",
+                        ImsReasonInfo.CODE_LOCAL_CALL_TERMINATED);
+            }
+
+            mSession.explicitCallTransfer();
+            mUpdateRequest = UPDATE_EXPLICIT_CALL_TRANSFER;
         }
     }
 
@@ -3252,6 +3302,48 @@ public class ImsCall implements ICall {
                 }
             }
         }
+
+        @Override
+        public void callSessionExplicitCallTransferred(ImsCallSession session) {
+            logi("callSessionExplicitCallTransferred :: session=" + session);
+
+            ImsCall.Listener listener;
+
+            synchronized(ImsCall.this) {
+                listener = mListener;
+                mUpdateRequest = UPDATE_NONE;
+            }
+
+            if (listener != null) {
+                try {
+                    listener.onCallExplicitCallTransferred(ImsCall.this);
+                } catch (Throwable t) {
+                    loge("callSessionExplicitCallTransferred :: ", t);
+                }
+            }
+        }
+
+        @Override
+        public void callSessionExplicitCallTransferFailed(ImsCallSession session,
+                ImsReasonInfo reasonInfo) {
+            loge("callSessionExplicitCallTransferFailed :: session=" + session+ "reasonInfo="
+                    + reasonInfo);
+
+            ImsCall.Listener listener;
+
+            synchronized(ImsCall.this) {
+                listener = mListener;
+                mUpdateRequest = UPDATE_NONE;
+            }
+
+            if (listener != null) {
+                try {
+                    listener.onCallExplicitCallTransferFailed(ImsCall.this, reasonInfo);
+                } catch (Throwable t) {
+                    loge("callSessionExplicitCallTransferFailed :: ", t);
+                }
+            }
+        }
     }
 
     /**
@@ -3302,6 +3394,8 @@ public class ImsCall implements ICall {
                 return "EXTEND_TO_CONFERENCE";
             case UPDATE_UNSPECIFIED:
                 return "UNSPECIFIED";
+            case UPDATE_EXPLICIT_CALL_TRANSFER:
+                return "EXPLICIT_CALL_TRANSFER";
             default:
                 return "UNKNOWN";
         }
