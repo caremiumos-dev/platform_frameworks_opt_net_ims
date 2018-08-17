@@ -22,6 +22,30 @@
       "revId": "dedacb65a04963a5a2028cad99d0fc3cf8e569dc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37721bcc_1e7ae15f",
+        "filename": "tests/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2018-08-17T15:23:34Z",
+      "side": 0,
+      "message": "No, it is encoded in the android_test module type instead.",
+      "parentUuid": "dce016d3_ef189c6d",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 26
+      },
+      "revId": "dedacb65a04963a5a2028cad99d0fc3cf8e569dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
