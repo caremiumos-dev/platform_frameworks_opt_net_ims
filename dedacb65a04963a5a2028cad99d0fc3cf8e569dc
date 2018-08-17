@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dce016d3_ef189c6d",
+        "filename": "tests/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-08-17T15:22:18Z",
+      "side": 0,
+      "message": "Is this not necessary for the new bp file? (I dont know if there is an equivalent in the new system)",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 26
+      },
+      "revId": "dedacb65a04963a5a2028cad99d0fc3cf8e569dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
