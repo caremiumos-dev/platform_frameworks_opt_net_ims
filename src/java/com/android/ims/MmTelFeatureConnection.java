@@ -26,6 +26,7 @@ import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsCallProfile;
 import android.telephony.ims.ImsReasonInfo;
+import android.telephony.ims.aidl.IImsCapabilityCallback;
 import android.telephony.ims.aidl.IImsConfig;
 import android.telephony.ims.aidl.IImsMmTelFeature;
 import android.telephony.ims.aidl.IImsRegistration;
@@ -45,7 +46,6 @@ import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.ims.internal.IImsUt;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -80,89 +80,95 @@ public class MmTelFeatureConnection {
             onRemovedOrDied();
     };
 
-    private abstract class CallbackAdapterManager<T> {
+    private abstract class CallbackAdapterManager<T, R> {
         private static final String TAG = "CallbackAdapterManager";
 
-        protected final Set<T> mLocalCallbacks =
-                Collections.newSetFromMap(new ConcurrentHashMap<>());
-        private boolean mHasConnected = false;
+        protected final ConcurrentHashMap<T, R> mLocalCallbacks =
+                new ConcurrentHashMap<>();
 
         public void addCallback(T localCallback) throws RemoteException {
             // We only one one binding to the ImsService per process.
             // Store any more locally.
             synchronized (mLock) {
-                if (!mHasConnected) {
-                    // throws a RemoteException if a connection can not be established.
-                    if (createConnection()) {
-                        mHasConnected = true;
-                    } else {
-                        throw new RemoteException("Can not create connection!");
-                    }
+                // Prevent old callback being overwritten. (Registered one replaced by unregistered
+                // one.)
+                if (mLocalCallbacks.contains(localCallback)) {
+                    Log.d(TAG, "duplicate callback to add, do nothing");
+                    return;
+                }
+                R wrappedCallBack = wrapInIImsCallback(localCallback);
+                // Need to put into map before createConnection using the value in the map.
+                mLocalCallbacks.put(localCallback, wrappedCallBack);
+                // throws a RemoteException if a connection can not be established.
+                if (!createConnection(localCallback)) {
+                    mLocalCallbacks.remove(localCallback);
+                    throw new RemoteException("Can not create connection!");
                 }
             }
-            Log.i(TAG, "Local callback added: " + localCallback);
-            mLocalCallbacks.add(localCallback);
         }
 
         public void removeCallback(T localCallback) {
-            // We only maintain one binding to the ImsService per process.
-            Log.i(TAG, "Local callback removed: " + localCallback);
-            mLocalCallbacks.remove(localCallback);
+            // We don't maintain one binding to the ImsService per process anymore.
             synchronized (mLock) {
                 // If we have removed all local callbacks, remove callback to ImsService.
-                if(mHasConnected) {
-                    if (mLocalCallbacks.isEmpty()) {
-                        removeConnection();
-                        mHasConnected = false;
-                    }
+                removeConnection(localCallback);
+                if(mLocalCallbacks.contains(localCallback)){
+                    mLocalCallbacks.remove(localCallback);
                 }
             }
         }
 
         public void close() {
             synchronized (mLock) {
-                if (mHasConnected) {
-                    removeConnection();
-                    // Still mark the connection as disconnected, even if this fails.
-                    mHasConnected = false;
+                for (T localCallback : mLocalCallbacks.keySet()) {
+                    removeConnection(localCallback);
                 }
+                mLocalCallbacks.clear();
             }
-            Log.i(TAG, "Closing connection and clearing callbacks");
-            mLocalCallbacks.clear();
         }
 
-        abstract boolean createConnection() throws RemoteException;
+        abstract boolean createConnection(T localCallback) throws RemoteException;
 
-        abstract void removeConnection();
+        abstract void removeConnection(T localCallback);
+
+        abstract R wrapInIImsCallback(T localCallback);
     }
     private ImsRegistrationCallbackAdapter mRegistrationCallbackManager
             = new ImsRegistrationCallbackAdapter();
     private class ImsRegistrationCallbackAdapter
-            extends CallbackAdapterManager<ImsRegistrationImplBase.Callback> {
-        private final RegistrationCallbackAdapter mRegistrationCallbackAdapter
-                = new RegistrationCallbackAdapter();
+            extends CallbackAdapterManager<ImsRegistrationImplBase.Callback, IImsRegistrationCallback> {
 
         private class RegistrationCallbackAdapter extends IImsRegistrationCallback.Stub {
+
+            private ImsRegistrationImplBase.Callback mLocalCallback;
+
+            public ImsRegistrationImplBase.Callback getLocalCallback() {
+                return mLocalCallback;
+            }
+
+            public void setLocalCallback(ImsRegistrationImplBase.Callback localCallback) {
+                mLocalCallback = localCallback;
+            }
 
             @Override
             public void onRegistered(int imsRadioTech) {
                 Log.i(TAG, "onRegistered ::");
 
-                mLocalCallbacks.forEach(l -> l.onRegistered(imsRadioTech));
+                getLocalCallback().onRegistered(imsRadioTech);
             }
 
             @Override
             public void onRegistering(int imsRadioTech) {
                 Log.i(TAG, "onRegistering ::");
 
-                mLocalCallbacks.forEach(l -> l.onRegistering(imsRadioTech));
+                getLocalCallback().onRegistering(imsRadioTech);
             }
 
             @Override
             public void onDeregistered(ImsReasonInfo imsReasonInfo) {
                 Log.i(TAG, "onDeregistered ::");
 
-                mLocalCallbacks.forEach(l -> l.onDeregistered(imsReasonInfo));
+                getLocalCallback().onDeregistered(imsReasonInfo);
             }
 
             @Override
@@ -170,23 +176,24 @@ public class MmTelFeatureConnection {
                 Log.i(TAG, "onTechnologyChangeFailed :: targetAccessTech=" + targetRadioTech +
                         ", imsReasonInfo=" + imsReasonInfo);
 
-                    mLocalCallbacks.forEach(l -> l.onTechnologyChangeFailed(targetRadioTech,
-                            imsReasonInfo));
+                    getLocalCallback().onTechnologyChangeFailed(targetRadioTech, imsReasonInfo);
             }
 
             @Override
             public void onSubscriberAssociatedUriChanged(Uri[] uris) {
                 Log.i(TAG, "onSubscriberAssociatedUriChanged");
 
-                mLocalCallbacks.forEach(l -> l.onSubscriberAssociatedUriChanged(uris));
+                getLocalCallback().onSubscriberAssociatedUriChanged(uris);
             }
         }
 
         @Override
-        boolean createConnection() throws RemoteException {
+        boolean createConnection(ImsRegistrationImplBase.Callback localCallback)
+                throws RemoteException {
+            IImsRegistrationCallback imsCallback = mLocalCallbacks.get(localCallback);
             IImsRegistration imsRegistration = getRegistration();
-            if (imsRegistration != null) {
-                getRegistration().addRegistrationCallback(mRegistrationCallbackAdapter);
+            if (imsRegistration != null && imsCallback != null) {
+                getRegistration().addRegistrationCallback(imsCallback);
                 return true;
             } else {
                 Log.e(TAG, "ImsRegistration is null");
@@ -195,11 +202,12 @@ public class MmTelFeatureConnection {
         }
 
         @Override
-        void removeConnection() {
+        void removeConnection(ImsRegistrationImplBase.Callback localCallback) {
+            IImsRegistrationCallback imsCallback = mLocalCallbacks.get(localCallback);
             IImsRegistration imsRegistration = getRegistration();
-            if (imsRegistration != null) {
+            if (imsRegistration != null && imsCallback != null) {
                 try {
-                    getRegistration().removeRegistrationCallback(mRegistrationCallbackAdapter);
+                    getRegistration().removeRegistrationCallback(imsCallback);
                 } catch (RemoteException e) {
                     Log.w(TAG, "removeConnection: couldn't remove registration callback");
                 }
@@ -207,32 +215,30 @@ public class MmTelFeatureConnection {
                 Log.e(TAG, "ImsRegistration is null");
             }
         }
+
+        @Override
+        final IImsRegistrationCallback wrapInIImsCallback(
+                ImsRegistrationImplBase.Callback localCallback) {
+            RegistrationCallbackAdapter mRegistrationCallbackAdapter = new RegistrationCallbackAdapter();
+            mRegistrationCallbackAdapter.setLocalCallback(localCallback);
+            return mRegistrationCallbackAdapter;
+        }
     }
 
     private final CapabilityCallbackManager mCapabilityCallbackManager
             = new CapabilityCallbackManager();
     private class CapabilityCallbackManager
-            extends CallbackAdapterManager<ImsFeature.CapabilityCallback> {
-        private final CapabilityCallbackAdapter mCallbackAdapter = new CapabilityCallbackAdapter();
-
-        private class CapabilityCallbackAdapter extends ImsFeature.CapabilityCallback {
-            // Called when the Capabilities Status on this connection have changed.
-            @Override
-            public void onCapabilitiesStatusChanged(ImsFeature.Capabilities config) {
-                mLocalCallbacks.forEach(
-                        callback -> callback.onCapabilitiesStatusChanged(config));
-            }
-        }
+            extends CallbackAdapterManager<ImsFeature.CapabilityCallback, ImsFeature.CapabilityCallback> {
 
         @Override
-        boolean createConnection() throws RemoteException {
+        boolean createConnection(ImsFeature.CapabilityCallback localCallback) throws RemoteException {
             IImsMmTelFeature binder;
             synchronized (mLock) {
                 checkServiceIsReady();
                 binder = getServiceInterface(mBinder);
             }
             if (binder != null) {
-                binder.addCapabilityCallback(mCallbackAdapter);
+                binder.addCapabilityCallback(localCallback);
                 return true;
             } else {
                 Log.w(TAG, "create: Couldn't get IImsMmTelFeature binder");
@@ -241,7 +247,7 @@ public class MmTelFeatureConnection {
         }
 
         @Override
-        void removeConnection() {
+        void removeConnection(ImsFeature.CapabilityCallback localCallback) {
             IImsMmTelFeature binder = null;
             synchronized (mLock) {
                 try {
@@ -249,17 +255,24 @@ public class MmTelFeatureConnection {
                     binder = getServiceInterface(mBinder);
                 } catch (RemoteException e) {
                     // binder is null
+                    Log.w(TAG, "remove: Binder is null");
                 }
             }
             if (binder != null) {
                 try {
-                    binder.removeCapabilityCallback(mCallbackAdapter);
+                    binder.removeCapabilityCallback(localCallback);
                 } catch (RemoteException e) {
                     Log.w(TAG, "remove: IImsMmTelFeature binder is dead");
                 }
             } else {
                 Log.w(TAG, "remove: Couldn't get IImsMmTelFeature binder");
             }
+        }
+
+
+        @Override
+        final ImsFeature.CapabilityCallback wrapInIImsCallback(ImsFeature.CapabilityCallback localCallback) {
+            return localCallback;
         }
     }
 
