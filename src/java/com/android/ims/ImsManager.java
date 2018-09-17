@@ -1853,16 +1853,28 @@ public class ImsManager {
     }
 
     /**
+<<<<<<< HEAD
      * Removes a previously registered {@link ImsMmTelManager.CapabilityCallback} callback.
      * @throws ImsException when the ImsService connection is not available.
      */
     public void removeCapabilitiesCallback(ImsMmTelManager.CapabilityCallback callback)
             throws ImsException {
+=======
+     * Removes the MMTel capability callback.
+     *
+     * @param callback Previously registered callback that will be removed. Can not be null.
+     * @throws ImsException if calling the IMS service results in an error
+     * instead.
+     */
+    public void removeCapabilitiesCallback(ImsFeature.CapabilityCallback callback)
+        throws ImsException {
+>>>>>>> fc863c6... IMS: add removeCapabilitiesCallback to ImsManager
         if (callback == null) {
             throw new NullPointerException("capabilities callback can't be null");
         }
 
         checkAndThrowExceptionIfServiceUnavailable();
+<<<<<<< HEAD
         mMmTelFeatureConnection.removeCapabilityCallback(callback.getBinder());
     }
 
@@ -1895,6 +1907,15 @@ public class ImsManager {
         }
 
         mMmTelFeatureConnection.removeCapabilityCallbackForSubscription(callback, subId);
+=======
+        try {
+            mMmTelFeatureConnection.removeCapabilityCallback(callback);
+            log("Capability Callback removeed.");
+        } catch (RemoteException e) {
+            throw new ImsException("removeCapabilitiesCallback(IF)", e,
+                    ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
+        }
+>>>>>>> fc863c6... IMS: add removeCapabilitiesCallback to ImsManager
     }
 
     /**
