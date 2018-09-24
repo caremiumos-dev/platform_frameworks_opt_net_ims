@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4af5986d_7f79736b",
+        "filename": "src/java/com/android/ims/MmTelFeatureConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-09-24T21:56:18Z",
+      "side": 1,
+      "message": "I don\u0027t know why I didn\u0027t have ImsRegistrationImplBase.Callback extend IImsRegistationCallback.Stub like i did with ImsFeature.CapabilityCallback.\n\nInstead of doing this, modify ImsRegistrationImplBase.Callback to extend IImsRegistrationImplBase, no need to do the wrapping step.",
+      "range": {
+        "startLine": 139,
+        "startChar": 43,
+        "endLine": 139,
+        "endChar": 75
+      },
+      "revId": "ae19dfbcf0e889c68d7d95a65bbe225c1673a02b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
