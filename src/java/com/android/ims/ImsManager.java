@@ -21,7 +21,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
+import android.os.HandlerExecutor;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
@@ -30,6 +30,9 @@ import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.telecom.TelecomManager;
 import android.telephony.CarrierConfigManager;
+import android.telephony.ims.ImsMmTelManager;
+import android.telephony.ims.aidl.IImsCapabilityCallback;
+import android.telephony.ims.aidl.IImsRegistrationCallback;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
@@ -55,15 +58,19 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Provides APIs for IMS services, such as initiating IMS calls, and provides access to
  * the operator's IMS network. This class is the starting point for any IMS actions.
  * You can acquire an instance of it with {@link #getInstance getInstance()}.</p>
- * <p>The APIs in this class allows you to:</p>
- *
+ * @deprecated use {@link ImsMmTelManager} instead.
  * @hide
  */
 public class ImsManager {
@@ -170,6 +177,8 @@ public class ImsManager {
 
     private static final String TAG = "ImsManager";
     private static final boolean DBG = true;
+
+    private static final int RESPONSE_WAIT_TIME_MS = 3000;
 
     /**
      * Helper class for managing a connection to the ImsManager when the ImsService is unavailable
@@ -537,8 +546,7 @@ public class ImsManager {
      * supported on a per slot basis.
      */
     public boolean isNonTtyOrTtyOnVolteEnabled() {
-        if (getBooleanCarrierConfig(
-                CarrierConfigManager.KEY_CARRIER_VOLTE_TTY_SUPPORTED_BOOL)) {
+        if (isTtyOnVoLteCapable()) {
             return true;
         }
 
@@ -548,6 +556,10 @@ public class ImsManager {
             return true;
         }
         return tm.getCurrentTtyMode() == TelecomManager.TTY_MODE_OFF;
+    }
+
+    public boolean isTtyOnVoLteCapable() {
+        return getBooleanCarrierConfig(CarrierConfigManager.KEY_CARRIER_VOLTE_TTY_SUPPORTED_BOOL);
     }
 
     /**
@@ -1552,8 +1564,8 @@ public class ImsManager {
      * @param listener To listen to IMS registration events; It cannot be null
      * @throws NullPointerException if {@code listener} is null
      * @throws ImsException if calling the IMS service results in an error
-     * @deprecated use {@link #addRegistrationCallback(ImsRegistrationImplBase.Callback)} and
-     * {@link #addCapabilitiesCallback(ImsFeature.CapabilityCallback)} instead.
+     * @deprecated use {@link #addRegistrationCallback(ImsMmTelManager.RegistrationCallback)}
+     * instead.
      */
     public void addRegistrationListener(ImsConnectionStateListener listener) throws ImsException {
         if (listener == null) {
@@ -1561,29 +1573,32 @@ public class ImsManager {
         }
         addRegistrationCallback(listener);
         // connect the ImsConnectionStateListener to the new CapabilityCallback.
-        addCapabilitiesCallback(new ImsFeature.CapabilityCallback() {
+        addCapabilitiesCallback(new ImsMmTelManager.CapabilityCallback() {
             @Override
-            public void onCapabilitiesStatusChanged(ImsFeature.Capabilities config) {
-                listener.onFeatureCapabilityChangedAdapter(getRegistrationTech(), config);
+            public void onCapabilitiesStatusChanged(
+                    MmTelFeature.MmTelCapabilities capabilities) {
+                listener.onFeatureCapabilityChangedAdapter(getRegistrationTech(), capabilities);
             }
         });
         log("Registration Callback registered.");
     }
 
     /**
-     * Adds a callback that gets called when IMS registration has changed.
-     * @param callback A {@link ImsRegistrationImplBase.Callback} that will notify the caller when
-     *         IMS registration status has changed.
+     * Adds a callback that gets called when IMS registration has changed for the slot ID
+     * associated with this ImsManager.
+     * @param callback A {@link ImsMmTelManager.RegistrationCallback} that will notify the caller
+     *                 when IMS registration status has changed.
      * @throws ImsException when the ImsService connection is not available.
      */
-    public void addRegistrationCallback(ImsRegistrationImplBase.Callback callback)
+    public void addRegistrationCallback(ImsMmTelManager.RegistrationCallback callback)
             throws ImsException {
         if (callback == null) {
             throw new NullPointerException("registration callback can't be null");
         }
 
         try {
-            mMmTelFeatureConnection.addRegistrationCallback(callback);
+            callback.setExecutor(getThreadExecutor());
+            mMmTelFeatureConnection.addRegistrationCallback(callback.getBinder());
             log("Registration Callback registered.");
             // Only record if there isn't a RemoteException.
         } catch (RemoteException e) {
@@ -1594,33 +1609,58 @@ public class ImsManager {
 
     /**
      * Removes a previously added registration callback that was added via
-     * {@link #addRegistrationCallback(ImsRegistrationImplBase.Callback)} .
-     * @param callback A {@link ImsRegistrationImplBase.Callback} that was previously added.
-     * @throws ImsException when the ImsService connection is not available.
+     * {@link #addRegistrationCallback(ImsMmTelManager.RegistrationCallback)} .
+     * @param callback A {@link ImsMmTelManager.RegistrationCallback} that was previously added.
      */
-    public void removeRegistrationListener(ImsRegistrationImplBase.Callback callback)
-        throws ImsException {
+    public void removeRegistrationListener(ImsMmTelManager.RegistrationCallback callback) {
         if (callback == null) {
             throw new NullPointerException("registration callback can't be null");
         }
 
-        try {
-            mMmTelFeatureConnection.removeRegistrationCallback(callback);
-            log("Registration callback removed.");
-        } catch (RemoteException e) {
-            throw new ImsException("removeRegistrationCallback(IRIB)", e,
-                    ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
+        mMmTelFeatureConnection.removeRegistrationCallback(callback.getBinder());
+        log("Registration callback removed.");
+    }
+
+    /**
+     * Adds a callback that gets called when IMS registration has changed for a specific
+     * subscription.
+     *
+     * @param callback A {@link ImsMmTelManager.RegistrationCallback} that will notify the caller
+     *                 when IMS registration status has changed.
+     * @param subId The subscription ID to register this registration callback for.
+     * @throws ImsException when the ImsService connection is not available.
+     */
+    public void addRegistrationCallbackForSubscription(IImsRegistrationCallback callback, int subId)
+            throws RemoteException {
+        if (callback == null) {
+            throw new NullPointerException("registration callback can't be null");
         }
+        mMmTelFeatureConnection.addRegistrationCallbackForSubscription(callback, subId);
+        log("Registration Callback registered.");
+        // Only record if there isn't a RemoteException.
+    }
+
+    /**
+     * Removes a previously registered {@link ImsMmTelManager.RegistrationCallback} callback that is
+     * associated with a specific subscription.
+     */
+    public void removeRegistrationCallbackForSubscription(IImsRegistrationCallback callback,
+            int subId) {
+        if (callback == null) {
+            throw new NullPointerException("registration callback can't be null");
+        }
+
+        mMmTelFeatureConnection.removeRegistrationCallbackForSubscription(callback, subId);
     }
 
     /**
      * Adds a callback that gets called when MMTel capability status has changed, for example when
      * Voice over IMS or VT over IMS is not available currently.
-     * @param callback A {@link ImsFeature.CapabilityCallback} that will notify the caller when
-     *         MMTel capability status has changed.
+     * @param callback A {@link ImsMmTelManager.CapabilityCallback} that will notify the caller when
+     *                 MMTel capability status has changed.
      * @throws ImsException when the ImsService connection is not available.
      */
-    public void addCapabilitiesCallback(ImsFeature.CapabilityCallback callback)
+    public void addCapabilitiesCallback(ImsMmTelManager.CapabilityCallback callback)
             throws ImsException {
         if (callback == null) {
             throw new NullPointerException("capabilities callback can't be null");
@@ -1628,13 +1668,59 @@ public class ImsManager {
 
         checkAndThrowExceptionIfServiceUnavailable();
         try {
-            mMmTelFeatureConnection.addCapabilityCallback(callback);
+            callback.setExecutor(getThreadExecutor());
+            mMmTelFeatureConnection.addCapabilityCallback(callback.getBinder());
             log("Capability Callback registered.");
             // Only record if there isn't a RemoteException.
         } catch (RemoteException e) {
             throw new ImsException("addCapabilitiesCallback(IF)", e,
                     ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
         }
+    }
+
+    /**
+     * Removes a previously registered {@link ImsMmTelManager.CapabilityCallback} callback.
+     * @throws ImsException when the ImsService connection is not available.
+     */
+    public void removeCapabilitiesCallback(ImsMmTelManager.CapabilityCallback callback)
+            throws ImsException {
+        if (callback == null) {
+            throw new NullPointerException("capabilities callback can't be null");
+        }
+
+        checkAndThrowExceptionIfServiceUnavailable();
+        mMmTelFeatureConnection.removeCapabilityCallback(callback.getBinder());
+    }
+
+    /**
+     * Adds a callback that gets called when IMS capabilities have changed for a specified
+     * subscription.
+     * @param callback A {@link ImsMmTelManager.CapabilityCallback} that will notify the caller
+     *                 when the IMS Capabilities have changed.
+     * @param subId The subscription that is associated with the callback.
+     * @throws ImsException when the ImsService connection is not available.
+     */
+    public void addCapabilitiesCallbackForSubscription(IImsCapabilityCallback callback, int subId)
+            throws RemoteException {
+        if (callback == null) {
+            throw new NullPointerException("registration callback can't be null");
+        }
+
+        mMmTelFeatureConnection.addCapabilityCallbackForSubscription(callback, subId);
+        log("Capability Callback registered for subscription.");
+    }
+
+    /**
+     * Removes a previously registered {@link ImsMmTelManager.CapabilityCallback} that was
+     * associated with a specific subscription.
+     */
+    public void removeCapabilitiesCallbackForSubscription(IImsCapabilityCallback callback,
+            int subId) {
+        if (callback == null) {
+            throw new NullPointerException("capabilities callback can't be null");
+        }
+
+        mMmTelFeatureConnection.removeCapabilityCallbackForSubscription(callback, subId);
     }
 
     /**
@@ -1652,14 +1738,9 @@ public class ImsManager {
         }
 
         checkAndThrowExceptionIfServiceUnavailable();
-        try {
-            mMmTelFeatureConnection.removeRegistrationCallback(listener);
-            log("Registration Callback/Listener registered.");
-            // Only record if there isn't a RemoteException.
-        } catch (RemoteException e) {
-            throw new ImsException("addRegistrationCallback()", e,
-                    ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
-        }
+        mMmTelFeatureConnection.removeRegistrationCallback(listener.getBinder());
+        log("Registration Callback/Listener registered.");
+        // Only record if there isn't a RemoteException.
     }
 
     public @ImsRegistrationImplBase.ImsRegistrationTech int getRegistrationTech() {
@@ -1869,6 +1950,84 @@ public class ImsManager {
         }
     }
 
+    /**
+     * @return true if this subscription will register for VoLTE capability during IMS registration.
+     * This does not mean that IMS is registered or that VoLTE is available at the current time.
+     */
+    public boolean isVoLteCapable() throws ImsException {
+        return queryMmTelCapability(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE,
+                ImsRegistrationImplBase.REGISTRATION_TECH_LTE);
+    }
+
+    /**
+     * @return true if this subscription will register for VT capability during IMS registration.
+     * This does not mean that IMS is registered or that VT is available at the current time.
+     */
+    public boolean isVtCapable() throws ImsException {
+        return queryMmTelCapability(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VIDEO,
+                ImsRegistrationImplBase.REGISTRATION_TECH_LTE) ||
+                // We should also check if it is available over IWLAN.
+                queryMmTelCapability(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VIDEO,
+                        ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN);
+    }
+
+    /**
+     * @return true if this subscription will register for VoWiFi capability during IMS
+     * registration over IWLAN. This does not mean that IMS is registered or that WoWiFi is
+     * available at the current time.
+     */
+    public boolean isVoWiFiCapable() throws ImsException {
+        return queryMmTelCapability(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE,
+                ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN);
+    }
+
+    private boolean queryMmTelCapability(
+            @MmTelFeature.MmTelCapabilities.MmTelCapability int capability,
+            @ImsRegistrationImplBase.ImsRegistrationTech int radioTech) throws ImsException {
+        checkAndThrowExceptionIfServiceUnavailable();
+
+        BlockingQueue<Boolean> result = new LinkedBlockingDeque<>(1);
+
+        try {
+            mMmTelFeatureConnection.queryEnabledCapabilities(capability, radioTech,
+                    new IImsCapabilityCallback.Stub() {
+                        @Override
+                        public void onQueryCapabilityConfiguration(int resCap, int resTech,
+                                boolean enabled) {
+                            if (resCap == capability && resTech == radioTech) {
+                                result.offer(enabled);
+                            }
+                        }
+
+                        @Override
+                        public void onChangeCapabilityConfigurationError(int capability,
+                                int radioTech, int reason) {
+
+                        }
+
+                        @Override
+                        public void onCapabilitiesStatusChanged(int config) {
+
+                        }
+
+                        @Override
+                        public void onSubscriptionRemoved(int subId) {
+
+                        }
+                    });
+        } catch (RemoteException e) {
+            throw new ImsException("queryMmTelCapability()", e,
+                    ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
+        }
+
+        try {
+            return result.poll(RESPONSE_WAIT_TIME_MS, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            Log.w(TAG, "queryMmTelCapability: interrupted while waiting for response");
+        }
+        return false;
+    }
+
     public void setRttEnabled(boolean enabled) {
         try {
             setAdvanced4GMode(enabled || isEnhanced4gLteModeSettingEnabledByUser());
@@ -1955,6 +2114,13 @@ public class ImsManager {
 
     public int getImsServiceState() throws ImsException {
         return mMmTelFeatureConnection.getFeatureState();
+    }
+
+    private Executor getThreadExecutor() {
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
+        return new HandlerExecutor(new Handler(Looper.myLooper()));
     }
 
     /**
