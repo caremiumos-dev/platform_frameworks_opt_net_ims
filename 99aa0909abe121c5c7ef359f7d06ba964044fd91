@@ -22,6 +22,30 @@
       "revId": "99aa0909abe121c5c7ef359f7d06ba964044fd91",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a551ae1a_e8e62926",
+        "filename": "src/java/com/android/ims/MmTelFeatureConnection.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2018-09-27T18:42:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d10f67b6_7e18af94",
+      "range": {
+        "startLine": 80,
+        "startChar": 43,
+        "endLine": 80,
+        "endChar": 53
+      },
+      "revId": "99aa0909abe121c5c7ef359f7d06ba964044fd91",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
