@@ -498,7 +498,7 @@ public class ImsManager {
         if (prevSetting != (enabled ?
                    ImsConfig.FeatureValueConstants.ON :
                    ImsConfig.FeatureValueConstants.OFF)) {
-            if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+            if (SubscriptionManager.isValidSubscriptionId(subId)) {
                 SubscriptionManager.setSubscriptionProperty(subId,
                         SubscriptionManager.ENHANCED_4G_MODE_ENABLED,
                         booleanToPropertyString(enabled));
@@ -772,7 +772,7 @@ public class ImsManager {
      */
     public void setVtSetting(boolean enabled) {
         int subId = getSubId();
-        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+        if (SubscriptionManager.isValidSubscriptionId(subId)) {
             SubscriptionManager.setSubscriptionProperty(subId, SubscriptionManager.VT_IMS_ENABLED,
                     booleanToPropertyString(enabled));
         } else {
@@ -888,7 +888,7 @@ public class ImsManager {
      */
     public void setWfcSetting(boolean enabled) {
         int subId = getSubId();
-        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+        if (SubscriptionManager.isValidSubscriptionId(subId)) {
             SubscriptionManager.setSubscriptionProperty(subId, SubscriptionManager.WFC_IMS_ENABLED,
                     booleanToPropertyString(enabled));
         } else {
@@ -974,7 +974,7 @@ public class ImsManager {
         if (DBG) log("setWfcMode(i) - setting=" + wfcMode);
 
         int subId = getSubId();
-        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+        if (SubscriptionManager.isValidSubscriptionId(subId)) {
             SubscriptionManager.setSubscriptionProperty(subId, SubscriptionManager.WFC_IMS_MODE,
                     Integer.toString(wfcMode));
         } else {
@@ -1074,7 +1074,7 @@ public class ImsManager {
      */
     public void setWfcMode(int wfcMode, boolean roaming) {
         int subId = getSubId();
-        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+        if (SubscriptionManager.isValidSubscriptionId(subId)) {
             if (!roaming) {
                 if (DBG) log("setWfcMode(i,b) - setting=" + wfcMode);
                 SubscriptionManager.setSubscriptionProperty(subId, SubscriptionManager.WFC_IMS_MODE,
@@ -2328,7 +2328,7 @@ public class ImsManager {
      */
     public void factoryReset() {
         int subId = getSubId();
-        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+        if (SubscriptionManager.isValidSubscriptionId(subId)) {
             // Set VoLTE to default
             SubscriptionManager.setSubscriptionProperty(subId,
                     SubscriptionManager.ENHANCED_4G_MODE_ENABLED,
