@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82d64a7b_89d9d74a",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1533,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-11-12T18:11:00Z",
+      "side": 1,
+      "message": "ImsManager is a manager interface that can be used in many processes, so this logic is probably better implemented in ImsPhoneCallTracker#mConfigCallback so it is not sent multiple times in N processes.",
+      "range": {
+        "startLine": 1512,
+        "startChar": 3,
+        "endLine": 1533,
+        "endChar": 6
+      },
+      "revId": "3f90b486217fa73b4955b8f2fb69e93f250d3c1c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
