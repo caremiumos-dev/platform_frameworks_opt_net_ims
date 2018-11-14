@@ -22,6 +22,30 @@
       "revId": "3f90b486217fa73b4955b8f2fb69e93f250d3c1c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6889afa6_5cc66be2",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1533,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-11-14T16:57:27Z",
+      "side": 1,
+      "message": "I have now moved this implementation to ImsPhoneCallTracker#mConfigCallback. This file is located in a different git, so a new patch was needed:\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/826703",
+      "parentUuid": "82d64a7b_89d9d74a",
+      "range": {
+        "startLine": 1512,
+        "startChar": 3,
+        "endLine": 1533,
+        "endChar": 6
+      },
+      "revId": "3f90b486217fa73b4955b8f2fb69e93f250d3c1c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
