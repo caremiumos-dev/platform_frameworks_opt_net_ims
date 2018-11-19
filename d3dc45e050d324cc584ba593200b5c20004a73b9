@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27ec0133_9fa61b26",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-11-19T23:52:48Z",
+      "side": 1,
+      "message": "This is used to make sure that WFC is successfully registered in some cases.\n\n@Meng: Is this check going to interfere with these cases?",
+      "range": {
+        "startLine": 937,
+        "startChar": 8,
+        "endLine": 940,
+        "endChar": 9
+      },
+      "revId": "d3dc45e050d324cc584ba593200b5c20004a73b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
