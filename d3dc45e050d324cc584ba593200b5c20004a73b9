@@ -46,6 +46,30 @@
       "revId": "d3dc45e050d324cc584ba593200b5c20004a73b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08b0989a_e5e6f044",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2018-11-20T14:01:32Z",
+      "side": 1,
+      "message": "I was not aware of this use case, but it sounds like you are correct that this would be a problem. \n\nIf I understand you correctly the Wi-Fi Calling provisioning status might change depending on the Wi-Fi Calling registration state triggered from setWfcNonPersistent? Is this done within AOSP or from a carrier application?\n\nFrom a Sony-perspective, the change in this function is not important. Our primary concern is that we do now want to end up in a situation where WFC has been persistently set to ON despite the fact that the provisioning policy disallows WFC. That would mean that WFC is enabled but the user has no way of controlling the WFC-behaviour since the WFC-menu is hidden in the settings menu.\n\nThis is not the case with this function since WFC is not set persistently in setWfcNonPersistent. \n\nConclusion: We are open to removing the changes from this function if you prefer?",
+      "parentUuid": "e47dde7a_6e1a8620",
+      "range": {
+        "startLine": 937,
+        "startChar": 8,
+        "endLine": 940,
+        "endChar": 9
+      },
+      "revId": "d3dc45e050d324cc584ba593200b5c20004a73b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
