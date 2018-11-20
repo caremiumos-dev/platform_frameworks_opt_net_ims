@@ -70,6 +70,30 @@
       "revId": "d3dc45e050d324cc584ba593200b5c20004a73b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89d7be95_cf4bd272",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2018-11-20T17:49:37Z",
+      "side": 1,
+      "message": "Yes, this is called during registration in some carrier apps. Lets remove the provisioning check from this method.",
+      "parentUuid": "08b0989a_e5e6f044",
+      "range": {
+        "startLine": 937,
+        "startChar": 8,
+        "endLine": 940,
+        "endChar": 9
+      },
+      "revId": "d3dc45e050d324cc584ba593200b5c20004a73b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
