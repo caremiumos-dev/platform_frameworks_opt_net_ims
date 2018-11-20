@@ -22,6 +22,30 @@
       "revId": "d3dc45e050d324cc584ba593200b5c20004a73b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e47dde7a_6e1a8620",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2018-11-20T00:27:29Z",
+      "side": 1,
+      "message": "My preference: From API design perspective, this is used by carriers to infer VoWiFi provisioning state from VoWiFi registration result. So we\u0027re really blocking ourselves.\n\nPractically though - if we really want to know what will break - this is not immediately a problem, as the carriers that uses this API AFAIK doesn\u0027t use the provisioning bit.",
+      "parentUuid": "27ec0133_9fa61b26",
+      "range": {
+        "startLine": 937,
+        "startChar": 8,
+        "endLine": 940,
+        "endChar": 9
+      },
+      "revId": "d3dc45e050d324cc584ba593200b5c20004a73b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
