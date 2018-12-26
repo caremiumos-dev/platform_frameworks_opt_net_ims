@@ -308,6 +308,11 @@ public class ImsVideoCallProviderWrapper extends Connection.VideoProvider {
                                 + "skipping resume request - already resumed.",
                         VideoProfile.videoStateToString(fromProfile.getVideoState()),
                         VideoProfile.videoStateToString(toProfile.getVideoState()));
+
+                mBinder.receiveSessionModifyResponse(
+                        Connection.VideoProvider.SESSION_MODIFY_REQUEST_FAIL,
+                        toProfile,
+                        fromProfile);
                 return;
             }
 
