@@ -3340,6 +3340,17 @@ public class ImsCall implements ICall {
     }
 
     /**
+     * Returns the merge peer for this call.  This is only applicable if the current call is the
+     * merge host and there is a merge in progress.
+     *
+     * @return The {@link ImsCall} which is the merge peer, or {@code null} if there is no merge
+     * peer.
+     */
+    public ImsCall getMergePeer() {
+        return mMergePeer;
+    }
+
+    /**
      * Determines if the call session is pending merge into a conference or not.
      *
      * @return {@code true} if a merge into a conference is pending, {@code false} otherwise.
