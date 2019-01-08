@@ -475,6 +475,12 @@ public class ImsCall implements ICall {
          */
         public void onMultipartyStateChanged(ImsCall imsCall, boolean isMultiParty) {
         }
+
+        /**
+         * TODO
+         */
+        public void onCallQualityChanged(ImsCall imsCall, CallQuality callQuality) {
+        }
     }
 
     // List of update operation for IMS call control
@@ -3174,6 +3180,24 @@ public class ImsCall implements ICall {
                     listener.onRttMessageReceived(ImsCall.this, rttMessage);
                 } catch (Throwable t) {
                     loge("callSessionRttModifyResponseReceived:: ", t);
+                }
+            }
+        }
+
+        @Override
+        public void callQualityChanged(CallQuality callQuality) {
+            ImsCall.Listener listener;
+
+            synchronized (ImsCall.this) {
+                listener = mListener;
+            }
+
+            if (listener != null) {
+                try {
+                    // TODO
+                    listener.onCallQualityChanged(ImsCall.this, callQuality);
+                } catch (Throwable t) {
+                    loge("callQualityChanged:: ", t);
                 }
             }
         }
