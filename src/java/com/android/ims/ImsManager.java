@@ -27,6 +27,7 @@ import android.os.Message;
 import android.os.Parcel;
 import android.os.PersistableBundle;
 import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Settings;
 import android.telecom.TelecomManager;
@@ -55,6 +56,7 @@ import com.android.ims.internal.IImsMultiEndpoint;
 import com.android.ims.internal.IImsUt;
 import android.telephony.ims.ImsCallSession;
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.ITelephony;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -72,7 +74,7 @@ import java.util.concurrent.TimeUnit;
  * Provides APIs for IMS services, such as initiating IMS calls, and provides access to
  * the operator's IMS network. This class is the starting point for any IMS actions.
  * You can acquire an instance of it with {@link #getInstance getInstance()}.</p>
- * @deprecated use {@link ImsMmTelManager} instead.
+ * For internal use ONLY! Use {@link ImsMmTelManager} instead.
  * @hide
  */
 public class ImsManager {
@@ -231,7 +233,6 @@ public class ImsManager {
                                     status = mImsManager.getImsServiceState();
                                 }
                             }
-                            log("Status Changed: " + status);
                             switch (status) {
                                 case ImsFeature.STATE_READY: {
                                     notifyReady();
@@ -248,7 +249,6 @@ public class ImsManager {
                                 }
                             }
                         } catch (ImsException e) {
-                            loge("notifyStateChanged(): ", e);
                             // Could not get the ImsService, retry!
                             notifyNotReady();
                             retryGetImsService();
@@ -329,13 +329,11 @@ public class ImsManager {
                 mImsManager = null;
             }
             // Exponential backoff during retry, limited to 32 seconds.
-            loge("Connector: Retrying getting ImsService...");
             removeCallbacks(mGetServiceRunnable);
             postDelayed(mGetServiceRunnable, mRetryTimeout.get());
         }
 
         private void getImsService() throws ImsException {
-            if (DBG) log("Connector: getImsService");
             synchronized (mLock) {
                 mImsManager = ImsManager.getInstance(mContext, mPhoneId);
                 // Adding to set, will be safe adding multiple times. If the ImsService is not
@@ -1250,6 +1248,19 @@ public class ImsManager {
                 isGbaValid();
     }
 
+    public boolean isSuppServicesOverUtEnabledByPlatform() {
+        TelephonyManager manager = (TelephonyManager) mContext.getSystemService(
+                Context.TELEPHONY_SERVICE);
+        int cardState = manager.getSimState(mPhoneId);
+        Log.i(TAG, "isSuppServicesOverUtEnabledByPlatform: cardstate:" + cardState);
+        if (cardState != TelephonyManager.SIM_STATE_READY) {
+            // Do not report enabled until we actually have an active subscription.
+            return false;
+        }
+        return getBooleanCarrierConfig(CarrierConfigManager.KEY_CARRIER_SUPPORTS_SS_OVER_UT_BOOL) &&
+                isGbaValid();
+    }
+
     /**
      * If carrier requires that IMS is only available if GBA capable SIM is used,
      * then this function checks GBA bit in EF IST.
@@ -1283,7 +1294,19 @@ public class ImsManager {
             throw new ImsException("getProvisionedBool failed with error for item: " + item,
                     ImsReasonInfo.CODE_LOCAL_INTERNAL_ERROR);
         }
-        return config.getProvisionedValue(item) == ProvisioningManager.PROVISIONING_VALUE_ENABLED;
+        return value == ProvisioningManager.PROVISIONING_VALUE_ENABLED;
+    }
+
+    /**
+     * Will set config value or throw an ImsException if we receive an error from ImsConfig for that
+     * value.
+     */
+    private void setProvisionedBool(ImsConfig config, int item, int value) throws ImsException {
+        int result = config.setConfig(item, value);
+        if (result != ImsConfigImplBase.CONFIG_RESULT_SUCCESS) {
+            throw new ImsException("setProvisionedBool failed with error for item: " + item,
+                    ImsReasonInfo.CODE_LOCAL_INTERNAL_ERROR);
+        }
     }
 
     /**
@@ -1295,8 +1318,26 @@ public class ImsManager {
             ImsConfig config = getConfigInterface();
             return getProvisionedBool(config, item);
         } catch (ImsException ex) {
+            Log.w(TAG, "getProvisionedBoolNoException: operation failed for item=" + item
+                    + ". Exception:" + ex.getMessage() + ". Returning false.");
             return false;
         }
+    }
+
+    /**
+     * Will return with config value or return false if we receive an error from
+     * ImsConfigImplBase implementation for that value.
+     */
+    private boolean setProvisionedBoolNoException(int item, int value) {
+        try {
+            ImsConfig config = getConfigInterface();
+            setProvisionedBool(config, item, value);
+        } catch (ImsException ex) {
+            Log.w(TAG, "setProvisionedBoolNoException: operation failed for item=" + item
+                    + ", value=" + value + ". Exception:" + ex.getMessage());
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -1340,6 +1381,7 @@ public class ImsManager {
                 boolean isImsUsed = updateVolteFeatureValue();
                 isImsUsed |= updateWfcFeatureAndProvisionedValues();
                 isImsUsed |= updateVideoCallFeatureValue();
+                isImsUsed |= updateUtFeatureValue();
                 isImsUsed |= updateRttConfigValue();
 
                 if (isImsUsed || !isTurnOffImsAllowedByPlatform()) {
@@ -1440,6 +1482,53 @@ public class ImsManager {
         setWfcModeInternal(mode);
         setWfcRoamingSettingInternal(roaming);
 
+        return isFeatureOn;
+    }
+
+
+    private boolean updateUtFeatureValue() throws ImsException {
+        boolean isCarrierSupported = isSuppServicesOverUtEnabledByPlatform();
+        boolean requiresProvisioning = getBooleanCarrierConfig(
+                CarrierConfigManager.KEY_CARRIER_UT_PROVISIONING_REQUIRED_BOOL);
+        // Count as "provisioned" if we do not require provisioning.
+        boolean isProvisioned = true;
+        if (requiresProvisioning) {
+            ITelephony telephony = ITelephony.Stub.asInterface(
+                    ServiceManager.getService(Context.TELEPHONY_SERVICE));
+            // Only track UT over LTE, since we do not differentiate between UT over LTE and IWLAN
+            // currently.
+            try {
+                if (telephony != null) {
+                    isProvisioned = telephony.isMmTelCapabilityProvisionedInCache(getSubId(),
+                            MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_UT,
+                            ImsRegistrationImplBase.REGISTRATION_TECH_LTE);
+                }
+            } catch (RemoteException e) {
+                Log.e(TAG, "updateUtFeatureValue: couldn't reach telephony! returning provisioned");
+            }
+        }
+        CapabilityChangeRequest request = new CapabilityChangeRequest();
+        boolean isFeatureOn = isCarrierSupported && isProvisioned;
+
+        log("updateUtFeatureValue: available = " + isCarrierSupported
+                + ", isProvisioned = " + isProvisioned
+                + ", enabled = " + isFeatureOn);
+
+        if (isFeatureOn) {
+            request.addCapabilitiesToEnableForTech(
+                    MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_UT,
+                    ImsRegistrationImplBase.REGISTRATION_TECH_LTE);
+        } else {
+            request.addCapabilitiesToDisableForTech(
+                    MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_UT,
+                    ImsRegistrationImplBase.REGISTRATION_TECH_LTE);
+        }
+        try {
+            mMmTelFeatureConnection.changeEnabledCapabilities(request, null);
+        } catch (RemoteException e) {
+            throw new ImsException("updateUtFeatureValue()", e,
+                    ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
+        }
         return isFeatureOn;
     }
 
@@ -1951,6 +2040,7 @@ public class ImsManager {
                         isEnabled ? ProvisioningManager.PROVISIONING_VALUE_ENABLED
                                 : ProvisioningManager.PROVISIONING_VALUE_DISABLED, -1);
             }
+            Log.i(TAG, "changeMmTelCapability: changing capabilities for sub: " + getSubId() + ", request: " + request);
         } catch (RemoteException e) {
             throw new ImsException("changeMmTelCapability()", e,
                     ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
@@ -2191,7 +2281,6 @@ public class ImsManager {
      * 2) android.telephony.ims.ImsService implementation through ImsResolver.
      */
     private void createImsService() {
-        Rlog.i(TAG, "Creating ImsService");
         mMmTelFeatureConnection = MmTelFeatureConnection.create(mContext, mPhoneId);
 
         // Forwarding interface to tell mStatusCallbacks that the Proxy is unavailable.
@@ -2517,21 +2606,42 @@ public class ImsManager {
         updateImsServiceConfig(true);
     }
 
+    public void setVolteProvisioned(boolean isProvisioned) {
+        int provisionStatus = isProvisioned ? ProvisioningManager.PROVISIONING_VALUE_ENABLED :
+                ProvisioningManager.PROVISIONING_VALUE_DISABLED;
+        setProvisionedBoolNoException(ImsConfig.ConfigConstants.VLT_SETTING_ENABLED,
+                provisionStatus);
+    }
+
+    public void setWfcProvisioned(boolean isProvisioned) {
+        int provisionStatus = isProvisioned ? ProvisioningManager.PROVISIONING_VALUE_ENABLED :
+                ProvisioningManager.PROVISIONING_VALUE_DISABLED;
+        setProvisionedBoolNoException(
+                ImsConfig.ConfigConstants.VOICE_OVER_WIFI_SETTING_ENABLED, provisionStatus);
+    }
+
+    public void setVtProvisioned(boolean isProvisioned) {
+        int provisionStatus = isProvisioned ? ProvisioningManager.PROVISIONING_VALUE_ENABLED :
+                ProvisioningManager.PROVISIONING_VALUE_DISABLED;
+        setProvisionedBoolNoException(ImsConfig.ConfigConstants.LVC_SETTING_ENABLED,
+                provisionStatus);
+    }
+
     private boolean isDataEnabled() {
         return new TelephonyManager(mContext, getSubId()).isDataCapable();
     }
 
-    private boolean isVolteProvisioned() {
+    public boolean isVolteProvisioned() {
         return getProvisionedBoolNoException(
                 ImsConfig.ConfigConstants.VLT_SETTING_ENABLED);
     }
 
-    private boolean isWfcProvisioned() {
+    public boolean isWfcProvisioned() {
         return getProvisionedBoolNoException(
                 ImsConfig.ConfigConstants.VOICE_OVER_WIFI_SETTING_ENABLED);
     }
 
-    private boolean isVtProvisioned() {
+    public boolean isVtProvisioned() {
         return getProvisionedBoolNoException(
                 ImsConfig.ConfigConstants.LVC_SETTING_ENABLED);
     }
