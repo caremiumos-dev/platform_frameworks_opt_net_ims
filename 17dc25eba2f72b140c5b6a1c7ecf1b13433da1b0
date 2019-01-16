@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "275f64f0_9e83bca7",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1371846
+      },
+      "writtenOn": "2019-01-16T09:05:05Z",
+      "side": 1,
+      "message": "seems something weird.\n\nCheck enabled and roaming here but just check roaming at line 1117.\n\nAnd I also worry about that the order for enable WFC and enable WFC roaming would make the modem doesn\u0027t work\ne.g. modem receive WFC enable request first while device roaming, but current WFC roaming setting not be enabled yet, so do nothing.\n\nI had put this question on b/109936682 and request modem team to check this.",
+      "revId": "17dc25eba2f72b140c5b6a1c7ecf1b13433da1b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62ded234_0842941b",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1371846
+      },
+      "writtenOn": "2019-01-16T09:05:05Z",
+      "side": 1,
+      "message": "ImsConfigImplBase?",
+      "revId": "17dc25eba2f72b140c5b6a1c7ecf1b13433da1b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
