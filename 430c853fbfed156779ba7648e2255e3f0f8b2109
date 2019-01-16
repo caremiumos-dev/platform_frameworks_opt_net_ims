@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d85e78a_b04f980b",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3227,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-16T22:00:04Z",
+      "side": 1,
+      "message": "incomplete?",
+      "range": {
+        "startLine": 3227,
+        "startChar": 20,
+        "endLine": 3227,
+        "endChar": 27
+      },
+      "revId": "430c853fbfed156779ba7648e2255e3f0f8b2109",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
