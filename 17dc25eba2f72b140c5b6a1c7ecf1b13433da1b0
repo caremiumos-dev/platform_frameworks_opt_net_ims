@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b9f40ccf_9e82c2b7",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-18T00:00:31Z",
+      "side": 1,
+      "message": "I have modified the code at 1117 to match this code (by checking what the user\u0027s current setting for this is).\n\nI am also moving the WFC mode and roaming setting to above turnOnIms(), this makes more sense.",
+      "parentUuid": "275f64f0_9e83bca7",
+      "revId": "17dc25eba2f72b140c5b6a1c7ecf1b13433da1b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62ded234_0842941b",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 3
