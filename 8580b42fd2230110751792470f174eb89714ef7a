@@ -16,6 +16,24 @@
       "revId": "8580b42fd2230110751792470f174eb89714ef7a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39003233_e908eac1",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1371846
+      },
+      "writtenOn": "2019-01-22T11:45:40Z",
+      "side": 1,
+      "message": "see \"3GPP TS 24.623 V10.3.0\"\n\nThe protocol (XCAP)\nallows authorized users to manipulate service-related data either when they are connected to IMS or when they are\nconnected to non-IMS networks (e.g. the public Internet).",
+      "parentUuid": "fb42e360_4314a3ae",
+      "revId": "8580b42fd2230110751792470f174eb89714ef7a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
