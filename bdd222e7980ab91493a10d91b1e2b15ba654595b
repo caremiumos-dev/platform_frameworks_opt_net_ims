@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bbbf54c_b65afe65",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-01-22T18:24:01Z",
+      "side": 0,
+      "message": "guess no more siminfo db settings?",
+      "range": {
+        "startLine": 998,
+        "startChar": 45,
+        "endLine": 998,
+        "endChar": 78
+      },
+      "revId": "bdd222e7980ab91493a10d91b1e2b15ba654595b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
