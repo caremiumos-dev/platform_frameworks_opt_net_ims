@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb42e360_4314a3ae",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1371846
+      },
+      "writtenOn": "2019-01-22T11:40:33Z",
+      "side": 1,
+      "message": "Should turn on IMS if only UT enabled?\nUT is not dependent on IMS, some carrier will declare that it use XCAP apn and this apn control in modem\n\nBy the other hand, SS can over UT even IMS not registered\n\nAnd O2UK also declared that even user not turn on VoLTE/WFC but at leased one service provisioned, should execute SS over UT.",
+      "revId": "8580b42fd2230110751792470f174eb89714ef7a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
