@@ -19,6 +19,7 @@ package com.android.ims;
 import android.annotation.Nullable;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerExecutor;
@@ -299,8 +300,14 @@ public class ImsManager {
          * Start the creation of a connection to the underlying ImsService implementation. When the
          * service is connected, {@link Listener#connectionReady(ImsManager)} will be called with
          * an active ImsManager instance.
+         *
+         * If this device does not support an ImsStack (i.e. doesn't support
+         * {@link PackageManager#FEATURE_TELEPHONY_IMS} feature), this method will do nothing.
          */
         public void connect() {
+            if (!ImsManager.isImsSupportedOnDevice(mContext)) {
+                return;
+            }
             mRetryCount = 0;
             // Send a message to connect to the Ims Service and open a connection through
             // getImsService().
@@ -406,6 +413,8 @@ public class ImsManager {
     /**
      * Gets a manager instance.
      *
+     * This
+     *
      * @param context application context for creating the manager object
      * @param phoneId the phone ID for the IMS Service
      * @return the manager instance corresponding to the phoneId
@@ -426,6 +435,10 @@ public class ImsManager {
 
             return mgr;
         }
+    }
+
+    public static boolean isImsSupportedOnDevice(Context context) {
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY_IMS);
     }
 
     /**
@@ -2197,6 +2210,10 @@ public class ImsManager {
      */
     private void checkAndThrowExceptionIfServiceUnavailable()
             throws ImsException {
+        if (!isImsSupportedOnDevice(mContext)) {
+            throw new ImsException("IMS stack not supported on this device",
+                    ImsReasonInfo.CODE_LOCAL_SERVICE_UNAVAILABLE);
+        }
         if (mMmTelFeatureConnection == null || !mMmTelFeatureConnection.isBinderAlive()) {
             createImsService();
 
@@ -2214,7 +2231,6 @@ public class ImsManager {
      * 2) android.telephony.ims.ImsService implementation through ImsResolver.
      */
     private void createImsService() {
-        Rlog.i(TAG, "Creating ImsService");
         mMmTelFeatureConnection = MmTelFeatureConnection.create(mContext, mPhoneId);
 
         // Forwarding interface to tell mStatusCallbacks that the Proxy is unavailable.
