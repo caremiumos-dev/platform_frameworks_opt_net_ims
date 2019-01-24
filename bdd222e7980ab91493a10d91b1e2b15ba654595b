@@ -22,6 +22,30 @@
       "revId": "bdd222e7980ab91493a10d91b1e2b15ba654595b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2a9f50f_9d5f3382",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-24T00:25:36Z",
+      "side": 0,
+      "message": "This is done in setWfcMode(mode, isRoaming), not sure why this method was kept around since it is the same thing. If I want to keep the same operation as before, I should use setWfcMode(wfcMode, false /*isRoaming*/) so we do not set the roaming mode.",
+      "parentUuid": "5bbbf54c_b65afe65",
+      "range": {
+        "startLine": 998,
+        "startChar": 45,
+        "endLine": 998,
+        "endChar": 78
+      },
+      "revId": "bdd222e7980ab91493a10d91b1e2b15ba654595b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
