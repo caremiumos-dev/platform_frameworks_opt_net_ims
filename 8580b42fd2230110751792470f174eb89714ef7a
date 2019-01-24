@@ -34,6 +34,24 @@
       "revId": "8580b42fd2230110751792470f174eb89714ef7a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "883a4360_46b040ef",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-01-24T00:55:05Z",
+      "side": 1,
+      "message": "Agreed, not basing IMS registration on ut feature value result.",
+      "parentUuid": "39003233_e908eac1",
+      "revId": "8580b42fd2230110751792470f174eb89714ef7a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
