@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6827938e_b7336a21",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-02-05T23:15:39Z",
+      "side": 1,
+      "message": "These previously happened after the call to mMmtelFeatureConnection.changeEnabledCapabilities, now they happen afterwards. Is that likely to cause a problem anywhere?",
+      "range": {
+        "startLine": 1531,
+        "startChar": 8,
+        "endLine": 1532,
+        "endChar": 46
+      },
+      "revId": "1dadc88bc3d76be30ef23b41af139b38b9070832",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
