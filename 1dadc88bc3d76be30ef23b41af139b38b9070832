@@ -22,6 +22,30 @@
       "revId": "1dadc88bc3d76be30ef23b41af139b38b9070832",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bd85beb_2433560d",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-02-05T23:26:29Z",
+      "side": 1,
+      "message": "No this should not be an issue, in fact i prefer this because we should change the mode before enabling the capability.",
+      "parentUuid": "6827938e_b7336a21",
+      "range": {
+        "startLine": 1531,
+        "startChar": 8,
+        "endLine": 1532,
+        "endChar": 46
+      },
+      "revId": "1dadc88bc3d76be30ef23b41af139b38b9070832",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
