@@ -22,6 +22,30 @@
       "revId": "5587c163f21a7d58ac932944b798c129c700eac3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17a0b6de_e9cf8623",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-02-15T17:51:17Z",
+      "side": 1,
+      "message": "It doesn\u0027t technically have to be on the main thread, the Connector also has a constructor that can specify a looper.",
+      "parentUuid": "cb3c4256_4c235909",
+      "range": {
+        "startLine": 295,
+        "startChar": 12,
+        "endLine": 295,
+        "endChar": 21
+      },
+      "revId": "5587c163f21a7d58ac932944b798c129c700eac3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
