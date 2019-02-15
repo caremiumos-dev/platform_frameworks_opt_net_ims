@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb3c4256_4c235909",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-02-15T01:27:56Z",
+      "side": 1,
+      "message": "Rename to mMainThreadExecutor so future readers know what the indirection is for.",
+      "range": {
+        "startLine": 295,
+        "startChar": 12,
+        "endLine": 295,
+        "endChar": 21
+      },
+      "revId": "5587c163f21a7d58ac932944b798c129c700eac3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
