@@ -16,8 +16,6 @@
 
 package com.android.ims;
 
-import com.android.internal.R;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -1368,6 +1366,22 @@ public class ImsCall implements ICall {
         }
     }
 
+    private boolean isUpdatePending(ImsCall imsCall) {
+        if (imsCall != null && imsCall.mUpdateRequest != UPDATE_NONE) {
+            imsCall.setCallSessionMergePending(false);
+            loge("merge :: update is in progress; request=" +
+                    updateRequestToString(mUpdateRequest));
+            return true;
+        }
+        return false;
+    }
+
+    private void changeCallSessionMergePending(ImsCall imsCall, boolean isPending) {
+        if (imsCall != null) {
+            imsCall.setCallSessionMergePending(isPending);
+        }
+    }
+
     /**
      * Merges the active & hold call.
      *
@@ -1378,25 +1392,20 @@ public class ImsCall implements ICall {
         logi("merge :: ");
 
         synchronized(mLockObj) {
-            // If the host of the merge is in the midst of some other operation, we cannot merge.
-            if (mUpdateRequest != UPDATE_NONE) {
-                setCallSessionMergePending(false);
-                if (mMergePeer != null) {
-                    mMergePeer.setCallSessionMergePending(false);
-                }
-                loge("merge :: update is in progress; request=" +
-                        updateRequestToString(mUpdateRequest));
+            // If the fg call of the merge is in the midst of some other operation, we cannot merge.
+            // fg is either the host or the peer of the merge
+            if (isUpdatePending(this)) {
+                changeCallSessionMergePending(mMergePeer, false);
+                changeCallSessionMergePending(mMergeHost, false);
                 throw new ImsException("Call update is in progress",
                         ImsReasonInfo.CODE_LOCAL_ILLEGAL_STATE);
             }
 
-            // The peer of the merge is in the midst of some other operation, we cannot merge.
-            if (mMergePeer != null && mMergePeer.mUpdateRequest != UPDATE_NONE) {
-                setCallSessionMergePending(false);
-                mMergePeer.setCallSessionMergePending(false);
-                loge("merge :: peer call update is in progress; request=" +
-                        updateRequestToString(mMergePeer.mUpdateRequest));
-                throw new ImsException("Peer call update is in progress",
+            // If the bg call of the merge is in the midst of some other operation, we cannot merge.
+            // bg is either the peer or the host of the merge.
+            if (isUpdatePending(mMergePeer) || isUpdatePending(mMergeHost)) {
+                changeCallSessionMergePending(this, false);
+                throw new ImsException("Peer or host call update is in progress",
                         ImsReasonInfo.CODE_LOCAL_ILLEGAL_STATE);
             }
 
@@ -1421,6 +1430,9 @@ public class ImsCall implements ICall {
                     // merge is pending.
                     mUpdateRequest = UPDATE_MERGE;
                     mMergePeer.mUpdateRequest = UPDATE_MERGE;
+                } else if (mMergeHost != null && !mMergeHost.isMultiparty() && !isMultiparty()) {
+                    mUpdateRequest = UPDATE_MERGE;
+                    mMergeHost.mUpdateRequest = UPDATE_MERGE;
                 }
 
                 mSession.merge();
