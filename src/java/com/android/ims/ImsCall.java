@@ -1386,6 +1386,7 @@ public class ImsCall implements ICall {
                 }
                 loge("merge :: update is in progress; request=" +
                         updateRequestToString(mUpdateRequest));
+                processMergeFailed(new ImsReasonInfo(ImsReasonInfo.CODE_LOCAL_ILLEGAL_STATE, 0,"Merge Failed"));
                 throw new ImsException("Call update is in progress",
                         ImsReasonInfo.CODE_LOCAL_ILLEGAL_STATE);
             }
@@ -1396,6 +1397,7 @@ public class ImsCall implements ICall {
                 mMergePeer.setCallSessionMergePending(false);
                 loge("merge :: peer call update is in progress; request=" +
                         updateRequestToString(mMergePeer.mUpdateRequest));
+                processMergeFailed(new ImsReasonInfo(ImsReasonInfo.CODE_LOCAL_ILLEGAL_STATE, 0,"Merge Failed"));
                 throw new ImsException("Peer call update is in progress",
                         ImsReasonInfo.CODE_LOCAL_ILLEGAL_STATE);
             }
