@@ -2437,6 +2437,9 @@ public class ImsCall implements ICall {
                     return;
                 }
 
+                if (!mHold) {
+                    mHold = true;
+                }
                 mUpdateRequest = UPDATE_NONE;
                 listener = mListener;
             }
