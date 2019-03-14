@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e659883d_6f6354ac",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-03-14T17:55:17Z",
+      "side": 1,
+      "message": "Do we need this?  You\u0027ve got the changeCallSessionMergePending method which does this as well.  It seems strange to have an is* method have a side effect like this.",
+      "range": {
+        "startLine": 1371,
+        "startChar": 12,
+        "endLine": 1371,
+        "endChar": 54
+      },
+      "revId": "af2f5e668cdd51dcb8c88eee2af4af76bd923e28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "690a51cb_3c92157d",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-03-14T17:55:17Z",
+      "side": 1,
+      "message": "If we assume the isUpdatePending method doesn\u0027t update, then we\u0027d need to:\nchangeCallSessionMergePending(mMergePeer, false);\n                changeCallSessionMergePending(mMergeHost, false);",
+      "revId": "af2f5e668cdd51dcb8c88eee2af4af76bd923e28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
