@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2f849817_b38ee99a",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-03-14T18:24:05Z",
+      "side": 1,
+      "message": "Yes. But I guess I should put it along with other setCallSessionMergePending, so it is not causing confusions.",
+      "parentUuid": "e659883d_6f6354ac",
+      "range": {
+        "startLine": 1371,
+        "startChar": 12,
+        "endLine": 1371,
+        "endChar": 54
+      },
+      "revId": "af2f5e668cdd51dcb8c88eee2af4af76bd923e28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "690a51cb_3c92157d",
         "filename": "src/java/com/android/ims/ImsCall.java",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2019-03-14T17:55:17Z",
       "side": 1,
       "message": "If we assume the isUpdatePending method doesn\u0027t update, then we\u0027d need to:\nchangeCallSessionMergePending(mMergePeer, false);\n                changeCallSessionMergePending(mMergeHost, false);",
+      "revId": "af2f5e668cdd51dcb8c88eee2af4af76bd923e28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec5f1be9_3b5ee93a",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1351305
+      },
+      "writtenOn": "2019-03-14T18:24:05Z",
+      "side": 1,
+      "message": "Yup, that the strange side effect inside isUpdatePending method. Making it cleaner.",
+      "parentUuid": "690a51cb_3c92157d",
       "revId": "af2f5e668cdd51dcb8c88eee2af4af76bd923e28",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
