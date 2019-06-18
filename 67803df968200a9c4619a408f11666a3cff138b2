@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "581bd6b3_c4119781",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3495,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2019-06-18T18:19:45Z",
+      "side": 1,
+      "message": "Another approach to avoid the lock would be:\nImsCallProfile profile \u003d mCallProfile;\nif (profile !\u003d null) {\n ....\n}",
+      "range": {
+        "startLine": 3489,
+        "startChar": 8,
+        "endLine": 3495,
+        "endChar": 9
+      },
+      "revId": "67803df968200a9c4619a408f11666a3cff138b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
