@@ -504,29 +504,29 @@ public class MmTelFeatureConnection {
 
         @Override
         public void imsFeatureCreated(int slotId, int feature) {
-                mExecutor.execute(() -> {
-                // The feature has been enabled. This happens when the feature is first created and
-                // may happen when the feature is re-enabled.
-                synchronized (mLock) {
-                    if(mSlotId != slotId) {
-                        return;
+            // The feature has been enabled. This happens when the feature is first created and
+            // may happen when the feature is re-enabled.
+            // Do not put onto executor, isAvailable needs to be updated synchronously during
+            // creation.
+            synchronized (mLock) {
+                if(mSlotId != slotId) {
+                    return;
+                }
+                switch (feature) {
+                    case ImsFeature.FEATURE_MMTEL: {
+                        if (!mIsAvailable) {
+                            Log.i(TAG, "MmTel enabled on slotId: " + slotId);
+                            mIsAvailable = true;
+                        }
+                        break;
                     }
-                    switch (feature) {
-                        case ImsFeature.FEATURE_MMTEL: {
-                            if (!mIsAvailable) {
-                                Log.i(TAG, "MmTel enabled on slotId: " + slotId);
-                                mIsAvailable = true;
-                            }
-                            break;
-                        }
-                        case ImsFeature.FEATURE_EMERGENCY_MMTEL: {
-                            mSupportsEmergencyCalling = true;
-                            Log.i(TAG, "Emergency calling enabled on slotId: " + slotId);
-                            break;
-                        }
+                    case ImsFeature.FEATURE_EMERGENCY_MMTEL: {
+                        mSupportsEmergencyCalling = true;
+                        Log.i(TAG, "Emergency calling enabled on slotId: " + slotId);
+                        break;
                     }
                 }
-            });
+            }
         }
 
         @Override
