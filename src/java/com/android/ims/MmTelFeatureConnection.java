@@ -841,19 +841,19 @@ public class MmTelFeatureConnection {
         }
     }
 
-    public void acknowledgeSms(int token, int messageRef,
-            @ImsSmsImplBase.SendStatusResult int result) throws RemoteException {
+    public void acknowledgeSms(int token, @ImsSmsImplBase.SendStatusResult int result)
+            throws RemoteException {
         synchronized (mLock) {
             checkServiceIsReady();
-            getServiceInterface(mBinder).acknowledgeSms(token, messageRef, result);
+            getServiceInterface(mBinder).acknowledgeSms(token, result);
         }
     }
 
-    public void acknowledgeSmsReport(int token, int messageRef,
-            @ImsSmsImplBase.StatusReportResult int result) throws RemoteException {
+    public void acknowledgeSmsReport(int token, @ImsSmsImplBase.StatusReportResult int result)
+            throws RemoteException {
         synchronized (mLock) {
             checkServiceIsReady();
-            getServiceInterface(mBinder).acknowledgeSmsReport(token, messageRef, result);
+            getServiceInterface(mBinder).acknowledgeSmsReport(token, result);
         }
     }
 

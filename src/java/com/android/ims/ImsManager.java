@@ -2578,18 +2578,18 @@ public class ImsManager {
         }
     }
 
-    public void acknowledgeSms(int token, int messageRef, int result) throws ImsException {
+    public void acknowledgeSms(int token, int result) throws ImsException {
         try {
-            mMmTelFeatureConnection.acknowledgeSms(token, messageRef, result);
+            mMmTelFeatureConnection.acknowledgeSms(token, result);
         } catch (RemoteException e) {
             throw new ImsException("acknowledgeSms()", e,
                     ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
         }
     }
 
-    public void acknowledgeSmsReport(int token, int messageRef, int result) throws  ImsException{
+    public void acknowledgeSmsReport(int token, int result) throws ImsException {
         try {
-            mMmTelFeatureConnection.acknowledgeSmsReport(token, messageRef, result);
+            mMmTelFeatureConnection.acknowledgeSmsReport(token, result);
         } catch (RemoteException e) {
             throw new ImsException("acknowledgeSmsReport()", e,
                     ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
