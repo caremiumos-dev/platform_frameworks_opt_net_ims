@@ -1,0 +1,7 @@
+Presubmit-Verified-1: Treehugger Robot <treehugger-gerrit@google.com>
+Code-Review+2: Hall Liu <hallliu@google.com>
+Submitted-by: Hall Liu <hallliu@google.com>
+Submitted-at: Tue, 01 Oct 2019 01:37:03 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1116515
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
