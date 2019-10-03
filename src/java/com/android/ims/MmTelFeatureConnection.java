@@ -420,7 +420,6 @@ public class MmTelFeatureConnection extends FeatureConnection {
 
     // Cache the Registration and Config interfaces as long as the MmTel feature is connected. If
     // it becomes disconnected, invalidate.
-    private IImsRegistration mRegistrationBinder;
     private IImsConfig mConfigBinder;
     private final ImsRegistrationCallbackAdapter mRegistrationCallbackManager;
     private final CapabilityCallbackManager mCapabilityCallbackManager;
@@ -495,27 +494,6 @@ public class MmTelFeatureConnection extends FeatureConnection {
                 }
             }
         }
-    }
-
-    private @Nullable IImsRegistration getRegistration() {
-        synchronized (mLock) {
-            // null if cache is invalid;
-            if (mRegistrationBinder != null) {
-                return mRegistrationBinder;
-            }
-        }
-        TelephonyManager tm = getTelephonyManager();
-        // We don't want to synchronize on a binder call to another process.
-        IImsRegistration regBinder = tm != null
-                ? tm.getImsRegistration(mSlotId, ImsFeature.FEATURE_MMTEL) : null;
-        synchronized (mLock) {
-            // mRegistrationBinder may have changed while we tried to get the registration
-            // interface.
-            if (mRegistrationBinder == null) {
-                mRegistrationBinder = regBinder;
-            }
-        }
-        return mRegistrationBinder;
     }
 
     private IImsConfig getConfig() {
@@ -727,16 +705,6 @@ public class MmTelFeatureConnection extends FeatureConnection {
 
     public IImsConfig getConfigInterface() {
         return getConfig();
-    }
-
-    public @ImsRegistrationImplBase.ImsRegistrationTech int getRegistrationTech()
-            throws RemoteException {
-        IImsRegistration registration = getRegistration();
-        if (registration != null) {
-                return registration.getRegistrationTechnology();
-        } else {
-            return ImsRegistrationImplBase.REGISTRATION_TECH_NONE;
-        }
     }
 
     public IImsEcbm getEcbmInterface() throws RemoteException {
