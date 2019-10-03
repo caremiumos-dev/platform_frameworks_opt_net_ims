@@ -20,7 +20,9 @@ import android.annotation.NonNull;
 import android.content.Context;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.telephony.ims.aidl.IImsCapabilityCallback;
 import android.telephony.ims.aidl.IRcsFeatureListener;
+import android.telephony.ims.feature.CapabilityChangeRequest;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
@@ -70,8 +72,21 @@ public class RcsFeatureConnection extends FeatureConnection {
         return serviceProxy;
     }
 
+    // Notify RcsFeatureManager to handle callback events
+    private RcsFeatureConnectionCallback mCallback;
+
     private RcsFeatureConnection(Context context, int slotId) {
         super(context, slotId, ImsFeature.FEATURE_RCS);
+    }
+
+    public interface RcsFeatureConnectionCallback {
+        void RcsFeatureCreated();
+        void RcsFeatureRemoved();
+        void RcsFeatureStatusChanged(int status);
+    }
+
+    public void setConnectionCallback(RcsFeatureConnectionCallback callback) {
+        mCallback = callback;
     }
 
     /**
@@ -104,7 +119,8 @@ public class RcsFeatureConnection extends FeatureConnection {
     }
 
     @Override
-    protected void handleImsFeatureCreatedCallback(int slotId, int feature) {
+    @VisibleForTesting
+    public void handleImsFeatureCreatedCallback(int slotId, int feature) {
         Log.i(TAG, "IMS feature created: slotId= " + slotId + ", feature=" + feature);
         if (!isUpdateForThisFeatureAndSlot(slotId, feature)) {
             return;
@@ -116,10 +132,16 @@ public class RcsFeatureConnection extends FeatureConnection {
                 mIsAvailable = true;
             }
         }
+
+        // Notify RcsFeatureManager that RCS feature has already created
+        if (mCallback != null) {
+            mCallback.RcsFeatureCreated();
+        }
     }
 
     @Override
-    protected void handleImsFeatureRemovedCallback(int slotId, int feature) {
+    @VisibleForTesting
+    public void handleImsFeatureRemovedCallback(int slotId, int feature) {
         Log.i(TAG, "IMS feature removed: slotId= " + slotId + ", feature=" + feature);
         if (!isUpdateForThisFeatureAndSlot(slotId, feature)) {
             return;
@@ -128,10 +150,16 @@ public class RcsFeatureConnection extends FeatureConnection {
         synchronized(mLock) {
             mIsAvailable = false;
         }
+
+        // notify RCS feature removed
+        if (mCallback != null) {
+            mCallback.RcsFeatureRemoved();
+        }
     }
 
     @Override
-    protected void handleImsStatusChangedCallback(int slotId, int feature, int status) {
+    @VisibleForTesting
+    public void handleImsStatusChangedCallback(int slotId, int feature, int status) {
         Log.i(TAG, "IMS status changed: slotId=" + slotId
                 + ", feature=" + feature + ", status=" + status);
         if (!isUpdateForThisFeatureAndSlot(slotId, feature)) {
@@ -140,6 +168,11 @@ public class RcsFeatureConnection extends FeatureConnection {
 
         synchronized(mLock) {
             mFeatureStateCached = status;
+        }
+
+        // notify RCS feature status changed
+        if (mCallback != null) {
+            mCallback.RcsFeatureStatusChanged(mFeatureStateCached);
         }
     }
 
@@ -153,6 +186,14 @@ public class RcsFeatureConnection extends FeatureConnection {
     public void setRcsFeatureListener(IRcsFeatureListener listener) throws RemoteException {
         checkServiceIsReady();
         getServiceInterface(mBinder).setListener(listener);
+    }
+
+    public void changeEnabledCapabilities(CapabilityChangeRequest request,
+        IImsCapabilityCallback callback) throws RemoteException {
+        synchronized (mLock) {
+            checkServiceIsReady();
+            getServiceInterface(mBinder).changeCapabilitiesConfiguration(request, callback);
+        }
     }
 
     @Override
