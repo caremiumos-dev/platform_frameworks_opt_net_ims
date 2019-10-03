@@ -16,6 +16,7 @@
 
 package com.android.ims;
 
+import android.annotation.Nullable;
 import android.content.Context;
 import android.os.Handler;
 import android.os.IBinder;
@@ -24,7 +25,9 @@ import android.os.RemoteException;
 import android.telephony.TelephonyManager;
 import android.telephony.ims.aidl.IImsMmTelFeature;
 import android.telephony.ims.aidl.IImsRcsFeature;
+import android.telephony.ims.aidl.IImsRegistration;
 import android.telephony.ims.feature.ImsFeature;
+import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 import android.util.Log;
@@ -55,6 +58,7 @@ public abstract class FeatureConnection {
     // ImsFeature Status from the ImsService. Cached.
     protected Integer mFeatureStateCached = null;
     protected IFeatureUpdate mStatusCallback;
+    protected IImsRegistration mRegistrationBinder;
     protected final Object mLock = new Object();
 
     public FeatureConnection(Context context, int slotId, int featureType) {
@@ -110,6 +114,7 @@ public abstract class FeatureConnection {
         synchronized (mLock) {
             if (mIsAvailable) {
                 mIsAvailable = false;
+                mRegistrationBinder = null;
                 if (mBinder != null) {
                     mBinder.unlinkToDeath(mDeathRecipient, 0);
                 }
@@ -150,6 +155,37 @@ public abstract class FeatureConnection {
     protected abstract void handleImsFeatureCreatedCallback(int slotId, int feature);
     protected abstract void handleImsFeatureRemovedCallback(int slotId, int feature);
     protected abstract void handleImsStatusChangedCallback(int slotId, int feature, int status);
+
+    public @ImsRegistrationImplBase.ImsRegistrationTech int getRegistrationTech()
+        throws RemoteException {
+        IImsRegistration registration = getRegistration();
+        if (registration != null) {
+            return registration.getRegistrationTechnology();
+        } else {
+            return ImsRegistrationImplBase.REGISTRATION_TECH_NONE;
+        }
+    }
+
+    protected @Nullable IImsRegistration getRegistration() {
+        synchronized (mLock) {
+            // null if cache is invalid;
+            if (mRegistrationBinder != null) {
+                return mRegistrationBinder;
+            }
+        }
+        TelephonyManager tm = getTelephonyManager();
+        // We don't want to synchronize on a binder call to another process.
+        IImsRegistration regBinder = tm != null
+            ? tm.getImsRegistration(mSlotId, ImsFeature.FEATURE_MMTEL) : null;
+        synchronized (mLock) {
+            // mRegistrationBinder may have changed while we tried to get the registration
+            // interface.
+            if (mRegistrationBinder == null) {
+                mRegistrationBinder = regBinder;
+            }
+        }
+        return mRegistrationBinder;
+    }
 
     protected void checkServiceIsReady() throws RemoteException {
         if (!sImsSupportedOnDevice) {
