@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79b586e4_70dd8e53",
+        "filename": "src/java/com/android/ims/FeatureConnector.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "nit: space",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b351dfd8_9e829723",
+        "filename": "src/java/com/android/ims/FeatureConnector.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "You can use a generic type \u003cT\u003e here to specify connectionReady(T manager) instead of creating a connectionReady for each type. For an example of this, please see MmTelFeatureConnection.CallbackAdapterManager",
+      "range": {
+        "startLine": 29,
+        "startChar": 22,
+        "endLine": 29,
+        "endChar": 38
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4270da9_71b04a2b",
+        "filename": "src/java/com/android/ims/FeatureConnector.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "nit: space",
+      "range": {
+        "startLine": 147,
+        "startChar": 52,
+        "endLine": 147,
+        "endChar": 53
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58512f4e_61eeeb97",
+        "filename": "src/java/com/android/ims/FeatureConnector.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "nit: space",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 4
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15e00234_86efb1af",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "Move this into FeatureConnector using a T type (generic).",
+      "range": {
+        "startLine": 195,
+        "startChar": 16,
+        "endLine": 195,
+        "endChar": 26
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dee5ece_c75d5b9f",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "We want to decouple ImsManager specific logic and keep it in FeatureConnector. In this case, removeCallbacks(mGetServiceRunnable) and notifyNotReady should both be done by FeatureConnector, while the rest is ImsManager specific.\n\nThis may look better if disconnect is a private method in FeatureConnection that specifies an abstract onDisconnect(T manager) where ImsManager#removeNotifyStatusChangedCallback is called.",
+      "range": {
+        "startLine": 223,
+        "startChar": 8,
+        "endLine": 223,
+        "endChar": 34
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d7abb03_1e389461",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "perhaps return a T type here in the super and return ImsManager instance or Exception?",
+      "range": {
+        "startLine": 234,
+        "startChar": 15,
+        "endLine": 234,
+        "endChar": 19
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0360649_17d7bd89",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "There is some mixing of ImsManager specific and FeatureConnection specific code here. It looks like callback handling + timeout handling should be done in FeatureConnector, the only ImsManager specific stuff should be handled in this @Override method. I suggest moving code to FeatureConnector and then calling onRetryGetImsService(T manager) to do ImsManager specific stuff like removing callbacks.",
+      "range": {
+        "startLine": 248,
+        "startChar": 20,
+        "endLine": 248,
+        "endChar": 38
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "712dbd4c_b64c17d8",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "use generic getImsFeatureStatus(T manager)",
+      "range": {
+        "startLine": 268,
+        "startChar": 19,
+        "endLine": 268,
+        "endChar": 38
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a1fc2be_f90f6958",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "Perhaps it makes more sense to use a generic to make this a private method in FeatureConnector that calls connectionReady for the generic T manager.",
+      "range": {
+        "startLine": 276,
+        "startChar": 20,
+        "endLine": 276,
+        "endChar": 31
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9084de86_ef804bb2",
+        "filename": "src/java/com/android/ims/RcsFeatureConnection.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "This looks like it may be null due to a race between setStatusCallback and handleImsFeatureCreatedCallback.",
+      "range": {
+        "startLine": 137,
+        "startChar": 16,
+        "endLine": 137,
+        "endChar": 41
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c04f575_255d946f",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "I think this will cause a race condition between the callback of handleImsFeatureCreatedCallback and setting this status callback. If the status callback is set after handleImsFeatureCreatedCallback is called, this event will be missed.\n\nI think it should be fine to always set the feature listeners and change capabilities during create. If it fails, that will indicate that the ImsService is no longer available. We have to make sure that we retry creating the interface the next time if accessing the ImsService causes a RemoteException.",
+      "range": {
+        "startLine": 68,
+        "startChar": 24,
+        "endLine": 68,
+        "endChar": 44
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "375ee0a2_8623b202",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-10T01:41:27Z",
+      "side": 1,
+      "message": "dont we need to remove the status changed callback here that we added with addNotifyStatusChangedCallbackIfAvailable?",
+      "range": {
+        "startLine": 328,
+        "startChar": 18,
+        "endLine": 328,
+        "endChar": 28
+      },
+      "revId": "90277d41f0625b1eac4bd3181e44ba54062fcd97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
