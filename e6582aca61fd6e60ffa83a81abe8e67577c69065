@@ -186,6 +186,52 @@
     },
     {
       "key": {
+        "uuid": "171b84d7_b445e830",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-14T23:54:10Z",
+      "side": 1,
+      "message": "It is probably better here to enable the capability for all registration technologies, not only the current one.",
+      "range": {
+        "startLine": 174,
+        "startChar": 12,
+        "endLine": 174,
+        "endChar": 72
+      },
+      "revId": "e6582aca61fd6e60ffa83a81abe8e67577c69065",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b93d490_b5d4fb1d",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-14T23:54:10Z",
+      "side": 1,
+      "message": "Its probably better to disable the capabilities for all radio technologies here, we do not want the ImsService registering for RCS when we handover to another tech.",
+      "range": {
+        "startLine": 190,
+        "startChar": 11,
+        "endLine": 190,
+        "endChar": 72
+      },
+      "revId": "e6582aca61fd6e60ffa83a81abe8e67577c69065",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a4209ef1_fdacd744",
         "filename": "src/java/com/android/ims/RcsFeatureManager.java",
         "patchSetId": 7
