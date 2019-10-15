@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55138cba_5d4d381b",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2019-10-15T01:40:07Z",
+      "side": 1,
+      "message": "you can remove the if statement",
+      "range": {
+        "startLine": 2448,
+        "startChar": 16,
+        "endLine": 2448,
+        "endChar": 29
+      },
+      "revId": "6898fb41255124c25ee8ec8f2536d5b872b995f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
