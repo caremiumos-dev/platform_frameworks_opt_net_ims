@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98b45674_2f628d27",
+        "filename": "src/java/com/android/ims/FeatureConnector.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-10-15T17:27:54Z",
+      "side": 1,
+      "message": "nit: This may be better as part of the IFeatureConnector interface, since the implementers (ImsManager, RcsFeatureManager) know whether or not they are supported and how to create their own objects. With this being in the Listener interface here, this logic has to  be duplicated for every user of FeatureConnector.\n\nThis is fine for now, we can clean it up later when we have more time.",
+      "range": {
+        "startLine": 44,
+        "startChar": 7,
+        "endLine": 52,
+        "endChar": 30
+      },
+      "revId": "12a4f89360d755c460270c89d9ec143af5da37b4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
