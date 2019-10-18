@@ -31,6 +31,7 @@ import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Settings;
 import android.telecom.TelecomManager;
+import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
 import android.telephony.ims.ImsMmTelManager;
 import android.telephony.ims.ImsService;
@@ -38,6 +39,7 @@ import android.telephony.ims.ProvisioningManager;
 import android.telephony.ims.aidl.IImsCapabilityCallback;
 import android.telephony.ims.aidl.IImsConfigCallback;
 import android.telephony.ims.aidl.IImsRegistrationCallback;
+import android.telephony.ims.stub.ImsCallSessionImplBase;
 import android.telephony.ims.stub.ImsConfigImplBase;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.telephony.Rlog;
@@ -100,9 +102,12 @@ public class ImsManager implements IFeatureConnector {
     public static final int INCOMING_CALL_RESULT_CODE = 101;
 
     /**
-     * Key to retrieve the call ID from an incoming call intent.
-     * @see #open(MmTelFeature.Listener)
+     * Key to retrieve the call ID from an incoming call intent. No longer used, see
+     * {@link ImsCallSessionImplBase#getCallId()}.
+     * @deprecated Not used in the framework, keeping around symbol to not break old vendor
+     * components.
      */
+    @Deprecated
     public static final String EXTRA_CALL_ID = "android:imsCallID";
 
     /**
@@ -152,7 +157,9 @@ public class ImsManager implements IFeatureConnector {
      * An integer value; service identifier obtained from {@link ImsManager#open}.
      * Internal use only.
      * @hide
+     * @deprecated Not used in the system, keeping around to not break old vendor components.
      */
+    @Deprecated
     public static final String EXTRA_SERVICE_ID = "android:imsServiceId";
 
     /**
@@ -160,6 +167,8 @@ public class ImsManager implements IFeatureConnector {
      * An boolean value; Flag to indicate that the incoming call is a normal call or call for USSD.
      * The value "true" indicates that the incoming call is for USSD.
      * Internal use only.
+     * @deprecated Keeping around to not break old vendor components. Use
+     * {@link MmTelFeature#EXTRA_USSD} instead.
      * @hide
      */
     public static final String EXTRA_USSD = "android:ussd";
@@ -172,6 +181,8 @@ public class ImsManager implements IFeatureConnector {
      * Even though they are not incoming calls, they are propagated
      * to Phone app using same ACTION_IMS_INCOMING_CALL intent.
      * Internal use only.
+     * @deprecated Keeping around to not break old vendor components. Use
+     * {@link MmTelFeature#EXTRA_IS_UNKNOWN_CALL} instead.
      * @hide
      */
     public static final String EXTRA_IS_UNKNOWN_CALL = "android:isUnknown";
@@ -407,6 +418,47 @@ public class ImsManager implements IFeatureConnector {
             return mgr.isVolteEnabledByPlatform();
         }
         loge("isVolteEnabledByPlatform: ImsManager null, returning default value.");
+        return false;
+    }
+
+    /**
+     * @return true if the MmTel capability is supported over the requested transport,
+     * false otherwise.
+     */
+    public boolean isSupported(int capability, int transportType) {
+        switch(transportType) {
+            case (AccessNetworkConstants.TRANSPORT_TYPE_WWAN): {
+                switch (capability) {
+                    case (MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE): {
+                        return isVolteEnabledByPlatform();
+                    } case (MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VIDEO): {
+                        return isVtEnabledByPlatform();
+                    }case (MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_UT): {
+                        return isSuppServicesOverUtEnabledByPlatform();
+                    } case (MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_SMS): {
+                        // There is currently no carrier config defined for this.
+                        return true;
+                    }
+                }
+                break;
+            } case (AccessNetworkConstants.TRANSPORT_TYPE_WLAN): {
+                switch (capability) {
+                    case (MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE) : {
+                        return isWfcEnabledByPlatform();
+                    } case (MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VIDEO) : {
+                        // This is not transport dependent at this time.
+                        return isVtEnabledByPlatform();
+                    } case (MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_UT) : {
+                        // This is not transport dependent at this time.
+                        return isSuppServicesOverUtEnabledByPlatform();
+                    } case (MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_SMS) : {
+                        // There is currently no carrier config defined for this.
+                        return true;
+                    }
+                }
+                break;
+            }
+        }
         return false;
     }
 
@@ -1480,12 +1532,10 @@ public class ImsManager implements IFeatureConnector {
      * (from ISIM) periodically in order to receive calls from the operator's network.
      * When the IMS service receives a new call, it will call
      * {@link MmTelFeature.Listener#onIncomingCall}
-     * The listener contains a call ID extra {@link #getCallId} and it can be used to take a call.
      * @param listener A {@link MmTelFeature.Listener}, which is the interface the
      * {@link MmTelFeature} uses to notify the framework of updates
      * @throws NullPointerException if {@code listener} is null
      * @throws ImsException if calling the IMS service results in an error
-     * @see #getCallId
      */
     public void open(MmTelFeature.Listener listener) throws ImsException {
         checkAndThrowExceptionIfServiceUnavailable();
@@ -1849,32 +1899,13 @@ public class ImsManager implements IFeatureConnector {
     /**
      * Creates a {@link ImsCall} to take an incoming call.
      *
-     * @param sessionId a session id which is obtained from {@link ImsManager#open}
-     * @param incomingCallExtras the incoming call broadcast intent
      * @param listener to listen to the call events from {@link ImsCall}
      * @return a {@link ImsCall} object
      * @throws ImsException if calling the IMS service results in an error
      */
-    public ImsCall takeCall(IImsCallSession session, Bundle incomingCallExtras,
-            ImsCall.Listener listener) throws ImsException {
-        if (DBG) {
-            log("takeCall :: incomingCall=" + incomingCallExtras);
-        }
-
+    public ImsCall takeCall(IImsCallSession session, ImsCall.Listener listener)
+            throws ImsException {
         checkAndThrowExceptionIfServiceUnavailable();
-
-        if (incomingCallExtras == null) {
-            throw new ImsException("Can't retrieve session with null intent",
-                    ImsReasonInfo.CODE_LOCAL_ILLEGAL_ARGUMENT);
-        }
-
-        String callId = getCallId(incomingCallExtras);
-
-        if (callId == null) {
-            throw new ImsException("Call ID missing in the incoming call intent",
-                    ImsReasonInfo.CODE_LOCAL_ILLEGAL_ARGUMENT);
-        }
-
         try {
             if (session == null) {
                 throw new ImsException("No pending session for the call",
@@ -2151,20 +2182,6 @@ public class ImsManager implements IFeatureConnector {
             // Return static default defined in CarrierConfigManager.
             return CarrierConfigManager.getDefaultConfig().getInt(key);
         }
-    }
-
-    /**
-     * Gets the call ID from the specified incoming call broadcast intent.
-     *
-     * @param incomingCallExtras the incoming call broadcast intent
-     * @return the call ID or null if the intent does not contain it
-     */
-    private static String getCallId(Bundle incomingCallExtras) {
-        if (incomingCallExtras == null) {
-            return null;
-        }
-
-        return incomingCallExtras.getString(EXTRA_CALL_ID);
     }
 
     /**
@@ -2486,31 +2503,33 @@ public class ImsManager implements IFeatureConnector {
             // Set VoLTE to default
             SubscriptionManager.setSubscriptionProperty(subId,
                     SubscriptionManager.ENHANCED_4G_MODE_ENABLED,
-                    booleanToPropertyString(getBooleanCarrierConfig(
-                            CarrierConfigManager.KEY_ENHANCED_4G_LTE_ON_BY_DEFAULT_BOOL)));
+                    Integer.toString(SUB_PROPERTY_NOT_INITIALIZED));
 
             // Set VoWiFi to default
             SubscriptionManager.setSubscriptionProperty(subId,
                     SubscriptionManager.WFC_IMS_ENABLED,
-                    booleanToPropertyString(getBooleanCarrierConfig(
-                            CarrierConfigManager.KEY_CARRIER_DEFAULT_WFC_IMS_ENABLED_BOOL)));
+                    Integer.toString(SUB_PROPERTY_NOT_INITIALIZED));
 
             // Set VoWiFi mode to default
             SubscriptionManager.setSubscriptionProperty(subId,
                     SubscriptionManager.WFC_IMS_MODE,
-                    Integer.toString(getIntCarrierConfig(
-                            CarrierConfigManager.KEY_CARRIER_DEFAULT_WFC_IMS_MODE_INT)));
+                    Integer.toString(SUB_PROPERTY_NOT_INITIALIZED));
 
             // Set VoWiFi roaming to default
             SubscriptionManager.setSubscriptionProperty(subId,
                     SubscriptionManager.WFC_IMS_ROAMING_ENABLED,
-                    booleanToPropertyString(getBooleanCarrierConfig(
-                            CarrierConfigManager.KEY_CARRIER_DEFAULT_WFC_IMS_ROAMING_ENABLED_BOOL)));
+                    Integer.toString(SUB_PROPERTY_NOT_INITIALIZED));
+
+            // Set VoWiFi roaming mode to default
+            SubscriptionManager.setSubscriptionProperty(subId,
+                    SubscriptionManager.WFC_IMS_ROAMING_MODE,
+                    Integer.toString(SUB_PROPERTY_NOT_INITIALIZED));
 
 
             // Set VT to default
             SubscriptionManager.setSubscriptionProperty(subId,
-                    SubscriptionManager.VT_IMS_ENABLED, booleanToPropertyString(true));
+                    SubscriptionManager.VT_IMS_ENABLED,
+                    Integer.toString(SUB_PROPERTY_NOT_INITIALIZED));
         } else {
             loge("factoryReset: invalid sub id, can not reset siminfo db settings; subId=" + subId);
         }
