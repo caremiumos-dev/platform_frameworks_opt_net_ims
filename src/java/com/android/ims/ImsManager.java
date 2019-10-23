@@ -593,9 +593,15 @@ public class ImsManager implements IFeatureConnector {
                 getSubId(), SubscriptionManager.VT_IMS_ENABLED,
                 SUB_PROPERTY_NOT_INITIALIZED, mContext);
 
-        // If it's never set, by default we return true.
-        return (setting == SUB_PROPERTY_NOT_INITIALIZED
-                || setting == ProvisioningManager.PROVISIONING_VALUE_ENABLED);
+        boolean onByDefault = getBooleanCarrierConfig(
+                CarrierConfigManager.KEY_VIDEO_CALLING_ON_BY_DEFAULT_BOOL);
+
+        // If video calling is not initialized, we use the default value
+        if (setting == SUB_PROPERTY_NOT_INITIALIZED) {
+            return onByDefault;
+        } else {
+            return (setting == ProvisioningManager.PROVISIONING_VALUE_ENABLED);
+        }
     }
 
     /**
