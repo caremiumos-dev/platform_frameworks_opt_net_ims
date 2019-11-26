@@ -1,0 +1,15 @@
+{
+  "presubmit": [
+    {
+      "name": "TeleServiceTests",
+      "options": [
+        {
+          "instrumentation-arg": "notAnnotation:=androidx.test.filters.FlakyTest"
+        },
+        {
+          "instrumentation-arg": "notAnnotation:=android.support.test.filters.FlakyTest"
+        }
+      ]
+    }
+  ]
+}
