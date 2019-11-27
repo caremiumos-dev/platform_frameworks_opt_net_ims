@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  */
 
 package com.android.ims;
@@ -184,12 +184,43 @@ public class RcsFeatureConnection extends FeatureConnection {
     }
 
     public void setRcsFeatureListener(IRcsFeatureListener listener) throws RemoteException {
-        checkServiceIsReady();
-        getServiceInterface(mBinder).setListener(listener);
+        synchronized (mLock) {
+            checkServiceIsReady();
+            getServiceInterface(mBinder).setListener(listener);
+        }
+    }
+
+    public int queryCapabilityStatus() throws RemoteException {
+        synchronized (mLock) {
+            checkServiceIsReady();
+            return getServiceInterface(mBinder).queryCapabilityStatus();
+        }
+    }
+
+    public void addCapabilityCallback(IImsCapabilityCallback callback) throws RemoteException {
+        synchronized (mLock) {
+            checkServiceIsReady();
+            getServiceInterface(mBinder).addCapabilityCallback(callback);
+        }
+    }
+
+    public void removeCapabilityCallback(IImsCapabilityCallback callback) throws RemoteException {
+        synchronized (mLock) {
+            checkServiceIsReady();
+            getServiceInterface(mBinder).removeCapabilityCallback(callback);
+        }
+    }
+
+    public void queryCapabilityConfiguration(int capability, int radioTech,
+            IImsCapabilityCallback c) throws RemoteException {
+        synchronized (mLock) {
+            checkServiceIsReady();
+            getServiceInterface(mBinder).queryCapabilityConfiguration(capability, radioTech, c);
+        }
     }
 
     public void changeEnabledCapabilities(CapabilityChangeRequest request,
-        IImsCapabilityCallback callback) throws RemoteException {
+            IImsCapabilityCallback callback) throws RemoteException {
         synchronized (mLock) {
             checkServiceIsReady();
             getServiceInterface(mBinder).changeCapabilitiesConfiguration(request, callback);
@@ -218,7 +249,8 @@ public class RcsFeatureConnection extends FeatureConnection {
         return null;
     }
 
-    private IImsRcsFeature getServiceInterface(IBinder b) {
+    @VisibleForTesting
+    public IImsRcsFeature getServiceInterface(IBinder b) {
         return IImsRcsFeature.Stub.asInterface(b);
     }
 }
