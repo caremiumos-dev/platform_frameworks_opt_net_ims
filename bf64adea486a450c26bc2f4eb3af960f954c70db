@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "080fd5b3_5c936102",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2019-11-27T14:47:24Z",
+      "side": 1,
+      "message": "I am currently having permission problems in Buganizer, so I have not been able to create an Buganizer issue for this CL. I will create a Buganizer issue and update the commit message when this problem has been resolved.",
+      "range": {
+        "startLine": 14,
+        "startChar": 5,
+        "endLine": 14,
+        "endChar": 12
+      },
+      "revId": "bf64adea486a450c26bc2f4eb3af960f954c70db",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
