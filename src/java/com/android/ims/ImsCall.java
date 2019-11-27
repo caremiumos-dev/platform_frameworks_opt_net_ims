@@ -1864,6 +1864,7 @@ public class ImsCall implements ICall {
 
             String key = entry.getKey();
             Bundle confInfo = entry.getValue();
+            String id = confInfo.getString(ImsConferenceState.ID);
             String status = confInfo.getString(ImsConferenceState.STATUS);
             String user = confInfo.getString(ImsConferenceState.USER);
             String displayName = confInfo.getString(ImsConferenceState.DISPLAY_TEXT);
@@ -1885,7 +1886,7 @@ public class ImsCall implements ICall {
             int connectionState = ImsConferenceState.getConnectionStateForStatus(status);
 
             if (connectionState != Connection.STATE_DISCONNECTED) {
-                ConferenceParticipant conferenceParticipant = new ConferenceParticipant(handle,
+                ConferenceParticipant conferenceParticipant = new ConferenceParticipant(id, handle,
                         displayName, endpointUri, connectionState, Call.Details.DIRECTION_UNKNOWN);
                 mConferenceParticipants.add(conferenceParticipant);
             }

@@ -43,6 +43,10 @@ public class ConferenceParticipant implements Parcelable {
      */
     private static final String ANONYMOUS_INVALID_HOST = "anonymous.invalid";
     /**
+     * The conference call connection id
+     */
+    private final String mId;
+    /**
      * The conference participant's handle (e.g., phone number).
      */
     private final Uri mHandle;
@@ -91,8 +95,9 @@ public class ConferenceParticipant implements Parcelable {
      * @param state       The state of the participant in the conference.
      * @param callDirection The direction of the call (incoming/outgoing).
      */
-    public ConferenceParticipant(Uri handle, String displayName, Uri endpoint, int state,
+    public ConferenceParticipant(String id, Uri handle, String displayName, Uri endpoint, int state,
             int callDirection) {
+        mId = id;
         mHandle = handle;
         mDisplayName = displayName;
         mEndpoint = endpoint;
@@ -109,6 +114,7 @@ public class ConferenceParticipant implements Parcelable {
                 @Override
                 public ConferenceParticipant createFromParcel(Parcel source) {
                     ClassLoader classLoader = ParcelableCall.class.getClassLoader();
+                    String id = source.readString();
                     Uri handle = source.readParcelable(classLoader);
                     String displayName = source.readString();
                     Uri endpoint = source.readParcelable(classLoader);
@@ -117,7 +123,7 @@ public class ConferenceParticipant implements Parcelable {
                     long elapsedRealTime = source.readLong();
                     int callDirection = source.readInt();
                     ConferenceParticipant participant =
-                            new ConferenceParticipant(handle, displayName, endpoint, state,
+                            new ConferenceParticipant(id, handle, displayName, endpoint, state,
                                     callDirection);
                     participant.setConnectTime(connectTime);
                     participant.setConnectElapsedTime(elapsedRealTime);
@@ -192,6 +198,7 @@ public class ConferenceParticipant implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mId);
         dest.writeParcelable(mHandle, 0);
         dest.writeString(mDisplayName);
         dest.writeParcelable(mEndpoint, 0);
@@ -209,7 +216,9 @@ public class ConferenceParticipant implements Parcelable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("[ConferenceParticipant Handle: ");
+        sb.append("[ConferenceParticipant id: ");
+        sb.append(mId);
+        sb.append(" Handle: ");
         sb.append(Rlog.pii(TAG, mHandle));
         sb.append(" DisplayName: ");
         sb.append(Rlog.pii(TAG, mDisplayName));
@@ -225,6 +234,13 @@ public class ConferenceParticipant implements Parcelable {
         sb.append(getCallDirection() == android.telecom.Call.Details.DIRECTION_INCOMING ? "Incoming" : "Outgoing");
         sb.append("]");
         return sb.toString();
+    }
+
+    /**
+     * The conference call connection id.
+     */
+    public String getId() {
+        return mId;
     }
 
     /**
