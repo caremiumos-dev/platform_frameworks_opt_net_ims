@@ -22,12 +22,15 @@ import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.RcsContactUceCapability;
+import android.telephony.ims.aidl.IImsCapabilityCallback;
 import android.telephony.ims.aidl.IRcsFeatureListener;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.telephony.ims.feature.CapabilityChangeRequest;
 import android.telephony.ims.feature.RcsFeature.RcsImsCapabilities;
+import android.telephony.Rlog;
 import android.util.Log;
 
 import com.android.ims.FeatureConnection.IFeatureUpdate;
@@ -36,11 +39,14 @@ import com.android.internal.annotations.VisibleForTesting;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class RcsFeatureManager implements IFeatureConnector {
     private static final String TAG = "RcsFeatureManager";
+    private static boolean DBG = true;
 
     private final int mSlotId;
     private final Context mContext;
@@ -50,9 +56,10 @@ public class RcsFeatureManager implements IFeatureConnector {
     public Set<IFeatureUpdate> mStatusCallbacks = new CopyOnWriteArraySet<>();
 
     public RcsFeatureManager(Context context, int slotId) {
-        Log.d(TAG, "RcsFeatureManager slotId: " + slotId);
         mContext = context;
         mSlotId = slotId;
+        log("RcsFeatureManager");
+
         createImsService();
     }
 
@@ -64,7 +71,7 @@ public class RcsFeatureManager implements IFeatureConnector {
                 new IRcsFeatureUpdate() {
                     @Override
                     public void notifyFeatureCreated() {
-                        Log.d(TAG, "Feature created");
+                        log("RcsFeature created");
                         setRcsFeatureListener();
                         changeEnabledCapabilitiesAfterRcsFeatureCreated();
                     }
@@ -88,7 +95,7 @@ public class RcsFeatureManager implements IFeatureConnector {
         try {
             mRcsFeatureConnection.setRcsFeatureListener(mRcsFeatureListener);
         } catch (RemoteException e) {
-            Log.e(TAG, "setRcsFeatureListener " + e);
+            loge("setRcsFeatureListener: ", e);
         }
     }
 
@@ -128,6 +135,85 @@ public class RcsFeatureManager implements IFeatureConnector {
         }
     };
 
+    public void registerRcsAvailabilityCallback(IImsCapabilityCallback callback)
+            throws ImsException {
+        try {
+            mRcsFeatureConnection.addCapabilityCallback(callback);
+        } catch (RemoteException e) {
+            loge("registerRcsAvailabilityCallback: ", e);
+            throw new ImsException(
+                    "register capability callback", e, ImsReasonInfo.CODE_LOCAL_INTERNAL_ERROR);
+        }
+    }
+
+    public void unregisterRcsAvailabilityCallback(IImsCapabilityCallback callback)
+            throws ImsException {
+        try {
+            mRcsFeatureConnection.removeCapabilityCallback(callback);
+        } catch (RemoteException e) {
+            loge("unregisterRcsAvailabilityCallback: ", e);
+        }
+    }
+
+    public boolean isCapable(@RcsImsCapabilities.RcsImsCapabilityFlag int capability)
+            throws ImsException {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicReference<Boolean> capableRef = new AtomicReference<>();
+
+        IImsCapabilityCallback callback = new IImsCapabilityCallback.Stub() {
+            @Override
+            public void onQueryCapabilityConfiguration(int capability, int radioTech,
+                    boolean enabled) {
+                if (DBG) log("isCapable result:capability=" + capability + ", enabled=" + enabled);
+                capableRef.set(enabled);
+                latch.countDown();
+            }
+
+            @Override
+            public void onCapabilitiesStatusChanged(int config) {
+                // Don't handle it
+            }
+
+            @Override
+            public void onChangeCapabilityConfigurationError(int capability, int radioTech,
+                    int reason) {
+                // Don't handle it
+            }
+        };
+
+        try {
+            int radioTech = getTelephonyManager().getImsRegTechnologyForMmTel();
+            if (DBG) log("Query capability: radioTech=" + radioTech);
+            mRcsFeatureConnection.queryCapabilityConfiguration(capability, radioTech, callback);
+            return awaitResult(latch, capableRef);
+        } catch (RemoteException e) {
+            loge("isCapable error: ", e);
+            throw new ImsException("is capable", e, ImsReasonInfo.CODE_LOCAL_INTERNAL_ERROR);
+        }
+    }
+
+    private static <T> T awaitResult(CountDownLatch latch, AtomicReference<T> resultRef) {
+        try {
+            android.util.Log.i(TAG, "awaitResult before");
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        android.util.Log.i(TAG,"awaitResult after");
+        return resultRef.get();
+    }
+
+    public boolean isAvailable(@RcsImsCapabilities.RcsImsCapabilityFlag int capability)
+            throws ImsException {
+        try {
+            int currentStatus = mRcsFeatureConnection.queryCapabilityStatus();
+            return (capability == currentStatus) ? true : false;
+        } catch (RemoteException e) {
+            loge("isAvailable error: ", e);
+            throw new ImsException("is RCS available", e, ImsReasonInfo.CODE_LOCAL_INTERNAL_ERROR);
+        }
+    }
+
     /**
      * Adds a callback for status changed events if the binder is already available. If it is not,
      * this method will throw an ImsException.
@@ -139,9 +225,8 @@ public class RcsFeatureManager implements IFeatureConnector {
             int reason = ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN;
             if (!isRcsUceSupportedByCarrier(mContext, mSlotId)) {
                 reason = ImsReasonInfo.CODE_LOCAL_IMS_NOT_SUPPORTED_ON_DEVICE;
-            } else {
-                throw new ImsException("Binder is not active!", reason);
             }
+            throw new ImsException("Binder is not active!", reason);
         }
         if (c != null) {
             mStatusCallbacks.add(c);
@@ -184,10 +269,10 @@ public class RcsFeatureManager implements IFeatureConnector {
         request.addCapabilitiesToEnableForTech(capabilityType,
                 ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN);
         try {
-            Log.i(TAG, "enableRcsUceCapability: " + capabilityType);
+            if (DBG) log("enableRcsUceCapability: " + capabilityType);
             mRcsFeatureConnection.changeEnabledCapabilities(request, null);
         } catch (RemoteException e) {
-            Log.e(TAG, "enableRcsUceCapability " + e);
+            loge("enableRcsUceCapability: ", e);
         }
     }
 
@@ -207,7 +292,7 @@ public class RcsFeatureManager implements IFeatureConnector {
         request.addCapabilitiesToDisableForTech(
                 RcsImsCapabilities.CAPABILITY_TYPE_PRESENCE_UCE, techIWlan);
         try {
-            Log.i(TAG, "disableRcsUceCapabilities");
+            if (DBG) log("disableRcsUceCapabilities");
             mRcsFeatureConnection.changeEnabledCapabilities(request, null);
         } catch (RemoteException e) {
             Log.e(TAG, "disableRcsUceCapabilities " + e);
@@ -233,8 +318,8 @@ public class RcsFeatureManager implements IFeatureConnector {
         boolean isPresenceSupported = isCapabilityTypeSupported(
             context, slotId, RcsImsCapabilities.CAPABILITY_TYPE_PRESENCE_UCE);
 
-        Log.i(TAG, "isRcsUceSupported: options=" + isOptionsSupported
-            + ", Presence=" + isPresenceSupported);
+        if (DBG) Log.d(TAG, "isRcsUceSupported: options=" + isOptionsSupported
+                + ", Presence=" + isPresenceSupported);
 
         return isOptionsSupported | isPresenceSupported;
     }
@@ -244,6 +329,7 @@ public class RcsFeatureManager implements IFeatureConnector {
      */
     private static boolean isCapabilityTypeSupported(
         Context context, int slotId, int capabilityType) {
+
         int subId = sSubscriptionManagerProxy.getSubId(slotId);
         if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
             Log.e(TAG, "isCapabilityTypeSupported: Getting subIds is failure! slotId=" + slotId);
@@ -253,11 +339,13 @@ public class RcsFeatureManager implements IFeatureConnector {
         CarrierConfigManager configManager =
             (CarrierConfigManager) context.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         if (configManager == null) {
+            Log.e(TAG, "isCapabilityTypeSupported: CarrierConfigManager is null, " + slotId);
             return false;
         }
 
         PersistableBundle b = configManager.getConfigForSubId(subId);
         if (b == null) {
+            Log.e(TAG, "isCapabilityTypeSupported: PersistableBundle is null, " + slotId);
             return false;
         }
 
@@ -272,6 +360,10 @@ public class RcsFeatureManager implements IFeatureConnector {
     @Override
     public int getImsServiceState() throws ImsException {
         return mRcsFeatureConnection.getFeatureState();
+    }
+
+    private TelephonyManager getTelephonyManager() {
+        return (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
     }
 
     /**
@@ -290,7 +382,6 @@ public class RcsFeatureManager implements IFeatureConnector {
             = slotId -> {
                 int[] subIds = SubscriptionManager.getSubId(slotId);
                 if (subIds != null) {
-                    Log.d(TAG, "getSubId : " + subIds[0]);
                     return subIds[0];
                 }
                 return SubscriptionManager.INVALID_SUBSCRIPTION_ID;
@@ -303,5 +394,17 @@ public class RcsFeatureManager implements IFeatureConnector {
     @VisibleForTesting
     public static void setSubscriptionManager(SubscriptionManagerProxy proxy) {
         sSubscriptionManagerProxy = proxy;
+    }
+
+    private void log(String s) {
+        Rlog.d(TAG + " [" + mSlotId + "]", s);
+    }
+
+    private void loge(String s) {
+        Rlog.e(TAG + " [" + mSlotId + "]", s);
+    }
+
+    private void loge(String s, Throwable t) {
+        Rlog.e(TAG + " [" + mSlotId + "]", s, t);
     }
 }
