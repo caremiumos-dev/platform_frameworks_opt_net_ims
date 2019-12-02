@@ -1126,6 +1126,7 @@ public class ImsCall implements ICall {
 
         synchronized(mLockObj) {
             mSession = session;
+            mIsConferenceHost = true;
 
             try {
                 session.setListener(createCallSessionListener());
