@@ -1078,6 +1078,7 @@ public class ImsCall implements ICall {
              mSession = session;
 
              try {
+                 mIsConferenceHost = isMultiparty();
                  mSession.setListener(createCallSessionListener());
              } catch (Throwable t) {
                  loge("attachSession :: ", t);
@@ -1125,6 +1126,7 @@ public class ImsCall implements ICall {
 
         synchronized(mLockObj) {
             mSession = session;
+            mIsConferenceHost = true;
 
             try {
                 session.setListener(createCallSessionListener());
