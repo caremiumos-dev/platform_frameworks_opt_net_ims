@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b93e3807_630621d3",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-03T22:07:25Z",
+      "side": 1,
+      "message": "Unfortunately, we can not just add the capability callback here, since this is mapped to a phoneId and not a subId.\n\nThis can lead to a bunch of bugs, such as the subscription associated with the phoneId changing, causing the user to not be able to unregister a callback (because the callback is now associated with a different subId) or the subId being removed and the callback never being unregistered with the service.\n\nIn MmTelFeatureConnection, this was handled with a Callback manager, which would listen for subscription changes and automatically unregister callbacks associated with a phone when the subId associated changes.\n\nPerhaps instead, we can abstract CallbackAdapterManager into FeatureConnection and have RcsFeatureConnection implement a CallbackAdapterManger for CallbackAdapterManager?",
+      "range": {
+        "startLine": 142,
+        "startChar": 16,
+        "endLine": 142,
+        "endChar": 47
+      },
+      "revId": "692cb61bab28d58822eee3a3fc16739e10e6dbb6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24442361_d8d76725",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-03T22:07:25Z",
+      "side": 1,
+      "message": "Check to make sure the capability and radioTech are correct before recording the result as a sanity check.",
+      "range": {
+        "startLine": 175,
+        "startChar": 24,
+        "endLine": 175,
+        "endChar": 54
+      },
+      "revId": "692cb61bab28d58822eee3a3fc16739e10e6dbb6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a2db67b_a831b5fe",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-03T22:07:25Z",
+      "side": 1,
+      "message": "We should decouple MMTEL and RCS where possible, since they can be handled by two completely different ImsServices. We should instead extend the isCapable method to include a parameter for registration technology. I accidentally omitted it in the original ImsRcsManager#isCapable method.",
+      "range": {
+        "startLine": 195,
+        "startChar": 50,
+        "endLine": 195,
+        "endChar": 77
+      },
+      "revId": "692cb61bab28d58822eee3a3fc16739e10e6dbb6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54553c54_2dc2828d",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-03T22:07:25Z",
+      "side": 1,
+      "message": "This is a bitfield, so this should be \"new RcsImsCapabilities(currentStatus).isCapable(capability)\"",
+      "range": {
+        "startLine": 225,
+        "startChar": 20,
+        "endLine": 225,
+        "endChar": 47
+      },
+      "revId": "692cb61bab28d58822eee3a3fc16739e10e6dbb6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
