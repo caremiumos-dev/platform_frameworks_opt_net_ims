@@ -161,9 +161,24 @@ public class ImsUt implements ImsUtInterface {
      * @param result message to pass the result of this operation
      *      The return value of ((AsyncResult)result.obj) is an array of {@link ImsSsInfo}.
      * @param serviceClass service class for e.g. voice/video
+     * @deprecated Use {@link #queryCallBarring(int, Message, int, String)} instead.
      */
     @Override
     public void queryCallBarring(int cbType, Message result, int serviceClass) {
+        queryCallBarring(cbType, result, serviceClass, "");
+    }
+
+    /**
+     * Retrieves the configuration of the call barring for specified service class with password.
+     *
+     * @param cbType type of call barring to be queried; ImsUtInterface#CB_XXX
+     * @param result message to pass the result of this operation
+     *      The return value of ((AsyncResult)result.obj) is an array of {@link ImsSsInfo}.
+     * @param serviceClass service class for e.g. voice/video
+     * @param password password or "" if not required
+     */
+    @Override
+    public void queryCallBarring(int cbType, Message result, int serviceClass, String password) {
         if (DBG) {
             log("queryCallBarring :: Ut=" + miUt + ", cbType=" + cbType + ", serviceClass="
                     + serviceClass);
@@ -171,7 +186,7 @@ public class ImsUt implements ImsUtInterface {
 
         synchronized(mLockObj) {
             try {
-                int id = miUt.queryCallBarringForServiceClass(cbType, serviceClass);
+                int id = miUt.queryCallBarringWithPassword(cbType, serviceClass, password);
 
                 if (id < 0) {
                     sendFailureReport(result,
@@ -360,10 +375,20 @@ public class ImsUt implements ImsUtInterface {
 
     /**
      * Modifies the configuration of the call barring for specified service class.
+     * @deprecated Use {@link #updateCallBarring(int, int, Message, String[], int, String)} instead.
+     */
+    @Override
+    public void updateCallBarring(int cbType, int action, Message result, String[] barrList,
+            int serviceClass) {
+        updateCallBarring(cbType, action, result, barrList, serviceClass, "");
+    }
+
+    /**
+     * Modifies the configuration of the call barring for specified service class with password.
      */
     @Override
     public void updateCallBarring(int cbType, int action, Message result,
-            String[] barrList, int serviceClass) {
+            String[] barrList, int serviceClass, String password) {
         if (DBG) {
             if (barrList != null) {
                 String bList = new String();
@@ -382,8 +407,8 @@ public class ImsUt implements ImsUtInterface {
 
         synchronized(mLockObj) {
             try {
-                int id = miUt.updateCallBarringForServiceClass(cbType, action,
-                        barrList, serviceClass);
+                int id = miUt.updateCallBarringWithPassword(cbType, action,
+                        barrList, serviceClass, password);
 
                 if (id < 0) {
                     sendFailureReport(result,
