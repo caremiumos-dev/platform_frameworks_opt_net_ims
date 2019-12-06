@@ -22,6 +22,30 @@
       "revId": "240e84ae6b0a4461664399cd5dcfab788ac0c9d9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60f242d7_f5914ba7",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1233564
+      },
+      "writtenOn": "2019-12-06T22:58:20Z",
+      "side": 1,
+      "message": "That check is actually already performed in the is*ProvisionedOnDevice-functions. They all already first check the value of KEY_CARRIER_VOLTE_PROVISIONING_REQUIRED_BOOL and return true if KEY_CARRIER_VOLTE_PROVISIONING_REQUIRED_BOOL is false:\n\nVoLTE:\n    public boolean isVolteProvisionedOnDevice() {\n        if (getBooleanCarrierConfig(\n                CarrierConfigManager.KEY_CARRIER_VOLTE_PROVISIONING_REQUIRED_BOOL)) {\n            return isVolteProvisioned();\n        }\n\n        return true;\n    }\n\t\n\t\nWFC:\n    public boolean isWfcProvisionedOnDevice() {\n        if (getBooleanCarrierConfig(\n                CarrierConfigManager.KEY_CARRIER_VOLTE_OVERRIDE_WFC_PROVISIONING_BOOL)) {\n            if (!isVolteProvisionedOnDevice()) {\n                return false;\n            }\n        }\n\n        if (getBooleanCarrierConfig(\n                CarrierConfigManager.KEY_CARRIER_VOLTE_PROVISIONING_REQUIRED_BOOL)) {\n            return isWfcProvisioned();\n        }\n\n        return true;\n    }\n\nVT:\n    public boolean isVtProvisionedOnDevice() {\n        if (getBooleanCarrierConfig(\n                CarrierConfigManager.KEY_CARRIER_VOLTE_PROVISIONING_REQUIRED_BOOL)) {\n            return isVtProvisioned();\n        }\n\n        return true;\n    }",
+      "parentUuid": "9e418c94_27c9be74",
+      "range": {
+        "startLine": 1361,
+        "startChar": 32,
+        "endLine": 1361,
+        "endChar": 58
+      },
+      "revId": "240e84ae6b0a4461664399cd5dcfab788ac0c9d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
