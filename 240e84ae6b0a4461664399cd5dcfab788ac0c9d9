@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e418c94_27c9be74",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-06T22:19:23Z",
+      "side": 1,
+      "message": "For operators that do not require provisioning, what is the result of querying this config option? Have you tried this with operators that do not require provisioning? I do not think it is currently well defined, but it may return false.\n\nI think in each of the is*ProvisionedOnDevice, we should probably first check to see if provisioning is actually required via carrier config option CarrierConfigManager.KEY_CARRIER_VOLTE_PROVISIONING_REQUIRED_BOOL",
+      "range": {
+        "startLine": 1361,
+        "startChar": 32,
+        "endLine": 1361,
+        "endChar": 58
+      },
+      "revId": "240e84ae6b0a4461664399cd5dcfab788ac0c9d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
