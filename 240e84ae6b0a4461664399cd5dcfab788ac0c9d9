@@ -46,6 +46,30 @@
       "revId": "240e84ae6b0a4461664399cd5dcfab788ac0c9d9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c52eb66a_c611d2d3",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-09T18:44:17Z",
+      "side": 1,
+      "message": "Oops, I was misreading the function name :) Thank you for the correction",
+      "parentUuid": "60f242d7_f5914ba7",
+      "range": {
+        "startLine": 1361,
+        "startChar": 32,
+        "endLine": 1361,
+        "endChar": 58
+      },
+      "revId": "240e84ae6b0a4461664399cd5dcfab788ac0c9d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
