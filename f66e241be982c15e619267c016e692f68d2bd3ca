@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "eee07780_aa2efb2a",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1594446
+      },
+      "writtenOn": "2019-12-09T08:51:18Z",
+      "side": 1,
+      "message": "I agree. I shall remove this line.",
+      "parentUuid": "56ab72be_fdb71f5a",
+      "range": {
+        "startLine": 1081,
+        "startChar": 17,
+        "endLine": 1081,
+        "endChar": 52
+      },
+      "revId": "f66e241be982c15e619267c016e692f68d2bd3ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a194d63_4a529a5d",
         "filename": "src/java/com/android/ims/ImsCall.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-05T22:21:20Z",
       "side": 1,
       "message": "only if participants.length\u003e 0 ?",
+      "range": {
+        "startLine": 1129,
+        "startChar": 32,
+        "endLine": 1129,
+        "endChar": 36
+      },
+      "revId": "f66e241be982c15e619267c016e692f68d2bd3ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60db7bb8_e89d656a",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1594446
+      },
+      "writtenOn": "2019-12-09T08:51:18Z",
+      "side": 1,
+      "message": "even for null participants, it would be host. So, it is not required to check for participants.length\u003e 0",
+      "parentUuid": "6a194d63_4a529a5d",
       "range": {
         "startLine": 1129,
         "startChar": 32,
