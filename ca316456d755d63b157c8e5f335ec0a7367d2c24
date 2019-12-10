@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb9c9415_995a2f61",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2696,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-10T21:04:22Z",
+      "side": 0,
+      "message": "This code is common across all vendor implementations. Do older implementations make the assumption that calls are unique correctly? This was originally added due to two bugs in merging here: b/20224516, b/20232100.\n\nHave you run regression tests to make sure that removing this fix doesnt cause the regressions mentioned in the two bug linked above?",
+      "range": {
+        "startLine": 2696,
+        "startChar": 50,
+        "endLine": 2696,
+        "endChar": 78
+      },
+      "revId": "ca316456d755d63b157c8e5f335ec0a7367d2c24",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
