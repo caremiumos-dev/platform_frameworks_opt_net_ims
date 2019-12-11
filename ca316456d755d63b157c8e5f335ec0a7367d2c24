@@ -22,6 +22,30 @@
       "revId": "ca316456d755d63b157c8e5f335ec0a7367d2c24",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82823bd9_fa18e1f1",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2696,
+      "author": {
+        "id": 1594446
+      },
+      "writtenOn": "2019-12-11T05:34:21Z",
+      "side": 0,
+      "message": "Sometimes when a peer call ends during merge process, lower layers re use the call ID of the terminated call to indicate the new conference call session. Lower layers are reusing the call id of the terminated peer call which was taking part in merge process and assigning it to conference call session as it is an unused call id from lower layers perspective.\n\nIn such cases, UI doesn\u0027t show conference call through merge was successful. \n\nWe did run regression testing and didn\u0027t find any issues.\n\nAlso, we don\u0027t find any bug id with b/20224516, b/20232100 when we searched in partnerissuetracker. Can you provide access to these bugs so that we can comment?",
+      "parentUuid": "fb9c9415_995a2f61",
+      "range": {
+        "startLine": 2696,
+        "startChar": 50,
+        "endLine": 2696,
+        "endChar": 78
+      },
+      "revId": "ca316456d755d63b157c8e5f335ec0a7367d2c24",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
