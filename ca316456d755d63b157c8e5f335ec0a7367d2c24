@@ -46,6 +46,30 @@
       "revId": "ca316456d755d63b157c8e5f335ec0a7367d2c24",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdfb0239_70a656aa",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2696,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-11T21:05:11Z",
+      "side": 0,
+      "message": "Did you also run regression testing on older modem implementations? Is this consistent throughout all implementations of the modem? It is important that this doesn\u0027t also cause regressions on older modem versions, since this was added to solve other bugs that were occurring.\n\nI updated b/117393458 with the details of the other bugs.",
+      "parentUuid": "82823bd9_fa18e1f1",
+      "range": {
+        "startLine": 2696,
+        "startChar": 50,
+        "endLine": 2696,
+        "endChar": 78
+      },
+      "revId": "ca316456d755d63b157c8e5f335ec0a7367d2c24",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
