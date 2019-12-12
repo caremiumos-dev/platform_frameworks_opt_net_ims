@@ -22,6 +22,30 @@
       "revId": "b6ceea477d771e5925da0b4edf3b8e1d47cd2ce2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1681781e_e4693386",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2019-12-12T23:45:43Z",
+      "side": 1,
+      "message": "This error log is in static function and loge() requires the member variable \"mSlotId\".\nthe loge function cannot be used here.",
+      "parentUuid": "ae17e125_7d5772aa",
+      "range": {
+        "startLine": 399,
+        "startChar": 12,
+        "endLine": 399,
+        "endChar": 17
+      },
+      "revId": "b6ceea477d771e5925da0b4edf3b8e1d47cd2ce2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
