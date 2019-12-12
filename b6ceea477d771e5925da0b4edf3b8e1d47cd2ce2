@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae17e125_7d5772aa",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-12T23:05:49Z",
+      "side": 1,
+      "message": "should this be using loge() defined below? Same with other references",
+      "range": {
+        "startLine": 399,
+        "startChar": 12,
+        "endLine": 399,
+        "endChar": 17
+      },
+      "revId": "b6ceea477d771e5925da0b4edf3b8e1d47cd2ce2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
