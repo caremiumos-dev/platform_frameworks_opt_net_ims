@@ -70,6 +70,30 @@
       "revId": "ca316456d755d63b157c8e5f335ec0a7367d2c24",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d945d8a0_f93ada89",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2696,
+      "author": {
+        "id": 1594446
+      },
+      "writtenOn": "2019-12-13T09:21:59Z",
+      "side": 0,
+      "message": "Yes, the behavior is consistent across all modem implementations. The use-cases mentioned are REFER fail use-cases, we executed them, took logs and after analyzing, we see that it is a known issue tracked with b/69900969 and is unrelated to the current fix.\n\nAlso, vendor code takes care of passing either non-null (i.e. valid) session or null session, so we can safely remove these extra checks.\n\nLet us know if you still have any other concerns.",
+      "parentUuid": "bdfb0239_70a656aa",
+      "range": {
+        "startLine": 2696,
+        "startChar": 50,
+        "endLine": 2696,
+        "endChar": 78
+      },
+      "revId": "ca316456d755d63b157c8e5f335ec0a7367d2c24",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
