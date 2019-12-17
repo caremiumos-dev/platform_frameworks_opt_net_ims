@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1994c293_789ee433",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3307,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2019-12-17T23:18:09Z",
+      "side": 1,
+      "message": "If these aren\u0027t needed, we can just remove them. Same with below",
+      "range": {
+        "startLine": 3307,
+        "startChar": 70,
+        "endLine": 3307,
+        "endChar": 77
+      },
+      "revId": "cf2082d8665497602b51d18bb631132843504ee5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
