@@ -16,13 +16,14 @@
 
 package com.android.ims;
 
-import android.compat.annotation.UnsupportedAppUsage;
+import android.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Parcel;
 import android.telecom.Call;
+import com.android.ims.internal.ConferenceParticipant;
 import android.telecom.Connection;
 import android.telephony.CallQuality;
 import android.telephony.Rlog;
@@ -35,7 +36,6 @@ import android.telephony.ims.ImsStreamMediaProfile;
 import android.telephony.ims.ImsSuppServiceNotification;
 import android.util.Log;
 
-import com.android.ims.internal.ConferenceParticipant;
 import com.android.ims.internal.ICall;
 import com.android.ims.internal.ImsStreamMediaSession;
 import com.android.internal.annotations.VisibleForTesting;
@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -2652,6 +2653,17 @@ public class ImsCall implements ICall {
             return;
         }
 
+        /*
+         * This method check if session exists as a session on the current
+         * ImsCall or its counterpart if it is in the process of a conference
+         */
+        private boolean doesCallSessionExistsInMerge(ImsCallSession cs) {
+            String callId = cs.getCallId();
+            return ((isMergeHost() && Objects.equals(mMergePeer.mSession.getCallId(), callId)) ||
+                    (isMergePeer() && Objects.equals(mMergeHost.mSession.getCallId(), callId)) ||
+                    Objects.equals(mSession.getCallId(), callId));
+        }
+
         /**
          * We received a callback from ImsCallSession that merge completed.
          * @param newSession - this session can have 2 values based on the below scenarios
@@ -2685,7 +2697,8 @@ public class ImsCall implements ICall {
             } else {
                 // Handles case 1, 2, 3
                 if (newSession != null) {
-                    mTransientConferenceSession = newSession;
+                    mTransientConferenceSession = doesCallSessionExistsInMerge(newSession) ?
+                            null: newSession;
                 }
                 // Handles case 5
                 processMergeComplete();

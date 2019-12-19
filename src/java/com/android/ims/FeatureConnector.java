@@ -20,9 +20,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.telephony.Rlog;
-import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.feature.ImsFeature;
+import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
 
@@ -33,7 +32,6 @@ import java.util.concurrent.Executor;
  */
 public class FeatureConnector<T extends IFeatureConnector> extends Handler {
     private static final String TAG = "FeatureConnector";
-    private static final boolean DBG = true;
 
     // Initial condition for ims connection retry.
     private static final int IMS_RETRY_STARTING_TIMEOUT_MS = 500; // ms
@@ -142,13 +140,12 @@ public class FeatureConnector<T extends IFeatureConnector> extends Handler {
      * {@link PackageManager#FEATURE_TELEPHONY_IMS} feature), this method will do nothing.
      */
     public void connect() {
-        if (DBG) log("connect");
+        Log.i(TAG, getLogMessage("connect"));
         if (!isSupported()) {
-            logw("connect: not supported.");
+            Log.i(TAG, getLogMessage("connect: not supported."));
             return;
         }
         mRetryCount = 0;
-
         // Send a message to connect to the Ims Service and open a connection through
         // getImsService().
         post(mGetServiceRunnable);
@@ -164,7 +161,7 @@ public class FeatureConnector<T extends IFeatureConnector> extends Handler {
      * {@link FeatureConnector.Listener#connectionUnavailable()} will be called one last time.
      */
     public void disconnect() {
-        if (DBG) log("disconnect");
+        Log.i(TAG, getLogMessage("disconnect"));
         removeCallbacks(mGetServiceRunnable);
         synchronized (mLock) {
             if (mManager != null) {
@@ -178,19 +175,14 @@ public class FeatureConnector<T extends IFeatureConnector> extends Handler {
         try {
             createImsService();
         } catch (ImsException e) {
-            int errorCode = e.getCode();
-            if (DBG) logw("Create IMS service error: " + errorCode);
-            if (ImsReasonInfo.CODE_LOCAL_IMS_NOT_SUPPORTED_ON_DEVICE != errorCode) {
-                // Retry when error is not IMS_NOT_SUPPORTED_ON_DEVICE
-                retryGetImsService();
-            }
+            retryGetImsService();
         }
     };
 
     @VisibleForTesting
     public void createImsService() throws ImsException {
         synchronized (mLock) {
-            if (DBG) log("createImsService");
+            Log.d(TAG, getLogMessage("createImsService"));
             mManager = mListener.getFeatureManager();
             // Adding to set, will be safe adding multiple times. If the ImsService is not
             // active yet, this method will throw an ImsException.
@@ -218,7 +210,8 @@ public class FeatureConnector<T extends IFeatureConnector> extends Handler {
         removeCallbacks(mGetServiceRunnable);
         int timeout = mRetryTimeout.get();
         postDelayed(mGetServiceRunnable, timeout);
-        if (DBG) log("retryGetImsService: unavailable, retrying in " + timeout + " seconds");
+        Log.i(TAG, getLogMessage("retryGetImsService: unavailable, retrying in " + timeout
+            + " seconds"));
     }
 
     // Callback fires when IMS Feature changes state
@@ -246,7 +239,7 @@ public class FeatureConnector<T extends IFeatureConnector> extends Handler {
                                     break;
                                 }
                                 default: {
-                                    logw("Unexpected State! " + status);
+                                    Log.w(TAG, getLogMessage("Unexpected State!"));
                                 }
                             }
                         } catch (ImsException e) {
@@ -272,11 +265,11 @@ public class FeatureConnector<T extends IFeatureConnector> extends Handler {
             manager = mManager;
         }
         try {
-            if (DBG) log("notifyReady");
+            Log.i(TAG, getLogMessage("notifyReady"));
             mListener.connectionReady(manager);
         }
         catch (ImsException e) {
-            logw("notifyReady exception: " + e.getMessage());
+            Log.w(TAG, getLogMessage("notifyReady exception: " + e.getMessage()));
             throw e;
         }
         // Only reset retry count if connectionReady does not generate an ImsException/
@@ -286,15 +279,11 @@ public class FeatureConnector<T extends IFeatureConnector> extends Handler {
     }
 
     protected void notifyNotReady() {
-        if (DBG) log("notifyNotReady");
+        Log.i(TAG, getLogMessage("notifyNotReady"));
         mListener.connectionUnavailable();
     }
 
-    private final void log(String message) {
-        Rlog.d(TAG, "[" + mLogPrefix + ", " + mPhoneId + "] " + message);
-    }
-
-    private final void logw(String message) {
-        Rlog.w(TAG, "[" + mLogPrefix + ", " + mPhoneId + "] " + message);
+    protected String getLogMessage(String message) {
+        return "Connector-[" + mLogPrefix + ", " + mPhoneId + "] " + message;
     }
 }

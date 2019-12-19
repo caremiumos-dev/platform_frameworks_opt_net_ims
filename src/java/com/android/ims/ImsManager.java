@@ -17,8 +17,8 @@
 package com.android.ims;
 
 import android.annotation.Nullable;
+import android.annotation.UnsupportedAppUsage;
 import android.app.PendingIntent;
-import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
@@ -30,6 +30,7 @@ import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.telecom.TelecomManager;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
@@ -228,6 +229,7 @@ public class ImsManager implements IFeatureConnector {
     private Context mContext;
     private CarrierConfigManager mConfigManager;
     private int mPhoneId;
+    private final boolean mConfigDynamicBind;
     private @Nullable MmTelFeatureConnection mMmTelFeatureConnection = null;
     private boolean mConfigUpdated = false;
 
@@ -1356,14 +1358,11 @@ public class ImsManager implements IFeatureConnector {
         boolean available = isVolteEnabledByPlatform();
         boolean enabled = isEnhanced4gLteModeSettingEnabledByUser();
         boolean isNonTty = isNonTtyOrTtyOnVolteEnabled();
-        boolean isProvisioned = isVolteProvisionedOnDevice();
-        boolean isFeatureOn = available && enabled && isNonTty && isProvisioned;
+        boolean isFeatureOn = available && enabled && isNonTty;
 
         log("updateVolteFeatureValue: available = " + available
                 + ", enabled = " + enabled
-                + ", nonTTY = " + isNonTty
-                + ", provisioned = " + isProvisioned
-                + ", isFeatureOn = " + isFeatureOn);
+                + ", nonTTY = " + isNonTty);
 
         if (isFeatureOn) {
             request.addCapabilitiesToEnableForTech(
@@ -1386,16 +1385,14 @@ public class ImsManager implements IFeatureConnector {
         boolean isDataEnabled = isDataEnabled();
         boolean ignoreDataEnabledChanged = getBooleanCarrierConfig(
                 CarrierConfigManager.KEY_IGNORE_DATA_ENABLED_CHANGED_FOR_VIDEO_CALLS);
-        boolean isProvisioned = isVtProvisionedOnDevice();
-        boolean isFeatureOn = available && enabled && isNonTty && isProvisioned
+
+        boolean isFeatureOn = available && enabled && isNonTty
                 && (ignoreDataEnabledChanged || isDataEnabled);
 
         log("updateVideoCallFeatureValue: available = " + available
                 + ", enabled = " + enabled
                 + ", nonTTY = " + isNonTty
-                + ", data enabled = " + isDataEnabled
-                + ", provisioned = " + isProvisioned
-                + ", isFeatureOn = " + isFeatureOn);
+                + ", data enabled = " + isDataEnabled);
 
         if (isFeatureOn) {
             request.addCapabilitiesToEnableForTech(
@@ -1416,17 +1413,14 @@ public class ImsManager implements IFeatureConnector {
         boolean isNetworkRoaming = tm.isNetworkRoaming();
         boolean available = isWfcEnabledByPlatform();
         boolean enabled = isWfcEnabledByUser();
-        boolean isProvisioned = isWfcProvisionedOnDevice();
         int mode = getWfcMode(isNetworkRoaming);
         boolean roaming = isWfcRoamingEnabledByUser();
-        boolean isFeatureOn = available && enabled && isProvisioned;
+        boolean isFeatureOn = available && enabled;
 
         log("updateWfcFeatureAndProvisionedValues: available = " + available
                 + ", enabled = " + enabled
                 + ", mode = " + mode
-                + ", provisioned = " + isProvisioned
-                + ", roaming = " + roaming
-                + ", isFeatureOn = " + isFeatureOn);
+                + ", roaming = " + roaming);
 
         if (isFeatureOn) {
             request.addCapabilitiesToEnableForTech(
@@ -1492,9 +1486,19 @@ public class ImsManager implements IFeatureConnector {
     public ImsManager(Context context, int phoneId) {
         mContext = context;
         mPhoneId = phoneId;
+        mConfigDynamicBind = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_dynamic_bind_ims);
         mConfigManager = (CarrierConfigManager) context.getSystemService(
                 Context.CARRIER_CONFIG_SERVICE);
         createImsService();
+    }
+
+    /**
+     * @return Whether or not ImsManager is configured to Dynamically bind or not to support legacy
+     * devices.
+     */
+    public boolean isDynamicBinding() {
+        return mConfigDynamicBind;
     }
 
     /*
@@ -2024,22 +2028,21 @@ public class ImsManager implements IFeatureConnector {
     }
 
     public boolean updateRttConfigValue() {
-        // If there's no active sub anywhere on the device, enable RTT on the modem so that
-        // the device can make an emergency call.
         boolean isCarrierSupported =
                 getBooleanCarrierConfig(CarrierConfigManager.KEY_RTT_SUPPORTED_BOOL);
+        boolean isRttUiSettingEnabled = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.RTT_CALLING_MODE, 0) != 0;
+        boolean isRttAlwaysOnCarrierConfig = getBooleanCarrierConfig(
+                CarrierConfigManager.KEY_IGNORE_RTT_MODE_SETTING_BOOL);
 
-        boolean isActiveSubscriptionPresent = isActiveSubscriptionPresent();
+        boolean shouldImsRttBeOn = isRttUiSettingEnabled || isRttAlwaysOnCarrierConfig;
+        logi("update RTT: settings value: " + isRttUiSettingEnabled + " always-on carrierconfig: "
+                + isRttAlwaysOnCarrierConfig);
 
-        logi("update RTT: is carrier enabled: "
-                + isCarrierSupported + "; is active sub present: "
-                + isActiveSubscriptionPresent);
-
-        if (isCarrierSupported || !isActiveSubscriptionPresent) {
-            setRttConfig(true);
-            return true;
+        if (isCarrierSupported) {
+            setRttConfig(shouldImsRttBeOn);
         }
-        return false;
+        return isCarrierSupported && shouldImsRttBeOn;
     }
 
     private void setRttConfig(boolean enabled) {
@@ -2683,12 +2686,6 @@ public class ImsManager implements IFeatureConnector {
     private boolean isSubIdValid(int subId) {
         return SubscriptionManager.isValidSubscriptionId(subId) &&
                 subId != SubscriptionManager.DEFAULT_SUBSCRIPTION_ID;
-    }
-
-    private boolean isActiveSubscriptionPresent() {
-        SubscriptionManager sm = (SubscriptionManager) mContext.getSystemService(
-                Context.TELEPHONY_SUBSCRIPTION_SERVICE);
-        return sm.getActiveSubscriptionIdList().length > 0;
     }
 
     private void updateImsCarrierConfigs(PersistableBundle configs) throws ImsException {

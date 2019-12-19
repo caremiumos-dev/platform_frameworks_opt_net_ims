@@ -214,8 +214,7 @@ public abstract class FeatureConnection {
         return mRegistrationBinder;
     }
 
-    @VisibleForTesting
-    public void checkServiceIsReady() throws RemoteException {
+    protected void checkServiceIsReady() throws RemoteException {
         if (!sImsSupportedOnDevice) {
             throw new RemoteException("IMS is not supported on this device.");
         }
