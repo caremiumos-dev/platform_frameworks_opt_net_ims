@@ -16,6 +16,7 @@
 
 package com.android.ims;
 
+import android.annotation.IntDef;
 import android.content.Context;
 import android.net.Uri;
 import android.os.PersistableBundle;
@@ -36,6 +37,8 @@ import com.android.ims.FeatureConnection.IFeatureUpdate;
 import com.android.ims.RcsFeatureConnection.IRcsFeatureUpdate;
 import com.android.internal.annotations.VisibleForTesting;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -58,6 +61,42 @@ public class RcsFeatureManager implements IFeatureConnector {
     public RcsCapabilityCallbackManager mCapabilityCallbackManager;
     @VisibleForTesting
     public Set<IFeatureUpdate> mStatusCallbacks = new CopyOnWriteArraySet<>();
+
+    /** ETag expired. */
+    public static final int UCE_PRES_PUBLISH_TRIGGER_ETAG_EXPIRED = 0;
+    /** Move to LTE with VoPS disabled. */
+    public static final int UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_LTE_VOPS_DISABLED = 1;
+    /** Move to LTE with VoPS enabled. */
+    public static final int UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_LTE_VOPS_ENABLED = 2;
+    /** Move to eHRPD. */
+    public static final int UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_EHRPD = 3;
+    /** Move to HSPA+. */
+    public static final int UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_HSPAPLUS = 4;
+    /** Move to 3G. */
+    public static final int UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_3G = 5;
+    /** Move to 2G. */
+    public static final int UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_2G = 6;
+    /** Move to WLAN */
+    public static final int UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_WLAN = 7;
+    /** Move to IWLAN */
+    public static final int UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_IWLAN = 8;
+    /** Trigger is unknown. */
+    public static final int UCE_PRES_PUBLISH_TRIGGER_UNKNOWN = 9;
+
+    @IntDef(value = {
+            UCE_PRES_PUBLISH_TRIGGER_ETAG_EXPIRED,
+            UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_LTE_VOPS_DISABLED,
+            UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_LTE_VOPS_ENABLED,
+            UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_EHRPD,
+            UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_HSPAPLUS,
+            UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_3G,
+            UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_2G,
+            UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_WLAN,
+            UCE_PRES_PUBLISH_TRIGGER_MOVE_TO_IWLAN,
+            UCE_PRES_PUBLISH_TRIGGER_UNKNOWN
+    }, prefix="UCE_PRES_PUBLISH_TRIGGER_")
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface StackPublishTriggerType {}
 
     public RcsFeatureManager(Context context, int slotId) {
         mContext = context;
@@ -153,7 +192,7 @@ public class RcsFeatureManager implements IFeatureConnector {
         }
 
         @Override
-        public void onNotifyUpdateCapabilities() {
+        public void onNotifyUpdateCapabilities(@StackPublishTriggerType int triggerType) {
         }
 
         @Override
