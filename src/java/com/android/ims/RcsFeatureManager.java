@@ -16,6 +16,7 @@
 
 package com.android.ims;
 
+import android.annotation.IntDef;
 import android.content.Context;
 import android.net.Uri;
 import android.os.PersistableBundle;
@@ -29,6 +30,7 @@ import android.telephony.ims.aidl.IRcsFeatureListener;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.telephony.ims.feature.CapabilityChangeRequest;
 import android.telephony.ims.feature.RcsFeature.RcsImsCapabilities;
+import android.telephony.ims.stub.RcsPresenceExchangeImplBase;
 import android.telephony.Rlog;
 import android.util.Log;
 
@@ -36,6 +38,8 @@ import com.android.ims.FeatureConnection.IFeatureUpdate;
 import com.android.ims.RcsFeatureConnection.IRcsFeatureUpdate;
 import com.android.internal.annotations.VisibleForTesting;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -153,7 +157,8 @@ public class RcsFeatureManager implements IFeatureConnector {
         }
 
         @Override
-        public void onNotifyUpdateCapabilities() {
+        public void onNotifyUpdateCapabilities(
+                @RcsPresenceExchangeImplBase.StackPublishTriggerType int triggerType) {
         }
 
         @Override
