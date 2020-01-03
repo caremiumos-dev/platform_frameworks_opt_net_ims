@@ -34,6 +34,7 @@ import android.util.Log;
 
 import com.android.ims.FeatureConnection.IFeatureUpdate;
 import com.android.ims.RcsFeatureConnection.IRcsFeatureUpdate;
+import com.android.ims.internal.uce.presence.PresPublishTriggerType;
 import com.android.internal.annotations.VisibleForTesting;
 
 import java.util.List;
@@ -153,7 +154,7 @@ public class RcsFeatureManager implements IFeatureConnector {
         }
 
         @Override
-        public void onNotifyUpdateCapabilities() {
+        public void onNotifyUpdateCapabilities(PresPublishTriggerType publishTriggerType) {
         }
 
         @Override
