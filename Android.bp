@@ -24,5 +24,9 @@ java_library {
         local_include_dirs: ["src/java"],
     },
     srcs: ["src/java/**/*.java"],
-    libs: ["unsupportedappusage"],
+    libs: [
+        "unsupportedappusage",
+        "framework-telephony",
+        // TODO link to framework-minus-apex stub and framework-wifi-stubs
+    ],
 }
