@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88e1a94e_ea717ad0",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-01-06T21:29:33Z",
+      "side": 1,
+      "message": "This is going to break VZW provisioning for EAB over OMA-DM right now. Need to also make the changes to PARIS+carrier id OMA-DM for all carriers that use OMA-DM provisioning for EAB.",
+      "range": {
+        "startLine": 550,
+        "startChar": 12,
+        "endLine": 550,
+        "endChar": 35
+      },
+      "revId": "be331213472639f887de01736674f4a678f8d0e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
