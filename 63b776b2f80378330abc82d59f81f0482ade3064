@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32f05f25_6abe3c15",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-01-06T21:41:45Z",
+      "side": 1,
+      "message": "We can not use this trigger type unfortunately, it will create a dependency on an @hide library that is deprecated. Instead, we need to redefine the trigger types here and create a new IntDef.",
+      "range": {
+        "startLine": 37,
+        "startChar": 45,
+        "endLine": 37,
+        "endChar": 67
+      },
+      "revId": "63b776b2f80378330abc82d59f81f0482ade3064",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
