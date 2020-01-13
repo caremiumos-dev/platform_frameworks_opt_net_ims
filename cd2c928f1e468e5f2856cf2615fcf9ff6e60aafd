@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74bfdb9f_44f8ffac",
+        "filename": "src/java/com/android/ims/FeatureConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1373692
+      },
+      "writtenOn": "2020-01-13T02:06:19Z",
+      "side": 1,
+      "message": "It\u0027s better to adjust the import order",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 31,
+        "endChar": 10
+      },
+      "revId": "cd2c928f1e468e5f2856cf2615fcf9ff6e60aafd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
