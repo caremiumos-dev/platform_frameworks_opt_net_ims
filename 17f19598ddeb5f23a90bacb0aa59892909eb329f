@@ -1,0 +1,9 @@
+Code-Review+2: Tyler Gunn <tgunn@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Autosubmit+1: Brad Ebinger <breadley@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Wed, 15 Jan 2020 00:03:42 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1208243
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
