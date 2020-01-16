@@ -21,4 +21,8 @@ java_library {
     },
     srcs: ["src/java/**/*.java"],
     libs: ["unsupportedappusage"],
+
+    static_libs: [
+        "ucepresencelib",
+    ],
 }
