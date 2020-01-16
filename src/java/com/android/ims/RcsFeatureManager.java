@@ -39,6 +39,7 @@ import android.util.Log;
 import com.android.ims.FeatureConnection.IFeatureUpdate;
 import com.android.ims.RcsFeatureConnection.IRcsFeatureUpdate;
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.service.ims.presence.SipOptionHandler;
 
 import java.util.List;
 import java.util.Set;
@@ -56,6 +57,8 @@ public class RcsFeatureManager implements IFeatureConnector {
 
     private final int mSlotId;
     private final Context mContext;
+
+    private SipOptionHandler mSipOptionHandler;
 
     @VisibleForTesting
     public RcsFeatureConnection mRcsFeatureConnection;
@@ -75,6 +78,7 @@ public class RcsFeatureManager implements IFeatureConnector {
         mRegistrationCallbackManager = new ImsRegistrationCallbackAdapter(context);
 
         createImsService();
+        mSipOptionHandler = new SipOptionHandler(mRcsFeatureConnection, mContext);
     }
 
     public void release() {
@@ -173,11 +177,15 @@ public class RcsFeatureManager implements IFeatureConnector {
         @Override
         public void onCapabilityRequestResponseOptions(
                 int code, String reason, RcsContactUceCapability info, int operationToken) {
+            mSipOptionHandler.onCapabilityRequestResponseOptions(code, reason, info,
+                    operationToken);
         }
 
         @Override
         public void onRemoteCapabilityRequest(
                 Uri contactUri, RcsContactUceCapability remoteInfo, int operationToken) {
+            mSipOptionHandler.handleIncomingCapabilityRequest(contactUri, remoteInfo,
+                    operationToken);
         }
     };
 

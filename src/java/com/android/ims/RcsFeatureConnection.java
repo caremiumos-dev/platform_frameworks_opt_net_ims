@@ -18,12 +18,16 @@ package com.android.ims;
 
 import android.annotation.NonNull;
 import android.content.Context;
+import android.net.Uri;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.telephony.ims.RcsContactUceCapability;
 import android.telephony.ims.aidl.IImsCapabilityCallback;
 import android.telephony.ims.aidl.IRcsFeatureListener;
 import android.telephony.ims.feature.CapabilityChangeRequest;
 import android.telephony.ims.feature.ImsFeature;
+
+import com.android.service.ims.presence.ISipOption;
 import com.android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.telephony.ims.aidl.IImsRcsFeature;
@@ -35,7 +39,7 @@ import com.android.internal.annotations.VisibleForTesting;
  * A container of the IImsServiceController binder, which implements all of the RcsFeatures that
  * the platform currently supports: RCS
  */
-public class RcsFeatureConnection extends FeatureConnection {
+public class RcsFeatureConnection extends FeatureConnection implements ISipOption {
     private static final String TAG = "RcsFeatureConnection";
 
     public interface IRcsFeatureUpdate extends IFeatureUpdate {
@@ -219,5 +223,27 @@ public class RcsFeatureConnection extends FeatureConnection {
     @VisibleForTesting
     public IImsRcsFeature getServiceInterface(IBinder b) {
         return IImsRcsFeature.Stub.asInterface(b);
+    }
+
+    @Override
+    public int getStackStatusForOptionRequest() {
+        return 0;
+    }
+
+    @Override
+    public int sendCapabilityRequest(Uri contact, RcsContactUceCapability capability, int taskId) {
+        return 0;
+    }
+
+    @Override
+    public void respondToCapabilityRequest(String contactUri,
+            RcsContactUceCapability ownCapabilities, int taskId) {
+
+    }
+
+    @Override
+    public void respondToCapabilityRequestWithError(String contactUri, int code, String reason,
+            int taskId) {
+
     }
 }
