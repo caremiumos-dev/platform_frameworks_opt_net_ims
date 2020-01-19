@@ -29,21 +29,22 @@ import android.telephony.ims.aidl.IImsCapabilityCallback;
 import android.telephony.ims.aidl.IImsRegistration;
 import android.telephony.ims.aidl.IImsRegistrationCallback;
 import android.telephony.ims.aidl.IRcsFeatureListener;
-import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.telephony.ims.feature.CapabilityChangeRequest;
 import android.telephony.ims.feature.RcsFeature.RcsImsCapabilities;
 import android.telephony.ims.stub.RcsPresenceExchangeImplBase;
-import com.android.telephony.Rlog;
+import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.util.Log;
 
 import com.android.ims.FeatureConnection.IFeatureUpdate;
 import com.android.ims.RcsFeatureConnection.IRcsFeatureUpdate;
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.service.ims.presence.SipOptionHandler;
+import com.android.telephony.Rlog;
 
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -177,11 +178,35 @@ public class RcsFeatureManager implements IFeatureConnector {
         @Override
         public void onCapabilityRequestResponseOptions(
                 int code, String reason, RcsContactUceCapability info, int operationToken) {
+            log("onCapabilityRequestResponseOptions");
+            if (mRcsFeatureConnection == null) {
+                log("RcsFeatureConnection null");
+            } else {
+                SipOptionHandler sipOptionHandler = mRcsFeatureConnection.getSipOptionHandler();
+                if (sipOptionHandler == null) {
+                    log("sipOptionHandler null");
+                } else {
+                    sipOptionHandler.onCapabilityRequestResponseOptions(code, reason, info,
+                            operationToken);
+                }
+            }
         }
 
         @Override
         public void onRemoteCapabilityRequest(
                 Uri contactUri, RcsContactUceCapability remoteInfo, int operationToken) {
+            log("onRemoteCapabilityRequest");
+            if (mRcsFeatureConnection == null) {
+                log("RcsFeatureConnection null");
+            } else {
+                SipOptionHandler sipOptionHandler = mRcsFeatureConnection.getSipOptionHandler();
+                if (sipOptionHandler == null) {
+                    log("sipOptionHandler null");
+                } else {
+                    sipOptionHandler.handleIncomingCapabilityRequest(contactUri, remoteInfo,
+                            operationToken);
+                }
+            }
         }
     };
 

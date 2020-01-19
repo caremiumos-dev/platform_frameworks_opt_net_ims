@@ -18,29 +18,34 @@ package com.android.ims;
 
 import android.annotation.NonNull;
 import android.content.Context;
+import android.net.Uri;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.telephony.TelephonyManager;
+import android.telephony.ims.RcsContactUceCapability;
 import android.telephony.ims.aidl.IImsCapabilityCallback;
+import android.telephony.ims.aidl.IImsRcsFeature;
 import android.telephony.ims.aidl.IRcsFeatureListener;
 import android.telephony.ims.feature.CapabilityChangeRequest;
 import android.telephony.ims.feature.ImsFeature;
-import android.telephony.ims.RcsContactUceCapability;
-import com.android.telephony.Rlog;
-import android.telephony.TelephonyManager;
-import android.telephony.ims.aidl.IImsRcsFeature;
 import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.service.ims.presence.ISipOption;
 import com.android.service.ims.presence.PresencePublisher;
+import com.android.service.ims.presence.SipOptionHandler;
 import com.android.service.ims.presence.SubscribePublisher;
+import com.android.telephony.Rlog;
 
 /**
  * A container of the IImsServiceController binder, which implements all of the RcsFeatures that
  * the platform currently supports: RCS
  */
-public class RcsFeatureConnection extends FeatureConnection implements PresencePublisher,
-        SubscribePublisher {
+public class RcsFeatureConnection extends FeatureConnection implements  PresencePublisher,
+        SubscribePublisher, ISipOption {
     private static final String TAG = "RcsFeatureConnection";
+
+    private SipOptionHandler mSipOptionHandler;
 
     public interface IRcsFeatureUpdate extends IFeatureUpdate {
         /**
@@ -255,6 +260,40 @@ public class RcsFeatureConnection extends FeatureConnection implements PresenceP
             }
         }
         return null;
+    }
+
+    @Override
+    public int getStackStatusForOptionRequest() {
+        return 0;
+    }
+
+    @Override
+    public int sendCapabilityRequest(Uri contact, RcsContactUceCapability capability, int taskId) {
+        // Need to implement this api
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void respondToCapabilityRequest(String contactUri,
+            RcsContactUceCapability ownCapabilities, int taskId) {
+        // Need to implement this api
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void respondToCapabilityRequestWithError(String contactUri, int code, String reason,
+            int taskId) {
+        // Need to implement this api
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setSipOptioinHandler(SipOptionHandler sipOptionHandler) {
+        mSipOptionHandler = sipOptionHandler;
+    }
+
+    public SipOptionHandler getSipOptionHandler() {
+        return mSipOptionHandler;
     }
 
     @VisibleForTesting
