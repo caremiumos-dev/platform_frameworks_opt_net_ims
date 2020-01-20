@@ -66,6 +66,11 @@ public class ConferenceParticipant implements Parcelable {
     private final int mState;
 
     /**
+     * The create time of the participant.
+     */
+    private long mCreateTime;
+
+    /**
      * The connect time of the participant.
      */
     private long mConnectTime;
@@ -113,12 +118,14 @@ public class ConferenceParticipant implements Parcelable {
                     String displayName = source.readString();
                     Uri endpoint = source.readParcelable(classLoader);
                     int state = source.readInt();
+                    long createTime = source.readLong();
                     long connectTime = source.readLong();
                     long elapsedRealTime = source.readLong();
                     int callDirection = source.readInt();
                     ConferenceParticipant participant =
                             new ConferenceParticipant(handle, displayName, endpoint, state,
                                     callDirection);
+                    participant.setCreateTime(createTime);
                     participant.setConnectTime(connectTime);
                     participant.setConnectElapsedTime(elapsedRealTime);
                     participant.setCallDirection(callDirection);
@@ -196,6 +203,7 @@ public class ConferenceParticipant implements Parcelable {
         dest.writeString(mDisplayName);
         dest.writeParcelable(mEndpoint, 0);
         dest.writeInt(mState);
+        dest.writeLong(mCreateTime);
         dest.writeLong(mConnectTime);
         dest.writeLong(mConnectElapsedTime);
         dest.writeInt(mCallDirection);
@@ -217,6 +225,8 @@ public class ConferenceParticipant implements Parcelable {
         sb.append(Rlog.pii(TAG, mEndpoint));
         sb.append(" State: ");
         sb.append(Connection.stateToString(mState));
+        sb.append(" CreateTime: ");
+        sb.append(getCreateTime());
         sb.append(" ConnectTime: ");
         sb.append(getConnectTime());
         sb.append(" ConnectElapsedTime: ");
@@ -256,6 +266,17 @@ public class ConferenceParticipant implements Parcelable {
      */
     public int getState() {
         return mState;
+    }
+
+    /**
+     * The create time of the participant to the conference.
+     */
+    public long getCreateTime() {
+        return mCreateTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.mCreateTime = createTime;
     }
 
     /**
