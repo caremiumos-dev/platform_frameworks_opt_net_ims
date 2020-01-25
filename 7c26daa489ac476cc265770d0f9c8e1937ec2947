@@ -46,6 +46,30 @@
       "revId": "7c26daa489ac476cc265770d0f9c8e1937ec2947",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d25f271f_6f937af7",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1299,
+      "author": {
+        "id": 1591497
+      },
+      "writtenOn": "2020-01-25T01:53:21Z",
+      "side": 1,
+      "message": "Removed this annotation from the new methods.",
+      "parentUuid": "65438812_42363f4c",
+      "range": {
+        "startLine": 1299,
+        "startChar": 4,
+        "endLine": 1299,
+        "endChar": 24
+      },
+      "revId": "7c26daa489ac476cc265770d0f9c8e1937ec2947",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
