@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c637c724_8281c4b1",
+        "filename": "src/java/com/android/ims/internal/ConferenceParticipant.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-01-29T22:33:55Z",
+      "side": 1,
+      "message": "Can you provide a link to the relevant constants/annotation in the comments?",
+      "range": {
+        "startLine": 284,
+        "startChar": 6,
+        "endLine": 284,
+        "endChar": 61
+      },
+      "revId": "901979f3ce78e1fb64aba9f2eee7941a554e29e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
