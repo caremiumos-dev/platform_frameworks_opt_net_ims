@@ -25,6 +25,7 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.RcsContactUceCapability;
+import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.aidl.IImsCapabilityCallback;
 import android.telephony.ims.aidl.IImsRegistration;
 import android.telephony.ims.aidl.IImsRegistrationCallback;
@@ -149,7 +150,7 @@ public class RcsFeatureManager implements IFeatureConnector {
     }
 
     /**
-     * The callback to receive updated from RcsFeature
+     * Base callback used to receive RCS Listener updates.
      */
     protected IRcsFeatureListener mRcsFeatureListener = new IRcsFeatureListener.Stub() {
         @Override
@@ -157,11 +158,13 @@ public class RcsFeatureManager implements IFeatureConnector {
         }
 
         @Override
-        public void onNetworkResponse(int code, String reason, int operationToken) {
+        public void onNetworkResponse(int code, String reason, int retryAfterSec,
+                int operationToken) throws RemoteException {
+
         }
 
         @Override
-        public void onCapabilityRequestResponsePresence(
+        public void onCapabilityRequestResponsePresence(boolean isCompleted,
                 List<RcsContactUceCapability> infos, int operationToken) {
         }
 
