@@ -1,0 +1,10 @@
+Autosubmit+1: Shuo Qian <shuoq@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+2: Hall Liu <hallliu@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Thu, 30 Jan 2020 00:42:54 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1221200
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
