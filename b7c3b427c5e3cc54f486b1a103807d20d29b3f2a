@@ -1,0 +1,10 @@
+Code-Review+2: Shuo Qian <shuoq@google.com>
+Code-Review+1: Brad Ebinger <breadley@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Submitted-by: Shuo Qian <shuoq@google.com>
+Submitted-at: Thu, 06 Feb 2020 04:07:32 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1206103
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
