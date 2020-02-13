@@ -1,0 +1,12 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Verified+1: Ravi Paluri <quic_rpaluri@quicinc.com>
+Code-Review+1: Ravi Paluri <quic_rpaluri@quicinc.com>
+Code-Review+2: Tyler Gunn <tgunn@google.com>
+Qualcomm-Review+1: Garik Badalyan <garikb@quicinc.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Tyler Gunn <tgunn@google.com>
+Submitted-at: Thu, 13 Feb 2020 18:05:10 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1216235
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
