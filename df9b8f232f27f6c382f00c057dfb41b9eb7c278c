@@ -1,0 +1,12 @@
+Code-Review+2: Tyler Gunn <tgunn@google.com>
+Code-Review+1: Pooja Jain <quic_poojain@quicinc.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Verified+1: Pooja Jain <quic_poojain@quicinc.com>
+Qualcomm-Review+1: Garik Badalyan <garikb@quicinc.com>
+Submitted-by: Tyler Gunn <tgunn@google.com>
+Submitted-at: Wed, 19 Feb 2020 18:55:17 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1188817
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
