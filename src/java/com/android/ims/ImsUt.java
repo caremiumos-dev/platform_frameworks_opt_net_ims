@@ -216,6 +216,31 @@ public class ImsUt implements ImsUtInterface {
         }
     }
 
+    @Override
+    public void queryCallForward(int condition, String number, int serviceClass, Message result) {
+        if (DBG) {
+            log("queryCallForward :: Ut=" + miUt + ", condition=" + condition
+                    + ", number=" + Rlog.pii(TAG, number) + ", serviceClass=" + serviceClass);
+        }
+
+        synchronized(mLockObj) {
+            try {
+                int id = miUt.queryCallForwardForServiceClass(condition, number, serviceClass);
+
+                if (id < 0) {
+                    sendFailureReport(result,
+                            new ImsReasonInfo(ImsReasonInfo.CODE_UT_SERVICE_UNAVAILABLE, 0));
+                    return;
+                }
+
+                mPendingCmds.put(Integer.valueOf(id), result);
+            } catch (RemoteException e) {
+                sendFailureReport(result,
+                        new ImsReasonInfo(ImsReasonInfo.CODE_UT_SERVICE_UNAVAILABLE, 0));
+            }
+        }
+    }
+
     /**
      * Retrieves the configuration of the call waiting.
      * The return value of ((AsyncResult)result.obj) is an array of {@link ImsSsInfo}.
