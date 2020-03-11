@@ -1,0 +1,10 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+2: Shuo Qian <shuoq@google.com>
+Code-Review+2: Tyler Gunn <tgunn@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Submitted-by: Shuo Qian <shuoq@google.com>
+Submitted-at: Wed, 11 Mar 2020 19:24:32 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1254555
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
