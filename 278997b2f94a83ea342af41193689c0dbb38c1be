@@ -1,0 +1,217 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004469343",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "9c4f53fd_36b8e513",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-17T23:13:00Z",
+      "side": 1,
+      "message": "Prefer to use inclusive terms like \u0027valid\u0027, \u0027validity check\u0027 or \u0027initial check\u0027; see https://source.android.com/setup/contribute/respectful-code for more details.",
+      "range": {
+        "startLine": 100,
+        "startChar": 21,
+        "endLine": 100,
+        "endChar": 27
+      },
+      "revId": "278997b2f94a83ea342af41193689c0dbb38c1be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004469343",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "00fe4432_2bc3e33f",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-17T23:13:00Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(CarrierConfigManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 534,
+        "startChar": 32,
+        "endLine": 534,
+        "endChar": 81
+      },
+      "revId": "278997b2f94a83ea342af41193689c0dbb38c1be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004469343",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "f3622c61_356f111b",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-17T23:13:00Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(UserManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 548,
+        "startChar": 34,
+        "endLine": 548,
+        "endChar": 74
+      },
+      "revId": "278997b2f94a83ea342af41193689c0dbb38c1be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004469341",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d1",
+      "fixSuggestions": [
+        {
+          "fixId": "dd02da53_1fb4f536",
+          "description": "Change to \"src/java/com/android/ims/ImsServiceControllerCompat.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/ims/ImsServiceControllerCompat.java",
+              "range": {
+                "startLine": 199,
+                "startChar": 80,
+                "endLine": 199,
+                "endChar": 93
+              },
+              "replacement": "compatibility"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "be573759_28fec391",
+        "filename": "src/java/com/android/ims/ImsServiceControllerCompat.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-17T23:13:00Z",
+      "side": 1,
+      "message": "Common typo found: \"compatability\" -- should it be \"compatibility\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 199,
+        "startChar": 80,
+        "endLine": 199,
+        "endChar": 93
+      },
+      "revId": "278997b2f94a83ea342af41193689c0dbb38c1be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004469341",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d1",
+      "fixSuggestions": [
+        {
+          "fixId": "589cc626_b0d707b7",
+          "description": "Change to \"tests/src/com/android/ims/ImsResolverTest.java\"",
+          "replacements": [
+            {
+              "path": "tests/src/com/android/ims/ImsResolverTest.java",
+              "range": {
+                "startLine": 296,
+                "startChar": 36,
+                "endLine": 296,
+                "endChar": 42
+              },
+              "replacement": " isn\u0027t "
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "04c6cb49_deaf0e5f",
+        "filename": "tests/src/com/android/ims/ImsResolverTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-17T23:13:00Z",
+      "side": 1,
+      "message": "Common typo found: \" isnt \" -- should it be \" isn\u0027t \"?\nCheck whether the apostrophe needs to be escaped.\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 296,
+        "startChar": 36,
+        "endLine": 296,
+        "endChar": 42
+      },
+      "revId": "278997b2f94a83ea342af41193689c0dbb38c1be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004469341",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d1",
+      "fixSuggestions": [
+        {
+          "fixId": "76f072ad_9a9341e0",
+          "description": "Change to \"tests/src/com/android/ims/ImsServiceControllerTest.java\"",
+          "replacements": [
+            {
+              "path": "tests/src/com/android/ims/ImsServiceControllerTest.java",
+              "range": {
+                "startLine": 623,
+                "startChar": 80,
+                "endLine": 623,
+                "endChar": 88
+              },
+              "replacement": "occurring"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "54ef1d21_d6cd9c1d",
+        "filename": "tests/src/com/android/ims/ImsServiceControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-17T23:13:00Z",
+      "side": 1,
+      "message": "Common typo found: \"occuring\" -- should it be \"occurring\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 623,
+        "startChar": 80,
+        "endLine": 623,
+        "endChar": 88
+      },
+      "revId": "278997b2f94a83ea342af41193689c0dbb38c1be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
