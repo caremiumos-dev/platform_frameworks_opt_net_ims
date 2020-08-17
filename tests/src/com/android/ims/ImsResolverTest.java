@@ -59,8 +59,6 @@ import android.util.ArraySet;
 
 import androidx.test.filters.SmallTest;
 
-//import com.android.internal.telephony.PhoneConfigurationManager;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -114,6 +112,7 @@ public class ImsResolverTest extends ImsTestBase {
     private BroadcastReceiver mTestPackageBroadcastReceiver;
     private BroadcastReceiver mTestCarrierConfigReceiver;
     private BroadcastReceiver mTestBootCompleteReceiver;
+    private BroadcastReceiver mTestMsimChangedReceiver;
     private ImsServiceFeatureQueryManager.Listener mDynamicQueryListener;
     private PersistableBundle[] mCarrierConfigs;
     private TestableLooper mLooper;
@@ -127,7 +126,6 @@ public class ImsResolverTest extends ImsTestBase {
     @After
     @Override
     public void tearDown() throws Exception {
-        mTestImsResolver.destroy();
         mTestImsResolver = null;
         mLooper.destroy();
         mLooper = null;
@@ -507,11 +505,10 @@ public class ImsResolverTest extends ImsTestBase {
 
         // Change number of SIMs and verify the features in the ImsServiceController are changed
         // as well
-        //PhoneConfigurationManager.notifyMultiSimConfigChange(1);
-        //mLooper.processAllMessages();
-        //featureSet = convertToHashSet(features, 0);
-        //verify(controller).changeImsServiceFeatures(featureSet);
-        //verify(controller, never()).unbind();
+        sendMsimConfigChanged(1);
+        featureSet = convertToHashSet(features, 0);
+        verify(controller).changeImsServiceFeatures(featureSet);
+        verify(controller, never()).unbind();
     }
 
     /**
@@ -548,12 +545,12 @@ public class ImsResolverTest extends ImsTestBase {
 
         // Change number of SIMs and verify the features in the ImsServiceController are changed
         // as well
-        //PhoneConfigurationManager.notifyMultiSimConfigChange(2);
+        sendMsimConfigChanged(2);
         // Carrier config changed should happen for slot 1 (independent of carrier ImsService)
-        //sendCarrierConfigChanged(1, 1);
-        //featureSet.addAll(convertToHashSet(features, 1));
-        //verify(controller).changeImsServiceFeatures(featureSet);
-        //verify(controller, never()).unbind();
+        sendCarrierConfigChanged(1, 1);
+        featureSet.addAll(convertToHashSet(features, 1));
+        verify(controller).changeImsServiceFeatures(featureSet);
+        verify(controller, never()).unbind();
     }
 
     /**
@@ -658,7 +655,7 @@ public class ImsResolverTest extends ImsTestBase {
         assertEquals(TEST_DEVICE_DEFAULT_NAME, deviceController.getComponentName());
 
         // Move to MSIM and verify the features in the ImsServiceController are changed as well
-        /*PhoneConfigurationManager.notifyMultiSimConfigChange(2);
+        sendMsimConfigChanged(2);
         setConfigCarrierStringMmTelRcs(1, TEST_CARRIER_DEFAULT_NAME.getPackageName());
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(1, ImsFeature.FEATURE_RCS));
         // Assume that there is a CarrierConfig change that kicks off query to carrier service.
@@ -669,7 +666,7 @@ public class ImsResolverTest extends ImsTestBase {
         deviceFeatureSet.addAll(convertToHashSet(deviceFeatures, 1));
         deviceFeatureSet.removeAll(carrierFeatures);
         verify(deviceController).changeImsServiceFeatures(deviceFeatureSet);
-        verify(deviceController, never()).unbind();*/
+        verify(deviceController, never()).unbind();
     }
 
     /**
@@ -722,15 +719,14 @@ public class ImsResolverTest extends ImsTestBase {
 
         // Move to single SIM and verify the features in the ImsServiceController are changed as
         // well.
-        /*PhoneConfigurationManager.notifyMultiSimConfigChange(1);
-        mLooper.processAllMessages();
+        sendMsimConfigChanged(1);
         carrierFeatures = new HashSet<>();
         carrierFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(0, ImsFeature.FEATURE_RCS));
         verify(carrierController).changeImsServiceFeatures(carrierFeatures);
         deviceFeatureSet = convertToHashSet(deviceFeatures, 0);
         deviceFeatureSet.removeAll(carrierFeatures);
         verify(deviceController).changeImsServiceFeatures(deviceFeatureSet);
-        verify(deviceController, never()).unbind();*/
+        verify(deviceController, never()).unbind();
     }
 
     /**
@@ -1725,6 +1721,11 @@ public class ImsResolverTest extends ImsTestBase {
      */
     private void startBindCarrierConfigAlreadySet() {
         mTestImsResolver.initialize();
+        // MSIM changed receiver is not registered until after initialize()
+        ArgumentCaptor<BroadcastReceiver> receiversCaptor =
+                ArgumentCaptor.forClass(BroadcastReceiver.class);
+        verify(mMockContext, times(4)).registerReceiver(receiversCaptor.capture(), any());
+        mTestMsimChangedReceiver = receiversCaptor.getAllValues().get(3);
         ArgumentCaptor<ImsServiceFeatureQueryManager.Listener> queryManagerCaptor =
                 ArgumentCaptor.forClass(ImsServiceFeatureQueryManager.Listener.class);
         verify(mMockQueryManagerFactory).create(any(Context.class), queryManagerCaptor.capture());
@@ -1740,6 +1741,11 @@ public class ImsResolverTest extends ImsTestBase {
      */
     private void startBindNoCarrierConfig(int numSlots) {
         mTestImsResolver.initialize();
+        // MSIM changed receiver is not registered until after initialize()
+        ArgumentCaptor<BroadcastReceiver> receiversCaptor =
+                ArgumentCaptor.forClass(BroadcastReceiver.class);
+        verify(mMockContext, times(4)).registerReceiver(receiversCaptor.capture(), any());
+        mTestMsimChangedReceiver = receiversCaptor.getAllValues().get(3);
         ArgumentCaptor<ImsServiceFeatureQueryManager.Listener> queryManagerCaptor =
                 ArgumentCaptor.forClass(ImsServiceFeatureQueryManager.Listener.class);
         verify(mMockQueryManagerFactory).create(any(Context.class), queryManagerCaptor.capture());
@@ -1894,6 +1900,13 @@ public class ImsResolverTest extends ImsTestBase {
                 });
     }
 
+
+    private void sendMsimConfigChanged(int newSlotCount) {
+        Intent intent = new Intent(TelephonyManager.ACTION_MULTI_SIM_CONFIG_CHANGED);
+        intent.putExtra(TelephonyManager.EXTRA_ACTIVE_SIM_SUPPORTED_COUNT, newSlotCount);
+        mTestMsimChangedReceiver.onReceive(null, intent);
+        mLooper.processAllMessages();
+    }
 
     private void sendCarrierConfigChanged(int subId, int slotId) {
         Intent carrierConfigIntent = new Intent();

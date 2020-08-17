@@ -274,6 +274,21 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
         }
     };
 
+    // Receives the broadcast that the device has dynamically changed the number of active SIMs that
+    // are supported.
+    private BroadcastReceiver mMsimChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int newSimCount = intent.getIntExtra(
+                    TelephonyManager.EXTRA_ACTIVE_SIM_SUPPORTED_COUNT, -1);
+            Log.i(TAG, "Received ACTION_MULTI_SIM_CONFIG_CHANGED, new value = " + newSimCount);
+            if (newSimCount != -1) {
+                mHandler.obtainMessage(HANDLER_MSIM_CONFIGURATION_CHANGE, newSimCount,
+                        0 /*not used*/).sendToTarget();
+            }
+        }
+    };
+
     /**
      * Testing interface used to mock SubscriptionManager in testing
      */
@@ -466,8 +481,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
                 break;
             }
             case HANDLER_MSIM_CONFIGURATION_CHANGE: {
-                AsyncResult result = (AsyncResult) msg.obj;
-                handleMsimConfigChange((Integer) result.result);
+                handleMsimConfigChange(msg.arg1 /*new SIM count*/);
                 break;
             }
             default:
@@ -588,8 +602,8 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     public void initialize() {
         mEventLog.log("Initializing");
         Log.i(TAG, "Initializing cache.");
-        //PhoneConfigurationManager.registerForMultiSimConfigChange(mHandler,
-        //        HANDLER_MSIM_CONFIGURATION_CHANGE, null);
+        mReceiverContext.registerReceiver(mMsimChanged,
+                new IntentFilter(TelephonyManager.ACTION_MULTI_SIM_CONFIG_CHANGED));
         mFeatureQueryManager = mDynamicQueryManagerFactory.create(mContext, mDynamicQueryListener);
 
         // This will get all services with the correct intent filter from PackageManager
@@ -603,15 +617,6 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
         // possibly bind if carrier configs exist. Otherwise wait for CarrierConfigChanged
         // indication.
         bindCarrierServicesIfAvailable();
-    }
-
-    /**
-     * Destroys this ImsResolver. Used for tearing down static resources during testing.
-     */
-    @VisibleForTesting
-    public void destroy() {
-        //PhoneConfigurationManager.unregisterForMultiSimConfigChange(mHandler);
-        mHandler.removeCallbacksAndMessages(null);
     }
 
     // Only start the bind if there is an existing Carrier Configuration. Otherwise, wait for
@@ -1355,7 +1360,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
         mHandler.obtainMessage(HANDLER_DYNAMIC_FEATURE_CHANGE, args).sendToTarget();
     }
 
-    private void handleMsimConfigChange(Integer newNumSlots) {
+    private void handleMsimConfigChange(int newNumSlots) {
         int oldLen = mNumSlots;
         if (oldLen == newNumSlots) {
             return;
