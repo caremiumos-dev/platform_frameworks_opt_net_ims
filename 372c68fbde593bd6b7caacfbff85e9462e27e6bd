@@ -1,0 +1,190 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004471009",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "ce1ed4a7_3215c32e",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-18T00:15:03Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(CarrierConfigManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 534,
+        "startChar": 32,
+        "endLine": 534,
+        "endChar": 81
+      },
+      "revId": "372c68fbde593bd6b7caacfbff85e9462e27e6bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004471009",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "78e0f17e_04b6a7a4",
+        "filename": "src/java/com/android/ims/ImsResolver.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-18T00:15:03Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(UserManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 548,
+        "startChar": 34,
+        "endLine": 548,
+        "endChar": 74
+      },
+      "revId": "372c68fbde593bd6b7caacfbff85e9462e27e6bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004471008",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d2",
+      "fixSuggestions": [
+        {
+          "fixId": "3b2d5f13_337b508c",
+          "description": "Change to \"src/java/com/android/ims/ImsServiceControllerCompat.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/ims/ImsServiceControllerCompat.java",
+              "range": {
+                "startLine": 199,
+                "startChar": 80,
+                "endLine": 199,
+                "endChar": 93
+              },
+              "replacement": "compatibility"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "df88c88e_855c0a64",
+        "filename": "src/java/com/android/ims/ImsServiceControllerCompat.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-18T00:15:03Z",
+      "side": 1,
+      "message": "Common typo found: \"compatability\" -- should it be \"compatibility\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 199,
+        "startChar": 80,
+        "endLine": 199,
+        "endChar": 93
+      },
+      "revId": "372c68fbde593bd6b7caacfbff85e9462e27e6bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004471008",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d2",
+      "fixSuggestions": [
+        {
+          "fixId": "e49a5f55_f1a3dbc5",
+          "description": "Change to \"tests/src/com/android/ims/ImsResolverTest.java\"",
+          "replacements": [
+            {
+              "path": "tests/src/com/android/ims/ImsResolverTest.java",
+              "range": {
+                "startLine": 296,
+                "startChar": 36,
+                "endLine": 296,
+                "endChar": 42
+              },
+              "replacement": " isn\u0027t "
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "ca5b03f6_2daa0fc6",
+        "filename": "tests/src/com/android/ims/ImsResolverTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-18T00:15:03Z",
+      "side": 1,
+      "message": "Common typo found: \" isnt \" -- should it be \" isn\u0027t \"?\nCheck whether the apostrophe needs to be escaped.\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 296,
+        "startChar": 36,
+        "endLine": 296,
+        "endChar": 42
+      },
+      "revId": "372c68fbde593bd6b7caacfbff85e9462e27e6bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004471008",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1402954?revision\u003d2",
+      "fixSuggestions": [
+        {
+          "fixId": "0d467d86_02ec3867",
+          "description": "Change to \"tests/src/com/android/ims/ImsServiceControllerTest.java\"",
+          "replacements": [
+            {
+              "path": "tests/src/com/android/ims/ImsServiceControllerTest.java",
+              "range": {
+                "startLine": 647,
+                "startChar": 80,
+                "endLine": 647,
+                "endChar": 88
+              },
+              "replacement": "occurring"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "3a48a4d5_54f161b3",
+        "filename": "tests/src/com/android/ims/ImsServiceControllerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-18T00:15:03Z",
+      "side": 1,
+      "message": "Common typo found: \"occuring\" -- should it be \"occurring\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 647,
+        "startChar": 80,
+        "endLine": 647,
+        "endChar": 88
+      },
+      "revId": "372c68fbde593bd6b7caacfbff85e9462e27e6bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
