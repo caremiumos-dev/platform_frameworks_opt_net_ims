@@ -1,0 +1,85 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004471022",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1394169?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "ee565200_b90bc7e9",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1606,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-18T00:15:01Z",
+      "side": 1,
+      "message": "Prefer to use context.getSystemService(CarrierConfigManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 1606,
+        "startChar": 25,
+        "endLine": 1606,
+        "endChar": 73
+      },
+      "revId": "58a5b6c1f14e1a3d4ea4cf23cbf6a951e7e65151",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004471022",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1394169?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "6faaed15_9821d83d",
+        "filename": "tests/src/com/android/ims/ImsTestBase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-18T00:15:01Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(TelephonyManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 46,
+        "startChar": 28,
+        "endLine": 46,
+        "endChar": 73
+      },
+      "revId": "58a5b6c1f14e1a3d4ea4cf23cbf6a951e7e65151",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004471022",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1394169?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "919b6f08_207310c4",
+        "filename": "tests/src/com/android/ims/ImsTestBase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-18T00:15:01Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(SubscriptionManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 47,
+        "startChar": 31,
+        "endLine": 47,
+        "endChar": 79
+      },
+      "revId": "58a5b6c1f14e1a3d4ea4cf23cbf6a951e7e65151",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
