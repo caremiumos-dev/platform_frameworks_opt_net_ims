@@ -16,9 +16,18 @@
 
 package com.android.ims;
 
-public interface IFeatureConnector<T> {
-    int getImsServiceState() throws ImsException;
-    void addNotifyStatusChangedCallbackIfAvailable(FeatureConnection.IFeatureUpdate callback)
-            throws android.telephony.ims.ImsException;
-    void removeNotifyStatusChangedCallback(FeatureConnection.IFeatureUpdate callback);
+import android.os.IBinder;
+import android.os.IInterface;
+import android.telephony.ims.aidl.IImsConfig;
+import android.telephony.ims.aidl.IImsRegistration;
+
+import com.android.ims.internal.IImsServiceFeatureCallback;
+
+public interface IFeatureConnector {
+    void registerFeatureListener(int slotId, IImsServiceFeatureCallback cb, boolean oneShot);
+    void unregisterFeatureListener(IImsServiceFeatureCallback cb);
+    void associate(IBinder feature, IImsConfig c, IImsRegistration r);
+    void invalidate();
+    void updateFeatureState(int state);
+    void updateFeatureCapabilities(long capabilities);
 }
