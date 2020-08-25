@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53b026c6_2040c7ca",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-08-25T19:29:35Z",
+      "side": 1,
+      "message": "if the settings value is already \u003d\u003d defaultRttMode, setting it again is a no-op.",
+      "range": {
+        "startLine": 2075,
+        "startChar": 42,
+        "endLine": 2075,
+        "endChar": 67
+      },
+      "revId": "13b90bba5703782103762884f9545bfa3f0c5c5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
