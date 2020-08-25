@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b68ab1c5_36213b11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-08-25T22:35:48Z",
+      "side": 1,
+      "message": "Clean CP to AOSP from internal branches, applying +2",
+      "revId": "faab3de934b1f8d5bdb200398d3e08891d5680e6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
