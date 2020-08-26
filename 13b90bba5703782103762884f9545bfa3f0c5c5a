@@ -22,6 +22,30 @@
       "revId": "13b90bba5703782103762884f9545bfa3f0c5c5a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c932da9_c09a8ab7",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1683341
+      },
+      "writtenOn": "2020-08-26T07:33:58Z",
+      "side": 1,
+      "message": "It will be a no-op operation when the settings value is already set as defaultrttMode.\nBut when the settings value is uninitialized,in line 2070 rtt mode variable will be assigned the default value as we are returning default value from getInt function if db is unitialized.\nIn that case rttmode variable will be assigned defaultrttmode although db will be unitialized.\nHence setting db to cover this case.",
+      "parentUuid": "53b026c6_2040c7ca",
+      "range": {
+        "startLine": 2075,
+        "startChar": 42,
+        "endLine": 2075,
+        "endChar": 67
+      },
+      "revId": "13b90bba5703782103762884f9545bfa3f0c5c5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
