@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.telephony.ims.aidl.IImsConfig;
 import android.telephony.ims.aidl.IImsRegistration;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
@@ -48,22 +49,16 @@ import java.util.concurrent.Executor;
 @RunWith(AndroidJUnit4.class)
 public class FeatureConnectionTest extends ImsTestBase {
 
-    private Executor mSimpleExecutor = new Executor() {
-        @Override
-        public void execute(Runnable r) {
-            r.run();
-        }
-    };
-
     private class TestFeatureConnection extends FeatureConnection {
         private Integer mFeatureState = ImsFeature.STATE_READY;
 
         public boolean isFeatureCreatedCalled = false;
         public boolean isFeatureRemovedCalled = false;
         public int mNewStatus = ImsFeature.STATE_UNAVAILABLE;
+        public long mCapabilities;
 
         TestFeatureConnection(Context context, int slotId) {
-            super(context, slotId);
+            super(context, slotId, mConfigBinder, mRegistrationBinder);
             if (!ImsManager.isImsSupportedOnDevice(context)) {
                 sImsSupportedOnDevice = false;
             }
@@ -75,28 +70,13 @@ public class FeatureConnectionTest extends ImsTestBase {
         }
 
         @Override
-        protected void handleImsFeatureCreatedCallback(int slotId, int feature) {
-            isFeatureCreatedCalled = true;
-        }
-
-        @Override
-        protected void handleImsFeatureRemovedCallback(int slotId, int feature) {
-            isFeatureRemovedCalled = true;
-        }
-
-        @Override
-        protected void handleImsStatusChangedCallback(int slotId, int feature, int status) {
-            mNewStatus = status;
-        }
-
-        @Override
         protected Integer retrieveFeatureState() {
             return mFeatureState;
         }
 
         @Override
-        protected IImsRegistration getRegistrationBinder() {
-            return getTestRegistrationBinder();
+        protected void onFeatureCapabilitiesUpdated(long capabilities) {
+            mCapabilities = capabilities;
         }
 
         public void setFeatureState(int state) {
@@ -107,6 +87,7 @@ public class FeatureConnectionTest extends ImsTestBase {
     private TestFeatureConnection mTestFeatureConnection;
     @Mock IBinder mBinder;
     @Mock IImsRegistration mRegistrationBinder;
+    @Mock IImsConfig mConfigBinder;
 
     public static final int PHONE_ID = 1;
 
@@ -118,7 +99,7 @@ public class FeatureConnectionTest extends ImsTestBase {
         mContextFixture.addSystemFeature(PackageManager.FEATURE_TELEPHONY_IMS);
 
         mTestFeatureConnection = new TestFeatureConnection(mContext, PHONE_ID);
-        mTestFeatureConnection.mExecutor = mSimpleExecutor;
+        mTestFeatureConnection.mExecutor = Runnable::run;
         mTestFeatureConnection.setBinder(mBinder);
     }
 
@@ -186,33 +167,16 @@ public class FeatureConnectionTest extends ImsTestBase {
     }
 
     /**
-     * Test callback is called when IMS feature created/removed/changed.
+     * Test registration tech callbacks.
      */
     @Test
     @SmallTest
-    public void testListenerCallback() {
-        IImsServiceFeatureCallback featureCallback = mTestFeatureConnection.getListener();
+    public void testUpdateCapabilities() throws Exception {
+        long testCaps = 1;
+        assertEquals(0 /*base state*/, mTestFeatureConnection.mCapabilities);
+        mTestFeatureConnection.updateFeatureCapabilities(testCaps);
+        assertEquals(testCaps, mTestFeatureConnection.mCapabilities);
 
-        try {
-            featureCallback.imsFeatureCreated(anyInt(), anyInt());
-            assertTrue(mTestFeatureConnection.isFeatureCreatedCalled);
-        } catch (RemoteException e) {
-            throw new AssertionFailedError("testListenerCallback(Created): " + e);
-        }
-
-        try {
-            featureCallback.imsFeatureRemoved(anyInt(), anyInt());
-            assertTrue(mTestFeatureConnection.isFeatureRemovedCalled);
-        } catch (RemoteException e) {
-            throw new AssertionFailedError("testListenerCallback(Removed): " + e);
-        }
-
-        try {
-            featureCallback.imsStatusChanged(anyInt(), anyInt(), ImsFeature.STATE_READY);
-            assertEquals(mTestFeatureConnection.mNewStatus, ImsFeature.STATE_READY);
-        } catch (RemoteException e) {
-            throw new AssertionFailedError("testListenerCallback(Changed): " + e);
-        }
     }
 
     private IImsRegistration getTestRegistrationBinder() {

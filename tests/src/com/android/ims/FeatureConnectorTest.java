@@ -69,7 +69,7 @@ public class FeatureConnectorTest extends ImsTestBase {
         mHandlerThread.start();
 
         mFeatureConnector = new FeatureConnector<>(mContext, PHONE_ID,
-            mListener, mExecutor, mHandlerThread.getLooper());
+            mListener, mExecutor, mHandlerThread.getLooper(), "Test");
         mFeatureConnector.mListener = mListener;
     }
 

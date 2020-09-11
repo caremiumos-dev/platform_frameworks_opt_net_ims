@@ -23,6 +23,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.telephony.TelephonyManager;
+import android.telephony.ims.aidl.IImsConfig;
 import android.telephony.ims.aidl.IImsRegistration;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
@@ -66,13 +67,17 @@ public abstract class FeatureConnection {
     protected volatile boolean mIsAvailable = true;
     // ImsFeature Status from the ImsService. Cached.
     protected Integer mFeatureStateCached = null;
+    protected long mFeatureCapabilities;
     protected IFeatureUpdate mStatusCallback;
-    protected IImsRegistration mRegistrationBinder;
+    private final IImsRegistration mRegistrationBinder;
+    private final IImsConfig mConfigBinder;
     protected final Object mLock = new Object();
 
-    public FeatureConnection(Context context, int slotId) {
+    public FeatureConnection(Context context, int slotId, IImsConfig c, IImsRegistration r) {
         mSlotId = slotId;
         mContext = context;
+        mRegistrationBinder = r;
+        mConfigBinder = c;
 
         // Callbacks should be scheduled on the main thread.
         if (context.getMainLooper() != null) {
@@ -126,7 +131,6 @@ public abstract class FeatureConnection {
         synchronized (mLock) {
             if (mIsAvailable) {
                 mIsAvailable = false;
-                mRegistrationBinder = null;
                 if (mBinder != null) {
                     mBinder.unlinkToDeath(mDeathRecipient, 0);
                 }
@@ -148,36 +152,6 @@ public abstract class FeatureConnection {
         mStatusCallback = callback;
     }
 
-    @VisibleForTesting
-    public IImsServiceFeatureCallback getListener() {
-        return mListenerBinder;
-    }
-
-    /**
-     * The callback to receive ImsFeature status changed.
-     */
-    private final IImsServiceFeatureCallback mListenerBinder =
-        new IImsServiceFeatureCallback.Stub() {
-            @Override
-            public void imsFeatureCreated(int slotId, int feature) {
-                mExecutor.execute(() -> {
-                    handleImsFeatureCreatedCallback(slotId, feature);
-                });
-            }
-            @Override
-            public void imsFeatureRemoved(int slotId, int feature) {
-                mExecutor.execute(() -> {
-                    handleImsFeatureRemovedCallback(slotId, feature);
-                });
-            }
-            @Override
-            public void imsStatusChanged(int slotId, int feature, int status) {
-                mExecutor.execute(() -> {
-                    handleImsStatusChangedCallback(slotId, feature, status);
-                });
-            }
-        };
-
     public @ImsRegistrationImplBase.ImsRegistrationTech int getRegistrationTech()
             throws RemoteException {
         IImsRegistration registration = getRegistration();
@@ -190,22 +164,11 @@ public abstract class FeatureConnection {
     }
 
     public @Nullable IImsRegistration getRegistration() {
-        synchronized (mLock) {
-            // null if cache is invalid;
-            if (mRegistrationBinder != null) {
-                return mRegistrationBinder;
-            }
-        }
-        // We don't want to synchronize on a binder call to another process.
-        IImsRegistration regBinder = getRegistrationBinder();
-        synchronized (mLock) {
-            // mRegistrationBinder may have changed while we tried to get the registration
-            // interface.
-            if (mRegistrationBinder == null) {
-                mRegistrationBinder = regBinder;
-            }
-        }
         return mRegistrationBinder;
+    }
+
+    public @Nullable IImsConfig getConfig() {
+        return mConfigBinder;
     }
 
     @VisibleForTesting
@@ -238,6 +201,27 @@ public abstract class FeatureConnection {
         return mIsAvailable && mBinder != null && mBinder.isBinderAlive();
     }
 
+    public void updateFeatureState(int state) {
+        synchronized (mLock) {
+            mFeatureStateCached = state;
+        }
+    }
+
+    public long getFeatureCapabilties() {
+        synchronized (mLock) {
+            return mFeatureCapabilities;
+        }
+    }
+
+    public void updateFeatureCapabilities(long caps) {
+        synchronized (mLock) {
+            if (mFeatureCapabilities != caps) {
+                mFeatureCapabilities = caps;
+                onFeatureCapabilitiesUpdated(caps);
+            }
+        }
+    }
+
     /**
      * @return an integer describing the current Feature Status, defined in
      * {@link ImsFeature.ImsState}.
@@ -263,36 +247,9 @@ public abstract class FeatureConnection {
     }
 
     /**
-     * An ImsFeature has been created for this FeatureConnection for the associated
-     * {@link ImsFeature.FeatureType}.
-     * @param slotId The slot ID associated with the event.
-     * @param feature The {@link ImsFeature.FeatureType} associated with the event.
-     */
-    protected abstract void handleImsFeatureCreatedCallback(int slotId, int feature);
-
-    /**
-     * An ImsFeature has been removed for this FeatureConnection for the associated
-     * {@link ImsFeature.FeatureType}.
-     * @param slotId The slot ID associated with the event.
-     * @param feature The {@link ImsFeature.FeatureType} associated with the event.
-     */
-    protected abstract void handleImsFeatureRemovedCallback(int slotId, int feature);
-
-    /**
-     * The status of an ImsFeature has changed for the associated {@link ImsFeature.FeatureType}.
-     * @param slotId The slot ID associated with the event.
-     * @param feature The {@link ImsFeature.FeatureType} associated with the event.
-     * @param status The new {@link ImsFeature.ImsState} associated with the ImsFeature
-     */
-    protected abstract void handleImsStatusChangedCallback(int slotId, int feature, int status);
-
-    /**
      * Internal method used to retrieve the feature status from the corresponding ImsService.
      */
     protected abstract Integer retrieveFeatureState();
 
-    /**
-     * @return The ImsRegistration instance associated with the FeatureConnection.
-     */
-    protected abstract IImsRegistration getRegistrationBinder();
+    protected abstract void onFeatureCapabilitiesUpdated(long capabilities);
 }

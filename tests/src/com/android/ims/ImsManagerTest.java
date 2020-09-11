@@ -32,6 +32,7 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.ims.ImsMmTelManager;
 import android.telephony.ims.ProvisioningManager;
+import android.telephony.ims.aidl.IImsMmTelFeature;
 import android.telephony.ims.stub.ImsConfigImplBase;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -68,6 +69,7 @@ public class ImsManagerTest extends ImsTestBase {
     Hashtable<Integer, Integer> mProvisionedIntVals = new Hashtable<>();
     ImsConfigImplBase.ImsConfigStub mImsConfigStub;
     @Mock MmTelFeatureConnection mMmTelFeatureConnection;
+    @Mock IImsMmTelFeature mMmTelFeature;
     @Mock ImsManager.SubscriptionManagerProxy mSubscriptionManagerProxy;
 
     private final int[] mSubId = {0};
@@ -818,9 +820,10 @@ public class ImsManagerTest extends ImsTestBase {
         mImsConfigStub = new ImsConfigImplBase.ImsConfigStub(mImsConfigImplBaseMock);
         doReturn(mImsConfigStub).when(mMmTelFeatureConnection).getConfigInterface();
 
-
-        return new ImsManager(mContext, mPhoneId,
-                (context, phoneId) -> mMmTelFeatureConnection, mSubscriptionManagerProxy);
+        ImsManager mgr = new ImsManager(mContext, mPhoneId,
+                (context, phoneId, mMmTelFeature) -> mMmTelFeatureConnection,
+                mSubscriptionManagerProxy);
+        return mgr;
     }
 
     // If the value is ever set, return the set value. If not, return a constant value 1000.

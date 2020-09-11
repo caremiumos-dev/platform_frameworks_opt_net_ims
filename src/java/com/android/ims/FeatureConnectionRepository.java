@@ -19,15 +19,18 @@ package com.android.ims;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.os.IInterface;
+import android.os.RemoteException;
+import android.telephony.ims.ImsService;
 import android.telephony.ims.aidl.IImsConfig;
 import android.telephony.ims.aidl.IImsRegistration;
+import android.telephony.ims.feature.ImsFeature;
 import android.util.ArrayMap;
 import android.util.LocalLog;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.internal.annotations.GuardedBy;
-import com.android.internal.annotations.VisibleForTesting;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -40,61 +43,73 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 /**
- * A singleton intra-process repository of ImsFeature connections  made available by an ImsService
- * once it has been successfully bound.
+ * A repository of ImsFeature connections made available by an ImsService once it has been
+ * successfully bound.
  *
  * Provides the ability for listeners to register callbacks and the repository notify registered
  * listeners when a connection has been created/removed for a specific connection type.
  */
-public class ImsServiceConnectionRepository {
+public class FeatureConnectionRepository {
 
-    private static final String TAG = "ImsServiceConnRepo";
+    private static final String TAG = "FeatureConnRepo";
 
     /**
-     * Callback interface to be used by registrants to listen to when a connection is available or
-     * unavailable
-     * @param <T> The Connection being listened to.
+     * Contains an IInterface linking to the appropriate ImsFeature as well as the associated
+     * interfaces.
+     * @param <T> The ImsFeature Binder Connection.
      */
-    public interface Callback<T extends IInterface> {
-        /**
-         * A new connection has become available for the requested type. Discard any previous
-         * connections that were available.
-         * @param connection The connection that has become available.
-         */
-        void onConnectionAvailable(FeatureContainer<T> connection);
+    public static class Container<T extends IInterface> {
 
         /**
-         * The previously available connection has become unavailable for usage. The
-         * connection should be discarded.
+         * ImsFeature IInterface that is being tracked.
          */
-        void onConnectionUnavailable();
-    }
-
-    public static class FeatureContainer<T extends IInterface> {
         public final T imsFeature;
+
+        /**
+         * IImsConfig interface that should be associated with the ImsFeature.
+         */
         public final IImsConfig imsConfig;
+
+        /**
+         * IImsRegistration interface that should be associated with this ImsFeature.
+         */
         public final IImsRegistration imsRegistration;
 
-        public FeatureContainer(@NonNull T iFace, @NonNull IImsConfig iConfig,
-                @NonNull IImsRegistration iReg) {
+        /**
+         * Capabilities of this ImsService.
+         */
+        private @ImsService.ImsServiceCapability long mCapabilities;
+
+        /**
+         * Contains the ImsFeature IInterface as well as the ImsService interfaces associated with
+         * that feature.
+         * @param iFace IInterface connection to the ImsFeature.
+         * @param iConfig IImsConfig interface associated with the ImsFeature.
+         * @param iReg IImsRegistration interface associated with the ImsFeature
+         * @param initialCaps The initial capabilities that the ImsService supports.
+         */
+        public Container(@NonNull T iFace, @NonNull IImsConfig iConfig,
+                @NonNull IImsRegistration iReg, long initialCaps) {
             imsFeature = iFace;
             imsConfig = iConfig;
             imsRegistration = iReg;
+            mCapabilities = initialCaps;
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            FeatureContainer<?> that = (FeatureContainer<?>) o;
+            Container<?> that = (Container<?>) o;
             return imsFeature.equals(that.imsFeature) &&
                     imsConfig.equals(that.imsConfig) &&
-                    imsRegistration.equals(that.imsRegistration);
+                    imsRegistration.equals(that.imsRegistration) &&
+                    mCapabilities == that.mCapabilities;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(imsFeature, imsConfig, imsRegistration);
+            return Objects.hash(imsFeature, imsConfig, imsRegistration, mCapabilities);
         }
 
         @Override
@@ -103,29 +118,91 @@ public class ImsServiceConnectionRepository {
                     "imsFeature=" + imsFeature +
                     ", imsConfig=" + imsConfig +
                     ", imsRegistration=" + imsRegistration +
+                    ", capabilities = " + mCapabilities +
                     '}';
+        }
+
+        /**
+         * Update the capabilties that are associated with the ImsService that this ImsFeature
+         * belongs to.
+         */
+        public void updateCapabilities(@ImsService.ImsServiceCapability long caps) {
+            mCapabilities = caps;
+        }
+
+        /**
+         * @return the capabilties that are associated with the ImsService that this ImsFeature
+         * belongs to.
+         */
+        public @ImsService.ImsServiceCapability long getCapabilities() {
+            return mCapabilities;
         }
     }
 
+    /**
+     * Internal class representing the listeners that are listening for changes to specific
+     * ImsFeature instances.
+     * @param <T> The ImsFeature instance.
+     */
     private static class ListenerContainer<T extends IInterface> {
         public final int phoneId;
-        private final Callback<T> mCallback;
+        private final IImsServiceFeatureCallback mCallback;
         private final Executor mExecutor;
 
 
-        public ListenerContainer(int p, @NonNull Callback<T> c, @NonNull Executor e) {
+        public ListenerContainer(int p, @NonNull IImsServiceFeatureCallback c,
+                @NonNull Executor e) {
             phoneId = p;
             mCallback = c;
             mExecutor = e;
         }
 
-        public void notifyCallback(FeatureContainer<T> connection) {
+        public void notifyCallback(Container<T> connection) {
             if (connection == null) {
-                mExecutor.execute(mCallback::onConnectionUnavailable);
+                mExecutor.execute(() -> {
+                    try {
+                        mCallback.imsFeatureRemoved(
+                                FeatureConnector.UNAVAILABLE_REASON_DISCONNECTED);
+                    } catch (RemoteException e) {
+                        // This listener will eventually be caught and removed during stale checks.
+                    }
+                });
             }
             else {
-                mExecutor.execute(() -> mCallback.onConnectionAvailable(connection));
+                mExecutor.execute(() -> {
+                    try {
+                        mCallback.imsFeatureCreated(connection.imsFeature.asBinder(),
+                                connection.imsConfig, connection.imsRegistration,
+                                connection.getCapabilities());
+                    } catch (RemoteException e) {
+                        // This listener will eventually be caught and removed during stale checks.
+                    }
+                });
             }
+        }
+
+        public void notifyStateChanged(int status) {
+            mExecutor.execute(() -> {
+                try {
+                    mCallback.imsStatusChanged(status);
+                } catch (RemoteException e) {
+                    // This listener will eventually be caught and removed during stale checks.
+                }
+            });
+        }
+
+        public void notifyUpdateCapabilties(Container<T> container) {
+            mExecutor.execute(() -> {
+                try {
+                    mCallback.updateCapabilities(container.getCapabilities());
+                } catch (RemoteException e) {
+                    // This listener will eventually be caught and removed during stale checks.
+                }
+            });
+        }
+
+        public boolean isStale() {
+            return mCallback.asBinder().isBinderAlive();
         }
 
         @Override
@@ -150,44 +227,24 @@ public class ImsServiceConnectionRepository {
         }
     }
 
-    private static ImsServiceConnectionRepository mInstance;
-
-    /**
-     * @return The ImsService connection repository instance for this process.
-     */
-    public static ImsServiceConnectionRepository getInstance() {
-        if (mInstance == null) {
-            synchronized (ImsServiceConnectionRepository.class) {
-                if (mInstance == null) {
-                    mInstance = new ImsServiceConnectionRepository();
-                }
-            }
-        }
-        return mInstance;
-    }
-
     private final Object mLock;
     @GuardedBy(value="mLock")
     // Array of phoneIds containing a map of FeatureContainer types to the respective
     // FeatureContainer holding the information.
     private final SparseArray<Map<Class<?>,
-            FeatureContainer<? extends IInterface>>> mConnectionsByPhoneId;
-    @GuardedBy(value="mLock")
+            Container<? extends IInterface>>> mConnectionsByPhoneId;
     // A map of FeatureContainer types to the respective list of listeners listening for changes to
     // that type.
+    @GuardedBy(value="mLock")
     private final Map<Class<?>, List<ListenerContainer<? extends IInterface>>> mListeners;
     @GuardedBy(value="mLock")
     private final LocalLog mLocalLog = new LocalLog(50 /*lines*/);
 
-    /**
-     * Not to be instantiated directly, use {@link #getInstance()} instead.
-     */
-    @VisibleForTesting
-    public ImsServiceConnectionRepository() {
+    public FeatureConnectionRepository() {
         mLock = new Object();
         mConnectionsByPhoneId = new SparseArray<>();
         mListeners = new HashMap<>();
-        logInfoLineLocked(-1, "ImsServiceConnectionRepository - created");
+        logInfoLineLocked(-1, "FeatureConnectionRepository - created");
     }
 
 
@@ -199,13 +256,13 @@ public class ImsServiceConnectionRepository {
      * @param <T> The Interface Type.
      * @return
      */
-    public <T extends IInterface> Optional<FeatureContainer<T>> getIfExists(
+    public <T extends IInterface> Optional<Container<T>> getIfExists(
             int phoneId, @NonNull Class<T> type) {
         if (type == null) {
             throw new IllegalArgumentException("this method does not accept null arguments");
         }
         synchronized (mLock) {
-            FeatureContainer<T> conn = filterForType(getConnectionMapLocked(phoneId), type);
+            Container<T> conn = filterForType(getConnectionMapLocked(phoneId), type);
             return Optional.ofNullable(conn);
         }
     }
@@ -221,12 +278,13 @@ public class ImsServiceConnectionRepository {
      * @param <T> The Interface Type.
      */
     public <T extends IInterface> void registerForConnectionUpdates(int phoneId,
-            @NonNull Class<T> type, @NonNull Callback<T> callback, @NonNull Executor executor) {
+            @NonNull Class<T> type, @NonNull IImsServiceFeatureCallback callback,
+            @NonNull Executor executor) {
         if (type == null || callback == null || executor == null) {
             throw new IllegalArgumentException("this method does not accept null arguments");
         }
         ListenerContainer<T> container = new ListenerContainer<>(phoneId, callback, executor);
-        FeatureContainer<T> conn;
+        Container<T> conn;
         synchronized (mLock) {
             List<ListenerContainer<? extends IInterface>> oldContainers
                     = getListenerListLocked(type);
@@ -243,9 +301,7 @@ public class ImsServiceConnectionRepository {
         }
 
         // Only notify in the case that the Connection is already available.
-        if (conn != null) {
-            container.notifyCallback(conn);
-        }
+        if (conn != null) container.notifyCallback(conn);
     }
 
     /**
@@ -255,7 +311,7 @@ public class ImsServiceConnectionRepository {
      * @param <T> The Interface Type.
      */
     public <T extends IInterface> void unregisterForConnectionUpdates(
-            @NonNull Callback<T> callback) {
+            @NonNull IImsServiceFeatureCallback callback) {
         if (callback == null) {
             throw new IllegalArgumentException("this method does not accept null arguments");
         }
@@ -273,23 +329,24 @@ public class ImsServiceConnectionRepository {
     }
 
     /**
-     * Update the connection associated with a specific connection type.
+     * Add a connection associated with a specific connection type. If one already exists, it will
+     * be replaced.
      * @param phoneId The phone ID associated with this connection.
      * @param type The class of the connection.
      * @param newConnection The new connection, either an {@link IInterface} or {@code null} if
      *                      the connection is no longer available.
      * @param <T> The connection class type.
      */
-    public <T extends IInterface> void updateConnection(int phoneId, @NonNull Class<T> type,
-            @Nullable FeatureContainer<T> newConnection) {
+    public <T extends IInterface> void addConnection(int phoneId, @NonNull Class<T> type,
+            @Nullable Container<T> newConnection) {
         if (type == null) {
             throw new IllegalArgumentException("The type must be non-null");
         }
         List<ListenerContainer<T>> callbacks = null;
         synchronized (mLock) {
-            Map<Class<?>, FeatureContainer<? extends IInterface>> connMap =
+            Map<Class<?>, Container<? extends IInterface>> connMap =
                     getConnectionMapLocked(phoneId);
-            FeatureContainer<T> oldConnection = filterForType(connMap, type);
+            Container<T> oldConnection = filterForType(connMap, type);
             if (!Objects.equals(oldConnection, newConnection)) {
                 logInfoLineLocked(phoneId, "updateConnection - updated: "  + oldConnection + "-> "
                         + newConnection);
@@ -307,10 +364,68 @@ public class ImsServiceConnectionRepository {
     }
 
     /**
+     * Remove the connection associated with a specific connection type.
+     * @param phoneId The phone ID associated with this connection.
+     * @param type The class of the connection.
+     * @param <T> The connection class type.
+     */
+    public <T extends IInterface> Container<T> removeConnection(int phoneId,
+            @NonNull Class<T> type) {
+        if (type == null) {
+            throw new IllegalArgumentException("The type must be non-null");
+        }
+        List<ListenerContainer<T>> callbacks = null;
+       Container<T> oldConnection = null;
+        synchronized (mLock) {
+            Map<Class<?>, Container<? extends IInterface>> connMap =
+                    getConnectionMapLocked(phoneId);
+            oldConnection = filterForType(connMap, type);
+            logInfoLineLocked(phoneId, "updateConnection - updated: "  + oldConnection +
+                    "-> null");
+            connMap.remove(type);
+            callbacks = filterListenersLocked(phoneId, type);
+            if (callbacks != null) callbacks.forEach(c -> logVerboseLineLocked(phoneId,
+                    "updateConnection  - updating callback: " + c));
+        }
+        // Callback will also be null if there was no update to the connections.
+        if (callbacks != null) callbacks.forEach(c -> c.notifyCallback(null));
+        return oldConnection;
+    }
+
+    /**
      * Prints the dump of log events that have occurred on this repository.
      */
     public void dump(PrintWriter printWriter) {
         mLocalLog.dump(printWriter);
+    }
+
+    /**
+     * Notify listeners that the state of a specific ImsFeature that this repository is tracking has
+     * changed.
+     * @param phoneId
+     * @param type
+     * @param status
+     * @param <T>
+     */
+    public <T extends IInterface> void notifyFeatureStateChanged(int phoneId,
+            @NonNull Class<T> type, @ImsFeature.ImsState int state) {
+        List<ListenerContainer<T>> containers;
+        synchronized (mLock) {
+            containers = filterListenersLocked(phoneId, type);
+        }
+        containers.forEach((c) -> c.notifyStateChanged(state));
+    }
+
+    public <T extends IInterface> void notifyFeatureCapabilitiesChanged(int phoneId,
+            @NonNull Class<T> type, long capabilities) {
+        Container<T> feature;
+        List<ListenerContainer<T>> containers;
+        synchronized (mLock) {
+            feature = filterForType(getConnectionMapLocked(phoneId), type);
+            if (feature != null) feature.updateCapabilities(capabilities);
+            containers = filterListenersLocked(phoneId, type);
+        }
+        containers.forEach((c) -> c.notifyUpdateCapabilties(feature));
     }
 
     // Should be locked by mLock before accessing
@@ -318,18 +433,24 @@ public class ImsServiceConnectionRepository {
             int phoneId, Class<T> type) {
         List<ListenerContainer<? extends IInterface>> containers = getListenerListLocked(type);
         List<ListenerContainer<T>> filteredContainers = new ArrayList<>();
+        List<ListenerContainer<T>> staleContainers = new ArrayList<>();
         for (ListenerContainer<? extends IInterface> c : containers) {
             if (c.phoneId == phoneId) {
                 filteredContainers.add((ListenerContainer<T>) c);
             }
+            if (c.isStale()) {
+                staleContainers.add((ListenerContainer<T>) c);
+            }
         }
+        //Remove now stale/dead listeners.
+        containers.removeAll(staleContainers);
         return filteredContainers;
     }
 
     // Should be locked by mLock before accessing
-    private Map<Class<?>, FeatureContainer<? extends IInterface>> getConnectionMapLocked(
+    private Map<Class<?>, Container<? extends IInterface>> getConnectionMapLocked(
             int phoneId) {
-        Map<Class<?>, FeatureContainer<? extends IInterface>> connectionMap =
+        Map<Class<?>, Container<? extends IInterface>> connectionMap =
                 mConnectionsByPhoneId.get(phoneId);
         if (connectionMap == null) {
             connectionMap = new ArrayMap<>();
@@ -343,7 +464,7 @@ public class ImsServiceConnectionRepository {
         return mListeners.computeIfAbsent(c, k -> new ArrayList<>());
     }
 
-    private <T extends IInterface, U> FeatureContainer<T> filterForType(
+    private <T extends IInterface, U> Container<T> filterForType(
             Map<Class<?>, U> map, Class<T> type) {
         U value = null;
         for (Class<?> t : map.keySet()) {
@@ -353,7 +474,7 @@ public class ImsServiceConnectionRepository {
             }
         }
         if (value == null) return null;
-        return (FeatureContainer<T>) value;
+        return (Container<T>) value;
     }
 
     private void logVerboseLineLocked(int phoneId, String log) {
