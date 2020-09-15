@@ -18,16 +18,25 @@ package com.android.ims;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.IBinder;
 import android.os.PersistableBundle;
 import android.os.RemoteException;
+import android.os.ServiceSpecificException;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyFrameworkInitializer;
+import android.telephony.ims.ImsException;
 import android.telephony.ims.RcsContactUceCapability;
 import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.aidl.IImsCapabilityCallback;
+import android.telephony.ims.aidl.IImsConfig;
+import android.telephony.ims.aidl.IImsRcsController;
+import android.telephony.ims.aidl.IImsRcsFeature;
+import android.telephony.ims.aidl.IImsRegistration;
 import android.telephony.ims.aidl.IImsRegistrationCallback;
 import android.telephony.ims.aidl.IRcsFeatureListener;
 import android.telephony.ims.feature.CapabilityChangeRequest;
+import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.feature.RcsFeature;
 import android.telephony.ims.feature.RcsFeature.RcsImsCapabilities;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
@@ -36,14 +45,16 @@ import android.telephony.ims.stub.RcsPresenceExchangeImplBase;
 import android.telephony.ims.stub.RcsSipOptionsImplBase;
 import android.util.Log;
 
-import com.android.ims.FeatureConnection.IFeatureUpdate;
+import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.telephony.Rlog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
