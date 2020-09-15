@@ -1,0 +1,172 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bed2620_aac04fc2",
+        "filename": "src/java/com/android/ims/rcs/uce/OptionsRetrievalParam.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-15T18:52:20Z",
+      "side": 1,
+      "message": "\u003e Please remove the trailing whitespace.\n\nPlease fix.",
+      "parentUuid": "8ad37ff5_2ee37da7",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 4
+      },
+      "revId": "4d530863e9c051605cf375737d70d2df86ab909a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c1f1d892_a290b634",
+        "filename": "src/java/com/android/ims/rcs/uce/OptionsRetrievalParam.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-15T18:52:20Z",
+      "side": 1,
+      "message": "\u003e Please remove the trailing whitespace.\n\nPlease fix.",
+      "parentUuid": "a5ec2c70_0dedd13c",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 4
+      },
+      "revId": "4d530863e9c051605cf375737d70d2df86ab909a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7b4205d_7b11ecfc",
+        "filename": "src/java/com/android/ims/rcs/uce/OptionsRetrievalParam.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-15T18:52:20Z",
+      "side": 1,
+      "message": "\u003e Please remove the trailing whitespace.\n\nPlease fix.",
+      "parentUuid": "56a52d28_53b6a319",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 4
+      },
+      "revId": "4d530863e9c051605cf375737d70d2df86ab909a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d06ee1ab_8e0cbc47",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-15T18:52:20Z",
+      "side": 1,
+      "message": "\u003e Please remove the trailing whitespace.\n\nPlease fix.",
+      "parentUuid": "861b7538_f13cb7bc",
+      "range": {
+        "startLine": 239,
+        "startChar": 74,
+        "endLine": 239,
+        "endChar": 75
+      },
+      "revId": "4d530863e9c051605cf375737d70d2df86ab909a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01c31e08_1457194a",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-15T18:52:20Z",
+      "side": 1,
+      "message": "\u003e Please remove the trailing whitespace.\n\nPlease fix.",
+      "parentUuid": "9a09c93a_32cdb5f9",
+      "range": {
+        "startLine": 367,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 8
+      },
+      "revId": "4d530863e9c051605cf375737d70d2df86ab909a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "207bdffa_6f97f760",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishControllerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-15T18:52:20Z",
+      "side": 1,
+      "message": "\u003e Please remove the trailing whitespace.\n\nPlease fix.",
+      "parentUuid": "dd111c83_2b310cf9",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 4
+      },
+      "revId": "4d530863e9c051605cf375737d70d2df86ab909a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "89f40f89_37ee8d7d",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishControllerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-15T18:52:20Z",
+      "side": 1,
+      "message": "\u003e Please remove the trailing whitespace.\n\nPlease fix.",
+      "parentUuid": "1d13877f_c364b56e",
+      "range": {
+        "startLine": 522,
+        "startChar": 0,
+        "endLine": 522,
+        "endChar": 8
+      },
+      "revId": "4d530863e9c051605cf375737d70d2df86ab909a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
