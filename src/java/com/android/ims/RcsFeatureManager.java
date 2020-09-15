@@ -160,6 +160,7 @@ public class RcsFeatureManager implements IFeatureConnector {
 
     @VisibleForTesting
     public RcsFeatureConnection mRcsFeatureConnection;
+    public BinderDeathListener<IImsRcsController> mControllerListener;
 
     public static FeatureConnector<RcsFeatureManager> getConnector(Context context, int slotId,
             FeatureConnector.Listener<RcsFeatureManager> listener, Executor executor,
@@ -483,16 +484,24 @@ public class RcsFeatureManager implements IFeatureConnector {
         return false;
     }
 
-    @Override
     public void registerFeatureListener(int slotId, IImsServiceFeatureCallback cb,
             boolean oneShot) {
-        IImsRcsController controller = getIImsRcsController();
+        BinderDeathListener<IImsRcsController> listener = getIImsRcsControllerListener();
+        IImsRcsController controller = listener.getConnection();
         try {
             if (controller == null) {
                 Log.e(TAG, "registerRcsFeatureListener: IImsRcsController is null");
                 cb.imsFeatureRemoved(FeatureConnector.UNAVAILABLE_REASON_SERVER_UNAVAILABLE);
             }
             controller.registerRcsFeatureListener(slotId, cb, oneShot);
+            boolean isAlive = listener.addDeathListener(() -> {
+                try {
+                    cb.imsFeatureRemoved(FeatureConnector.UNAVAILABLE_REASON_SERVER_UNAVAILABLE);
+                } catch (RemoteException ignore) {}; // Remote is dead anyway
+            });
+            if (!isAlive) {
+                cb.imsFeatureRemoved(FeatureConnector.UNAVAILABLE_REASON_SERVER_UNAVAILABLE);
+            }
         } catch (ServiceSpecificException e) {
             try {
                 switch (e.errorCode) {
@@ -515,7 +524,7 @@ public class RcsFeatureManager implements IFeatureConnector {
     @Override
     public void unregisterFeatureListener(IImsServiceFeatureCallback cb) {
         try {
-            IImsRcsController imsRcsController = getIImsRcsController();
+            IImsRcsController imsRcsController = getIImsRcsControllerListener().getConnection();
             if (imsRcsController != null) {
                 imsRcsController.unregisterImsFeatureCallback(cb);
             }
@@ -526,13 +535,16 @@ public class RcsFeatureManager implements IFeatureConnector {
         }
     }
 
-    private IImsRcsController getIImsRcsController() {
-        IBinder binder = TelephonyFrameworkInitializer
+    private synchronized BinderDeathListener<IImsRcsController> getIImsRcsControllerListener() {
+        if (mControllerListener == null || mControllerListener.getConnection() == null) {
+            IBinder binder = TelephonyFrameworkInitializer
                     .getTelephonyServiceManager()
                     .getTelephonyImsServiceRegisterer()
                     .get();
-        IImsRcsController c = IImsRcsController.Stub.asInterface(binder);
-        return c;
+            IImsRcsController c = IImsRcsController.Stub.asInterface(binder);
+            mControllerListener = new BinderDeathListener<>(c);
+        }
+        return mControllerListener;
     }
 
     @Override

@@ -309,6 +309,7 @@ public class ImsManager implements IFeatureConnector {
     private boolean mConfigUpdated = false;
 
     private ImsConfigListener mImsConfigListener;
+    private BinderDeathListener<ITelephony> mTelephonyListener;
 
     public static final String TRUE = "true";
     public static final String FALSE = "false";
@@ -1547,7 +1548,7 @@ public class ImsManager implements IFeatureConnector {
         // Count as "provisioned" if we do not require provisioning.
         boolean isProvisioned = true;
         if (requiresProvisioning) {
-            ITelephony telephony = getITelephony();
+            ITelephony telephony = getITelephonyListener().getConnection();
             // Only track UT over LTE, since we do not differentiate between UT over LTE and IWLAN
             // currently.
             try {
@@ -2327,9 +2328,19 @@ public class ImsManager implements IFeatureConnector {
     public void registerFeatureListener(int slotId, IImsServiceFeatureCallback cb,
             boolean oneShot) {
         try {
-            ITelephony telephony = getITelephony();
+            BinderDeathListener<ITelephony> telephonyListener = getITelephonyListener();
+            ITelephony telephony = telephonyListener.getConnection();
             if (telephony != null) {
                 telephony.registerMmTelFeatureListener(slotId, cb, oneShot);
+                boolean isAlive = telephonyListener.addDeathListener(() -> {
+                    try {
+                        cb.imsFeatureRemoved(
+                                FeatureConnector.UNAVAILABLE_REASON_SERVER_UNAVAILABLE);
+                    } catch (RemoteException e) {} // remote is dead anyway
+                });
+                if (!isAlive) {
+                    cb.imsFeatureRemoved(FeatureConnector.UNAVAILABLE_REASON_SERVER_UNAVAILABLE);
+                }
             } else {
                 cb.imsFeatureRemoved(FeatureConnector.UNAVAILABLE_REASON_SERVER_UNAVAILABLE);
             }
@@ -2355,7 +2366,7 @@ public class ImsManager implements IFeatureConnector {
     @Override
     public void unregisterFeatureListener(IImsServiceFeatureCallback cb) {
         try {
-            ITelephony telephony = getITelephony();
+            ITelephony telephony = getITelephonyListener().getConnection();
             if (telephony != null) {
                 telephony.unregisterImsFeatureCallback(cb);
             }
@@ -2381,12 +2392,16 @@ public class ImsManager implements IFeatureConnector {
         }
     }
 
-    private ITelephony getITelephony() {
-        return ITelephony.Stub.asInterface(
-                TelephonyFrameworkInitializer
-                        .getTelephonyServiceManager()
-                        .getTelephonyServiceRegisterer()
-                        .get());
+    private synchronized BinderDeathListener<ITelephony> getITelephonyListener() {
+        if (mTelephonyListener == null || mTelephonyListener.getConnection() == null) {
+            ITelephony telephony = ITelephony.Stub.asInterface(
+                    TelephonyFrameworkInitializer
+                            .getTelephonyServiceManager()
+                            .getTelephonyServiceRegisterer()
+                            .get());
+            mTelephonyListener = new BinderDeathListener<>(telephony);
+        }
+        return mTelephonyListener;
     }
 
     /**
