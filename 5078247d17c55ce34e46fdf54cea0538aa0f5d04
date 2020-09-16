@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffcfc30a_394767cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-16T01:16:56Z",
+      "side": 1,
+      "message": "Can you remove *ControllerImpl classes from this CL and focus on UceController + interfaces and testing?",
+      "revId": "5078247d17c55ce34e46fdf54cea0538aa0f5d04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "558067ac_405fa5c3",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-16T01:16:56Z",
+      "side": 1,
+      "message": "Inject controller dependencies instead of initializing them here for testing purposes.",
+      "range": {
+        "startLine": 124,
+        "startChar": 11,
+        "endLine": 124,
+        "endChar": 24
+      },
+      "revId": "5078247d17c55ce34e46fdf54cea0538aa0f5d04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
