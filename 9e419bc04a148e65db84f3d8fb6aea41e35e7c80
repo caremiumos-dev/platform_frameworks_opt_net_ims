@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "622db501_fd26d5b3",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "It\u0027s named FeatureConnectionRepository, but it\u0027s not actually holding any instances of FeatureConnection? Maybe there\u0027s a better name for it",
+      "range": {
+        "startLine": 49,
+        "startChar": 13,
+        "endLine": 49,
+        "endChar": 30
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8722d665_3e98824f",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "notifyFeatureCreatedOrRemoved?",
+      "range": {
+        "startLine": 172,
+        "startChar": 20,
+        "endLine": 172,
+        "endChar": 34
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c47d573_9201c056",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "If this is called while holding mLock, and the executor is a non-async executor (e.g. if it\u0027s just Runnable::run), and if the other side of the binder is in the same process, there\u0027s the potential for a deadlock if there are locks being acquired in the impl of updateCapabilities",
+      "range": {
+        "startLine": 210,
+        "startChar": 22,
+        "endLine": 210,
+        "endChar": 29
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4a74379_00996c70",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "can you add a docstring that describes this class?",
+      "range": {
+        "startLine": 244,
+        "startChar": 3,
+        "endLine": 244,
+        "endChar": 37
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deda0420_964cf79b",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "rename to imsFeatureType? just saying type makes it a bit hard to understand",
+      "range": {
+        "startLine": 246,
+        "startChar": 30,
+        "endLine": 246,
+        "endChar": 34
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f52fd8e_2a2ba06e",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "add some examples (e.g. IImsMmTelFeature)",
+      "range": {
+        "startLine": 327,
+        "startChar": 14,
+        "endLine": 327,
+        "endChar": 37
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bc835c3_d1aea47d",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "I thought it\u0027s multiple interfaces inside a Container?",
+      "range": {
+        "startLine": 389,
+        "startChar": 58,
+        "endLine": 389,
+        "endChar": 76
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64e927a7_262a76d6",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "@GuardedBy",
+      "range": {
+        "startLine": 454,
+        "startChar": 6,
+        "endLine": 454,
+        "endChar": 49
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c0d2458_776a4ff7",
+        "filename": "src/java/com/android/ims/FeatureConnector.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "what implements this listener interface? is it the ims feature implementation that\u0027s trying to determine when ImsManager becomes available?",
+      "range": {
+        "startLine": 95,
+        "startChar": 21,
+        "endLine": 95,
+        "endChar": 29
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f7e58f2_fbb2238f",
+        "filename": "src/java/com/android/ims/FeatureConnector.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "can you document the contents of this list?",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 65
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8354d1d0_41819a0e",
+        "filename": "src/java/com/android/ims/FeatureUpdates.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "can",
+      "range": {
+        "startLine": 33,
+        "startChar": 79,
+        "endLine": 33,
+        "endChar": 82
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66447973_bf93b277",
+        "filename": "src/java/com/android/ims/FeatureUpdates.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "and",
+      "range": {
+        "startLine": 36,
+        "startChar": 85,
+        "endLine": 36,
+        "endChar": 88
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f490268c_eb34e957",
+        "filename": "src/java/com/android/ims/FeatureUpdates.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "done",
+      "range": {
+        "startLine": 54,
+        "startChar": 7,
+        "endLine": 54,
+        "endChar": 11
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dee4563d_6120d544",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:09:11Z",
+      "side": 1,
+      "message": "I think I mentioned this earlier, but be careful about lock ordering when you\u0027re doing this",
+      "range": {
+        "startLine": 349,
+        "startChar": 19,
+        "endLine": 349,
+        "endChar": 32
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
