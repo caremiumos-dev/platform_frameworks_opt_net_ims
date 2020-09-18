@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "acb5d105_72a19636",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "622db501_fd26d5b3",
+      "range": {
+        "startLine": 49,
+        "startChar": 13,
+        "endLine": 49,
+        "endChar": 30
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8722d665_3e98824f",
         "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "102aadc7_95584094",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8722d665_3e98824f",
+      "range": {
+        "startLine": 172,
+        "startChar": 20,
+        "endLine": 172,
+        "endChar": 34
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "97604457_e7e78705",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Yes I agree, will move mLock to UpdateMapper improve granularity.",
+      "parentUuid": "5c47d573_9201c056",
+      "range": {
+        "startLine": 210,
+        "startChar": 22,
+        "endLine": 210,
+        "endChar": 29
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4a74379_00996c70",
         "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
         "patchSetId": 6
@@ -91,6 +163,30 @@
       "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f65892e3_c691762c",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4a74379_00996c70",
+      "range": {
+        "startLine": 244,
+        "startChar": 3,
+        "endLine": 244,
+        "endChar": 37
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "2f7acbbf_f75f0414",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "deda0420_964cf79b",
+      "range": {
+        "startLine": 246,
+        "startChar": 30,
+        "endLine": 246,
+        "endChar": 34
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f52fd8e_2a2ba06e",
         "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
         "patchSetId": 6
@@ -137,6 +257,30 @@
       "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2187b87b_e6d85e04",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Removed T concept entirely.",
+      "parentUuid": "7f52fd8e_2a2ba06e",
+      "range": {
+        "startLine": 327,
+        "startChar": 14,
+        "endLine": 327,
+        "endChar": 37
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "8d1f0c63_a015f282",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Removed IInterface concept entirely",
+      "parentUuid": "7bc835c3_d1aea47d",
+      "range": {
+        "startLine": 389,
+        "startChar": 58,
+        "endLine": 389,
+        "endChar": 76
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64e927a7_262a76d6",
         "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
         "patchSetId": 6
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "f99db28a_ec50d0bb",
+        "filename": "src/java/com/android/ims/FeatureConnectionRepository.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64e927a7_262a76d6",
+      "range": {
+        "startLine": 454,
+        "startChar": 6,
+        "endLine": 454,
+        "endChar": 49
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c0d2458_776a4ff7",
         "filename": "src/java/com/android/ims/FeatureConnector.java",
         "patchSetId": 6
@@ -197,6 +389,30 @@
       "writtenOn": "2020-09-16T19:09:11Z",
       "side": 1,
       "message": "what implements this listener interface? is it the ims feature implementation that\u0027s trying to determine when ImsManager becomes available?",
+      "range": {
+        "startLine": 95,
+        "startChar": 21,
+        "endLine": 95,
+        "endChar": 29
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0b94203_50a60a9d",
+        "filename": "src/java/com/android/ims/FeatureConnector.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Tried to create a comment for this. This Listener interface is used by users of the FeatureConnector to listen for when a new Manager is available. (For example, ImsManager). This functionality is wrapped by ImsManager#getConnector.",
+      "parentUuid": "7c0d2458_776a4ff7",
       "range": {
         "startLine": 95,
         "startChar": 21,
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "f154dcb4_c241f4cb",
+        "filename": "src/java/com/android/ims/FeatureConnector.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f7e58f2_fbb2238f",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 65
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8354d1d0_41819a0e",
         "filename": "src/java/com/android/ims/FeatureUpdates.java",
         "patchSetId": 6
@@ -252,6 +492,30 @@
       "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bca46b2_b642224b",
+        "filename": "src/java/com/android/ims/FeatureUpdates.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8354d1d0_41819a0e",
+      "range": {
+        "startLine": 33,
+        "startChar": 79,
+        "endLine": 33,
+        "endChar": 82
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "400dad60_5657e24e",
+        "filename": "src/java/com/android/ims/FeatureUpdates.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66447973_bf93b277",
+      "range": {
+        "startLine": 36,
+        "startChar": 85,
+        "endLine": 36,
+        "endChar": 88
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f490268c_eb34e957",
         "filename": "src/java/com/android/ims/FeatureUpdates.java",
         "patchSetId": 6
@@ -301,6 +589,30 @@
     },
     {
       "key": {
+        "uuid": "f5840864_cf8dfd2d",
+        "filename": "src/java/com/android/ims/FeatureUpdates.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f490268c_eb34e957",
+      "range": {
+        "startLine": 54,
+        "startChar": 7,
+        "endLine": 54,
+        "endChar": 11
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dee4563d_6120d544",
         "filename": "src/java/com/android/ims/ImsManager.java",
         "patchSetId": 6
@@ -312,6 +624,30 @@
       "writtenOn": "2020-09-16T19:09:11Z",
       "side": 1,
       "message": "I think I mentioned this earlier, but be careful about lock ordering when you\u0027re doing this",
+      "range": {
+        "startLine": 349,
+        "startChar": 19,
+        "endLine": 349,
+        "endChar": 32
+      },
+      "revId": "9e419bc04a148e65db84f3d8fb6aea41e35e7c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6bb009f_501b7512",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:18Z",
+      "side": 1,
+      "message": "Yeah - unfortunately I dont know of another way to do this for the existing getInstance() method.",
+      "parentUuid": "dee4563d_6120d544",
       "range": {
         "startLine": 349,
         "startChar": 19,
