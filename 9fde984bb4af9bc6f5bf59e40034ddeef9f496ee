@@ -1,0 +1,102 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005043475",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1425909?revision\u003d5",
+      "fixSuggestions": [
+        {
+          "fixId": "cfaca2db_dbe1dbfd",
+          "description": "Change to \"src/java/com/android/ims/rcs/uce/UceRequestTaskManager.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/ims/rcs/uce/UceRequestTaskManager.java",
+              "range": {
+                "startLine": 42,
+                "startChar": 34,
+                "endLine": 42,
+                "endChar": 41
+              },
+              "replacement": "destroy"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "ccb8fba3_4e8d702a",
+        "filename": "src/java/com/android/ims/rcs/uce/UceRequestTaskManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-19T00:03:12Z",
+      "side": 1,
+      "message": "Common typo found: \"destory\" -- should it be \"destroy\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 42,
+        "startChar": 34,
+        "endLine": 42,
+        "endChar": 41
+      },
+      "revId": "9fde984bb4af9bc6f5bf59e40034ddeef9f496ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005043476",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1425909?revision\u003d5",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "2a3f1c6c_30224ecf",
+        "filename": "tests/src/com/android/ims/rcs/uce/UceControllerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-19T00:03:12Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 4
+      },
+      "revId": "9fde984bb4af9bc6f5bf59e40034ddeef9f496ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005043476",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1425909?revision\u003d5",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "4ab7947b_0ccb7955",
+        "filename": "tests/src/com/android/ims/rcs/uce/UceControllerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-19T00:03:12Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 8
+      },
+      "revId": "9fde984bb4af9bc6f5bf59e40034ddeef9f496ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
