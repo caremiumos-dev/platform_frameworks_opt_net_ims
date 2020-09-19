@@ -1,0 +1,76 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0273a40f_02b73cca",
+        "filename": "src/java/com/android/ims/rcs/uce/UceRequestTaskManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-19T00:13:34Z",
+      "side": 1,
+      "message": "\u003e Common typo found: \"destory\" -- should it be \"destroy\"?\n\u003e Note: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.\n\nPlease fix.",
+      "parentUuid": "ccb8fba3_4e8d702a",
+      "range": {
+        "startLine": 42,
+        "startChar": 34,
+        "endLine": 42,
+        "endChar": 41
+      },
+      "revId": "9fde984bb4af9bc6f5bf59e40034ddeef9f496ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6202c89d_1fb67e43",
+        "filename": "tests/src/com/android/ims/rcs/uce/UceControllerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-19T00:13:34Z",
+      "side": 1,
+      "message": "\u003e Please remove the trailing whitespace.\n\nPlease fix.",
+      "parentUuid": "2a3f1c6c_30224ecf",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 4
+      },
+      "revId": "9fde984bb4af9bc6f5bf59e40034ddeef9f496ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6906a4a8_55b047d3",
+        "filename": "tests/src/com/android/ims/rcs/uce/UceControllerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-19T00:13:34Z",
+      "side": 1,
+      "message": "\u003e Please remove the trailing whitespace.\n\nPlease fix.",
+      "parentUuid": "4ab7947b_0ccb7955",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 8
+      },
+      "revId": "9fde984bb4af9bc6f5bf59e40034ddeef9f496ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
