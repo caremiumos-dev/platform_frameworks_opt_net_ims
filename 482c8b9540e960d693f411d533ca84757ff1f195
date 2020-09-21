@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba730b3f_b8de2323",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "Thanks for performing this separation, this makes the structure a little more clear!\n\nJust a few small comments",
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2c54dcb0_6d4272c3",
+        "filename": "src/java/com/android/ims/rcs/uce/OptionsRetrievalParam.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "Can we just use SomeArgs in the handler instead to pass this information?",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 64
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f36ba3d_3f746d8d",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "nit: given, same with below",
+      "range": {
+        "startLine": 62,
+        "startChar": 57,
+        "endLine": 62,
+        "endChar": 63
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47cebf37_2a0ea2a7",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "Is this going to be something that the UceController will need to do or should the caller of onRcsDisconnected do this?",
+      "range": {
+        "startLine": 229,
+        "startChar": 31,
+        "endLine": 229,
+        "endChar": 48
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a5ac94d_e7491ea3",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "We have a few threads interacting here: UceController+Controller thread, main thread, and ImsService binder thread.\n\nAre you expecting it to be the UceController\u0027s responsibility to move the requests from main/ImsService thread onto the UceController thread or each of the individual controllers\u0027 responsibilities?\n\nMy first thought is that it may be easier for UceController to handle thread management so that the Controllers can assume everything is on a singular thread.",
+      "range": {
+        "startLine": 354,
+        "startChar": 75,
+        "endLine": 354,
+        "endChar": 85
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfe113bb_c8e009ee",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "Is there any reason why this is done here instead of the OptionsController?",
+      "range": {
+        "startLine": 393,
+        "startChar": 18,
+        "endLine": 393,
+        "endChar": 38
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad86162a_08ac95cd",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "nit: move class definitions above params,methods",
+      "range": {
+        "startLine": 393,
+        "startChar": 4,
+        "endLine": 424,
+        "endChar": 5
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b35262b0_828e697e",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "nit: This should be \"Enhanced\"",
+      "range": {
+        "startLine": 29,
+        "startChar": 32,
+        "endLine": 29,
+        "endChar": 40
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beeef532_686fdc64",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "nit: have",
+      "range": {
+        "startLine": 37,
+        "startChar": 45,
+        "endLine": 37,
+        "endChar": 48
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19cd13c8_f5dd3853",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/subscribe/SubscribeController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 29,
+        "startChar": 7,
+        "endLine": 29,
+        "endChar": 15
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98392bfd_70f55122",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/subscribe/SubscribeController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T21:53:00Z",
+      "side": 1,
+      "message": "not very precise, perhaps: Request the cached capabilities for the requested contacts if they exist. If not, perform a capability request on the network for the capabilities of these contacts. \n\nSame with below",
+      "range": {
+        "startLine": 33,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 59
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
