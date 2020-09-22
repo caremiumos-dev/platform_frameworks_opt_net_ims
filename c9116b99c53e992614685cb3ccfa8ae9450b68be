@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fcb6c36_709d5119",
+        "filename": "src/java/com/android/ims/ImsFeatureBinderRepository.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-22T22:02:36Z",
+      "side": 1,
+      "message": "this is subject to a ConcurrentModificationException -- you should make a copy of mListeners inside the lock since you could be modifying mListeners in addListener/removeListener as well.",
+      "range": {
+        "startLine": 212,
+        "startChar": 16,
+        "endLine": 212,
+        "endChar": 26
+      },
+      "revId": "c9116b99c53e992614685cb3ccfa8ae9450b68be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

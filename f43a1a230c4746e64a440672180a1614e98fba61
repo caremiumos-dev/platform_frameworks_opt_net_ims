@@ -1,0 +1,51 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "520a3403_a5b2b12a",
+        "filename": "src/java/com/android/ims/ImsFeatureBinderRepository.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-22T22:02:36Z",
+      "side": 1,
+      "message": "outdated name",
+      "range": {
+        "startLine": 49,
+        "startChar": 39,
+        "endLine": 49,
+        "endChar": 54
+      },
+      "revId": "f43a1a230c4746e64a440672180a1614e98fba61",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0e7173b_77ae0920",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-22T22:02:36Z",
+      "side": 1,
+      "message": "\u003e Common typo found: \"compatable\" -- should it be \"compatible\"?\n\u003e Note: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.\n\nPlease fix.",
+      "parentUuid": "a2874131_b80e3281",
+      "range": {
+        "startLine": 357,
+        "startChar": 11,
+        "endLine": 357,
+        "endChar": 21
+      },
+      "revId": "f43a1a230c4746e64a440672180a1614e98fba61",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
