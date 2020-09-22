@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "493ee813_2943a0a4",
+        "filename": "src/java/com/android/ims/rcs/uce/OptionsRetrievalParam.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-22T04:23:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c54dcb0_6d4272c3",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 64
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f36ba3d_3f746d8d",
         "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
         "patchSetId": 6
@@ -62,6 +86,30 @@
       "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1abb25fd_04070bf1",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-22T04:23:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f36ba3d_3f746d8d",
+      "range": {
+        "startLine": 62,
+        "startChar": 57,
+        "endLine": 62,
+        "endChar": 63
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "317c3792_2299a547",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-22T04:23:29Z",
+      "side": 1,
+      "message": "Yes, it should be handled by the class which create/destroy the RcsFeatureManager. The UceController should not be the class to call the release connection.",
+      "parentUuid": "47cebf37_2a0ea2a7",
+      "range": {
+        "startLine": 229,
+        "startChar": 31,
+        "endLine": 229,
+        "endChar": 48
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a5ac94d_e7491ea3",
         "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
         "patchSetId": 6
@@ -108,6 +180,30 @@
       "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e2d110b_ade5a1cf",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-22T04:23:29Z",
+      "side": 1,
+      "message": "My original thought is that this request is simple and it could be handled in the UceController.  However, this request should be handled by OptionsController more suitable.\n\nSince the looper of handler thread is passed to each controllers, all controllers share one message queue. The UceController is only responsible for crating and destroying the looper.",
+      "parentUuid": "6a5ac94d_e7491ea3",
+      "range": {
+        "startLine": 354,
+        "startChar": 75,
+        "endLine": 354,
+        "endChar": 85
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "0bf6590b_fbea8fec",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-22T04:23:29Z",
+      "side": 1,
+      "message": "Yes, this request is more suitable for OptionsController to handle. I will move it to OptionsController.",
+      "parentUuid": "bfe113bb_c8e009ee",
+      "range": {
+        "startLine": 393,
+        "startChar": 18,
+        "endLine": 393,
+        "endChar": 38
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad86162a_08ac95cd",
         "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
         "patchSetId": 6
@@ -154,6 +274,30 @@
       "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2aedea7_bd947dda",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-22T04:23:29Z",
+      "side": 1,
+      "message": "Since UceController doesn\u0027t handle this request, remove the class definition",
+      "parentUuid": "ad86162a_08ac95cd",
+      "range": {
+        "startLine": 393,
+        "startChar": 4,
+        "endLine": 424,
+        "endChar": 5
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -180,6 +324,30 @@
     },
     {
       "key": {
+        "uuid": "a5fdb973_adf20c68",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-22T04:23:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b35262b0_828e697e",
+      "range": {
+        "startLine": 29,
+        "startChar": 32,
+        "endLine": 29,
+        "endChar": 40
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "beeef532_686fdc64",
         "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishController.java",
         "patchSetId": 6
@@ -200,6 +368,30 @@
       "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "539d9cfb_a071758d",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-22T04:23:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "beeef532_686fdc64",
+      "range": {
+        "startLine": 37,
+        "startChar": 45,
+        "endLine": 37,
+        "endChar": 48
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -226,6 +418,30 @@
     },
     {
       "key": {
+        "uuid": "3d7da4f8_abd1d981",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/subscribe/SubscribeController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-22T04:23:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19cd13c8_f5dd3853",
+      "range": {
+        "startLine": 29,
+        "startChar": 7,
+        "endLine": 29,
+        "endChar": 15
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98392bfd_70f55122",
         "filename": "src/java/com/android/ims/rcs/uce/presence/subscribe/SubscribeController.java",
         "patchSetId": 6
@@ -246,6 +462,30 @@
       "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f1976dc_90108175",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/subscribe/SubscribeController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-09-22T04:23:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98392bfd_70f55122",
+      "range": {
+        "startLine": 33,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 59
+      },
+      "revId": "482c8b9540e960d693f411d533ca84757ff1f195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
