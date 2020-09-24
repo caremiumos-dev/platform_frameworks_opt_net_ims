@@ -16,6 +16,7 @@
 
 package com.android.ims;
 
+import android.annotation.NonNull;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.net.Uri;
@@ -501,12 +502,29 @@ public class ImsCall implements ICall {
         }
 
         /**
+         * Reports a DTMF tone received from the network.
+         * @param imsCall The IMS call the tone was received from.
+         * @param digit The digit received.
+         */
+        public void onCallSessionDtmfReceived(ImsCall imsCall, char digit) {
+        }
+
+        /**
          * Called when the call quality has changed.
          *
          * @param imsCall ImsCall object
          * @param callQuality the updated CallQuality
          */
         public void onCallQualityChanged(ImsCall imsCall, CallQuality callQuality) {
+        }
+
+        /**
+         * Called when RTP header extension data is received from the newtork.
+         * @param imsCall The ImsCall the data was received on.
+         * @param rtpHeaderExtensionData The RTP extension data received.
+         */
+        public void onCallSessionRtpHeaderExtensionReceived(ImsCall imsCall,
+                @NonNull byte[] rtpHeaderExtensionData) {
         }
     }
 
@@ -1792,6 +1810,29 @@ public class ImsCall implements ICall {
                 return;
             }
             mSession.sendRttModifyResponse(status);
+        }
+    }
+
+    /**
+     * Requests that {@code extensionBytes} are sent as a header extension with the next RTP packet
+     * sent by the IMS stack.
+     * <a href="https://tools.ietf.org/html/rfc3550#section-5.3.1">RFC3550 Section 5.3.1</a> defines
+     * an RTP header extension as a variable length header consisting of 32 bit words.  Although by
+     * specification up to 65,535 32 bit words can be supported, RTP header extension traffic should
+     * be kept to an absolute minimum as it rides alongside audio information.
+     * <p>
+     * By specification, the RTP header extension is an unacknowledged transmission and there is no
+     * guarantee that the header extension will be delivered by the network to the other end of the
+     * call.
+     * @param extensionBytes The data to be included in the next RTP header extension.
+     */
+    public void sendRtpHeaderExtension(@NonNull byte[] extensionBytes) {
+        logi("sendRtpHeaderExtension; byteCount=" + extensionBytes.length);
+        synchronized(mLockObj) {
+            if (mSession == null) {
+                loge("sendRtpHeaderExtension::no session");
+            }
+            mSession.sendRtpHeaderExtension(extensionBytes);
         }
     }
 
@@ -3345,6 +3386,23 @@ public class ImsCall implements ICall {
         }
 
         @Override
+        public void callSessionDtmfReceived(char digit) {
+            ImsCall.Listener listener;
+
+            synchronized(ImsCall.this) {
+                listener = mListener;
+            }
+
+            if (listener != null) {
+                try {
+                    listener.onCallSessionDtmfReceived(ImsCall.this, digit);
+                } catch (Throwable t) {
+                    loge("callSessionDtmfReceived:: ", t);
+                }
+            }
+        }
+
+        @Override
         public void callQualityChanged(CallQuality callQuality) {
             ImsCall.Listener listener;
 
@@ -3357,6 +3415,23 @@ public class ImsCall implements ICall {
                     listener.onCallQualityChanged(ImsCall.this, callQuality);
                 } catch (Throwable t) {
                     loge("callQualityChanged:: ", t);
+                }
+            }
+        }
+
+        @Override
+        public void callSessionRtpHeaderExtensionReceived(@NonNull byte[] extensionBytes) {
+            ImsCall.Listener listener;
+
+            synchronized (ImsCall.this) {
+                listener = mListener;
+            }
+
+            if (listener != null) {
+                try {
+                    listener.onCallSessionRtpHeaderExtensionReceived(ImsCall.this, extensionBytes);
+                } catch (Throwable t) {
+                    loge("callSessionRtpHeaderExtensionReceived:: ", t);
                 }
             }
         }
