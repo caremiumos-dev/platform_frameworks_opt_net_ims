@@ -22,12 +22,43 @@ import android.telephony.ims.RcsUceAdapter.PublishState;
 import android.telephony.ims.aidl.IRcsUcePublishStateCallback;
 
 import com.android.ims.rcs.uce.ControllerBase;
-import com.android.ims.rcs.uce.UceController.UceControllerCallback;
 
 /**
  * The interface related to the PUBLISH request.
  */
 public interface PublishController extends ControllerBase {
+    /**
+     * The type of triggering the publish request.
+     */
+    enum PUBLISH_TRIGGER_TYPE {
+        REQUEST_REGULAR_PUBLISH,
+        REQUEST_FROM_SERVICE,
+        REQUEST_FAILED_RETRY,
+        TTY_PREFERRED_CHANGED,
+        AIRPLANE_MODE_CHANGED,
+        MOBILE_DATA_CHANGED,
+        VT_SETTING_CHANGED,
+        MMTEL_REGISTERED,
+        MMTEL_UNREGISTERED,
+        MMTEL_CAPABILITY_CHANGED,
+        PROVISIONING_CHANGED
+    }
+
+    /**
+     * Receive the callback from the sub-components which interact with PublishController.
+     */
+    interface PublishControllerCallback {
+        /**
+         * Request publish from local.
+         */
+        void requestPublishFromInternal(PUBLISH_TRIGGER_TYPE type, long delay);
+
+        /**
+         * Update the publish request result.
+         */
+        void updatePublishRequestResult(int publishState);
+    }
+
     /**
      * Retrieve the RCS UCE Publish state.
      */
@@ -46,7 +77,7 @@ public interface PublishController extends ControllerBase {
     /**
      * Publish the device's capabilities to the Presence server.
      */
-    void publishCapabilities(int triggerType);
+    void requestPublishCapabilitiesFromService();
 
     /**
      * Register a {@link PublishStateCallback} to listen to the published state changed.
