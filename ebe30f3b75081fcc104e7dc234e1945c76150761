@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff3f72bb_277d1ba9",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "Probably do not need a separate interface definition here. We were only separating controllers into interfaces so that \n1) other oems could reimplement if they felt like it, and\n2) We did not have the implementations of the classes yet. \n\nSame with PublishProcessor (unless you think there is a good reason to keep them)",
+      "range": {
+        "startLine": 47,
+        "startChar": 17,
+        "endLine": 47,
+        "endChar": 41
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91de0a01_fc1a60cb",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "Would an initialize() and destroy() be enough here? I do not see a turnOffListener method being used",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 5
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d854b9be_d23f8a57",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "Should this use the looper given to this class?",
+      "range": {
+        "startLine": 182,
+        "startChar": 12,
+        "endLine": 182,
+        "endChar": 65
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7ca0ae9_d3d67d6b",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "Usually class definitions come before method definitions, can you move to top?",
+      "range": {
+        "startLine": 347,
+        "startChar": 18,
+        "endLine": 347,
+        "endChar": 41
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a2646c0_870de2ce",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "This is set as private, but then used outside of the class, can you move to public?",
+      "range": {
+        "startLine": 356,
+        "startChar": 21,
+        "endLine": 356,
+        "endChar": 57
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a59d2085_1ffc141b",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "Should we remove the existing one if a message already exists?",
+      "range": {
+        "startLine": 357,
+        "startChar": 12,
+        "endLine": 358,
+        "endChar": 64
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd6a24ab_b654c509",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "Use intdef instead",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 8
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de29dc53_f8e5e4a6",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "I do not see any usages of delay?",
+      "range": {
+        "startLine": 54,
+        "startChar": 68,
+        "endLine": 54,
+        "endChar": 77
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c23371d0_8469937c",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishControllerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "Would it be easier to just pass in the DeviceCapListenerFactory/PublishProcessor implementation here?",
+      "range": {
+        "startLine": 84,
+        "startChar": 75,
+        "endLine": 84,
+        "endChar": 94
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb9cd761_5c15397f",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishControllerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "Should this remove existing publish requests in the queue?",
+      "range": {
+        "startLine": 276,
+        "startChar": 20,
+        "endLine": 276,
+        "endChar": 34
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d83f0e9_954603df",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishControllerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:50:04Z",
+      "side": 1,
+      "message": "This shouldnt be called while in the lock, it can cause deadlocks. Can you move to outside of the lock?",
+      "range": {
+        "startLine": 305,
+        "startChar": 19,
+        "endLine": 305,
+        "endChar": 59
+      },
+      "revId": "ebe30f3b75081fcc104e7dc234e1945c76150761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
