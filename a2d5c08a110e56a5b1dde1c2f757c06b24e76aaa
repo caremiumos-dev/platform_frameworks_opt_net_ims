@@ -1,0 +1,8 @@
+Code-Review+2: Brad Ebinger <breadley@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Brad Ebinger <breadley@google.com>
+Submitted-at: Wed, 30 Sep 2020 21:00:32 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1443079
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
