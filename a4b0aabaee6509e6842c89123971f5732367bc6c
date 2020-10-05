@@ -1,0 +1,31 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005347155",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1449555?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "dad8dd80_ba5b946c",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/pidf/Tuple.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-10-05T19:12:06Z",
+      "side": 1,
+      "message": "Wrong casing for \"sLock\". static final variables should be ALL_UPPERCASE.",
+      "range": {
+        "startLine": 41,
+        "startChar": 12,
+        "endLine": 41,
+        "endChar": 37
+      },
+      "revId": "a4b0aabaee6509e6842c89123971f5732367bc6c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
