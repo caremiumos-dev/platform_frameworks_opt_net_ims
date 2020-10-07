@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "782755c7_c16c164f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T00:54:26Z",
+      "side": 1,
+      "message": "Looks okay overall, however the RcsContactUceCapabilities used is not the new definition as per the new partner doc.",
+      "revId": "18a29292376c11578f816d9f0205e22aebdcfef0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e06dd9b_cac2a525",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/TupleFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T00:54:26Z",
+      "side": 1,
+      "message": "Since you are  starting to use this structure, now would be a good time to modify this class to contain the new version of the class that was defined in the partner document. Can you please modify this class to contain the new definition in the partner doc?\n\nThe new version of this class contains the ServiceCapabilities as well as the other feature tags that will be required to be in the PIDF XML doc generated.",
+      "range": {
+        "startLine": 43,
+        "startChar": 52,
+        "endLine": 43,
+        "endChar": 75
+      },
+      "revId": "18a29292376c11578f816d9f0205e22aebdcfef0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
