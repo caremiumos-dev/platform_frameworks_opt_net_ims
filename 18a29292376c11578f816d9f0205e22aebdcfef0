@@ -39,6 +39,30 @@
       },
       "revId": "18a29292376c11578f816d9f0205e22aebdcfef0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe40aa6d_da62be58",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/TupleFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T01:09:18Z",
+      "side": 1,
+      "message": "We will use the current one for now for testing and upgrade to the new version of RcsContactUceCapability later",
+      "parentUuid": "4e06dd9b_cac2a525",
+      "range": {
+        "startLine": 43,
+        "startChar": 52,
+        "endLine": 43,
+        "endChar": 75
+      },
+      "revId": "18a29292376c11578f816d9f0205e22aebdcfef0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
