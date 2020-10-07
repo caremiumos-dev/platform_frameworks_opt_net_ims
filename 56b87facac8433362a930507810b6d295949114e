@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee4e776d_87ee37fa",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityInfo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T00:44:54Z",
+      "side": 1,
+      "message": "In other places such as PresencePublisher#getUriForPublication, we only use getLine1Number as a backup. Do we want to use the same type of logic here, since line 1 number may not be available?",
+      "range": {
+        "startLine": 255,
+        "startChar": 70,
+        "endLine": 255,
+        "endChar": 84
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "533f8561_439f3739",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T00:44:54Z",
+      "side": 1,
+      "message": "can this be named \"initialize\"?",
+      "range": {
+        "startLine": 147,
+        "startChar": 16,
+        "endLine": 147,
+        "endChar": 30
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7241e730_1d161fe3",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T00:44:54Z",
+      "side": 1,
+      "message": "I do not think this is needed, instead can onDestroy just be used?",
+      "range": {
+        "startLine": 163,
+        "startChar": 17,
+        "endLine": 163,
+        "endChar": 32
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87105667_d9ee82ab",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T00:44:54Z",
+      "side": 1,
+      "message": "This should probably be on the looper that was passed in here (see HandlerExecutor)",
+      "range": {
+        "startLine": 218,
+        "startChar": 37,
+        "endLine": 218,
+        "endChar": 65
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33486672_1bb538c6",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T00:44:54Z",
+      "side": 1,
+      "message": "Since the subid doesnt change, maybe the mmtel and rcs managers can be created in either the constructor or the \"initialize\" function? Same with provisioningmanager?",
+      "range": {
+        "startLine": 220,
+        "startChar": 12,
+        "endLine": 232,
+        "endChar": 0
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82ed32fa_ec07db7d",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T00:44:54Z",
+      "side": 1,
+      "message": "Looper passed into class?",
+      "range": {
+        "startLine": 309,
+        "startChar": 24,
+        "endLine": 309,
+        "endChar": 30
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "198a69c2_500205cd",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T00:44:54Z",
+      "side": 1,
+      "message": "Can this be the looper passed into this class?",
+      "range": {
+        "startLine": 319,
+        "startChar": 24,
+        "endLine": 319,
+        "endChar": 30
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
