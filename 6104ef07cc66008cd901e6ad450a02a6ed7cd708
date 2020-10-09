@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005444142",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1439551?revision\u003d7",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "f29a26e1_dd90e121",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishUtils.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-10-09T15:55:06Z",
+      "side": 1,
+      "message": "Wrong casing for \"getInstance\". static final variables should be ALL_UPPERCASE.",
+      "range": {
+        "startLine": 38,
+        "startChar": 11,
+        "endLine": 38,
+        "endChar": 48
+      },
+      "revId": "6104ef07cc66008cd901e6ad450a02a6ed7cd708",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
