@@ -51,6 +51,24 @@
       "parentUuid": "9de6356a_ece20509",
       "revId": "751c047c23fadf4bd0767db9785905bc365d0099",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e36179ca_5dd4a4da",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1766,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-09T19:32:58Z",
+      "side": 1,
+      "message": "ImsMmMelManager is the API that vendors should be using to register a RegistrationCallback. This is an internal method, not a public API.",
+      "parentUuid": "1f55d8ac_637fc2b0",
+      "revId": "751c047c23fadf4bd0767db9785905bc365d0099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
