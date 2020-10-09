@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0692e09b_1536d4cc",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityInfo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-09T15:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee4e776d_87ee37fa",
+      "range": {
+        "startLine": 255,
+        "startChar": 70,
+        "endLine": 255,
+        "endChar": 84
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "533f8561_439f3739",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-07T00:44:54Z",
       "side": 1,
       "message": "can this be named \"initialize\"?",
+      "range": {
+        "startLine": 147,
+        "startChar": 16,
+        "endLine": 147,
+        "endChar": 30
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5706d3ab_3d418659",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-09T15:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "533f8561_439f3739",
       "range": {
         "startLine": 147,
         "startChar": 16,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8600f3f0_28950c23",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-09T15:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7241e730_1d161fe3",
+      "range": {
+        "startLine": 163,
+        "startChar": 17,
+        "endLine": 163,
+        "endChar": 32
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87105667_d9ee82ab",
@@ -83,6 +155,30 @@
       "writtenOn": "2020-10-07T00:44:54Z",
       "side": 1,
       "message": "This should probably be on the looper that was passed in here (see HandlerExecutor)",
+      "range": {
+        "startLine": 218,
+        "startChar": 37,
+        "endLine": 218,
+        "endChar": 65
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15bf494e_28b18959",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-09T15:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87105667_d9ee82ab",
       "range": {
         "startLine": 218,
         "startChar": 37,
@@ -116,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0552dd4_ead4a751",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-09T15:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33486672_1bb538c6",
+      "range": {
+        "startLine": 220,
+        "startChar": 12,
+        "endLine": 232,
+        "endChar": 0
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82ed32fa_ec07db7d",
@@ -139,6 +259,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d622c358_95ef8f8e",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-09T15:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82ed32fa_ec07db7d",
+      "range": {
+        "startLine": 309,
+        "startChar": 24,
+        "endLine": 309,
+        "endChar": 30
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "198a69c2_500205cd",
@@ -152,6 +296,30 @@
       "writtenOn": "2020-10-07T00:44:54Z",
       "side": 1,
       "message": "Can this be the looper passed into this class?",
+      "range": {
+        "startLine": 319,
+        "startChar": 24,
+        "endLine": 319,
+        "endChar": 30
+      },
+      "revId": "56b87facac8433362a930507810b6d295949114e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41884d23_d29892dc",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-09T15:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "198a69c2_500205cd",
       "range": {
         "startLine": 319,
         "startChar": 24,
