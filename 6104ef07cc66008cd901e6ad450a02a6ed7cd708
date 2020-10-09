@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79817856_dcd96839",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishUtils.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-09T18:10:40Z",
+      "side": 1,
+      "message": "If this does not hold any state, can this not hold any instance and these methods can all be declared as static?",
+      "range": {
+        "startLine": 29,
+        "startChar": 6,
+        "endLine": 29,
+        "endChar": 18
+      },
+      "revId": "6104ef07cc66008cd901e6ad450a02a6ed7cd708",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
