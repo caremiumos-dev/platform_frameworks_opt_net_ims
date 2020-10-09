@@ -16,6 +16,23 @@
       "message": "Already submitted internally, CP to AOSP. Verified change on AOSP device as well.",
       "revId": "751c047c23fadf4bd0767db9785905bc365d0099",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9de6356a_ece20509",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1766,
+      "author": {
+        "id": 1096713
+      },
+      "writtenOn": "2020-10-09T18:28:51Z",
+      "side": 1,
+      "message": "This API change breaks partner code.  How are we communicating this to partners?",
+      "revId": "751c047c23fadf4bd0767db9785905bc365d0099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
