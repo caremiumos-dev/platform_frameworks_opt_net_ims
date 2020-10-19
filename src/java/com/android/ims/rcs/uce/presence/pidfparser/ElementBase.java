@@ -16,6 +16,9 @@
 
 package com.android.ims.rcs.uce.presence.pidfparser;
 
+import android.util.Log;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
@@ -35,13 +38,29 @@ public abstract class ElementBase {
     protected abstract String initNamespace();
     protected abstract String initElementName();
 
-    protected String getNamespace() {
+    /**
+     * @return The namespace of this element
+     */
+    public String getNamespace() {
         return mNamespace;
     }
 
-    protected String getElementName() {
+    /**
+     * @return The name of this element.
+     */
+    public String getElementName() {
         return mElementName;
     }
 
     public abstract void serialize(XmlSerializer serializer) throws IOException;
+
+    public abstract void parse(XmlPullParser parser) throws IOException, XmlPullParserException;
+
+    protected boolean verifyParsingElement(String namespace, String elementName) {
+        if (!getNamespace().equals(namespace) || !getElementName().equals(elementName)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
