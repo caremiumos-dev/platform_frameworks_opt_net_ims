@@ -16,8 +16,13 @@
 
 package com.android.ims.rcs.uce.presence.pidfparser.capabilities;
 
-import com.android.ims.rcs.uce.presence.pidfparser.ElementBase;
+import android.text.TextUtils;
 
+import com.android.ims.rcs.uce.presence.pidfparser.ElementBase;
+import com.android.internal.annotations.VisibleForTesting;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
@@ -26,7 +31,13 @@ import java.io.IOException;
  * The "video" element of the Capabilities namespace.
  */
 public class Video extends ElementBase {
-    private final boolean mSupported;
+    /** The name of this element */
+    public static final String ELEMENT_NAME = "video";
+
+    private boolean mSupported;
+
+    public Video() {
+    }
 
     public Video(boolean supported) {
         mSupported = supported;
@@ -39,7 +50,12 @@ public class Video extends ElementBase {
 
     @Override
     protected String initElementName() {
-        return "video";
+        return ELEMENT_NAME;
+    }
+
+    @VisibleForTesting
+    public boolean isVideoSupported() {
+        return mSupported;
     }
 
     @Override
@@ -47,11 +63,41 @@ public class Video extends ElementBase {
         String namespace = getNamespace();
         String elementName = getElementName();
         serializer.startTag(namespace, elementName);
-        serializer.text(getValue());
+        serializer.text(String.valueOf(isVideoSupported()));
         serializer.endTag(namespace, elementName);
     }
 
-    private String getValue() {
-        return (mSupported) ? "true" : "false";
+    @Override
+    public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String namespace = parser.getNamespace();
+        String name = parser.getName();
+
+        if (!verifyParsingElement(namespace, name)) {
+            throw new XmlPullParserException("Incorrect element: " + namespace + ", " + name);
+        }
+
+        // Move to the next event to get the value.
+        int eventType = parser.next();
+
+        // Get the value if the event type is text.
+        if (eventType == XmlPullParser.TEXT) {
+            String isSupported = parser.getText();
+            if (!TextUtils.isEmpty(isSupported)) {
+                mSupported = Boolean.parseBoolean(isSupported);
+            }
+        }
+
+        // Move to the end tag of the Video element.
+        while(!(eventType == XmlPullParser.END_TAG
+                && getNamespace().equals(parser.getNamespace())
+                && getElementName().equals(parser.getName()))) {
+            eventType = parser.next();
+
+            // Leave directly if the event type is the end of the document.
+            if (eventType == XmlPullParser.END_DOCUMENT) {
+                return;
+            }
+        }
     }
+
 }

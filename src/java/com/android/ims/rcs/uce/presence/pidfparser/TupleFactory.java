@@ -56,7 +56,7 @@ public class TupleFactory {
         serviceDescription.setServiceId(new ServiceId(PidfParserConstant.SERVICE_ID_CAPS_DISCOVERY));
         serviceDescription.setVersion(new Version(1, 0));
         serviceDescription.setDescription(new Description("Capabilities Discovery"));
-        tuple.addElement(serviceDescription);
+        tuple.setServiceDescription(serviceDescription);
 
         // The "contact" element
         Contact contact = new Contact();
@@ -83,7 +83,7 @@ public class TupleFactory {
         serviceDescription.setServiceId(new ServiceId(PidfParserConstant.SERVICE_ID_IpCall));
         serviceDescription.setVersion(new Version(1, 0));
         serviceDescription.setDescription(new Description("VoLTE Voice/Video service"));
-        tuple.addElement(serviceDescription);
+        tuple.setServiceDescription(serviceDescription);
 
         // The service capabilities element
         ServiceCaps serviceCaps = new ServiceCaps();
@@ -94,7 +94,7 @@ public class TupleFactory {
         serviceCaps.addElement(audio);
         serviceCaps.addElement(video);
         serviceCaps.addElement(duplex);
-        tuple.addElement(serviceCaps);
+        tuple.setServiceCaps(serviceCaps);
 
         // The "contact" element
         Contact contact = new Contact();

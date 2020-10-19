@@ -16,25 +16,43 @@
 
 package com.android.ims.rcs.uce.presence.pidfparser;
 
+import android.net.Uri;
+import android.telephony.ims.RcsContactPresenceTuple;
+import android.telephony.ims.RcsContactPresenceTuple.ServiceCapabilities;
 import android.telephony.ims.RcsContactUceCapability;
+import android.telephony.ims.RcsContactUceCapability.PresenceBuilder;
+import android.text.TextUtils;
+import android.util.Log;
 
+import com.android.ims.rcs.uce.presence.pidfparser.capabilities.Audio;
 import com.android.ims.rcs.uce.presence.pidfparser.capabilities.CapsConstant;
+import com.android.ims.rcs.uce.presence.pidfparser.capabilities.Duplex;
+import com.android.ims.rcs.uce.presence.pidfparser.capabilities.ServiceCaps;
+import com.android.ims.rcs.uce.presence.pidfparser.capabilities.Video;
 import com.android.ims.rcs.uce.presence.pidfparser.omapres.OmaPresConstant;
+import com.android.ims.rcs.uce.presence.pidfparser.pidf.Basic;
 import com.android.ims.rcs.uce.presence.pidfparser.pidf.PidfConstant;
 import com.android.ims.rcs.uce.presence.pidfparser.pidf.Presence;
 import com.android.ims.rcs.uce.presence.pidfparser.pidf.Tuple;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.List;
+
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
-import java.io.IOException;
-import java.io.StringWriter;
-
 /**
- * The pidf parser class
+ * Convert between the class RcsContactUceCapability and the pidf format.
  */
 public class PidfParser {
+
+    private static final String LOG_TAG = "PidfParser";
+
     /**
      * Convert the RcsContactUceCapability to the string of pidf.
      */
@@ -86,5 +104,153 @@ public class PidfParser {
             presence.addTuple(ipCallTuple);
         }
         return presence;
+    }
+
+    /**
+     * Convert the pidf data to the class RcsContactUceCapability.
+     */
+    public static RcsContactUceCapability convertToRcsContactUceCapability(String pidf) {
+        if (TextUtils.isEmpty(pidf)) {
+            return null;
+        }
+
+        Reader reader = null;
+        try {
+            // Init the instance of the parser
+            XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+            reader = new StringReader(pidf);
+            parser.setInput(reader);
+
+            // Start parsing
+            Presence presence = parsePidf(parser);
+
+            // Convert to the class RcsContactUceCapability
+            return convert(presence);
+
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    private static Presence parsePidf(XmlPullParser parser) throws IOException,
+            XmlPullParserException {
+        Presence presence = null;
+
+        int nextType = parser.next();
+        do {
+            // Find the Presence start tag
+            if (nextType == XmlPullParser.START_TAG
+                    && Presence.ELEMENT_NAME.equals(parser.getName())) {
+                presence = new Presence();
+                presence.parse(parser);
+                break;
+            }
+            nextType = parser.next();
+        } while(nextType != XmlPullParser.END_DOCUMENT);
+
+        return presence;
+    }
+
+    private static RcsContactUceCapability convert(Presence presence) {
+        if (presence == null) {
+            return null;
+        }
+
+        PresenceBuilder builder = new PresenceBuilder(Uri.parse(presence.getEntity()),
+                RcsContactUceCapability.SOURCE_TYPE_NETWORK,
+                RcsContactUceCapability.REQUEST_RESULT_FOUND);
+
+        List<Tuple> tupleList = presence.getTupleList();
+        if (tupleList == null || tupleList.isEmpty()) {
+            Log.w(LOG_TAG, "convert: tuple list is empty");
+            return builder.build();
+        }
+
+        for (Tuple tuple : tupleList) {
+            RcsContactPresenceTuple capabilityTuple = getRcsContactPresenceTuple(tuple);
+            if (capabilityTuple != null) {
+                builder.addCapabilityTuple(capabilityTuple);
+            }
+        }
+        return builder.build();
+    }
+
+    private static RcsContactPresenceTuple getRcsContactPresenceTuple(Tuple tuple) {
+        if (tuple == null) {
+            return null;
+        }
+
+        String status = RcsContactPresenceTuple.TUPLE_BASIC_STATUS_CLOSED;
+        if (Basic.OPEN.equals(tuple.getStatus().getBasic().getValue())) {
+            status = RcsContactPresenceTuple.TUPLE_BASIC_STATUS_OPEN;
+        }
+
+        String serviceId = tuple.getServiceDescription().getServiceId().getValue();
+        String serviceVersion = tuple.getServiceDescription().getVersion().getValue();
+        String description = tuple.getServiceDescription().getDescription().getValue();
+
+        RcsContactPresenceTuple.Builder builder = new RcsContactPresenceTuple.Builder(status,
+                serviceId, serviceVersion);
+
+        // Contact information
+        if (tuple.getContact() != null) {
+            String contact = tuple.getContact().getContact();
+            if (!TextUtils.isEmpty(contact)) {
+                builder.addContactUri(Uri.parse(contact));
+            }
+        }
+
+        // Service description
+        if (!TextUtils.isEmpty(description)) {
+            builder.addDescription(description);
+        }
+
+        // Service capabilities
+        ServiceCaps serviceCaps = tuple.getServiceCaps();
+        if (serviceCaps != null) {
+            List<ElementBase> serviceCapsList = serviceCaps.getElements();
+            if (serviceCapsList != null && !serviceCapsList.isEmpty()) {
+                boolean isAudioSupported = false;
+                boolean isVideoSupported = false;
+                String supportedType = null;
+                String notSupportedType = null;
+
+                for (ElementBase element : serviceCapsList) {
+                    if (element instanceof Audio) {
+                        isAudioSupported = ((Audio) element).isAudioSupported();
+                    } else if (element instanceof Video) {
+                        isVideoSupported = ((Video) element).isVideoSupported();
+                    } else if (element instanceof Duplex) {
+                        supportedType = ((Duplex) element).getSupportedType();
+                        notSupportedType = ((Duplex) element).getNotSupportedType();
+                    }
+                }
+
+                ServiceCapabilities.Builder capabilitiesBuilder
+                        = new ServiceCapabilities.Builder(isAudioSupported, isVideoSupported);
+
+                if (!TextUtils.isEmpty(supportedType)) {
+                    capabilitiesBuilder.addSupportedDuplexMode(supportedType);
+                }
+
+                if (!TextUtils.isEmpty(notSupportedType)) {
+                    capabilitiesBuilder.addUnsupportedDuplexMode(notSupportedType);
+                }
+
+                builder.addServiceCapabilities(capabilitiesBuilder.build());
+            }
+        }
+
+        return builder.build();
     }
 }
