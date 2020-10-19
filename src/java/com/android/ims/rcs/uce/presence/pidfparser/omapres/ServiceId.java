@@ -16,8 +16,13 @@
 
 package com.android.ims.rcs.uce.presence.pidfparser.omapres;
 
-import com.android.ims.rcs.uce.presence.pidfparser.ElementBase;
+import android.text.TextUtils;
 
+import com.android.ims.rcs.uce.presence.pidfparser.ElementBase;
+import com.android.internal.annotations.VisibleForTesting;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
@@ -26,8 +31,13 @@ import java.io.IOException;
  * The "service-id" element of the pidf.
  */
 public class ServiceId extends ElementBase {
+    /** The name of this element */
+    public static final String ELEMENT_NAME = "service-id";
 
-    private final String mServiceId;
+    private String mServiceId;
+
+    public ServiceId() {
+    }
 
     public ServiceId(String serviceId) {
         mServiceId = serviceId;
@@ -40,7 +50,12 @@ public class ServiceId extends ElementBase {
 
     @Override
     protected String initElementName() {
-        return "service-id";
+        return ELEMENT_NAME;
+    }
+
+    @VisibleForTesting
+    public String getServiceId() {
+        return mServiceId;
     }
 
     @Override
@@ -53,5 +68,38 @@ public class ServiceId extends ElementBase {
         serializer.startTag(namespace, elementName);
         serializer.text(mServiceId);
         serializer.endTag(namespace, elementName);
+    }
+
+    @Override
+    public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String namespace = parser.getNamespace();
+        String name = parser.getName();
+
+        if (!verifyParsingElement(namespace, name)) {
+            throw new XmlPullParserException("Incorrect element: " + namespace + ", " + name);
+        }
+
+        // Move to the next event to get the value.
+        int eventType = parser.next();
+
+        // Get the value if the event type is text.
+        if (eventType == XmlPullParser.TEXT) {
+            String serviceId = parser.getText();
+            if (!TextUtils.isEmpty(serviceId)) {
+                mServiceId = serviceId;
+            }
+        }
+
+        // Move to the end tag of the Description element.
+        while(!(eventType == XmlPullParser.END_TAG
+                && getNamespace().equals(parser.getNamespace())
+                && getElementName().equals(parser.getName()))) {
+            eventType = parser.next();
+
+            // Leave directly if the event type is the end of the document.
+            if (eventType == XmlPullParser.END_DOCUMENT) {
+                return;
+            }
+        }
     }
 }
