@@ -19,7 +19,10 @@ package com.android.ims.rcs.uce.presence.pidfparser.pidf;
 import android.annotation.StringDef;
 
 import com.android.ims.rcs.uce.presence.pidfparser.ElementBase;
+import com.android.internal.annotations.VisibleForTesting;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
@@ -30,8 +33,12 @@ import java.lang.annotation.RetentionPolicy;
  * The "basic" element of the pidf.
  */
 public class Basic extends ElementBase {
+    /** The name of this element */
+    public static final String ELEMENT_NAME = "basic";
+
     /** The value "open" of the Basic element */
     public static final String OPEN = "open";
+
     /** The value "closed" of the Basic element */
     public static final String CLOSED = "closed";
 
@@ -41,7 +48,10 @@ public class Basic extends ElementBase {
     @Retention(RetentionPolicy.SOURCE)
     public @interface BasicValue {}
 
-    private final @BasicValue String mBasic;
+    private @BasicValue String mBasic;
+
+    public Basic() {
+    }
 
     public Basic(@BasicValue String value) {
         mBasic = value;
@@ -54,7 +64,12 @@ public class Basic extends ElementBase {
 
     @Override
     protected String initElementName() {
-        return "basic";
+        return ELEMENT_NAME;
+    }
+
+    @VisibleForTesting
+    public String getValue() {
+        return mBasic;
     }
 
     @Override
@@ -67,5 +82,42 @@ public class Basic extends ElementBase {
         serializer.startTag(namespace, element);
         serializer.text(mBasic);
         serializer.endTag(namespace, element);
+    }
+
+    @Override
+    public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String namespace = parser.getNamespace();
+        String name = parser.getName();
+
+        if (!verifyParsingElement(namespace, name)) {
+            throw new XmlPullParserException("Incorrect element: " + namespace + ", " + name);
+        }
+
+        // Move to the next event to get the value.
+        int eventType = parser.next();
+
+        // Get the value if the event type is text.
+        if (eventType == XmlPullParser.TEXT) {
+            String basicValue = parser.getText();
+            if (OPEN.equals(basicValue)) {
+                mBasic = OPEN;
+            } else if (CLOSED.equals(basicValue)) {
+                mBasic = CLOSED;
+            } else {
+                mBasic = null;
+            }
+        }
+
+        // Move to the end tag of the Basic element.
+        while(!(eventType == XmlPullParser.END_TAG
+                && getNamespace().equals(parser.getNamespace())
+                && getElementName().equals(parser.getName()))) {
+            eventType = parser.next();
+
+            // Leave directly if the event type is the end of the document.
+            if (eventType == XmlPullParser.END_DOCUMENT) {
+                return;
+            }
+        }
     }
 }
