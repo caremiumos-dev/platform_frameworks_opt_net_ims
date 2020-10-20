@@ -20,6 +20,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "60d753a3_64ad4b2c",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/PidfParser.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-20T22:53:07Z",
+      "side": 1,
+      "message": "These are guaranteed in the Tuple, right? Otherwise, we may see NPEs",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 200,
+        "endChar": 87
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97c07005_ceed0043",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/PidfParser.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-20T22:53:07Z",
+      "side": 1,
+      "message": "Can there be multiple supported/not supported types?",
+      "range": {
+        "startLine": 225,
+        "startChar": 16,
+        "endLine": 226,
+        "endChar": 47
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "525ed0db_4aef63f1",
         "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/omapres/Version.java",
         "patchSetId": 4
