@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "525ed0db_4aef63f1",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/omapres/Version.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-10-20T22:47:54Z",
+      "side": 1,
+      "message": "i\u0027m seeing this code block a lot. Any chance it can be factored out into a helper method in ElementBase?",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 9
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "47389579_9b18d831",
         "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/pidf/Presence.java",
         "patchSetId": 4
