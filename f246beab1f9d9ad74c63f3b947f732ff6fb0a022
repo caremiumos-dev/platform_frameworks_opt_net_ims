@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "658f696c_b47daac6",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/PidfParser.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-21T16:49:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60d753a3_64ad4b2c",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 200,
+        "endChar": 87
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97c07005_ceed0043",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-20T22:53:07Z",
       "side": 1,
       "message": "Can there be multiple supported/not supported types?",
+      "range": {
+        "startLine": 225,
+        "startChar": 16,
+        "endLine": 226,
+        "endChar": 47
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c65c70f_3b1c73ac",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/PidfParser.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-21T16:49:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97c07005_ceed0043",
       "range": {
         "startLine": 225,
         "startChar": 16,
@@ -87,6 +135,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a6b5496_6a8e623e",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/omapres/Version.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-21T16:49:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "525ed0db_4aef63f1",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 9
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47389579_9b18d831",
@@ -100,6 +172,30 @@
       "writtenOn": "2020-10-20T22:39:36Z",
       "side": 1,
       "message": "Is there a way we can collect these XML snippets or would it be difficult to get the whole sub-snippet without parsing it?",
+      "range": {
+        "startLine": 41,
+        "startChar": 10,
+        "endLine": 41,
+        "endChar": 74
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83f8dfe0_23d686fe",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/pidf/Presence.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-21T16:49:14Z",
+      "side": 1,
+      "message": "Now all I can think of is to ask the modem team to help grab sip packets for collectiong these xml code snippets.",
+      "parentUuid": "47389579_9b18d831",
       "range": {
         "startLine": 41,
         "startChar": 10,
@@ -133,6 +229,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c568755d_f9334f3c",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/pidf/Presence.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-21T16:49:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90986600_ede3a947",
+      "range": {
+        "startLine": 170,
+        "startChar": 57,
+        "endLine": 170,
+        "endChar": 63
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54995597_3cd54aa0",
@@ -146,6 +266,30 @@
       "writtenOn": "2020-10-20T22:39:36Z",
       "side": 1,
       "message": "Note.ELEMENT_NAME?",
+      "range": {
+        "startLine": 174,
+        "startChar": 56,
+        "endLine": 174,
+        "endChar": 62
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d582e5be_c0784e3a",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/pidf/Presence.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-21T16:49:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54995597_3cd54aa0",
       "range": {
         "startLine": 174,
         "startChar": 56,
@@ -179,6 +323,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0999c328_4a5da619",
+        "filename": "tests/src/com/android/ims/rcs/uce/presence/pidfparser/PidfParserTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-21T16:49:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2db757b4_586e45d7",
+      "range": {
+        "startLine": 85,
+        "startChar": 16,
+        "endLine": 85,
+        "endChar": 55
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e4c86e7_8258e7d4",
@@ -202,6 +370,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3983eff8_4b19225d",
+        "filename": "tests/src/com/android/ims/rcs/uce/presence/pidfparser/PidfParserTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-21T16:49:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e4c86e7_8258e7d4",
+      "range": {
+        "startLine": 132,
+        "startChar": 27,
+        "endLine": 132,
+        "endChar": 32
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed7e118c_950ced74",
@@ -215,6 +407,30 @@
       "writtenOn": "2020-10-20T22:39:36Z",
       "side": 1,
       "message": "video",
+      "range": {
+        "startLine": 147,
+        "startChar": 31,
+        "endLine": 147,
+        "endChar": 36
+      },
+      "revId": "f246beab1f9d9ad74c63f3b947f732ff6fb0a022",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acd97f58_0e662c57",
+        "filename": "tests/src/com/android/ims/rcs/uce/presence/pidfparser/PidfParserTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-21T16:49:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed7e118c_950ced74",
       "range": {
         "startLine": 147,
         "startChar": 31,
