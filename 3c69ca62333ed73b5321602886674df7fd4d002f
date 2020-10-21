@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96c8cb5e_61ae8212",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-21T22:28:04Z",
+      "side": 1,
+      "message": "Clean CP from AOSP, already reviewed and submitted internally.",
+      "revId": "3c69ca62333ed73b5321602886674df7fd4d002f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
