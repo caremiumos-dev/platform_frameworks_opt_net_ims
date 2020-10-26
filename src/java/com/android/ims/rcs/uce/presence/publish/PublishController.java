@@ -95,6 +95,17 @@ public interface PublishController extends ControllerBase {
         void requestPublishFromInternal(@PublishTriggerType int type, long delay);
 
         /**
+         * Set the timer to cancel the request. This timer is to prevent taking too long for
+         * waiting the response callback.
+         */
+        void setupRequestCanceledTimer(long taskId, long delay);
+
+        /**
+         * Clear the request canceled timer. This api will be called if the request is finished.
+         */
+        void clearRequestCanceledTimer();
+
+        /**
          * Update the publish request result.
          */
         void updatePublishRequestResult(int publishState);

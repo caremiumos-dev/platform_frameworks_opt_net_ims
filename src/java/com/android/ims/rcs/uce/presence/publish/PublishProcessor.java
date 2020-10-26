@@ -17,34 +17,371 @@
 package com.android.ims.rcs.uce.presence.publish;
 
 import android.content.Context;
+import android.os.RemoteException;
+import android.telephony.ims.RcsContactUceCapability;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.ims.RcsFeatureManager;
+import com.android.ims.rcs.uce.presence.pidfparser.PidfParser;
 import com.android.ims.rcs.uce.presence.publish.PublishController.PublishControllerCallback;
 import com.android.ims.rcs.uce.presence.publish.PublishController.PublishTriggerType;
+import com.android.ims.rcs.uce.util.UceUtils;
 
+/**
+ * Send the publish request and handle the response of the publish request result.
+ */
 public class PublishProcessor {
 
-    public PublishProcessor(Context context, int subId, DeviceCapabilityInfo capabilityInfo,
-            PublishControllerCallback callback) {
+    private static final String LOG_TAG = "PublishProcessor";
+
+    // The length of time waiting for the response callback.
+    private static final long RESPONSE_CALLBACK_WAITING_TIME = 60000L;
+
+    private final int mSubId;
+    private final Context mContext;
+
+    // Manage the state of the publish processor.
+    private final PublishProcessorState mProcessorState;
+
+    // The information of the device's capabilities.
+    private final DeviceCapabilityInfo mDeviceCapabilities;
+
+    // The callback of the PublishController
+    private final PublishControllerCallback mPublishCtrlCallback;
+
+    // Receive the result callback of the publish request from ImsService
+    private PublishRequestResponse mResponseCallback;
+
+    private RcsFeatureManager mRcsFeatureManager;
+
+    private volatile boolean mIsDestroyed;
+    private final Object mLock = new Object();
+
+    PublishProcessor(Context context, int subId, DeviceCapabilityInfo capabilityInfo,
+            PublishControllerCallback publishCtrlCallback) {
+        mSubId = subId;
+        mContext = context;
+        mDeviceCapabilities = capabilityInfo;
+        mPublishCtrlCallback = publishCtrlCallback;
+        mProcessorState = new PublishProcessorState();
     }
 
-    public void onRcsConnected(RcsFeatureManager featureManager) {
-        // TODO: Implement this method
+    /**
+     * The RcsFeature has been connected to the framework.
+     */
+    void onRcsConnected(RcsFeatureManager featureManager) {
+        synchronized (mLock) {
+            logi("onRcsConnected");
+            mRcsFeatureManager = featureManager;
+        }
     }
 
-    public void onRcsDisconnected() {
-        // TODO: Implement this method
+    /**
+     * The framework has lost the binding to the RcsFeature.
+     */
+    void onRcsDisconnected() {
+        synchronized (mLock) {
+            logi("onRcsDisconnected");
+            mRcsFeatureManager = null;
+        }
     }
 
-    public void onDestroy() {
-        // TODO: Implement this method
+    /**
+     * Set the destroy flag
+     */
+    void onDestroy() {
+        logi("onDestroy");
+        mIsDestroyed = true;
     }
 
     /**
      * Execute the publish request. This method is called by the handler of the PublishController.
      * @param triggerType The type of triggering the publish request.
      */
-    public void doPublish(@PublishTriggerType int triggerType) {
-        // TODO: Implement this method
+    synchronized void doPublish(@PublishTriggerType int triggerType) {
+        if (mIsDestroyed) return;
+
+        logi("doPublish: " + triggerType);
+
+        // Check if it should reset the retry count.
+        if (isResetRetryNeeded(triggerType)) {
+            mProcessorState.resetRetryCount();
+        }
+
+        // Return if this request is not allowed to execute.
+        if (!isRequestAllowed()) {
+            return;
+        }
+
+        // Get the latest device's capabilities
+        RcsContactUceCapability deviceCapability =
+                mDeviceCapabilities.getDeviceCapabilities(mContext);
+        if (deviceCapability == null) {
+            logw("doPublish: device capability is null");
+            return;
+        }
+
+        // Convert to pidf
+        String pidfXml = PidfParser.convertToPidf(deviceCapability);
+        if (TextUtils.isEmpty(pidfXml)) {
+            logw("doPublish: pidfXml is empty");
+            return;
+        }
+
+        // Publish to the Presence server.
+        publishCapabilities(pidfXml);
     }
+
+    // Check if the giving trigger type should reset the retry count.
+    private boolean isResetRetryNeeded(@PublishTriggerType int triggerType) {
+        // Do no reset the retry count if the request is triggered by the previous failed retry.
+        if (triggerType == PublishController.PUBLISH_TRIGGER_RETRY) {
+            return false;
+        }
+        return true;
+    }
+
+    // Check if the publish request is allowed to execute.
+    private boolean isRequestAllowed() {
+        synchronized (mLock) {
+            // Check if the instance is destroyed.
+            if (mIsDestroyed) {
+                logd("isPublishAllowed: This instance is already destroyed");
+                return false;
+            }
+
+            // Check if it has provisioned.
+            if (!UceUtils.isEabProvisioned(mContext, mSubId)) {
+                logd("isPublishAllowed: NOT provisioned");
+                return false;
+            }
+
+            // Do not request publish if the IMS is not registered. When the IMS is registered
+            // afterward, a new PUBLISH request will be triggered.
+            if (!mDeviceCapabilities.isImsRegistered()) {
+                logd("isPublishAllowed: IMS is not registered");
+                return false;
+            }
+
+            // Set the pending flag if there's already a request running now.
+            if (mProcessorState.isPublishingNow()) {
+                logd("isPublishAllowed: There is already a request running now");
+                mProcessorState.setPendingRequest(true);
+                return false;
+            }
+
+            // Check if the publishing request has reached the maximum number of retries.
+            if (mProcessorState.isReachMaximumRetries()) {
+                logd("isPublishAllowed: It has reached maximum number of retries");
+                return false;
+            }
+
+            // Skip this request and re-send the request with the delay time if the publish request
+            // executes too frequently.
+            if (!mProcessorState.isCurrentTimeAllowed()) {
+                long delayTime = mProcessorState.getDelayTimeToAllowPublish();
+                mPublishCtrlCallback.requestPublishFromInternal(
+                        PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+                logd("isPublishAllowed: Current time is not allowed, resend this request");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Publish the device capabilities with the giving pidf
+    private void publishCapabilities(String pidfXml) {
+        if (mIsDestroyed) {
+            logw("publishCapabilities: This instance is already destroyed");
+            return;
+        }
+
+        RcsFeatureManager featureManager = null;
+        synchronized (mLock) {
+            featureManager = mRcsFeatureManager;
+        }
+        if (featureManager == null) {
+            logw("publishCapabilities: NOT connected");
+            return;
+        }
+
+        try {
+            // Set publishing flag
+            mProcessorState.setPublishingFlag(true);
+
+            // Generate a unique taskId to track this request.
+            long taskId = mProcessorState.generatePublishTaskId();
+            synchronized (mLock) {
+                mResponseCallback = new PublishRequestResponse(this, taskId);
+            }
+
+            logi("publishCapabilities: taskId=" + taskId);
+
+            // request publish
+            featureManager.requestPublication(pidfXml, mResponseCallback);
+
+            // Set the timer to avoid waiting too long for the response callback.
+            mPublishCtrlCallback.setupRequestCanceledTimer(taskId, RESPONSE_CALLBACK_WAITING_TIME);
+
+        } catch (RemoteException e) {
+            logw("publishCapabilities: exception=" + e.getMessage());
+            // Exception occurred, end this request.
+            setRequestEnded();
+            checkAndSendPendingRequest();
+        }
+   }
+
+    /*
+     * The request is failed with receiving the command error callback. This method is called by
+     * PublishRequestResponse#onCommandError
+     */
+    void onCommandError(int errorCode) {
+        synchronized (mLock) {
+            logd("onCommandError: error code=" + errorCode);
+
+            if (checkRequestRespIsValid()) {
+                return;
+            }
+
+            logd("onCommandError: " + mResponseCallback.toString());
+
+            if (mResponseCallback.needRetry()) {
+                // Resend the request if the error code requires to retry and
+                mProcessorState.increaseRetryCount();
+
+                long delayTime = mProcessorState.getDelayTimeToAllowPublish();
+                mPublishCtrlCallback.requestPublishFromInternal(
+                        PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+            } else {
+                // Update the publish state if the request is failed and doesn't need to retry.
+                int publishState = mResponseCallback.getPublishStateByCmdErrorCode();
+                mPublishCtrlCallback.updatePublishRequestResult(publishState);
+            }
+
+            // End this request
+            setRequestEnded();
+            checkAndSendPendingRequest();
+        }
+    }
+
+    /*
+     * Handle the network response of the publish request.
+     */
+    void onNetworkResponse(int sipCode, String reason) {
+        synchronized (mLock) {
+            logd("onNetworkResponse: code=" + sipCode + ", reason=" + reason);
+
+            if (checkRequestRespIsValid()) {
+                return;
+            }
+
+            logd("onNetworkResponse: " + mResponseCallback.toString());
+
+            if (mResponseCallback.needRetry()) {
+                // Resend the request if the sip code requires to retry.
+                mProcessorState.increaseRetryCount();
+
+                long delayTime = mProcessorState.getDelayTimeToAllowPublish();
+                mPublishCtrlCallback.requestPublishFromInternal(
+                        PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+            } else {
+                // Reset the retry count if the publish is success.
+                if (mResponseCallback.isRequestSuccess()) {
+                    mProcessorState.resetRetryCount();
+                }
+                // Update the publish state if the request doesn't need to retry.
+                int publishResult = mResponseCallback.getPublishStateByNetworkResponse();
+                mPublishCtrlCallback.updatePublishRequestResult(publishResult);
+            }
+
+            // Set this request has ended.
+            setRequestEnded();
+            checkAndSendPendingRequest();
+        }
+    }
+
+    // Check if the request response callback is valid.
+    private boolean checkRequestRespIsValid() {
+        if (!mProcessorState.isPublishingNow()) {
+            logd("checkRequestRespIsValid: the request is finished");
+            return false;
+        }
+
+        if (mResponseCallback == null) {
+            logd("checkRequestRespIsValid: response callback is null");
+            return false;
+        }
+
+        long taskId = mProcessorState.getTaskId();
+        long responseTaskId = mResponseCallback.getTaskId();
+
+        if (taskId != responseTaskId) {
+            logd("checkRequestRespIsValid: invalid taskId! current id=" + taskId
+                    + ", response id=" + responseTaskId);
+            return false;
+        }
+
+        if (mIsDestroyed) {
+            logd("checkRequestRespIsValid: is already destroyed! taskId=" + taskId);
+            return false;
+        }
+        return true;
+    }
+
+    // Cancel the publish request since it has token too long for waiting the response callback
+    void cancelPublishRequest(long taskId) {
+        logd("cancelPublishRequest: taskId=" + taskId);
+        synchronized (mLock) {
+            if (mResponseCallback == null || mResponseCallback.getTaskId() != taskId) {
+                return;
+            }
+        }
+        setRequestEnded();
+        checkAndSendPendingRequest();
+    }
+
+    private void setRequestEnded() {
+        synchronized (mLock) {
+            if (mResponseCallback != null) {
+                mResponseCallback.onDestroy();
+                mResponseCallback = null;
+            }
+            mProcessorState.setPublishingFlag(false);
+            mPublishCtrlCallback.clearRequestCanceledTimer();
+        }
+    }
+
+    private void checkAndSendPendingRequest() {
+        synchronized (mLock) {
+            if (mIsDestroyed) return;
+            if (mProcessorState.hasPendingRequest()) {
+                logd("checkAndSendPendingRequest: send pending request");
+                mProcessorState.setPublishingFlag(false);
+
+                long delayTime = mProcessorState.getDelayTimeToAllowPublish();
+                mPublishCtrlCallback.requestPublishFromInternal(
+                        PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+            }
+        }
+    }
+
+    private void logd(String log) {
+       Log.d(LOG_TAG, getLogPrefix().append(log).toString());
+    }
+
+    private void logi(String log) {
+       Log.i(LOG_TAG, getLogPrefix().append(log).toString());
+    }
+
+   private void logw(String log) {
+       Log.w(LOG_TAG, getLogPrefix().append(log).toString());
+   }
+
+   private StringBuilder getLogPrefix() {
+       StringBuilder builder = new StringBuilder("[");
+       builder.append(mSubId);
+       builder.append("] ");
+       return builder;
+   }
 }
