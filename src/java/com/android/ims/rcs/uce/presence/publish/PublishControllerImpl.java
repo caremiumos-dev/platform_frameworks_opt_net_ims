@@ -213,6 +213,18 @@ public class PublishControllerImpl implements PublishController {
                 }
 
                 @Override
+                public void setupRequestCanceledTimer(long taskId, long delay) {
+                    logd("setupRequestCanceledTimer: taskId=" + taskId + ", delay=" + delay);
+                    mPublishHandler.setRequestCanceledTimer(taskId, delay);
+                }
+
+                @Override
+                public void clearRequestCanceledTimer() {
+                    logd("clearRequestCanceledTimer");
+                    mPublishHandler.clearRequestCanceledTimer();
+                }
+
+                @Override
                 public void updatePublishRequestResult(@PublishState int publishState) {
                     logd("updatePublishRequestResult: " + publishState);
                     mPublishHandler.onPublishStateChanged(publishState);
@@ -231,6 +243,7 @@ public class PublishControllerImpl implements PublishController {
     private class PublishHandler extends Handler {
         private static final int MSG_PUBLISH_STATE_CHANGED = 1;
         private static final int MSG_REQUEST_PUBLISH = 2;
+        private static final int MSG_REQUEST_CANCELED = 3;
 
         public PublishHandler(Looper looper) {
             super(looper);
@@ -249,6 +262,11 @@ public class PublishControllerImpl implements PublishController {
                 case MSG_REQUEST_PUBLISH:
                     int type = (Integer) message.obj;
                     handleRequestPublishMessage(type);
+                    break;
+
+                case MSG_REQUEST_CANCELED:
+                    long taskId = (Long) message.obj;
+                    handleRequestCanceledMessage(taskId);
                     break;
             }
         }
@@ -297,6 +315,21 @@ public class PublishControllerImpl implements PublishController {
                 sendMessage(message);
             }
         }
+
+        public void setRequestCanceledTimer(long taskId, long delay) {
+            if (mIsDestroyedFlag) return;
+            removeMessages(MSG_REQUEST_CANCELED, (Long) taskId);
+
+            Message message = obtainMessage();
+            message.what = MSG_REQUEST_CANCELED;
+            message.obj = (Long) taskId;
+            sendMessageDelayed(message, delay);
+        }
+
+        public void clearRequestCanceledTimer() {
+            if (mIsDestroyedFlag) return;
+            removeMessages(MSG_REQUEST_CANCELED);
+        }
     }
 
     /**
@@ -325,8 +358,12 @@ public class PublishControllerImpl implements PublishController {
 
     public void handleRequestPublishMessage(@PublishTriggerType int type) {
         if (mIsDestroyedFlag) return;
-        logd("handleRequestPublishMessage");
         mPublishProcessor.doPublish(type);
+    }
+
+    public void handleRequestCanceledMessage(long taskId) {
+        if (mIsDestroyedFlag) return;
+        mPublishProcessor.cancelPublishRequest(taskId);
     }
 
     @VisibleForTesting
