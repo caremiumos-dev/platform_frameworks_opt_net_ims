@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbef3cff_aa75273f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1010681
+      },
+      "writtenOn": "2020-10-27T10:25:37Z",
+      "side": 1,
+      "message": "Overriding our lint checker since CLs for b/170729553 break policy",
+      "revId": "7a1723d1dfe05a353a627f23ba5c2913214dd5f2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
