@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fcaaf56_8ecb2ee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-28T14:27:06Z",
+      "side": 1,
+      "message": "It would be a better design for called these methods from a same handler instead of synchronizing every methods.\n\nI remove the mLock lock and these methods are called by the handler of PublishControllerImpl",
+      "parentUuid": "144c97b0_ea7b083c",
+      "revId": "e9f9b20323883e287ed0d2e1c4db965d49999181",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "228a5bc9_7e5ce539",
@@ -31,6 +49,30 @@
       "writtenOn": "2020-10-28T00:28:39Z",
       "side": 1,
       "message": "Instead of synchronized + mLock in other places, can everything use mLock?",
+      "range": {
+        "startLine": 103,
+        "startChar": 11,
+        "endLine": 103,
+        "endChar": 23
+      },
+      "revId": "e9f9b20323883e287ed0d2e1c4db965d49999181",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db2d05e0_e8c089ef",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishProcessor.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-28T14:27:06Z",
+      "side": 1,
+      "message": "Remove the synchronized and mLock becuase these methods are run in the handler now.\nIt can prevent the race condition",
+      "parentUuid": "228a5bc9_7e5ce539",
       "range": {
         "startLine": 103,
         "startChar": 11,
@@ -64,6 +106,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e0d4cff_20387728",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishProcessor.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-28T14:27:06Z",
+      "side": 1,
+      "message": "Yes, we do.\nThe DeviceCapabilityListener will listen to the EAB provisioning changes and trigger a publish request.\n\nhttps://source.corp.google.com/android/frameworks/opt/net/ims/src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java;l\u003d429?q\u003dDeviceCapabilityListener.java\n\nhttps://source.corp.google.com/android/frameworks/opt/net/ims/src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java;l\u003d519?q\u003dDeviceCapabilityListener.java",
+      "parentUuid": "c7c2bf03_a44cf7ed",
+      "range": {
+        "startLine": 156,
+        "startChar": 16,
+        "endLine": 156,
+        "endChar": 60
+      },
+      "revId": "e9f9b20323883e287ed0d2e1c4db965d49999181",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35adb116_4c20150e",
@@ -77,6 +143,30 @@
       "writtenOn": "2020-10-28T00:28:39Z",
       "side": 1,
       "message": "nit: given",
+      "range": {
+        "startLine": 194,
+        "startChar": 48,
+        "endLine": 194,
+        "endChar": 54
+      },
+      "revId": "e9f9b20323883e287ed0d2e1c4db965d49999181",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c61dd5da_4906e2c9",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishProcessor.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-28T14:27:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35adb116_4c20150e",
       "range": {
         "startLine": 194,
         "startChar": 48,
@@ -110,6 +200,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b61d26c_131f458f",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishProcessor.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-28T14:27:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f40d69e4_a8c1411a",
+      "range": {
+        "startLine": 288,
+        "startChar": 17,
+        "endLine": 288,
+        "endChar": 39
+      },
+      "revId": "e9f9b20323883e287ed0d2e1c4db965d49999181",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d37cc9d8_36033e58",
@@ -123,6 +237,30 @@
       "writtenOn": "2020-10-28T00:28:39Z",
       "side": 1,
       "message": "Can we set up an event dump here using LocalLog that keeps track of important events outside of logcat? See ImsResovler/ImsServiceController for an example. TelephonyRcsService already has dump() implemented, so you would just need to add hooks.",
+      "range": {
+        "startLine": 401,
+        "startChar": 17,
+        "endLine": 401,
+        "endChar": 21
+      },
+      "revId": "e9f9b20323883e287ed0d2e1c4db965d49999181",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd615476_22404f37",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishProcessor.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-28T14:27:06Z",
+      "side": 1,
+      "message": "I have set up an event dump using LocalLog.\nHowever, the TelephonyRcsService have not created the UceController yet.\nI will prepare another CL to create UceController from TelephonyRcsService and the PublishProcessor#dump() can be called by TelephonyRcsService",
+      "parentUuid": "d37cc9d8_36033e58",
       "range": {
         "startLine": 401,
         "startChar": 17,
