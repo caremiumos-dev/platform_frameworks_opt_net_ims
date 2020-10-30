@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ef77a46_ad4ed117",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EABProvider.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-10-30T15:41:20Z",
+      "side": 1,
+      "message": "There seems to be a PII problem, same as below",
+      "range": {
+        "startLine": 240,
+        "startChar": 40,
+        "endLine": 240,
+        "endChar": 44
+      },
+      "revId": "c8a25c0772bdc0d622e71db1c57665535b656956",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
