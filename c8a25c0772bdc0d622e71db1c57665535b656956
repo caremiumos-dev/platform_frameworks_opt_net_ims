@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb551c07_ba5eb16e",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EABProvider.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-03T01:34:46Z",
+      "side": 1,
+      "message": "Since they don\u0027t allow to put the phone number or contact name in the URI, so i think it safe. Change to print match to prevent print the PII in the feature.",
+      "parentUuid": "0ef77a46_ad4ed117",
+      "range": {
+        "startLine": 240,
+        "startChar": 40,
+        "endLine": 240,
+        "endChar": 44
+      },
+      "revId": "c8a25c0772bdc0d622e71db1c57665535b656956",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e11f892a_5029b22e",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-30T16:21:33Z",
       "side": 1,
       "message": "Don\u0027t we need to record timestamp?",
+      "range": {
+        "startLine": 353,
+        "startChar": 17,
+        "endLine": 353,
+        "endChar": 31
+      },
+      "revId": "c8a25c0772bdc0d622e71db1c57665535b656956",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fee23be7_ea8c39ee",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EABProvider.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-03T01:34:46Z",
+      "side": 1,
+      "message": "Move timestamp to common table for Presence and Option",
+      "parentUuid": "e11f892a_5029b22e",
       "range": {
         "startLine": 353,
         "startChar": 17,
