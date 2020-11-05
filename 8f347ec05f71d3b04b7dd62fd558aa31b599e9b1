@@ -22,6 +22,52 @@
       },
       "revId": "8f347ec05f71d3b04b7dd62fd558aa31b599e9b1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a742ab_124438b7",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-05T21:19:28Z",
+      "side": 1,
+      "message": "For each of these it would be helpful to provide a small description with what they are used for + how they relate to each other.",
+      "range": {
+        "startLine": 325,
+        "startChar": 17,
+        "endLine": 325,
+        "endChar": 31
+      },
+      "revId": "8f347ec05f71d3b04b7dd62fd558aa31b599e9b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4aa9380c_e07ea54b",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-05T21:19:28Z",
+      "side": 1,
+      "message": "nit: can you move these static definitions above method declarations?",
+      "range": {
+        "startLine": 325,
+        "startChar": 3,
+        "endLine": 435,
+        "endChar": 5
+      },
+      "revId": "8f347ec05f71d3b04b7dd62fd558aa31b599e9b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
