@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eb11a57_52ba4288",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-06T16:58:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a065153_1655bf87",
+      "range": {
+        "startLine": 36,
+        "startChar": 13,
+        "endLine": 36,
+        "endChar": 24
+      },
+      "revId": "8f347ec05f71d3b04b7dd62fd558aa31b599e9b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64a742ab_124438b7",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b0a18cf_1874007e",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-06T16:58:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64a742ab_124438b7",
+      "range": {
+        "startLine": 325,
+        "startChar": 17,
+        "endLine": 325,
+        "endChar": 31
+      },
+      "revId": "8f347ec05f71d3b04b7dd62fd558aa31b599e9b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4aa9380c_e07ea54b",
@@ -60,6 +108,30 @@
       "writtenOn": "2020-11-05T21:19:28Z",
       "side": 1,
       "message": "nit: can you move these static definitions above method declarations?",
+      "range": {
+        "startLine": 325,
+        "startChar": 3,
+        "endLine": 435,
+        "endChar": 5
+      },
+      "revId": "8f347ec05f71d3b04b7dd62fd558aa31b599e9b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b4cc1f1_00dfc58d",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-06T16:58:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4aa9380c_e07ea54b",
       "range": {
         "startLine": 325,
         "startChar": 3,
