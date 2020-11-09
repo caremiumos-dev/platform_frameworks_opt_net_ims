@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "413db747_bbe9be88",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-09T08:15:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "256cb82c_f2570a9d",
+      "range": {
+        "startLine": 109,
+        "startChar": 15,
+        "endLine": 109,
+        "endChar": 21
+      },
+      "revId": "de1042a68ea1abcd66f9f18e8b0261cae67e9586",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cf40dd1_db0b0b12",
@@ -37,6 +61,24 @@
       "writtenOn": "2020-11-04T14:38:16Z",
       "side": 1,
       "message": "Should this contact be stored in the EAB db if the phone number cannot find in the contact table?",
+      "revId": "de1042a68ea1abcd66f9f18e8b0261cae67e9586",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33ac1aa3_0557f952",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-09T08:15:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cf40dd1_db0b0b12",
       "revId": "de1042a68ea1abcd66f9f18e8b0261cae67e9586",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
