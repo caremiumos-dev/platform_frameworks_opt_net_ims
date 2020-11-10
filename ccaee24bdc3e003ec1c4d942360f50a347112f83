@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d341fc6b_dad3721a",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "This makes me a little nervous, as it is not really specified here that the phone numbers should be appended via a comma separated list. Perhaps instead of having the users of the provider provide the URI directly, we can have a static class, like a EabProvider.QueryHelper that allows you to do something like:\nQueryHelper.createPresenceQuery(int subId) or QueryHelper.createPresenceAndOptionsQuery(subId, List\u003cString\u003e phoneNumbers) and it would internally build the URI?",
+      "range": {
+        "startLine": 98,
+        "startChar": 38,
+        "endLine": 98,
+        "endChar": 47
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2be95dfb_4825cef4",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "Sorry, my SQL is a little rusty.. What is the intended function of this? I do not see any select commands based on the other tables, so this would return the contacts that have entries in EAB_COMMON_TABLE_NAME, EAB_OPTIONS_TABLE_NAME, and EAB_PRESENCE_TUPLE_TABLE_NAME?\n\nWould you also want to include PresenceTupleColumns.ID and OptionsColumns.ID in the select to see which contact entries also have presence/options entries?",
+      "range": {
+        "startLine": 101,
+        "startChar": 32,
+        "endLine": 101,
+        "endChar": 47
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dd4d64d_5752e74c",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "Is this the phone number the user associated with the contact in the contact db?",
+      "range": {
+        "startLine": 123,
+        "startChar": 35,
+        "endLine": 123,
+        "endChar": 47
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "451a13b8_7acc1005",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "Perhaps add a comment with {@link ContactColumns#ID} here to further clarify the relationship here?",
+      "range": {
+        "startLine": 133,
+        "startChar": 35,
+        "endLine": 133,
+        "endChar": 49
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "855179ea_f86a9ba7",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "Hm can the potential values be defined as constants here?",
+      "range": {
+        "startLine": 134,
+        "startChar": 35,
+        "endLine": 134,
+        "endChar": 44
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15447b31_77d1f9bf",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "What is REQUEST_RESULT here?",
+      "range": {
+        "startLine": 135,
+        "startChar": 35,
+        "endLine": 135,
+        "endChar": 49
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3d6dfe8_0e26d91f",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "There is also the contact_uri that the network sends with each tuple. This is different from what the user sets as the phone number in contact db and also can be different for each tuple.",
+      "range": {
+        "startLine": 141,
+        "startChar": 24,
+        "endLine": 141,
+        "endChar": 44
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea713efa_a3fa2cac",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "Perhaps add a comment with {@link EabCommonColumns#ID} here to further clarify the relationship here?",
+      "range": {
+        "startLine": 143,
+        "startChar": 35,
+        "endLine": 143,
+        "endChar": 48
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2015d5a3_1df41a27",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "Perhaps add a comment with {@link EabCommonColumns#ID} here to further clarify the relationship here?",
+      "range": {
+        "startLine": 160,
+        "startChar": 41,
+        "endLine": 160,
+        "endChar": 51
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c4e7f3a_76fb4c96",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "can you put a comment here, such as /*intentional fallthrough*/ so that readers know this was intentional?\n\nSame with below",
+      "range": {
+        "startLine": 287,
+        "startChar": 17,
+        "endLine": 287,
+        "endChar": 29
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a29ee627_e111db17",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-10T19:12:00Z",
+      "side": 1,
+      "message": "This looks a little fragile, as the JOIN_ALL_TABLES string also depends on this. Can this be included in part of JOIN_ALL_TABLES?",
+      "range": {
+        "startLine": 315,
+        "startChar": 84,
+        "endLine": 315,
+        "endChar": 91
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
