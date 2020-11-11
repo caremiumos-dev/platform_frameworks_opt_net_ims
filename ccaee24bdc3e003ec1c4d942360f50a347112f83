@@ -3,6 +3,98 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "afdf2ef1_37c6419b",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "Don\u0027t need to mention SqlLite; the provider is technically abstracting that away.\n\nI\u0027d replace this with:\nbased on both SIP options and UCE presence server data.",
+      "range": {
+        "startLine": 37,
+        "startChar": 92,
+        "endLine": 38,
+        "endChar": 30
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56646b21_f779f137",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "The docs here are good, but they should be formatted using HTML format so the API docs generate in a meaningful manner. \nRun make doc and check the offline API docs to see how it\u0027ll look.\n\nProbably something like this would work:\n\n\u003cul\u003e\n  \u003cli\u003e\u003cem\u003eCommon:\u003c/em\u003e Table for storing the query....\n  ...\n\u003c/ul\u003e",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 41,
+        "endChar": 3
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ae07261_516b6cab",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "Question:\nIs the relationship 1:1 between the contact and common table?\nOr could contact A have a common entry for both PRESENCE and OPTIONS?\n\nIf it\u0027s just 1:1, should the common data perhaps just move into the contact table?",
+      "range": {
+        "startLine": 44,
+        "startChar": 39,
+        "endLine": 44,
+        "endChar": 72
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7c77709_ff3a0350",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "Is this something you can @link to?",
+      "range": {
+        "startLine": 46,
+        "startChar": 18,
+        "endLine": 46,
+        "endChar": 47
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d341fc6b_dad3721a",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
         "patchSetId": 14
@@ -49,6 +141,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d5a03eaf_bd47b641",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "Should this just be a regular JOIN / INNER JOIN?\nGiven the schema defined eab_common looks to be associated 1:1 with eab_contact?  If there is no associated eab_common for an eab_contact, would we still want to get the eab_contact data?",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 105,
+        "endChar": 81
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b4721cf_535ebb1e",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "For the base IDs, it\u0027s typical to implement BaseColumns; ie\nimplements BaseColumns",
+      "range": {
+        "startLine": 120,
+        "startChar": 38,
+        "endLine": 120,
+        "endChar": 39
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7dd4d64d_5752e74c",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
         "patchSetId": 14
@@ -65,6 +203,52 @@
         "startChar": 35,
         "endLine": 123,
         "endChar": 47
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b30fa8e_1967e027",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "These need API docs to indicate data types, allowable values, etc.  \nThe RAW_CONTACT_ID and DATA_ID I presume are from CP2 so we need @links to the API docs there which are pertinent.",
+      "range": {
+        "startLine": 122,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 55
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60a7ee49_5957344b",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "implements BaseColumns",
+      "range": {
+        "startLine": 131,
+        "startChar": 40,
+        "endLine": 131,
+        "endChar": 41
       },
       "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
@@ -95,6 +279,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7371d92c_703e8462",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "You can @link to the ID column in the other table.\n{@link ContactColumns#_ID}",
+      "range": {
+        "startLine": 133,
+        "startChar": 35,
+        "endLine": 133,
+        "endChar": 49
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "855179ea_f86a9ba7",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
         "patchSetId": 14
@@ -106,6 +313,29 @@
       "writtenOn": "2020-11-10T19:12:00Z",
       "side": 1,
       "message": "Hm can the potential values be defined as constants here?",
+      "range": {
+        "startLine": 134,
+        "startChar": 35,
+        "endLine": 134,
+        "endChar": 44
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbc08c26_ae0fe3c4",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "Need to define datatypes and allowed values here; you eluded to CAPABILITY_MECHANISM_OPTIONS and other values above; those should be @linked and defined somewhere.",
       "range": {
         "startLine": 134,
         "startChar": 35,
@@ -164,6 +394,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd1e9758_4e5cad4a",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "implements BaseColumns",
+      "range": {
+        "startLine": 141,
+        "startChar": 44,
+        "endLine": 141,
+        "endChar": 45
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea713efa_a3fa2cac",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
         "patchSetId": 14
@@ -187,6 +440,98 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ddd7d35b_1e5096f9",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "@link to the other column this refers to.",
+      "range": {
+        "startLine": 143,
+        "startChar": 35,
+        "endLine": 143,
+        "endChar": 48
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abb2a2c1_9b5087f7",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "SUBSCRIPTION_ID",
+      "range": {
+        "startLine": 144,
+        "startChar": 35,
+        "endLine": 144,
+        "endChar": 41
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fe181dd_8d4566e8",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "These all need more docs to determine data types and allowed values.",
+      "range": {
+        "startLine": 145,
+        "startChar": 8,
+        "endLine": 153,
+        "endChar": 67
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67799910_a6fe84a5",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "implements BaseColumns",
+      "range": {
+        "startLine": 159,
+        "startChar": 38,
+        "endLine": 159,
+        "endChar": 39
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2015d5a3_1df41a27",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
         "patchSetId": 14
@@ -203,6 +548,98 @@
         "startChar": 41,
         "endLine": 160,
         "endChar": 51
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58f274d6_f97a0835",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "If the common table is sticking around, should this just be there?  It\u0027s common to both.",
+      "range": {
+        "startLine": 162,
+        "startChar": 35,
+        "endLine": 162,
+        "endChar": 41
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a5d57e3_d131d1ca",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "Again docs on allowed values.",
+      "range": {
+        "startLine": 163,
+        "startChar": 35,
+        "endLine": 164,
+        "endChar": 67
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abe73307_c6e68cd6",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "Protected?",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 13
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cbc5cbc_a7b22806",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-11T00:29:23Z",
+      "side": 1,
+      "message": "Need API docs for this to explain how to use it, etc.  Also, when would the user want to query for the sub-tables on their own?  Wouldn\u0027t the normal use-case be to query ALL_DATA_URI?",
+      "range": {
+        "startLine": 259,
+        "startChar": 4,
+        "endLine": 260,
+        "endChar": 55
       },
       "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
