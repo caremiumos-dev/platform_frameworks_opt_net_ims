@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d58d774_d7302086",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afdf2ef1_37c6419b",
+      "range": {
+        "startLine": 37,
+        "startChar": 92,
+        "endLine": 38,
+        "endChar": 30
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56646b21_f779f137",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-11-11T00:29:23Z",
       "side": 1,
       "message": "The docs here are good, but they should be formatted using HTML format so the API docs generate in a meaningful manner. \nRun make doc and check the offline API docs to see how it\u0027ll look.\n\nProbably something like this would work:\n\n\u003cul\u003e\n  \u003cli\u003e\u003cem\u003eCommon:\u003c/em\u003e Table for storing the query....\n  ...\n\u003c/ul\u003e",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 41,
+        "endChar": 3
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5de8d848_7c45fb10",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56646b21_f779f137",
       "range": {
         "startLine": 40,
         "startChar": 3,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f34c5dc_6db776e5",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Yes, it 1:1  between the contact and common table. I separate common and contact into two different tables since we will have a service that listen contact provider changed and update the contact table, the columns of common table only update when someone tries to query the capabilities and save the capabilities into the db.\n\nI think there are two options: \nOption 1: Separate to two table\n- Pros:\n  - It\u0027s helpful to reduce NULL in contact table(If no one save the capability to EAB DB).\n  - If one day common and contact table is not 1:1, we don\u0027t need to touch the DB schema.\n\n- Cons:\n  - We need to query two times first for update/insert/delete. We need to query contact and \ncommon tables first and update the capabilities.\n\nOption2: Merge them into one table\n- Pros:\n  - More easier to query/update/insert/delete\n\n- Cons:\n  - Some NULL in contact table.\n\nI\u0027m OK for both, what do you think?",
+      "parentUuid": "0ae07261_516b6cab",
+      "range": {
+        "startLine": 44,
+        "startChar": 39,
+        "endLine": 44,
+        "endChar": 72
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7c77709_ff3a0350",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
         "patchSetId": 14
@@ -83,6 +155,30 @@
       "writtenOn": "2020-11-11T00:29:23Z",
       "side": 1,
       "message": "Is this something you can @link to?",
+      "range": {
+        "startLine": 46,
+        "startChar": 18,
+        "endLine": 46,
+        "endChar": 47
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63b435c5_d34f1b84",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7c77709_ff3a0350",
       "range": {
         "startLine": 46,
         "startChar": 18,
@@ -118,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "010ec407_88fc5baf",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "\"Perhaps instead of having the users of the provider provide the URI directly, we can have a static class, like a EabProvider.QueryHelper\"\n\n-\u003e  I agree that it will be clearer for those who need to use it, but I am not sure if it is a good design from an Android provider perspective. I think Android wants to unify all of query/insert/delete/update interfaces.\n\nAnother thought:\nOr we remove \"URL_ALL_WITH_SUBID_AND_PHONE_NUMBER\" and only keep \"URL_ALL_WITH_SUBID\" and let EabController to build the where clause by itself (like \"phone_number\u003d\u002712345\u0027 AND phone_number\u003d\u00271234567\u0027\")",
+      "parentUuid": "d341fc6b_dad3721a",
+      "range": {
+        "startLine": 98,
+        "startChar": 38,
+        "endLine": 98,
+        "endChar": 47
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2be95dfb_4825cef4",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
         "patchSetId": 14
@@ -129,6 +249,30 @@
       "writtenOn": "2020-11-10T19:12:00Z",
       "side": 1,
       "message": "Sorry, my SQL is a little rusty.. What is the intended function of this? I do not see any select commands based on the other tables, so this would return the contacts that have entries in EAB_COMMON_TABLE_NAME, EAB_OPTIONS_TABLE_NAME, and EAB_PRESENCE_TUPLE_TABLE_NAME?\n\nWould you also want to include PresenceTupleColumns.ID and OptionsColumns.ID in the select to see which contact entries also have presence/options entries?",
+      "range": {
+        "startLine": 101,
+        "startChar": 32,
+        "endLine": 101,
+        "endChar": 47
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1eb7cb28_72c2b917",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Yes, it create a temporary table that join the contact, common, Presence, Options tables in this SQL, so EAB controller can query by phone number more easily, and the API will return all the columns of PresenceTuple and Options tables.",
+      "parentUuid": "2be95dfb_4825cef4",
       "range": {
         "startLine": 101,
         "startChar": 32,
@@ -162,6 +306,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a818072a_92de1cd3",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done. Move to INNER JOIN, we don\u0027t care about the cases that there is no associated eab_common for an eab_contact.",
+      "parentUuid": "d5a03eaf_bd47b641",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 105,
+        "endChar": 81
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b4721cf_535ebb1e",
@@ -175,6 +343,30 @@
       "writtenOn": "2020-11-11T00:29:23Z",
       "side": 1,
       "message": "For the base IDs, it\u0027s typical to implement BaseColumns; ie\nimplements BaseColumns",
+      "range": {
+        "startLine": 120,
+        "startChar": 38,
+        "endLine": 120,
+        "endChar": 39
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e4b8951_8f100d91",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b4721cf_535ebb1e",
       "range": {
         "startLine": 120,
         "startChar": 38,
@@ -208,6 +400,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c244a65_98991604",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Yes, all of columns are come from contact provider.",
+      "parentUuid": "7dd4d64d_5752e74c",
+      "range": {
+        "startLine": 123,
+        "startChar": 35,
+        "endLine": 123,
+        "endChar": 47
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b30fa8e_1967e027",
@@ -231,6 +447,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8495b31d_475287b4",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Yes, there are come from the contact provider.",
+      "parentUuid": "4b30fa8e_1967e027",
+      "range": {
+        "startLine": 122,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 55
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60a7ee49_5957344b",
@@ -244,6 +484,30 @@
       "writtenOn": "2020-11-11T00:29:23Z",
       "side": 1,
       "message": "implements BaseColumns",
+      "range": {
+        "startLine": 131,
+        "startChar": 40,
+        "endLine": 131,
+        "endChar": 41
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e33f481f_8963c4fc",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60a7ee49_5957344b",
       "range": {
         "startLine": 131,
         "startChar": 40,
@@ -300,6 +564,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88b62cff_70a4c448",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7371d92c_703e8462",
+      "range": {
+        "startLine": 133,
+        "startChar": 35,
+        "endLine": 133,
+        "endChar": 49
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe9114a_0b27f658",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "451a13b8_7acc1005",
+      "range": {
+        "startLine": 133,
+        "startChar": 35,
+        "endLine": 133,
+        "endChar": 49
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "855179ea_f86a9ba7",
@@ -346,6 +658,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd14f02_c3092d85",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "855179ea_f86a9ba7",
+      "range": {
+        "startLine": 134,
+        "startChar": 35,
+        "endLine": 134,
+        "endChar": 44
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "327187d2_b87722e7",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbc08c26_ae0fe3c4",
+      "range": {
+        "startLine": 134,
+        "startChar": 35,
+        "endLine": 134,
+        "endChar": 44
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15447b31_77d1f9bf",
@@ -359,6 +719,30 @@
       "writtenOn": "2020-11-10T19:12:00Z",
       "side": 1,
       "message": "What is REQUEST_RESULT here?",
+      "range": {
+        "startLine": 135,
+        "startChar": 35,
+        "endLine": 135,
+        "endChar": 49
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ad2dfcc_23b49100",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "I see RequestResult that has define in OptionsBuilder and PresenceBuilder. Should we remove this field?\n\nhttps://source.corp.google.com/android/frameworks/base/telephony/java/android/telephony/ims/RcsContactUceCapability.java;rcl\u003d21927c460385991023de7e94ec245bfae8f631eb;l\u003d105",
+      "parentUuid": "15447b31_77d1f9bf",
       "range": {
         "startLine": 135,
         "startChar": 35,
@@ -415,6 +799,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3836144f_35cebe97",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd1e9758_4e5cad4a",
+      "range": {
+        "startLine": 141,
+        "startChar": 44,
+        "endLine": 141,
+        "endChar": 45
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c7f767a_e8b2a5a6",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Sorry for missing this one, add a contact Uri columns for presence tuple. By the way, when do we use this tuple? Should it use when user query via EabController? or just store the value into db?",
+      "parentUuid": "c3d6dfe8_0e26d91f",
+      "range": {
+        "startLine": 141,
+        "startChar": 24,
+        "endLine": 141,
+        "endChar": 44
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea713efa_a3fa2cac",
@@ -461,6 +893,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0e34e5b_442a24e5",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddd7d35b_1e5096f9",
+      "range": {
+        "startLine": 143,
+        "startChar": 35,
+        "endLine": 143,
+        "endChar": 48
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eb50abe_649b36c0",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea713efa_a3fa2cac",
+      "range": {
+        "startLine": 143,
+        "startChar": 35,
+        "endLine": 143,
+        "endChar": 48
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abb2a2c1_9b5087f7",
@@ -474,6 +954,30 @@
       "writtenOn": "2020-11-11T00:29:23Z",
       "side": 1,
       "message": "SUBSCRIPTION_ID",
+      "range": {
+        "startLine": 144,
+        "startChar": 35,
+        "endLine": 144,
+        "endChar": 41
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3fd8578_5fd894f5",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abb2a2c1_9b5087f7",
       "range": {
         "startLine": 144,
         "startChar": 35,
@@ -507,6 +1011,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b32ff53_f08ef0bf",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fe181dd_8d4566e8",
+      "range": {
+        "startLine": 145,
+        "startChar": 8,
+        "endLine": 153,
+        "endChar": 67
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67799910_a6fe84a5",
@@ -520,6 +1048,30 @@
       "writtenOn": "2020-11-11T00:29:23Z",
       "side": 1,
       "message": "implements BaseColumns",
+      "range": {
+        "startLine": 159,
+        "startChar": 38,
+        "endLine": 159,
+        "endChar": 39
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54d5b887_2c1e3deb",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67799910_a6fe84a5",
       "range": {
         "startLine": 159,
         "startChar": 38,
@@ -553,6 +1105,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cecee780_acb37d39",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2015d5a3_1df41a27",
+      "range": {
+        "startLine": 160,
+        "startChar": 41,
+        "endLine": 160,
+        "endChar": 51
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58f274d6_f97a0835",
@@ -566,6 +1142,30 @@
       "writtenOn": "2020-11-11T00:29:23Z",
       "side": 1,
       "message": "If the common table is sticking around, should this just be there?  It\u0027s common to both.",
+      "range": {
+        "startLine": 162,
+        "startChar": 35,
+        "endLine": 162,
+        "endChar": 41
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67c66ed3_2701fcb8",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58f274d6_f97a0835",
       "range": {
         "startLine": 162,
         "startChar": 35,
@@ -599,6 +1199,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e199223c_02c6f206",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Currently, that doesn\u0027t have possible values. Add docs.",
+      "parentUuid": "8a5d57e3_d131d1ca",
+      "range": {
+        "startLine": 163,
+        "startChar": 35,
+        "endLine": 164,
+        "endChar": 67
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abe73307_c6e68cd6",
@@ -612,6 +1236,30 @@
       "writtenOn": "2020-11-11T00:29:23Z",
       "side": 1,
       "message": "Protected?",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 13
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fac962c9_0d628f8c",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abe73307_c6e68cd6",
       "range": {
         "startLine": 167,
         "startChar": 4,
@@ -647,6 +1295,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e843927e_6928027d",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "I think most of cases are queried based on ALL_DATA_URI but I think there are two cases that we need to query based on sub-tables:\n1. We will have a service that listen contact provider change and sync the contact information to the \"contact\" table.  Maybe need to query based on contact table only.\n\n2. Update/Insert the Presence/Options capability, we will need to query the contact table first and then update/Insert the Presence/Options table.",
+      "parentUuid": "5cbc5cbc_a7b22806",
+      "range": {
+        "startLine": 259,
+        "startChar": 4,
+        "endLine": 260,
+        "endChar": 55
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7c4e7f3a_76fb4c96",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
         "patchSetId": 14
@@ -658,6 +1330,30 @@
       "writtenOn": "2020-11-10T19:12:00Z",
       "side": 1,
       "message": "can you put a comment here, such as /*intentional fallthrough*/ so that readers know this was intentional?\n\nSame with below",
+      "range": {
+        "startLine": 287,
+        "startChar": 17,
+        "endLine": 287,
+        "endChar": 29
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11167980_4966d60a",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c4e7f3a_76fb4c96",
       "range": {
         "startLine": 287,
         "startChar": 17,
@@ -681,6 +1377,30 @@
       "writtenOn": "2020-11-10T19:12:00Z",
       "side": 1,
       "message": "This looks a little fragile, as the JOIN_ALL_TABLES string also depends on this. Can this be included in part of JOIN_ALL_TABLES?",
+      "range": {
+        "startLine": 315,
+        "startChar": 84,
+        "endLine": 315,
+        "endChar": 91
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bc3636a_314c4679",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-11T15:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a29ee627_e111db17",
       "range": {
         "startLine": 315,
         "startChar": 84,
