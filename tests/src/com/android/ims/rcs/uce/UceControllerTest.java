@@ -37,6 +37,7 @@ import com.android.ims.rcs.uce.eab.EabController;
 import com.android.ims.rcs.uce.options.OptionsController;
 import com.android.ims.rcs.uce.presence.publish.PublishController;
 import com.android.ims.rcs.uce.presence.subscribe.SubscribeController;
+import com.android.ims.rcs.uce.request.UceRequestManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +57,8 @@ public class UceControllerTest extends ImsTestBase {
     @Mock OptionsController mOptionsController;
     @Mock UceController.ControllerFactory mControllerFactory;
 
-    @Mock UceRequestTaskManager mTaskManager;
-    @Mock UceController.RequestTaskManagerFactory mTaskManagerFactory;
+    @Mock UceRequestManager mTaskManager;
+    @Mock UceController.RequestManagerFactory mTaskManagerFactory;
 
     @Mock RcsFeatureManager mFeatureManager;
     @Mock UceController.UceControllerCallback mCallback;
@@ -74,10 +75,11 @@ public class UceControllerTest extends ImsTestBase {
         doReturn(mPublishController).when(mControllerFactory).createPublishController(any(),
                 eq(mSubId), any());
         doReturn(mSubscribeController).when(mControllerFactory).createSubscribeController(any(),
-                eq(mSubId), any(), any());
+                eq(mSubId));
         doReturn(mOptionsController).when(mControllerFactory).createOptionsController(any(),
                 eq(mSubId), any(), any());
-        doReturn(mTaskManager).when(mTaskManagerFactory).createTaskManager(any(), eq(mSubId), any());
+        doReturn(mTaskManager).when(mTaskManagerFactory).createRequestManager(any(), eq(mSubId),
+                any(), any());
     }
 
     @After
@@ -136,7 +138,7 @@ public class UceControllerTest extends ImsTestBase {
         uceController.requestCapabilities(uriList, mCapabilitiesCallback);
 
         verify(mCapabilitiesCallback).onError(RcsUceAdapter.ERROR_GENERIC_FAILURE);
-        verify(mTaskManager, never()).triggerCapabilityRequestTask(any(), any(), any());
+        verify(mTaskManager, never()).sendCapabilityRequest(any(), any());
     }
 
     @Test
@@ -148,8 +150,7 @@ public class UceControllerTest extends ImsTestBase {
         List<Uri> uriList = new ArrayList<>();
         uceController.requestCapabilities(uriList, mCapabilitiesCallback);
 
-        verify(mTaskManager).triggerCapabilityRequestTask(mCallback, uriList,
-                mCapabilitiesCallback);
+        verify(mTaskManager).sendCapabilityRequest(uriList, mCapabilitiesCallback);
     }
 
     @Test
@@ -162,7 +163,7 @@ public class UceControllerTest extends ImsTestBase {
         uceController.requestAvailability(contact, mCapabilitiesCallback);
 
         verify(mCapabilitiesCallback).onError(RcsUceAdapter.ERROR_GENERIC_FAILURE);
-        verify(mTaskManager, never()).triggerAvailabilityRequestTask(any(), any(), any());
+        verify(mTaskManager, never()).sendAvailabilityRequest(any(), any());
     }
 
     @Test
@@ -174,8 +175,7 @@ public class UceControllerTest extends ImsTestBase {
         Uri contact = Uri.fromParts("sip", "test", null);
         uceController.requestAvailability(contact, mCapabilitiesCallback);
 
-        verify(mTaskManager).triggerAvailabilityRequestTask(mCallback, contact,
-                mCapabilitiesCallback);
+        verify(mTaskManager).sendAvailabilityRequest(contact, mCapabilitiesCallback);
     }
 
     @Test
