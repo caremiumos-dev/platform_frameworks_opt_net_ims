@@ -44,6 +44,7 @@ import com.android.ims.rcs.uce.presence.publish.PublishController;
 import com.android.ims.rcs.uce.presence.publish.PublishControllerImpl;
 import com.android.ims.rcs.uce.presence.subscribe.SubscribeController;
 import com.android.ims.rcs.uce.presence.subscribe.SubscribeControllerImpl;
+import com.android.ims.rcs.uce.request.UceRequestManager;
 import com.android.internal.annotations.VisibleForTesting;
 
 import java.util.List;
@@ -59,7 +60,7 @@ public class UceController {
 
     /**
      * The callback interface is called by the internal controllers to receive information from
-     * others controllers
+     * others controllers.
      */
     public interface UceControllerCallback {
         /**
@@ -109,15 +110,16 @@ public class UceController {
     }
 
     /**
-     * Used to inject RequestTaskManger instances for testing.
+     * Used to inject RequestManger instances for testing.
      */
     @VisibleForTesting
-    public interface RequestTaskManagerFactory {
-        UceRequestTaskManager createTaskManager(Context context, int subId, Looper looper);
+    public interface RequestManagerFactory {
+        UceRequestManager createRequestManager(Context context, int subId, Looper looper,
+                UceControllerCallback callback);
     }
 
-    private RequestTaskManagerFactory mTaskManagerFactory = (context, subId, looper) ->
-            new UceRequestTaskManager(context, subId, looper);
+    private RequestManagerFactory mRequestManagerFactory = (context, subId, looper, callback) ->
+            new UceRequestManager(context, subId, looper, callback);
 
     /**
      * Used to inject Controller instances for testing.
@@ -138,8 +140,7 @@ public class UceController {
         /**
          * @return an {@link SubscribeController} associated with the subscription id specified.
          */
-        SubscribeController createSubscribeController(Context context, int subId,
-                UceControllerCallback c, Looper looper);
+        SubscribeController createSubscribeController(Context context, int subId);
 
         /**
          * @return an {@link OptionsController} associated with the subscription id specified.
@@ -162,9 +163,8 @@ public class UceController {
         }
 
         @Override
-        public SubscribeController createSubscribeController(Context context, int subId,
-                UceControllerCallback c, Looper looper) {
-            return new SubscribeControllerImpl(context, subId, c, looper);
+        public SubscribeController createSubscribeController(Context context, int subId) {
+            return new SubscribeControllerImpl(context, subId);
         }
 
         @Override
@@ -184,7 +184,7 @@ public class UceController {
     private PublishController mPublishController;
     private SubscribeController mSubscribeController;
     private OptionsController mOptionsController;
-    private UceRequestTaskManager mTaskManager;
+    private UceRequestManager mRequestManager;
 
     public UceController(Context context, int subId) {
         mSubId = subId;
@@ -192,20 +192,20 @@ public class UceController {
         logi("create");
 
         initLooper();
-        initRequestTaskManager();
         initControllers();
+        initRequestManager();
     }
 
     @VisibleForTesting
     public UceController(Context context, int subId, ControllerFactory controllerFactory,
-            RequestTaskManagerFactory taskManagerFactory) {
+            RequestManagerFactory requestManagerFactory) {
         mSubId = subId;
         mContext = context;
         mControllerFactory = controllerFactory;
-        mTaskManagerFactory = taskManagerFactory;
+        mRequestManagerFactory = requestManagerFactory;
         initLooper();
-        initRequestTaskManager();
         initControllers();
+        initRequestManager();
     }
 
     private void initLooper() {
@@ -215,18 +215,19 @@ public class UceController {
         mLooper = handlerThread.getLooper();
     }
 
-    private void initRequestTaskManager() {
-        mTaskManager = mTaskManagerFactory.createTaskManager(mContext, mSubId, mLooper);
-    }
-
     private void initControllers() {
         mEabController = mControllerFactory.createEabController(mContext, mSubId, mCtrlCallback,
                 mLooper);
         mPublishController = mControllerFactory.createPublishController(mContext, mSubId, mLooper);
-        mSubscribeController = mControllerFactory.createSubscribeController(mContext, mSubId,
-                mCtrlCallback, mLooper);
+        mSubscribeController = mControllerFactory.createSubscribeController(mContext, mSubId);
         mOptionsController = mControllerFactory.createOptionsController(mContext, mSubId,
                 mCtrlCallback, mLooper);
+    }
+
+    private void initRequestManager() {
+        mRequestManager = mRequestManagerFactory.createRequestManager(mContext, mSubId, mLooper,
+                mCtrlCallback);
+        mRequestManager.setSubscribeController(mSubscribeController);
     }
 
     /**
@@ -267,7 +268,7 @@ public class UceController {
     public void onDestroy() {
         logi("onDestroy");
         mIsDestroyedFlag = true;
-        mTaskManager.onDestroy();
+        mRequestManager.onDestroy();
         mEabController.onDestroy();
         mPublishController.onDestroy();
         mSubscribeController.onDestroy();
@@ -359,7 +360,7 @@ public class UceController {
     /**
      * Request to get the contacts' capabilities. This method will retrieve the capabilities from
      * the cache If the capabilities are out of date, it will trigger another request to get the
-     * latest contact's capabilities from the carrier network.
+     * latest contact's capabilities from the network.
      */
     public void requestCapabilities(@NonNull List<Uri> uriList,
             @NonNull IRcsUceControllerCallback c) throws RemoteException {
@@ -379,18 +380,18 @@ public class UceController {
 
         // Trigger the capabilities request task
         logd("requestCapabilities: " + uriList.size());
-        mTaskManager.triggerCapabilityRequestTask(mCtrlCallback, uriList, c);
+        mRequestManager.sendCapabilityRequest(uriList, c);
     }
 
     /**
      * Request to get the contact's capabilities. It will check the availability cache first. If
      * the capability in the availability cache is expired then it will retrieve the capability
-     * from the carrier network.
+     * from the network.
      */
     public void requestAvailability(@NonNull Uri uri, @NonNull IRcsUceControllerCallback c)
-            throws RemoteException{
+            throws RemoteException {
         if (uri == null || c == null) {
-            logw("requestCapabilities: parameter is empty");
+            logw("requestAvailability: parameter is empty");
             if (c != null) {
                 c.onError(RcsUceAdapter.ERROR_GENERIC_FAILURE, 0L);
             }
@@ -405,7 +406,7 @@ public class UceController {
 
         // Trigger the availability request task
         logd("requestAvailability");
-        mTaskManager.triggerAvailabilityRequestTask(mCtrlCallback, uri, c);
+        mRequestManager.sendAvailabilityRequest(uri, c);
     }
 
     /**
@@ -421,7 +422,7 @@ public class UceController {
      * capabilities has been unpublished from the network.
      */
     public void onUnpublish() {
-        logd("onUnpublish");
+        logi("onUnpublish");
         mPublishController.onUnpublish();
     }
 
@@ -431,7 +432,7 @@ public class UceController {
      */
     public void retrieveOptionsCapabilitiesForRemote(@NonNull Uri contactUri,
             @NonNull List<String> remoteCapabilities, @NonNull IOptionsRequestCallback c) {
-        logd("retrieveOptionsCapabilitiesForRemote");
+        logi("retrieveOptionsCapabilitiesForRemote");
         mOptionsController.retrieveCapabilitiesForRemote(contactUri, remoteCapabilities, c);
     }
 
@@ -456,20 +457,17 @@ public class UceController {
         return mPublishController.getUcePublishState();
     }
 
-    @VisibleForTesting
-    public void setRequestTaskManagerFactory(RequestTaskManagerFactory factory) {
-        mTaskManagerFactory = factory;
-    }
-
-    @VisibleForTesting
-    public void setControllerFactory(ControllerFactory factory) {
-        mControllerFactory = factory;
-    }
-
+    /**
+     * Get the subscription ID.
+     */
     public int getSubId() {
         return mSubId;
     }
 
+    /**
+     * Check if the UceController is available.
+     * @return true if the RCS is connected without destroyed.
+     */
     public boolean isUnavailable() {
         if (!mIsRcsConnected || mIsDestroyedFlag) {
             return true;
