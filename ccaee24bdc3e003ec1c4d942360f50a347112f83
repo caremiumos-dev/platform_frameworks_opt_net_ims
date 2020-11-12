@@ -283,6 +283,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4685fce9_7d61a955",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-12T22:43:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1eb7cb28_72c2b917",
+      "range": {
+        "startLine": 101,
+        "startChar": 32,
+        "endLine": 101,
+        "endChar": 47
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5a03eaf_bd47b641",
