@@ -18,11 +18,10 @@ package com.android.ims.rcs.uce.presence.subscribe;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Looper;
-import android.telephony.ims.RcsUceAdapter.CapabilitiesCallback;
+import android.os.RemoteException;
+import android.telephony.ims.aidl.ISubscribeResponseCallback;
 
 import com.android.ims.RcsFeatureManager;
-import com.android.ims.rcs.uce.UceController.UceControllerCallback;
 
 import java.util.List;
 
@@ -31,46 +30,44 @@ import java.util.List;
  */
 public class SubscribeControllerImpl implements SubscribeController {
 
-    private final Context mContext;
     private final int mSubId;
-    private final UceControllerCallback mCallback;
-    private final Looper mLooper;
+    private final Context mContext;
+    private volatile boolean mIsDestroyedFlag;
+    private volatile RcsFeatureManager mRcsFeatureManager;
 
-    public SubscribeControllerImpl(Context context, int subId, UceControllerCallback c,
-            Looper looper) {
-        mContext = context;
+    public SubscribeControllerImpl(Context context, int subId) {
         mSubId = subId;
-        mCallback = c;
-        mLooper = looper;
+        mContext = context;
     }
 
     @Override
     public void onRcsConnected(RcsFeatureManager manager) {
-        // TODO: Implement this method
+        mRcsFeatureManager = manager;
     }
 
     @Override
     public void onRcsDisconnected() {
-        // TODO: Implement this method
+        mRcsFeatureManager = null;
     }
 
     @Override
     public void onDestroy() {
-        // TODO: Implement this method
+        mIsDestroyedFlag = true;
     }
 
     @Override
-    public void setUceRequestCallback(UceControllerCallback c) {
-        // TODO: Implement this method
-    }
+    public void requestCapabilities(List<Uri> contactUris, ISubscribeResponseCallback c)
+            throws RemoteException {
 
-    @Override
-    public void requestCapabilities(List<Uri> contactUris, CapabilitiesCallback c) {
-        // TODO: Implement this method
-    }
+        if (mIsDestroyedFlag) {
+            throw new RemoteException("Subscribe controller is destroyed");
+        }
 
-    @Override
-    public void requestAvailability(Uri uri, CapabilitiesCallback c) {
-        // TODO: Implement this method
+        RcsFeatureManager featureManager = mRcsFeatureManager;
+        if (featureManager == null) {
+            throw new RemoteException("RCS is disconnected");
+        }
+
+        featureManager.requestCapabilities(contactUris, c);
     }
 }
