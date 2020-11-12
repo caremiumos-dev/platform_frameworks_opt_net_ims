@@ -56,8 +56,8 @@ public class UceControllerTest extends ImsTestBase {
     @Mock OptionsController mOptionsController;
     @Mock UceController.ControllerFactory mControllerFactory;
 
-    @Mock UceRequestTaskManager mTaskManager;
-    @Mock UceController.RequestTaskManagerFactory mTaskManagerFactory;
+    @Mock UceRequestManager mTaskManager;
+    @Mock UceController.RequestManagerFactory mTaskManagerFactory;
 
     @Mock RcsFeatureManager mFeatureManager;
     @Mock UceController.UceControllerCallback mCallback;
