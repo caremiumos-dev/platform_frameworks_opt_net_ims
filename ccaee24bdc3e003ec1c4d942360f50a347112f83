@@ -753,6 +753,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7350ffa_1c88b048",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-12T22:36:18Z",
+      "side": 1,
+      "message": "No this makes sense. Thank you for linking the potential values in the comment",
+      "parentUuid": "7ad2dfcc_23b49100",
+      "range": {
+        "startLine": 135,
+        "startChar": 35,
+        "endLine": 135,
+        "endChar": 49
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3d6dfe8_0e26d91f",
@@ -837,6 +861,30 @@
       "side": 1,
       "message": "Sorry for missing this one, add a contact Uri columns for presence tuple. By the way, when do we use this tuple? Should it use when user query via EabController? or just store the value into db?",
       "parentUuid": "c3d6dfe8_0e26d91f",
+      "range": {
+        "startLine": 141,
+        "startChar": 24,
+        "endLine": 141,
+        "endChar": 44
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a88cd67_2270d79d",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-12T22:36:18Z",
+      "side": 1,
+      "message": "This contact uri should only be present if it differs from the contact\u0027s uri and should be populated as part of RcsContactPresenceTupl.Builder#addContactUri if it is sent from the network. We do not need to use it when matching.",
+      "parentUuid": "6c7f767a_e8b2a5a6",
       "range": {
         "startLine": 141,
         "startChar": 24,
