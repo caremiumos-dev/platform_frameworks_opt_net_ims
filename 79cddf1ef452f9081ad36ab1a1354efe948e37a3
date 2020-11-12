@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de9ca9b0_529cd9a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-12T23:15:34Z",
+      "side": 1,
+      "message": "Are you planning on submitting this as one topic? if so, it may be better to squish all of the dependent frameworks/opt/net/ims commits into one CL, that way it is easier to review as one change ",
+      "revId": "79cddf1ef452f9081ad36ab1a1354efe948e37a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6642014e_1d2ccc6b",
