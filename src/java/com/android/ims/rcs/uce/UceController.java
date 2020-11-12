@@ -59,7 +59,7 @@ public class UceController {
 
     /**
      * The callback interface is called by the internal controllers to receive information from
-     * others controllers
+     * others controllers.
      */
     public interface UceControllerCallback {
         /**
@@ -113,11 +113,12 @@ public class UceController {
      */
     @VisibleForTesting
     public interface RequestTaskManagerFactory {
-        UceRequestTaskManager createTaskManager(Context context, int subId, Looper looper);
+        UceRequestManager createTaskManager(Context context, int subId, Looper looper,
+                UceControllerCallback callback);
     }
 
-    private RequestTaskManagerFactory mTaskManagerFactory = (context, subId, looper) ->
-            new UceRequestTaskManager(context, subId, looper);
+    private RequestTaskManagerFactory mTaskManagerFactory = (context, subId, looper, callback) ->
+            new UceRequestManager(context, subId, looper, callback);
 
     /**
      * Used to inject Controller instances for testing.
@@ -138,8 +139,7 @@ public class UceController {
         /**
          * @return an {@link SubscribeController} associated with the subscription id specified.
          */
-        SubscribeController createSubscribeController(Context context, int subId,
-                UceControllerCallback c, Looper looper);
+        SubscribeController createSubscribeController(Context context, int subId);
 
         /**
          * @return an {@link OptionsController} associated with the subscription id specified.
@@ -162,9 +162,8 @@ public class UceController {
         }
 
         @Override
-        public SubscribeController createSubscribeController(Context context, int subId,
-                UceControllerCallback c, Looper looper) {
-            return new SubscribeControllerImpl(context, subId, c, looper);
+        public SubscribeController createSubscribeController(Context context, int subId) {
+            return new SubscribeControllerImpl(context, subId);
         }
 
         @Override
@@ -184,7 +183,7 @@ public class UceController {
     private PublishController mPublishController;
     private SubscribeController mSubscribeController;
     private OptionsController mOptionsController;
-    private UceRequestTaskManager mTaskManager;
+    private UceRequestManager mTaskManager;
 
     public UceController(Context context, int subId) {
         mSubId = subId;
@@ -192,8 +191,8 @@ public class UceController {
         logi("create");
 
         initLooper();
-        initRequestTaskManager();
         initControllers();
+        initRequestTaskManager();
     }
 
     @VisibleForTesting
@@ -204,8 +203,8 @@ public class UceController {
         mControllerFactory = controllerFactory;
         mTaskManagerFactory = taskManagerFactory;
         initLooper();
-        initRequestTaskManager();
         initControllers();
+        initRequestTaskManager();
     }
 
     private void initLooper() {
@@ -215,18 +214,19 @@ public class UceController {
         mLooper = handlerThread.getLooper();
     }
 
-    private void initRequestTaskManager() {
-        mTaskManager = mTaskManagerFactory.createTaskManager(mContext, mSubId, mLooper);
-    }
-
     private void initControllers() {
         mEabController = mControllerFactory.createEabController(mContext, mSubId, mCtrlCallback,
                 mLooper);
         mPublishController = mControllerFactory.createPublishController(mContext, mSubId, mLooper);
-        mSubscribeController = mControllerFactory.createSubscribeController(mContext, mSubId,
-                mCtrlCallback, mLooper);
+        mSubscribeController = mControllerFactory.createSubscribeController(mContext, mSubId);
         mOptionsController = mControllerFactory.createOptionsController(mContext, mSubId,
                 mCtrlCallback, mLooper);
+    }
+
+    private void initRequestTaskManager() {
+        mTaskManager = mTaskManagerFactory.createTaskManager(mContext, mSubId, mLooper,
+                mCtrlCallback);
+        mTaskManager.setSubscribeController(mSubscribeController);
     }
 
     /**
@@ -379,7 +379,7 @@ public class UceController {
 
         // Trigger the capabilities request task
         logd("requestCapabilities: " + uriList.size());
-        mTaskManager.triggerCapabilityRequestTask(mCtrlCallback, uriList, c);
+        mTaskManager.sendCapabilityRequest(uriList, c);
     }
 
     /**
@@ -388,7 +388,7 @@ public class UceController {
      * from the carrier network.
      */
     public void requestAvailability(@NonNull Uri uri, @NonNull IRcsUceControllerCallback c)
-            throws RemoteException{
+            throws RemoteException {
         if (uri == null || c == null) {
             logw("requestCapabilities: parameter is empty");
             if (c != null) {
@@ -405,7 +405,7 @@ public class UceController {
 
         // Trigger the availability request task
         logd("requestAvailability");
-        mTaskManager.triggerAvailabilityRequestTask(mCtrlCallback, uri, c);
+        mTaskManager.sendAvailabilityRequest(uri, c);
     }
 
     /**

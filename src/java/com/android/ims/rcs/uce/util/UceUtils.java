@@ -61,4 +61,36 @@ public class UceUtils {
         }
         return isProvisioned;
     }
+
+    /**
+     * Check if Presence is supported by the carrier.
+     */
+    public static boolean isPresenceSupported(Context context, int subId) {
+        CarrierConfigManager configManager =
+                (CarrierConfigManager) context.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configManager == null) {
+            return false;
+        }
+        PersistableBundle config = configManager.getConfigForSubId(subId);
+        if (config == null) {
+            return false;
+        }
+        return config.getBoolean(CarrierConfigManager.KEY_USE_RCS_PRESENCE_BOOL);
+    }
+
+    /**
+     * Check if SIP OPTIONS is supported by the carrier.
+     */
+    public static boolean isSipOptionsSupported(Context context, int subId) {
+        CarrierConfigManager configManager =
+                (CarrierConfigManager) context.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configManager == null) {
+            return false;
+        }
+        PersistableBundle config = configManager.getConfigForSubId(subId);
+        if (config == null) {
+            return false;
+        }
+        return config.getBoolean(CarrierConfigManager.KEY_USE_RCS_SIP_OPTIONS_BOOL);
+    }
 }
