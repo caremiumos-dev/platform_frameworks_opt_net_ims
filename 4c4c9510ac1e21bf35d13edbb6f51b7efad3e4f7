@@ -1,0 +1,56 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000006127406",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1498479?revision\u003d3",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "f7df7dac_e3caba2b",
+        "filename": "src/java/com/android/ims/rcs/uce/util/UceUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-11-13T09:09:37Z",
+      "side": 1,
+      "message": "Prefer to use context.getSystemService(CarrierConfigManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 70,
+        "startChar": 16,
+        "endLine": 70,
+        "endChar": 64
+      },
+      "revId": "4c4c9510ac1e21bf35d13edbb6f51b7efad3e4f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000006127406",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1498479?revision\u003d3",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "fdcce7d7_f5076ef8",
+        "filename": "src/java/com/android/ims/rcs/uce/util/UceUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-11-13T09:09:37Z",
+      "side": 1,
+      "message": "Prefer to use context.getSystemService(CarrierConfigManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 86,
+        "startChar": 16,
+        "endLine": 86,
+        "endChar": 64
+      },
+      "revId": "4c4c9510ac1e21bf35d13edbb6f51b7efad3e4f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
