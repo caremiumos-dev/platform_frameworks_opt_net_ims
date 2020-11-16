@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "187d2b0c_3bd20163",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-16T08:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de9ca9b0_529cd9a3",
+      "revId": "79cddf1ef452f9081ad36ab1a1354efe948e37a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6642014e_1d2ccc6b",
@@ -31,6 +49,30 @@
       "writtenOn": "2020-11-12T22:36:18Z",
       "side": 1,
       "message": "Maybe it would also be more clear if you added a link to the class this corresponds to, for example: \"This is used to generate a instance of {@link RcsContactPresenceTuple}. See that class for more information on each of these parameters\".\n\nSame with options columns docs below",
+      "range": {
+        "startLine": 189,
+        "startChar": 20,
+        "endLine": 189,
+        "endChar": 27
+      },
+      "revId": "79cddf1ef452f9081ad36ab1a1354efe948e37a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6eb63e2_155be99a",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-16T08:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6642014e_1d2ccc6b",
       "range": {
         "startLine": 189,
         "startChar": 20,
