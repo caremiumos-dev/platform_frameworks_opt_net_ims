@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18372ea0_c14c6582",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "Does the availability cache need to be stored separately? The only difference is the cache expiration time. Can we perform a DB query in both the capability and availability check case and check the db insert timestamp against the availability or capability expiration time?",
+      "range": {
+        "startLine": 68,
+        "startChar": 18,
+        "endLine": 68,
+        "endChar": 35
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77b3221b_0e4fe8d8",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "Can we instead fill in all numbers with an error code result of not available?",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 81
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1301f37c_eeb1e28a",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "Should this be the size of numbers?",
+      "range": {
+        "startLine": 120,
+        "startChar": 83,
+        "endLine": 120,
+        "endChar": 84
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8407f28f_20608027",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "Collections.emptyList",
+      "range": {
+        "startLine": 126,
+        "startChar": 45,
+        "endLine": 126,
+        "endChar": 62
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6058911_88cb33a3",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "can we just shortcut return here and remove this giant else block?",
+      "range": {
+        "startLine": 127,
+        "startChar": 8,
+        "endLine": 127,
+        "endChar": 9
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfe101cb_0e5f36d1",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "This should be the original uri associated with the request from the app. Also is this a tel: URI in its current form?",
+      "range": {
+        "startLine": 271,
+        "startChar": 20,
+        "endLine": 271,
+        "endChar": 42
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fdab8e7_6596b7a5",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "These optional attributes should only be added if they are present, which may not be the case for all tuples. Instead of entering them as empty placeholders, just do not add them.",
+      "range": {
+        "startLine": 337,
+        "startChar": 44,
+        "endLine": 337,
+        "endChar": 51
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19e5f3c4_1a76c005",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "This should be contactUri, right?",
+      "range": {
+        "startLine": 339,
+        "startChar": 39,
+        "endLine": 339,
+        "endChar": 61
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12fad57d_83bcba00",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "Hm technically, this is optional in the presence tuple.. are we populating it with the timestamp of the device when this is not populated from the network?",
+      "range": {
+        "startLine": 351,
+        "startChar": 46,
+        "endLine": 351,
+        "endChar": 89
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cf04e1b_64dba72b",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "There are actually a bunch of different forms of this cache depending on things like if the contact is an RCS contact or not. Can we also include these?",
+      "range": {
+        "startLine": 392,
+        "startChar": 17,
+        "endLine": 392,
+        "endChar": 45
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5bdc7c8_7147c3a0",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-18T21:15:07Z",
+      "side": 1,
+      "message": "my assumption was that that the contact table would map to the contact provider. is this not the case? I do not see any query to the contact database.. Is there any value in a separate contact table?",
+      "range": {
+        "startLine": 426,
+        "startChar": 16,
+        "endLine": 426,
+        "endChar": 32
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
