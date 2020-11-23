@@ -1781,14 +1781,18 @@ public class ImsCall implements ICall {
             }
             // Make a copy of the current ImsCallProfile and modify it to enable RTT
             Parcel p = Parcel.obtain();
-            mCallProfile.writeToParcel(p, 0);
-            p.setDataPosition(0);
-            ImsCallProfile requestedProfile = new ImsCallProfile(p);
-            requestedProfile.mMediaProfile.setRttMode(rttOn
-                    ? ImsStreamMediaProfile.RTT_MODE_FULL
-                    : ImsStreamMediaProfile.RTT_MODE_DISABLED);
+            try {
+                mCallProfile.writeToParcel(p, 0);
+                p.setDataPosition(0);
+                ImsCallProfile requestedProfile = new ImsCallProfile(p);
+                requestedProfile.mMediaProfile.setRttMode(rttOn
+                        ? ImsStreamMediaProfile.RTT_MODE_FULL
+                        : ImsStreamMediaProfile.RTT_MODE_DISABLED);
 
-            mSession.sendRttModifyRequest(requestedProfile);
+                mSession.sendRttModifyRequest(requestedProfile);
+            } finally {
+                p.recycle();
+            }
         }
     }
 
