@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dd302b8_602bc428",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "Done. Add the inserted timestamp and expired timestamp in EabProvider and change the isExpired() logic.",
+      "parentUuid": "18372ea0_c14c6582",
+      "range": {
+        "startLine": 68,
+        "startChar": 18,
+        "endLine": 68,
+        "endChar": 35
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77b3221b_0e4fe8d8",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-11-18T21:15:07Z",
       "side": 1,
       "message": "Can we instead fill in all numbers with an error code result of not available?",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 81
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ece6185d_6120861a",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "Done. Add a field in EabCapabilityResult to store the error code.",
+      "parentUuid": "77b3221b_0e4fe8d8",
       "range": {
         "startLine": 102,
         "startChar": 12,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19d58952_82f0ddc3",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "1301f37c_eeb1e28a",
+      "range": {
+        "startLine": 120,
+        "startChar": 83,
+        "endLine": 120,
+        "endChar": 84
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8407f28f_20608027",
@@ -83,6 +155,30 @@
       "writtenOn": "2020-11-18T21:15:07Z",
       "side": 1,
       "message": "Collections.emptyList",
+      "range": {
+        "startLine": 126,
+        "startChar": 45,
+        "endLine": 126,
+        "endChar": 62
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b5f366c_5efd1f77",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "8407f28f_20608027",
       "range": {
         "startLine": 126,
         "startChar": 45,
@@ -116,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43f7bbd5_81f10480",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6058911_88cb33a3",
+      "range": {
+        "startLine": 127,
+        "startChar": 8,
+        "endLine": 127,
+        "endChar": 9
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cfe101cb_0e5f36d1",
@@ -129,6 +249,30 @@
       "writtenOn": "2020-11-18T21:15:07Z",
       "side": 1,
       "message": "This should be the original uri associated with the request from the app. Also is this a tel: URI in its current form?",
+      "range": {
+        "startLine": 271,
+        "startChar": 20,
+        "endLine": 271,
+        "endChar": 42
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a344ae3_946e3e24",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfe101cb_0e5f36d1",
       "range": {
         "startLine": 271,
         "startChar": 20,
@@ -162,6 +306,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df95a8d7_a9e4e615",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "The database will store them with null if the attributes doesn\u0027t be set and we will put null in the builder.",
+      "parentUuid": "1fdab8e7_6596b7a5",
+      "range": {
+        "startLine": 337,
+        "startChar": 44,
+        "endLine": 337,
+        "endChar": 51
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19e5f3c4_1a76c005",
@@ -175,6 +343,30 @@
       "writtenOn": "2020-11-18T21:15:07Z",
       "side": 1,
       "message": "This should be contactUri, right?",
+      "range": {
+        "startLine": 339,
+        "startChar": 39,
+        "endLine": 339,
+        "endChar": 61
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "206ecbb5_94d210de",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19e5f3c4_1a76c005",
       "range": {
         "startLine": 339,
         "startChar": 39,
@@ -210,6 +402,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4479413b_44f22a9b",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "Add the inserted timestamp and expired timestamp in EabProvider and change the isExpired() logic like that\n1. Check that expired timestamp is smaller than current timestamp, if expired timestamp is null, skip the check.\n2. Check that inserted timestamp add ProvisioningManager.KEY_RCS_CAPABILITIES_CACHE_EXPIRATION_SEC is smaller than current timestamp.",
+      "parentUuid": "12fad57d_83bcba00",
+      "range": {
+        "startLine": 351,
+        "startChar": 46,
+        "endLine": 351,
+        "endChar": 89
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9cf04e1b_64dba72b",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
         "patchSetId": 17
@@ -233,6 +449,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0eb57bef_cfe3a39f",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "Does it have more details? What the forms for RCS contact and non-RCS contact? Should we only allow user to get/set the capability of RCS contact and skip all of action about non-RCS contact?",
+      "parentUuid": "9cf04e1b_64dba72b",
+      "range": {
+        "startLine": 392,
+        "startChar": 17,
+        "endLine": 392,
+        "endChar": 45
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5bdc7c8_7147c3a0",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
         "patchSetId": 17
@@ -244,6 +484,30 @@
       "writtenOn": "2020-11-18T21:15:07Z",
       "side": 1,
       "message": "my assumption was that that the contact table would map to the contact provider. is this not the case? I do not see any query to the contact database.. Is there any value in a separate contact table?",
+      "range": {
+        "startLine": 426,
+        "startChar": 16,
+        "endLine": 426,
+        "endChar": 32
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bd73d3c_3e09db51",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-24T15:55:00Z",
+      "side": 1,
+      "message": "I think we will have another service to listen contact provider change and sync the contact to Eab provider. \n\nI think most of cases, the contact that from saveCapabilities() are in contact provider. Should we care about the cases that someone try to save the capability for the contact that not in the contact provider or just we ignore the cases?",
+      "parentUuid": "a5bdc7c8_7147c3a0",
       "range": {
         "startLine": 426,
         "startChar": 16,
