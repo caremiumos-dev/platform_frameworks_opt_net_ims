@@ -426,6 +426,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8aee152_ce76ba54",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-24T20:34:59Z",
+      "side": 1,
+      "message": "I am a little confused about the expired timestamp... unless i am mistaken, the timestamp from the tuple is the timestamp that the network request got the capability. So expired in this case would be tuple timestamp + cache expiration time.\n\nIt should be fine to have one column for timestamp and when storing it in the db, use the current device time if the network did not provide one.",
+      "parentUuid": "4479413b_44f22a9b",
+      "range": {
+        "startLine": 351,
+        "startChar": 46,
+        "endLine": 351,
+        "endChar": 89
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9cf04e1b_64dba72b",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
         "patchSetId": 17
@@ -473,6 +497,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fb79aca_c7dcebd6",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-24T20:34:59Z",
+      "side": 1,
+      "message": "For some carriers, 404 NOT FOUND indicates that the contact is non-rcs/EAB capable. In these instances, they are considered non-rcs. Non-rcs contacts should also be stored in the db with request result \u003d REQUEST_RESULT_NOT_FOUND and you should be able to use that to figure out if you should use normal capability/availability cache timer or extended capability cache timer.",
+      "parentUuid": "0eb57bef_cfe3a39f",
+      "range": {
+        "startLine": 392,
+        "startChar": 17,
+        "endLine": 392,
+        "endChar": 45
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5bdc7c8_7147c3a0",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
         "patchSetId": 17
@@ -508,6 +556,30 @@
       "side": 1,
       "message": "I think we will have another service to listen contact provider change and sync the contact to Eab provider. \n\nI think most of cases, the contact that from saveCapabilities() are in contact provider. Should we care about the cases that someone try to save the capability for the contact that not in the contact provider or just we ignore the cases?",
       "parentUuid": "a5bdc7c8_7147c3a0",
+      "range": {
+        "startLine": 426,
+        "startChar": 16,
+        "endLine": 426,
+        "endChar": 32
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f48ef2aa_1bf1766d",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-24T20:34:59Z",
+      "side": 1,
+      "message": "No need to only save contacts in contacts db, however there is unfortunately a little bit of a backwards compatibility problem we need to solve. When bulk capability is exchanged, we will need to listen to changes in the contacts db and then internally trigger some contacts exchanges to happen if our cache has expired. we will also have to set up an alarm to trigger a bulk capability cache update when one of the contact\u0027s cached values for capability expire.\n\nThis doesn\u0027t have to be solved in this CL though, let\u0027s leave that for a follow up CL.",
+      "parentUuid": "3bd73d3c_3e09db51",
       "range": {
         "startLine": 426,
         "startChar": 16,
