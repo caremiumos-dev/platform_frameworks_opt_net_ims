@@ -142,6 +142,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ac3d743_7de5642a",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-25T21:04:14Z",
+      "side": 1,
+      "message": "I can see there are benefits both ways.  I\u0027ll defer to your opinion on this then.  Keeping them separate seems reasonable given what you\u0027d said.",
+      "parentUuid": "9f34c5dc_6db776e5",
+      "range": {
+        "startLine": 44,
+        "startChar": 39,
+        "endLine": 44,
+        "endChar": 72
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7c77709_ff3a0350",
@@ -1403,6 +1427,30 @@
       "side": 1,
       "message": "I think most of cases are queried based on ALL_DATA_URI but I think there are two cases that we need to query based on sub-tables:\n1. We will have a service that listen contact provider change and sync the contact information to the \"contact\" table.  Maybe need to query based on contact table only.\n\n2. Update/Insert the Presence/Options capability, we will need to query the contact table first and then update/Insert the Presence/Options table.",
       "parentUuid": "5cbc5cbc_a7b22806",
+      "range": {
+        "startLine": 259,
+        "startChar": 4,
+        "endLine": 260,
+        "endChar": 55
+      },
+      "revId": "ccaee24bdc3e003ec1c4d942360f50a347112f83",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "581b7072_f1b3bf95",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-25T21:04:14Z",
+      "side": 1,
+      "message": "Okay ,that makes sense. If there is a need to access the tables separately then it makes sense.",
+      "parentUuid": "e843927e_6928027d",
       "range": {
         "startLine": 259,
         "startChar": 4,
