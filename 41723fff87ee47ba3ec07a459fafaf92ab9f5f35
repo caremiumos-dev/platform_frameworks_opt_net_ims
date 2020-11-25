@@ -22,6 +22,30 @@
       },
       "revId": "41723fff87ee47ba3ec07a459fafaf92ab9f5f35",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6eb04647_ddb398a9",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-25T19:28:03Z",
+      "side": 1,
+      "message": "I thought the logic will like that:\n\nThe contact table is empty at the beginning and then when the boot is completed, we will start a service which is responsible for synchronizing the content of CP2 to the contact table, and listens to the notification of CP2 to update the contact table, so the contents of contact table are all coming from CP2. Only when someone calls saveCapabilities() and the contact is not in CP2, EabContollerImpl will update the contact table, otherwise the service is responsible for updating the contact table. Does it make sense?\n\n\nI think NAME is not necessary.",
+      "parentUuid": "d1151fb3_8adda99f",
+      "range": {
+        "startLine": 127,
+        "startChar": 24,
+        "endLine": 127,
+        "endChar": 38
+      },
+      "revId": "41723fff87ee47ba3ec07a459fafaf92ab9f5f35",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
