@@ -448,6 +448,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87bb7274_b5f817b9",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-25T08:48:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8aee152_ce76ba54",
+      "range": {
+        "startLine": 351,
+        "startChar": 46,
+        "endLine": 351,
+        "endChar": 89
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9cf04e1b_64dba72b",
@@ -509,6 +533,30 @@
       "side": 1,
       "message": "For some carriers, 404 NOT FOUND indicates that the contact is non-rcs/EAB capable. In these instances, they are considered non-rcs. Non-rcs contacts should also be stored in the db with request result \u003d REQUEST_RESULT_NOT_FOUND and you should be able to use that to figure out if you should use normal capability/availability cache timer or extended capability cache timer.",
       "parentUuid": "0eb57bef_cfe3a39f",
+      "range": {
+        "startLine": 392,
+        "startChar": 17,
+        "endLine": 392,
+        "endChar": 45
+      },
+      "revId": "67bd18b09095dfe8a1a79b755d5ab60ca628e96e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46592514_fe7c157f",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-25T08:48:31Z",
+      "side": 1,
+      "message": "Ack. Trace in b/174196620",
+      "parentUuid": "2fb79aca_c7dcebd6",
       "range": {
         "startLine": 392,
         "startChar": 17,

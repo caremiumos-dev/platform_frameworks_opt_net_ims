@@ -22,6 +22,30 @@
       },
       "revId": "ed2e0d2e77d8703f2ae7b4076516c954360ca887",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80eb1511_bcc3bc41",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabCapabilityResult.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-11-25T08:48:31Z",
+      "side": 1,
+      "message": "James has checked this part and he will update his local code.",
+      "parentUuid": "cc9403a7_46009dbc",
+      "range": {
+        "startLine": 31,
+        "startChar": 13,
+        "endLine": 31,
+        "endChar": 32
+      },
+      "revId": "ed2e0d2e77d8703f2ae7b4076516c954360ca887",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
