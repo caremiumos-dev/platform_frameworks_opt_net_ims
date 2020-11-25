@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5449045_302cc99e",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-25T17:57:28Z",
+      "side": 1,
+      "message": "Shouldn\u0027t REQUEST_TIMESTAMP always be populated here? we need the time that the capabilities were saved to the EAB DB",
+      "range": {
+        "startLine": 268,
+        "startChar": 8,
+        "endLine": 272,
+        "endChar": 9
+      },
+      "revId": "01beebf38a84769978d61631ddb3f901afeba494",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
