@@ -22,6 +22,52 @@
       },
       "revId": "01beebf38a84769978d61631ddb3f901afeba494",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "556f338c_e5b8d15f",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-25T18:19:30Z",
+      "side": 1,
+      "message": "Can we only add capabilities when they are available vs adding null values?",
+      "range": {
+        "startLine": 316,
+        "startChar": 8,
+        "endLine": 323,
+        "endChar": 33
+      },
+      "revId": "01beebf38a84769978d61631ddb3f901afeba494",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "755943d9_c8c60d1f",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-25T18:19:30Z",
+      "side": 1,
+      "message": "Do we want to add the current time if the timestamp is null here?",
+      "range": {
+        "startLine": 474,
+        "startChar": 20,
+        "endLine": 474,
+        "endChar": 41
+      },
+      "revId": "01beebf38a84769978d61631ddb3f901afeba494",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
