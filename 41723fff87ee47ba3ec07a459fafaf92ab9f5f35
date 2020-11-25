@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1151fb3_8adda99f",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-25T18:49:06Z",
+      "side": 1,
+      "message": "I only see PHONE_NUMBER and ID being used here right now in EabControllerImpl. Will this other info be filled in as a separate CL? Also, PHONE_NUMBER docs state that it is the number as presented in CP2, however the impl fills this number as the number used in the EAB request. Can you change the docs to reflect that the PHONE_NUMBER is the number used in the request?\n\nAlso, we may want to fill in RAW_CONTACT_ID \u0026 DATA_ID from CP2 if there is a match found in the contacts DB, however it may be empty in the case that there is no match in the contacts.\n\nDo we need a NAME field at all?",
+      "range": {
+        "startLine": 127,
+        "startChar": 24,
+        "endLine": 127,
+        "endChar": 38
+      },
+      "revId": "41723fff87ee47ba3ec07a459fafaf92ab9f5f35",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
