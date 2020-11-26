@@ -526,7 +526,7 @@ public class RcsFeatureManager implements FeatureUpdates {
         if (capabilityType == CAPABILITY_OPTIONS) {
             return b.getBoolean(CarrierConfigManager.KEY_USE_RCS_SIP_OPTIONS_BOOL, false);
         } else if (capabilityType == CAPABILITY_PRESENCE) {
-            return b.getBoolean(CarrierConfigManager.KEY_USE_RCS_PRESENCE_BOOL, false);
+            return b.getBoolean(CarrierConfigManager.KEY_RCS_PRESENCE_SUPPORTED_BOOL, false);
         }
         return false;
     }
