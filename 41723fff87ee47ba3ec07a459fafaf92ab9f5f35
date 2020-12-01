@@ -46,6 +46,30 @@
       },
       "revId": "41723fff87ee47ba3ec07a459fafaf92ab9f5f35",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13590009_d9689702",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabProvider.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-01T00:49:52Z",
+      "side": 1,
+      "message": "okay, the  contact table should only be necessary anyway when the bulk capability exchange option of capability exchange is enabled (periodic sync of the contacts database). Otherwise, we really do not need to keep track of a contact \u003c-\u003e eab mapping. I agree that this can be done with a service later.\n\nThe only other thing that will need to be done as well is sync back the vt capability to the cp2 database for legacy reasons.",
+      "parentUuid": "6eb04647_ddb398a9",
+      "range": {
+        "startLine": 127,
+        "startChar": 24,
+        "endLine": 127,
+        "endChar": 38
+      },
+      "revId": "41723fff87ee47ba3ec07a459fafaf92ab9f5f35",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
