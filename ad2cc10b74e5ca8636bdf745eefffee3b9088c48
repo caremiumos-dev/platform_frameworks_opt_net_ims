@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb09e2f9_c147bb87",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-02T01:49:49Z",
+      "side": 1,
+      "message": "Looking at this closer, there doesnt look to be any checking of the same number being requested multiple times here...\n\nHmm the easy way to solve this would be to only service one request at a time in a queue. Or we could queue requests that contain numbers being requested in the active request list... What do you think?",
+      "range": {
+        "startLine": 408,
+        "startChar": 16,
+        "endLine": 408,
+        "endChar": 35
+      },
+      "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2db935bc_a0a0cd14",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/pidfparser/PidfParserUtils.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-02T01:49:49Z",
+      "side": 1,
+      "message": "Reason codes here can result in different results. For example \"noresource\" amd \"rejected\" \u003d REQUEST_RESULT_NOT_FOUND, and all other results should return REQUEST_RESULT_UNKNOWN.",
+      "range": {
+        "startLine": 280,
+        "startChar": 86,
+        "endLine": 280,
+        "endChar": 92
+      },
+      "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc54384f_3db42525",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/subscribe/SubscribeControllerImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-02T01:49:49Z",
+      "side": 1,
+      "message": "Perhaps this could call c.onCommandError(COMMAND_CODE_SERVICE_UNAVAILABLE) instead of having to catch a REMOTE_EXCEPTION?",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 9
+      },
+      "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b0e15c4_1d7ead91",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-02T01:49:49Z",
+      "side": 1,
+      "message": "Can you shorten this, there is a limit on log tag size: \"CapRequestResponse\"",
+      "range": {
+        "startLine": 41,
+        "startChar": 43,
+        "endLine": 41,
+        "endChar": 68
+      },
+      "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d072b28e_10d3d0e6",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-02T01:49:49Z",
+      "side": 1,
+      "message": "The callback itself is a \"oneway\" binder callback, meaning it will not block this process while waiting for the binder call on the other side to complete and will also be executed in the order it was called on the same binder thread in the remote process. I do not think we need to lock this",
+      "range": {
+        "startLine": 70,
+        "startChar": 25,
+        "endLine": 70,
+        "endChar": 38
+      },
+      "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c461ca34_6d9c55d2",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-02T01:49:49Z",
+      "side": 1,
+      "message": "Can we just lock on mUpdatedCapabilityList?",
+      "range": {
+        "startLine": 71,
+        "startChar": 25,
+        "endLine": 71,
+        "endChar": 44
+      },
+      "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
