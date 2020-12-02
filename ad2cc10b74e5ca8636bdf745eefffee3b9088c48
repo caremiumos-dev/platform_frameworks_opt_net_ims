@@ -305,6 +305,30 @@
       },
       "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d74bd744_4ddd6b1e",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-02T20:31:52Z",
+      "side": 1,
+      "message": "Hm sorry, i meant do something like:\nprivate final List\u003cRcsContactUceCapability\u003e mUpdatedCapabilityList \u003d new ArrayList\u003c\u003e();\n....\nsynchronized (mUpdatedCapabilityList) {\n    //access or modify mCapabilityListLock\n}\n\n---\n\nBut, i didnt realize there were two lists here mUpdatedCapabilityList and mTerminatedResource... if there is multiple thread access, we should keep the lock for both",
+      "parentUuid": "42fc58b8_85bcc574",
+      "range": {
+        "startLine": 71,
+        "startChar": 25,
+        "endLine": 71,
+        "endChar": 44
+      },
+      "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
