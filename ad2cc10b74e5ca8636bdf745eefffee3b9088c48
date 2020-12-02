@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aaeb4d0_5458f0b4",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-02T02:13:18Z",
+      "side": 1,
+      "message": "James to file a bug and handle this in a later CL.",
+      "parentUuid": "bb09e2f9_c147bb87",
+      "range": {
+        "startLine": 408,
+        "startChar": 16,
+        "endLine": 408,
+        "endChar": 35
+      },
+      "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2db935bc_a0a0cd14",
