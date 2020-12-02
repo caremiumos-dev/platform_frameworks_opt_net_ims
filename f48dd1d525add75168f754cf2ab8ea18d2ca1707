@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19c94e29_3ebd6edf",
+        "filename": "src/java/com/android/ims/RcsFeatureManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-02T21:26:22Z",
+      "side": 1,
+      "message": "Should this be KEY_ENABLE_PRESENCE_PUBLISH_BOOL instead?",
+      "range": {
+        "startLine": 529,
+        "startChar": 53,
+        "endLine": 529,
+        "endChar": 84
+      },
+      "revId": "f48dd1d525add75168f754cf2ab8ea18d2ca1707",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
