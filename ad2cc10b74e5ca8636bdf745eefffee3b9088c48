@@ -329,6 +329,30 @@
       },
       "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f29bfc1_bcbe1676",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-12-03T00:15:41Z",
+      "side": 1,
+      "message": "Yes, when the UceController handler thread modify the mUpdatedCapabilityList / mTerminatedResource, it may also receive the capability update / resource terminated callback from the binder thread.\nTherefore, it may be necessary to add locks for each of them.",
+      "parentUuid": "d74bd744_4ddd6b1e",
+      "range": {
+        "startLine": 71,
+        "startChar": 25,
+        "endLine": 71,
+        "endChar": 44
+      },
+      "revId": "ad2cc10b74e5ca8636bdf745eefffee3b9088c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
