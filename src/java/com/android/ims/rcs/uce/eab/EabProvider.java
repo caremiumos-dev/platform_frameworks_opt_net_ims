@@ -479,7 +479,7 @@ public class EabProvider extends ContentProvider {
                 Log.d(TAG, "Query failed. Not support URL.");
                 return null;
         }
-        return qb.query(db, projection, selection, selectionArgs, null, null, null);
+        return qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Override
@@ -623,13 +623,11 @@ public class EabProvider extends ContentProvider {
 
     @VisibleForTesting
     public SQLiteDatabase getWritableDatabase() {
-        Log.d(TAG, "getWritableDatabase");
         return mOpenHelper.getWritableDatabase();
     }
 
     @VisibleForTesting
     public SQLiteDatabase getReadableDatabase() {
-        Log.d(TAG, "getReadableDatabase");
         return mOpenHelper.getReadableDatabase();
     }
 }
