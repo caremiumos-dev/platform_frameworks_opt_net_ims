@@ -117,7 +117,8 @@ public class UceController {
          * refreshed.
          */
         void refreshCapabilities(@NonNull List<Uri> contactNumbers,
-                @NonNull IRcsUceControllerCallback callback) throws RemoteException;
+                @NonNull IRcsUceControllerCallback callback,
+                @NonNull boolean shouldCheckExpiredContact) throws RemoteException;
 
         /**
          * The method is called when the EabController and the PublishController want to receive
@@ -363,7 +364,9 @@ public class UceController {
 
         @Override
         public void refreshCapabilities(@NonNull List<Uri> contactNumbers,
-                @NonNull IRcsUceControllerCallback callback) throws RemoteException{
+                @NonNull IRcsUceControllerCallback callback,
+                boolean shouldCheckExpiredContact) throws RemoteException{
+            // TODO: check shouldCheckExpiredContact
             logd("refreshCapabilities: " + contactNumbers.size());
             UceController.this.requestCapabilities(contactNumbers, callback);
         }
