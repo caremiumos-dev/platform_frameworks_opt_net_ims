@@ -623,13 +623,11 @@ public class EabProvider extends ContentProvider {
 
     @VisibleForTesting
     public SQLiteDatabase getWritableDatabase() {
-        Log.d(TAG, "getWritableDatabase");
         return mOpenHelper.getWritableDatabase();
     }
 
     @VisibleForTesting
     public SQLiteDatabase getReadableDatabase() {
-        Log.d(TAG, "getReadableDatabase");
         return mOpenHelper.getReadableDatabase();
     }
 }
