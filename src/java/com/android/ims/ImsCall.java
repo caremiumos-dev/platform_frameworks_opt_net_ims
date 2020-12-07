@@ -95,6 +95,17 @@ public class ImsCall implements ICall {
     public static class Listener {
         /**
          * Called when a request is sent out to initiate a new call
+         * and 180 RINGING response is received from the network.
+         * The default implementation calls {@link #onCallStateChanged}.
+         *
+         * @param call the call object that carries out the IMS call
+         */
+        public void onCallInitiating(ImsCall call) {
+            onCallStateChanged(call);
+        }
+
+        /**
+         * Called when a request is sent out to initiate a new call
          * and 1xx response is received from the network.
          * The default implementation calls {@link #onCallStateChanged}.
          *
@@ -2435,6 +2446,32 @@ public class ImsCall implements ICall {
 
     @VisibleForTesting
     public class ImsCallSessionListenerProxy extends ImsCallSession.Listener {
+        @Override
+        public void callSessionInitiating(ImsCallSession session, ImsCallProfile profile) {
+            logi("callSessionInitiating :: session=" + session + " profile=" + profile);
+            if (isTransientConferenceSession(session)) {
+                // If it is a transient (conference) session, there is no action for this signal.
+                logi("callSessionInitiating :: not supported for transient conference session=" +
+                        session);
+                return;
+            }
+
+            ImsCall.Listener listener;
+
+            synchronized(ImsCall.this) {
+                listener = mListener;
+                setCallProfile(profile);
+            }
+
+            if (listener != null) {
+                try {
+                    listener.onCallInitiating(ImsCall.this);
+                } catch (Throwable t) {
+                    loge("callSessionInitiating :: ", t);
+                }
+            }
+        }
+
         @Override
         public void callSessionProgressing(ImsCallSession session, ImsStreamMediaProfile profile) {
             logi("callSessionProgressing :: session=" + session + " profile=" + profile);
