@@ -34,6 +34,7 @@ import android.telephony.ims.aidl.ICapabilityExchangeEventListener;
 import android.telephony.ims.aidl.IImsCapabilityCallback;
 import android.telephony.ims.aidl.IImsRcsController;
 import android.telephony.ims.aidl.IImsRcsFeature;
+import android.telephony.ims.aidl.IImsRegistration;
 import android.telephony.ims.aidl.IImsRegistrationCallback;
 import android.telephony.ims.aidl.IPublishResponseCallback;
 import android.telephony.ims.aidl.IRcsFeatureListener;
@@ -364,6 +365,10 @@ public class RcsFeatureManager implements FeatureUpdates {
             return null;
         }
         return mRcsFeatureConnection.getSipTransport();
+    }
+
+    public IImsRegistration getImsRegistration() {
+        return mRcsFeatureConnection.getRegistration();
     }
     /**
      * Query for the specific capability.
