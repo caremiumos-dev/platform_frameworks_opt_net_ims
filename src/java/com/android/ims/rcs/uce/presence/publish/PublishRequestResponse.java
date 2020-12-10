@@ -150,10 +150,14 @@ public class PublishRequestResponse {
      * Convert the network sip code to the publish state
      */
     public int getPublishStateByNetworkResponse() {
-        if (NetworkSipCode.SIP_CODE_REQUEST_TIMEOUT == mNetworkRespSipCode) {
-            return RcsUceAdapter.PUBLISH_STATE_REQUEST_TIMEOUT;
+        switch (mNetworkRespSipCode) {
+            case NetworkSipCode.SIP_CODE_OK:
+                return RcsUceAdapter.PUBLISH_STATE_OK;
+            case NetworkSipCode.SIP_CODE_REQUEST_TIMEOUT:
+                return RcsUceAdapter.PUBLISH_STATE_REQUEST_TIMEOUT;
+            default:
+                return RcsUceAdapter.PUBLISH_STATE_OTHER_ERROR;
         }
-        return RcsUceAdapter.PUBLISH_STATE_OTHER_ERROR;
     }
 
     /**
