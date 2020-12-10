@@ -31,11 +31,19 @@ import android.util.Log;
 
 import com.android.ims.RcsFeatureManager;
 import com.android.ims.rcs.uce.UceController.UceControllerCallback;
+import com.android.ims.rcs.uce.util.UceUtils;
 import com.android.internal.annotations.VisibleForTesting;
 
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * The implementation of PublishController.
+ */
 public class PublishControllerImpl implements PublishController {
 
-    private static final String LOG_TAG = "PublishController";
+    private static final String LOG_TAG = UceUtils.getLogPrefix() + "PublishController";
 
     /**
      * Used to inject PublishProcessor instances for testing.
@@ -63,6 +71,8 @@ public class PublishControllerImpl implements PublishController {
 
     // The device publish state
     private @PublishState int mPublishState;
+    // The timestamp of updating the publish state
+    private Instant mPublishStateUpdatedTime = Instant.now();
 
     // The callbacks to notify publish state changed.
     private RemoteCallbackList<IRcsUcePublishStateCallback> mPublishStateCallbacks;
@@ -167,7 +177,11 @@ public class PublishControllerImpl implements PublishController {
         synchronized (mPublishStateLock) {
             if (mIsDestroyedFlag) return;
             mPublishStateCallbacks.register(c);
+            logd("registerPublishStateCallback: size="
+                    + mPublishStateCallbacks.getRegisteredCallbackCount());
         }
+        // Notify the current publish state
+        mPublishHandler.onNotifyCurrentPublishState(c);
     }
 
     /**
@@ -201,7 +215,8 @@ public class PublishControllerImpl implements PublishController {
     public void onUnpublish() {
         logd("onUnpublish");
         if (mIsDestroyedFlag) return;
-        mPublishHandler.onPublishStateChanged(RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED);
+        mPublishHandler.onPublishStateChanged(RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED,
+                Instant.now());
     }
 
     @Override
@@ -220,13 +235,15 @@ public class PublishControllerImpl implements PublishController {
 
                 @Override
                 public void onRequestCommandError(PublishRequestResponse requestResponse) {
-                    logd("onRequestCommandError: taskId=" + requestResponse.getTaskId());
+                    logd("onRequestCommandError: taskId=" + requestResponse.getTaskId()
+                            + ", time=" + requestResponse.getResponseTimestamp());
                     mPublishHandler.onRequestCommandError(requestResponse);
                 }
 
                 @Override
                 public void onRequestNetworkResp(PublishRequestResponse requestResponse) {
-                    logd("onRequestNetworkResp: taskId=" + requestResponse.getTaskId());
+                    logd("onRequestNetworkResp: taskId=" + requestResponse.getTaskId()
+                            + ", time=" + requestResponse.getResponseTimestamp());
                     mPublishHandler.onRequestNetworkResponse(requestResponse);
                 }
 
@@ -243,9 +260,10 @@ public class PublishControllerImpl implements PublishController {
                 }
 
                 @Override
-                public void updatePublishRequestResult(@PublishState int publishState) {
-                    logd("updatePublishRequestResult: " + publishState);
-                    mPublishHandler.onPublishStateChanged(publishState);
+                public void updatePublishRequestResult(@PublishState int publishState,
+                        Instant updatedTime) {
+                    logd("updatePublishRequestResult: " + publishState + ", time=" + updatedTime);
+                    mPublishHandler.onPublishStateChanged(publishState, updatedTime);
                 }
             };
 
@@ -254,29 +272,39 @@ public class PublishControllerImpl implements PublishController {
      */
     @Override
     public void requestPublishCapabilitiesFromService(int triggerType) {
-        logi("Receive the publish request from service: " + triggerType);
+        logi("Receive the publish request from service: service trigger type=" + triggerType);
         mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_SERVICE);
     }
 
     private class PublishHandler extends Handler {
-        private static final int MSG_PUBLISH_STATE_CHANGED = 1;
-        private static final int MSG_REQUEST_PUBLISH = 2;
-        private static final int MSG_REQUEST_CMD_ERROR = 3;
-        private static final int MSG_REQUEST_SIP_RESPONSE = 4;
-        private static final int MSG_REQUEST_CANCELED = 5;
+        private final int MSG_PUBLISH_STATE_CHANGED = 1;
+        private final int MSG_NOTIFY_CURRENT_PUBLISH_STATE = 2;
+        private final int MSG_REQUEST_PUBLISH = 3;
+        private final int MSG_REQUEST_CMD_ERROR = 4;
+        private final int MSG_REQUEST_NETWORK_RESPONSE = 5;
+        private final int MSG_REQUEST_CANCELED = 6;
+
+        private Map<Integer, String> mEventDescription;
 
         public PublishHandler(Looper looper) {
             super(looper);
+            initEventDescription();
         }
 
         @Override
         public void handleMessage(Message message) {
             if (mIsDestroyedFlag) return;
-            logd("handleMessage: " + message.what);
+            logd("handleMessage: " + mEventDescription.get(message.what));
             switch (message.what) {
                 case MSG_PUBLISH_STATE_CHANGED:
                     int newPublishState = message.arg1;
-                    handlePublishStateChangedMessage(newPublishState);
+                    Instant updatedTimestamp = (Instant) message.obj;
+                    handlePublishStateChangedMessage(newPublishState, updatedTimestamp);
+                    break;
+
+                case MSG_NOTIFY_CURRENT_PUBLISH_STATE:
+                    IRcsUcePublishStateCallback c = (IRcsUcePublishStateCallback) message.obj;
+                    handleNotifyCurrentPublishStateMessage(c);
                     break;
 
                 case MSG_REQUEST_PUBLISH:
@@ -289,7 +317,7 @@ public class PublishControllerImpl implements PublishController {
                     mPublishProcessor.onCommandError(cmdErrorResponse);
                     break;
 
-                case MSG_REQUEST_SIP_RESPONSE:
+                case MSG_REQUEST_NETWORK_RESPONSE:
                     PublishRequestResponse networkResponse = (PublishRequestResponse) message.obj;
                     mPublishProcessor.onNetworkResponse(networkResponse);
                     break;
@@ -305,17 +333,25 @@ public class PublishControllerImpl implements PublishController {
          * Remove all the messages from the handler.
          */
         public void onDestroy() {
-            removeMessages(MSG_PUBLISH_STATE_CHANGED);
-            removeMessages(MSG_REQUEST_PUBLISH);
+            removeCallbacksAndMessages(null);
         }
 
         /**
          * Send the message to notify the publish state is changed.
          */
-        public void onPublishStateChanged(@PublishState int publishState) {
+        public void onPublishStateChanged(@PublishState int publishState,
+                @NonNull Instant updatedTimestamp) {
             Message message = obtainMessage();
             message.what = MSG_PUBLISH_STATE_CHANGED;
             message.arg1 = publishState;
+            message.obj = updatedTimestamp;
+            sendMessage(message);
+        }
+
+        public void onNotifyCurrentPublishState(IRcsUcePublishStateCallback callback) {
+            Message message = obtainMessage();
+            message.what = MSG_NOTIFY_CURRENT_PUBLISH_STATE;
+            message.obj = callback;
             sendMessage(message);
         }
 
@@ -333,8 +369,12 @@ public class PublishControllerImpl implements PublishController {
             if (mIsDestroyedFlag) return;
             logd("requestPublish: " + type + ", delay=" + delay);
 
-            // Remove existing publish request.
-            removeMessages(MSG_REQUEST_PUBLISH, (Integer) type);
+            // Don't send duplicated publish request because it always publish the latest device
+            // capabilities.
+            if (hasMessages(MSG_REQUEST_PUBLISH)) {
+                logd("requestPublish: Skip. there is already a publish request in the queue");
+                return;
+            }
 
             Message message = obtainMessage();
             message.what = MSG_REQUEST_PUBLISH;
@@ -359,7 +399,7 @@ public class PublishControllerImpl implements PublishController {
             if (mIsDestroyedFlag) return;
 
             Message message = obtainMessage();
-            message.what = MSG_REQUEST_SIP_RESPONSE;
+            message.what = MSG_REQUEST_NETWORK_RESPONSE;
             message.obj = requestResponse;
             sendMessage(message);
         }
@@ -378,18 +418,38 @@ public class PublishControllerImpl implements PublishController {
             if (mIsDestroyedFlag) return;
             removeMessages(MSG_REQUEST_CANCELED);
         }
+
+        private void initEventDescription() {
+            mEventDescription = new HashMap<>();
+            mEventDescription.put(MSG_PUBLISH_STATE_CHANGED, "PUBLISH_STATE_CHANGED");
+            mEventDescription.put(MSG_NOTIFY_CURRENT_PUBLISH_STATE, "NOTIFY_PUBLISH_STATE");
+            mEventDescription.put(MSG_REQUEST_PUBLISH, "REQUEST_PUBLISH");
+            mEventDescription.put(MSG_REQUEST_CMD_ERROR, "REQUEST_CMD_ERROR");
+            mEventDescription.put(MSG_REQUEST_NETWORK_RESPONSE, "REQUEST_NETWORK_RESPONSE");
+            mEventDescription.put(MSG_REQUEST_CANCELED, "REQUEST_CANCELED");
+        }
     }
 
     /**
      * Update the publish state and notify the publish state callback if the new state is different
      * from original state.
      */
-    private void handlePublishStateChangedMessage(@PublishState int newPublishState) {
+    private void handlePublishStateChangedMessage(@PublishState int newPublishState,
+            Instant updatedTimestamp) {
         synchronized (mPublishStateLock) {
             if (mIsDestroyedFlag) return;
-            logd("publish state changes from " + mPublishState + " to " + newPublishState);
+            // Check if the time of the given publish state is not earlier than existing time.
+            if (updatedTimestamp == null || !updatedTimestamp.isAfter(mPublishStateUpdatedTime)) {
+                logd("handlePublishStateChangedMessage: updatedTimestamp is not allowed: "
+                        + mPublishStateUpdatedTime + " to " + updatedTimestamp
+                        + ", publishState=" + newPublishState);
+                return;
+            }
+            logd("publish state changes from " + mPublishState + " to " + newPublishState +
+                    ", time=" + updatedTimestamp);
             if (mPublishState == newPublishState) return;
             mPublishState = newPublishState;
+            mPublishStateUpdatedTime = updatedTimestamp;
         }
 
         // Trigger the publish state changed in handler thread since it may take time.
@@ -402,6 +462,15 @@ public class PublishControllerImpl implements PublishController {
             }
         });
         logd("Notify publish state changed: completed");
+    }
+
+    private void handleNotifyCurrentPublishStateMessage(IRcsUcePublishStateCallback callback) {
+        if (mIsDestroyedFlag || callback == null) return;
+        try {
+            callback.onPublishStateChanged(getUcePublishState());
+        } catch (RemoteException e) {
+            logw("handleCurrentPublishStateUpdateMessage exception: " + e);
+        }
     }
 
     public void handleRequestPublishMessage(@PublishTriggerType int type) {
