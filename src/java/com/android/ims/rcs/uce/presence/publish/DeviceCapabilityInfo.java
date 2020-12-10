@@ -18,10 +18,8 @@ package com.android.ims.rcs.uce.presence.publish;
 
 import android.content.Context;
 import android.net.Uri;
-import android.telecom.PhoneAccount;
 import android.telecom.TelecomManager;
 import android.telephony.AccessNetworkConstants;
-import android.telephony.TelephonyManager;
 import android.telephony.ims.RcsContactPresenceTuple;
 import android.telephony.ims.RcsContactPresenceTuple.ServiceCapabilities;
 import android.telephony.ims.RcsContactUceCapability;
