@@ -31,11 +31,15 @@ import android.util.Log;
 
 import com.android.ims.RcsFeatureManager;
 import com.android.ims.rcs.uce.UceController.UceControllerCallback;
+import com.android.ims.rcs.uce.util.UceUtils;
 import com.android.internal.annotations.VisibleForTesting;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PublishControllerImpl implements PublishController {
 
-    private static final String LOG_TAG = "PublishController";
+    private static final String LOG_TAG =  UceUtils.getLogPrefix() + "PublishController";
 
     /**
      * Used to inject PublishProcessor instances for testing.
@@ -167,7 +171,11 @@ public class PublishControllerImpl implements PublishController {
         synchronized (mPublishStateLock) {
             if (mIsDestroyedFlag) return;
             mPublishStateCallbacks.register(c);
+            logd("registerPublishStateCallback: size="
+                    + mPublishStateCallbacks.getRegisteredCallbackCount());
         }
+        // Notify the current publish state
+        mPublishHandler.onNotifyCurrentPublishState(c);
     }
 
     /**
@@ -201,7 +209,7 @@ public class PublishControllerImpl implements PublishController {
     public void onUnpublish() {
         logd("onUnpublish");
         if (mIsDestroyedFlag) return;
-        mPublishHandler.onPublishStateChanged(RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED);
+        mPublishHandler.onNotifyPublishStateChanged(RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED);
     }
 
     @Override
@@ -245,7 +253,7 @@ public class PublishControllerImpl implements PublishController {
                 @Override
                 public void updatePublishRequestResult(@PublishState int publishState) {
                     logd("updatePublishRequestResult: " + publishState);
-                    mPublishHandler.onPublishStateChanged(publishState);
+                    mPublishHandler.onNotifyPublishStateChanged(publishState);
                 }
             };
 
@@ -254,16 +262,17 @@ public class PublishControllerImpl implements PublishController {
      */
     @Override
     public void requestPublishCapabilitiesFromService(int triggerType) {
-        logi("Receive the publish request from service: " + triggerType);
+        logi("Receive the publish request from service: service trigger type=" + triggerType);
         mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_SERVICE);
     }
 
     private class PublishHandler extends Handler {
         private static final int MSG_PUBLISH_STATE_CHANGED = 1;
-        private static final int MSG_REQUEST_PUBLISH = 2;
-        private static final int MSG_REQUEST_CMD_ERROR = 3;
-        private static final int MSG_REQUEST_SIP_RESPONSE = 4;
-        private static final int MSG_REQUEST_CANCELED = 5;
+        private static final int MSG_NOTIFY_CURRENT_PUBLISH_STATE = 2;
+        private static final int MSG_REQUEST_PUBLISH = 3;
+        private static final int MSG_REQUEST_CMD_ERROR = 4;
+        private static final int MSG_REQUEST_NETWORK_RESPONSE = 5;
+        private static final int MSG_REQUEST_CANCELED = 6;
 
         public PublishHandler(Looper looper) {
             super(looper);
@@ -272,11 +281,16 @@ public class PublishControllerImpl implements PublishController {
         @Override
         public void handleMessage(Message message) {
             if (mIsDestroyedFlag) return;
-            logd("handleMessage: " + message.what);
+            logd("handleMessage: " + mEventDescription.get(message.what));
             switch (message.what) {
                 case MSG_PUBLISH_STATE_CHANGED:
                     int newPublishState = message.arg1;
                     handlePublishStateChangedMessage(newPublishState);
+                    break;
+
+                case MSG_NOTIFY_CURRENT_PUBLISH_STATE:
+                    IRcsUcePublishStateCallback c = (IRcsUcePublishStateCallback) message.obj;
+                    handleNotifyCurrentPublishStateMessage(c);
                     break;
 
                 case MSG_REQUEST_PUBLISH:
@@ -289,7 +303,7 @@ public class PublishControllerImpl implements PublishController {
                     mPublishProcessor.onCommandError(cmdErrorResponse);
                     break;
 
-                case MSG_REQUEST_SIP_RESPONSE:
+                case MSG_REQUEST_NETWORK_RESPONSE:
                     PublishRequestResponse networkResponse = (PublishRequestResponse) message.obj;
                     mPublishProcessor.onNetworkResponse(networkResponse);
                     break;
@@ -306,16 +320,24 @@ public class PublishControllerImpl implements PublishController {
          */
         public void onDestroy() {
             removeMessages(MSG_PUBLISH_STATE_CHANGED);
+            removeMessages(MSG_NOTIFY_CURRENT_PUBLISH_STATE);
             removeMessages(MSG_REQUEST_PUBLISH);
         }
 
         /**
          * Send the message to notify the publish state is changed.
          */
-        public void onPublishStateChanged(@PublishState int publishState) {
+        public void onNotifyPublishStateChanged(@PublishState int publishState) {
             Message message = obtainMessage();
             message.what = MSG_PUBLISH_STATE_CHANGED;
             message.arg1 = publishState;
+            sendMessage(message);
+        }
+
+        public void onNotifyCurrentPublishState(IRcsUcePublishStateCallback callback) {
+            Message message = obtainMessage();
+            message.what = MSG_NOTIFY_CURRENT_PUBLISH_STATE;
+            message.obj = callback;
             sendMessage(message);
         }
 
@@ -333,8 +355,12 @@ public class PublishControllerImpl implements PublishController {
             if (mIsDestroyedFlag) return;
             logd("requestPublish: " + type + ", delay=" + delay);
 
-            // Remove existing publish request.
-            removeMessages(MSG_REQUEST_PUBLISH, (Integer) type);
+            // NOT send the duplicated publish request because it always publish the latest device
+            // capabilities.
+            if (hasMessages(MSG_REQUEST_PUBLISH)) {
+                logd("requestPublish: Skip. there is already a duplicated in the queue");
+                return;
+            }
 
             Message message = obtainMessage();
             message.what = MSG_REQUEST_PUBLISH;
@@ -359,7 +385,7 @@ public class PublishControllerImpl implements PublishController {
             if (mIsDestroyedFlag) return;
 
             Message message = obtainMessage();
-            message.what = MSG_REQUEST_SIP_RESPONSE;
+            message.what = MSG_REQUEST_NETWORK_RESPONSE;
             message.obj = requestResponse;
             sendMessage(message);
         }
@@ -378,6 +404,15 @@ public class PublishControllerImpl implements PublishController {
             if (mIsDestroyedFlag) return;
             removeMessages(MSG_REQUEST_CANCELED);
         }
+
+        private final Map<Integer, String> mEventDescription = new HashMap<>() {{
+            put(MSG_PUBLISH_STATE_CHANGED, "PUBLISH_STATE_CHANGED");
+            put(MSG_NOTIFY_CURRENT_PUBLISH_STATE, "NOTIFY_PUBLISH_STATE");
+            put(MSG_REQUEST_PUBLISH, "REQUEST_PUBLISH");
+            put(MSG_REQUEST_CMD_ERROR, "REQUEST_CMD_ERROR");
+            put(MSG_REQUEST_NETWORK_RESPONSE, "REQUEST_NETWORK_RESPONSE");
+            put(MSG_REQUEST_CANCELED, "REQUEST_CANCELED");
+        }};
     }
 
     /**
@@ -402,6 +437,15 @@ public class PublishControllerImpl implements PublishController {
             }
         });
         logd("Notify publish state changed: completed");
+    }
+
+    private void handleNotifyCurrentPublishStateMessage(IRcsUcePublishStateCallback callback) {
+        if (mIsDestroyedFlag || callback == null) return;
+        try {
+            callback.onPublishStateChanged(getUcePublishState());
+        } catch (RemoteException e) {
+            logw("handleCurrentPublishStateUpdateMessage exception: " + e);
+        }
     }
 
     public void handleRequestPublishMessage(@PublishTriggerType int type) {
