@@ -37,7 +37,7 @@ import java.io.PrintWriter;
  */
 public class PublishProcessor {
 
-    private static final String LOG_TAG = "PublishProcessor";
+    private static final String LOG_TAG = UceUtils.getLogPrefix() + "PublishProcessor";
 
     // The length of time waiting for the response callback.
     private static final long RESPONSE_CALLBACK_WAITING_TIME = 60000L;
