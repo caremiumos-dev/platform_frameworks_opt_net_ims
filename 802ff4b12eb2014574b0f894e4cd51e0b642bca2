@@ -22,6 +22,30 @@
       },
       "revId": "802ff4b12eb2014574b0f894e4cd51e0b642bca2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c9516e7_e1eced54",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishControllerImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2020-12-15T16:48:05Z",
+      "side": 1,
+      "message": "The non-static inner class will reference the outer class.\nIf there is a static member in the inner class, it will case that the inner class alive as long as the static member and it also keep reference the outer class and may cause the memory leak.\nTherefore, I declare the PublishHandler as static and use the WeakReference instead.",
+      "parentUuid": "518c17ac_85819532",
+      "range": {
+        "startLine": 287,
+        "startChar": 37,
+        "endLine": 287,
+        "endChar": 54
+      },
+      "revId": "802ff4b12eb2014574b0f894e4cd51e0b642bca2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
