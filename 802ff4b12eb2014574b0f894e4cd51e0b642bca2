@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "518c17ac_85819532",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishControllerImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-15T00:57:02Z",
+      "side": 1,
+      "message": "can you just move this to a static map (see something like RegistrationManager static map)?",
+      "range": {
+        "startLine": 287,
+        "startChar": 37,
+        "endLine": 287,
+        "endChar": 54
+      },
+      "revId": "802ff4b12eb2014574b0f894e4cd51e0b642bca2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
