@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2956bb00_98cfeff1",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "WOuld it also be possible for unit tests on this?",
+      "range": {
+        "startLine": 49,
+        "startChar": 19,
+        "endLine": 49,
+        "endChar": 43
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcd80191_22338950",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "should we shortcut and not call this if getExpiredContactList is empty?",
+      "range": {
+        "startLine": 80,
+        "startChar": 15,
+        "endLine": 82,
+        "endChar": 51
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8e731e1_7ce83ff5",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "Can you add more context here - this should only be registered when Carrier config has enabled bulk capability exchange.",
+      "range": {
+        "startLine": 104,
+        "startChar": 3,
+        "endLine": 106,
+        "endChar": 7
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c284331_86cbc80e",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "can we actually hardcode this to false instead for production?",
+      "range": {
+        "startLine": 158,
+        "startChar": 50,
+        "endLine": 158,
+        "endChar": 54
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "199ef4a7_1e5ca9f4",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "This can be KEY_USE_RCS_PRESENCE_BOOL until Allen\u0027s CL is in",
+      "range": {
+        "startLine": 158,
+        "startChar": 57,
+        "endLine": 158,
+        "endChar": 80
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54fcde4c_889770a3",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "Should we include a Carrier Config listener here as well to listen in the case that this carrier config changes?",
+      "range": {
+        "startLine": 161,
+        "startChar": 58,
+        "endLine": 161,
+        "endChar": 89
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07b3a622_48224374",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "The specs define a bit of jitter here so that all devices do not spam server if synchronized to the same time.",
+      "range": {
+        "startLine": 253,
+        "startChar": 40,
+        "endLine": 253,
+        "endChar": 50
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d091236_b97c0633",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "This may cause unexpected behavior.. can we instead pull the default value of that config?",
+      "range": {
+        "startLine": 272,
+        "startChar": 12,
+        "endLine": 272,
+        "endChar": 75
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47b0931e_937b70bb",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "WHy are these defined in EabBulkCApabilityUpdater if they are only used in EabContactSyncController?",
+      "range": {
+        "startLine": 320,
+        "startChar": 5,
+        "endLine": 332,
+        "endChar": 5
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61410680_5fac7006",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabContactSyncController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "WHere is it enforced that the last contact is the newest?",
+      "range": {
+        "startLine": 91,
+        "startChar": 31,
+        "endLine": 91,
+        "endChar": 41
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53d65c66_b242b3b9",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:00:19Z",
+      "side": 1,
+      "message": "This may not be the right place for handling this, we may need to do things like reschedule a retry based on the error code from the network. Can you instead pass EabController interface into EabBulkCapabilityUpdater constructor and move this callback into there?",
+      "range": {
+        "startLine": 68,
+        "startChar": 38,
+        "endLine": 68,
+        "endChar": 63
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
