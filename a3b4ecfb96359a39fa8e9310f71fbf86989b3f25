@@ -141,6 +141,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f306e8c_b533187d",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:14:40Z",
+      "side": 1,
+      "message": "This will also check EAB DB again, can we add flag to bypass the database check, since this is happening due to capabilities being expired already?",
+      "range": {
+        "startLine": 184,
+        "startChar": 35,
+        "endLine": 184,
+        "endChar": 54
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9054d811_ab6d5dbb",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T02:14:40Z",
+      "side": 1,
+      "message": "This should only include EAB entries that are tied to a contacts id.",
+      "range": {
+        "startLine": 211,
+        "startChar": 17,
+        "endLine": 211,
+        "endChar": 41
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07b3a622_48224374",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
         "patchSetId": 2
