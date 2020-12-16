@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a37585b8_ef065063",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T19:33:07Z",
+      "side": 1,
+      "message": "This should happen before ringing.",
+      "range": {
+        "startLine": 98,
+        "startChar": 15,
+        "endLine": 98,
+        "endChar": 36
+      },
+      "revId": "a181414293cc232c14763f4b9242dbfe90c19381",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
