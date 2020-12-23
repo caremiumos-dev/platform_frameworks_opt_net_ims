@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e91e6fb_28b3e4ba",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2956bb00_98cfeff1",
+      "range": {
+        "startLine": 49,
+        "startChar": 19,
+        "endLine": 49,
+        "endChar": 43
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcd80191_22338950",
@@ -47,6 +71,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5809efb8_1489a8bd",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcd80191_22338950",
+      "range": {
+        "startLine": 80,
+        "startChar": 15,
+        "endLine": 82,
+        "endChar": 51
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd12b446_53d58140",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcd80191_22338950",
+      "range": {
+        "startLine": 80,
+        "startChar": 15,
+        "endLine": 82,
+        "endChar": 51
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8e731e1_7ce83ff5",
@@ -60,6 +132,30 @@
       "writtenOn": "2020-12-16T02:00:19Z",
       "side": 1,
       "message": "Can you add more context here - this should only be registered when Carrier config has enabled bulk capability exchange.",
+      "range": {
+        "startLine": 104,
+        "startChar": 3,
+        "endLine": 106,
+        "endChar": 7
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6270d3d2_902efb3a",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8e731e1_7ce83ff5",
       "range": {
         "startLine": 104,
         "startChar": 3,
@@ -116,6 +212,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22eee3a0_ea036640",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c284331_86cbc80e",
+      "range": {
+        "startLine": 158,
+        "startChar": 50,
+        "endLine": 158,
+        "endChar": 54
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bd4d539_f6d1662e",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done. Use KEY_RCS_BULK_CAPABILITY_EXCHANGE_BOOL",
+      "parentUuid": "199ef4a7_1e5ca9f4",
+      "range": {
+        "startLine": 158,
+        "startChar": 57,
+        "endLine": 158,
+        "endChar": 80
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54fcde4c_889770a3",
@@ -129,6 +273,30 @@
       "writtenOn": "2020-12-16T02:00:19Z",
       "side": 1,
       "message": "Should we include a Carrier Config listener here as well to listen in the case that this carrier config changes?",
+      "range": {
+        "startLine": 161,
+        "startChar": 58,
+        "endLine": 161,
+        "endChar": 89
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4daa5bbd_d703d1ee",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54fcde4c_889770a3",
       "range": {
         "startLine": 161,
         "startChar": 58,
@@ -162,6 +330,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ded0dbe5_79d42ac3",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f306e8c_b533187d",
+      "range": {
+        "startLine": 184,
+        "startChar": 35,
+        "endLine": 184,
+        "endChar": 54
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9054d811_ab6d5dbb",
@@ -175,6 +367,30 @@
       "writtenOn": "2020-12-16T02:14:40Z",
       "side": 1,
       "message": "This should only include EAB entries that are tied to a contacts id.",
+      "range": {
+        "startLine": 211,
+        "startChar": 17,
+        "endLine": 211,
+        "endChar": 41
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f641be91_057bae0d",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9054d811_ab6d5dbb",
       "range": {
         "startLine": 211,
         "startChar": 17,
@@ -210,6 +426,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3f62e8f0_283aa0c4",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "So, james will have another CL to integrate all requests and send to network one time and we don\u0027t have any action in here, right?",
+      "parentUuid": "07b3a622_48224374",
+      "range": {
+        "startLine": 253,
+        "startChar": 40,
+        "endLine": 253,
+        "endChar": 50
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2d091236_b97c0633",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
         "patchSetId": 2
@@ -221,6 +461,30 @@
       "writtenOn": "2020-12-16T02:00:19Z",
       "side": 1,
       "message": "This may cause unexpected behavior.. can we instead pull the default value of that config?",
+      "range": {
+        "startLine": 272,
+        "startChar": 12,
+        "endLine": 272,
+        "endChar": 75
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb76dfdc_85119af7",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "This will return the default value of KEY_RCS_BULK_CAPABILITY_EXCHANGE_BOOL(false) if device can\u0027t get the value, should we return false directly in here?",
+      "parentUuid": "2d091236_b97c0633",
       "range": {
         "startLine": 272,
         "startChar": 12,
@@ -254,6 +518,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52bb9437_19c91372",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47b0931e_937b70bb",
+      "range": {
+        "startLine": 320,
+        "startChar": 5,
+        "endLine": 332,
+        "endChar": 5
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61410680_5fac7006",
@@ -277,6 +565,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35102008_933adf49",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabContactSyncController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Done. Originally, it sorted by CONTACT_LAST_UPDATED_TIMESTAMP, removed in Line 77 and find max timestamp by ourselves.",
+      "parentUuid": "61410680_5fac7006",
+      "range": {
+        "startLine": 91,
+        "startChar": 31,
+        "endLine": 91,
+        "endChar": 41
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53d65c66_b242b3b9",
@@ -290,6 +602,30 @@
       "writtenOn": "2020-12-16T02:00:19Z",
       "side": 1,
       "message": "This may not be the right place for handling this, we may need to do things like reschedule a retry based on the error code from the network. Can you instead pass EabController interface into EabBulkCapabilityUpdater constructor and move this callback into there?",
+      "range": {
+        "startLine": 68,
+        "startChar": 38,
+        "endLine": 68,
+        "endChar": 63
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b240d4e5_869771d5",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2020-12-23T03:23:27Z",
+      "side": 1,
+      "message": "Pass EabControllerImpl instance into EabBulkCapabilityUpdater and move the callback into EabBulkCapabilityUpdater.",
+      "parentUuid": "53d65c66_b242b3b9",
       "range": {
         "startLine": 68,
         "startChar": 38,
