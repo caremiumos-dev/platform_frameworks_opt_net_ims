@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  */
 public abstract class UceRequest {
 
-    private static final String LOG_TAG = "UceRequest";
+    private static final String LOG_TAG = UceUtils.getLogPrefix() + "UceRequest";
 
     /** The request type: CAPABILITY */
     public static final int REQUEST_TYPE_CAPABILITY = 1;
@@ -127,7 +127,10 @@ public abstract class UceRequest {
         // Get the capabilities from the cache.
         final List<RcsContactUceCapability> cachedCapabilityList = getCapabilitiesFromCache();
 
-        logd("executeRequest: cached capabilities=" + cachedCapabilityList.size());
+        logd("executeRequest: cached capabilities size=" + cachedCapabilityList.size());
+        // TODO:
+        cachedCapabilityList.clear();
+        logd("executeRequest: cached capabilities clear size=" + cachedCapabilityList.size());
 
         // Trigger the callback for those capabilities from the cache.
         if (!handleCachedCapabilities(cachedCapabilityList)) {
@@ -166,9 +169,8 @@ public abstract class UceRequest {
         }
 
         if (mRequestManagerCallback.isRequestForbidden()) {
-            long retryAfter = mRequestManagerCallback.getRetryAfterMillis();
-            logw("isRequestAllowed: The request is forbidden, retry=" + retryAfter);
-            mRequestResponse.setErrorCode(RcsUceAdapter.ERROR_FORBIDDEN, retryAfter);
+            logw("isRequestAllowed: The request is forbidden");
+            mRequestResponse.setErrorCode(RcsUceAdapter.ERROR_FORBIDDEN);
             return false;
         }
         return true;
@@ -190,6 +192,7 @@ public abstract class UceRequest {
             return Collections.emptyList();
         }
         return resultList.stream()
+                .filter(Objects::nonNull)
                 .filter(result -> result.getStatus() == EabCapabilityResult.EAB_QUERY_SUCCESSFUL)
                 .map(EabCapabilityResult::getContactCapabilities)
                 .filter(Objects::nonNull)
@@ -275,10 +278,10 @@ public abstract class UceRequest {
     }
 
     private void checkRequestForbidden() {
-        final int networkResp = mRequestResponse.getNetworkResponseCode();
+        int networkResp = mRequestResponse.getNetworkResponseCode();
+        int errorCode = mRequestResponse.getErrorCode();
         if (networkResp == NetworkSipCode.SIP_CODE_FORBIDDEN) {
-            long retryAfter = mRequestResponse.getRetryAfterMillis();
-            mRequestManagerCallback.onRequestForbidden(true, retryAfter);
+            mRequestManagerCallback.onRequestForbidden(true, errorCode);
         }
     }
 

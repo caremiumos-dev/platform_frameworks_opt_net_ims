@@ -182,13 +182,10 @@ public class UceRequestManagerTest extends ImsTestBase {
         requestMgrCallback.isRequestForbidden();
         verify(mCallback).isRequestForbiddenByNetwork();
 
-        requestMgrCallback.getRetryAfterMillis();
-        verify(mCallback).getRetryAfterMillis();
-
         boolean isForbidden = true;
-        long retryAfter = 3000L;
-        requestMgrCallback.onRequestForbidden(isForbidden, retryAfter);
-        verify(mCallback).updateRequestForbidden(isForbidden, retryAfter);
+        Integer errorCode = RcsUceAdapter.ERROR_NOT_AUTHORIZED;
+        requestMgrCallback.onRequestForbidden(isForbidden, errorCode);
+        verify(mCallback).updateRequestForbidden(isForbidden, errorCode);
     }
 
     private UceRequestManager getUceRequestManager() {

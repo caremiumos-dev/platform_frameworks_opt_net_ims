@@ -82,8 +82,6 @@ public class UceRequestTest extends ImsTestBase {
                 new RcsContactUceCapability.PresenceBuilder(contact2,
                         SOURCE_TYPE_CACHED, REQUEST_RESULT_FOUND);
 
-        //EabCapabilityResult eabResult = new EabCapabilityResult(capabilityList, null);
-
         List<EabCapabilityResult> eabResultList = new ArrayList<>();
         EabCapabilityResult eabResult1 =
                 new EabCapabilityResult(contact1, EAB_QUERY_SUCCESSFUL, builder1.build());
@@ -115,7 +113,7 @@ public class UceRequestTest extends ImsTestBase {
         RcsContactUceCapability.PresenceBuilder builder =
                 new RcsContactUceCapability.PresenceBuilder(contact,
                         SOURCE_TYPE_CACHED, REQUEST_RESULT_FOUND);
-        //EabCapabilityResult eabResult = new EabCapabilityResult(capabilityList, null);
+
         List<EabCapabilityResult> eabResultList = new ArrayList<>();
         EabCapabilityResult eabResult =
                 new EabCapabilityResult(contact, EAB_QUERY_SUCCESSFUL, builder.build());
