@@ -143,38 +143,45 @@ public class EabControllerImpl implements EabController {
             return;
         }
         Log.d(TAG, "Save capabilities: " + contactCapabilities.size());
+        try {
 
-        // Update the capabilities
-        for (RcsContactUceCapability capability : contactCapabilities) {
-            String phoneNumber = getNumberFromUri(capability.getContactUri());
-            Cursor c = mContext.getContentResolver().query(
-                    EabProvider.CONTACT_URI, null, EabProvider.ContactColumns.PHONE_NUMBER + "=?",
-                    new String[]{phoneNumber}, null);
+            // Update the capabilities
+            for (RcsContactUceCapability capability : contactCapabilities) {
+                String phoneNumber = getNumberFromUri(capability.getContactUri());
+                Cursor c = mContext.getContentResolver().query(
+                        EabProvider.CONTACT_URI, null,
+                        EabProvider.ContactColumns.PHONE_NUMBER + "=?",
+                        new String[]{phoneNumber}, null);
 
-            if (c != null && c.moveToNext()) {
-                int contactId = getIntValue(c, EabProvider.ContactColumns._ID);
-                if (capability.getCapabilityMechanism() == CAPABILITY_MECHANISM_PRESENCE) {
-                    Log.d(TAG, "Insert presence capability");
-                    deleteOldPresenceCapability(contactId);
-                    insertNewPresenceCapability(contactId, capability);
-                } else if (capability.getCapabilityMechanism() == CAPABILITY_MECHANISM_OPTIONS) {
-                    Log.d(TAG, "Insert options capability");
-                    deleteOldOptionCapability(contactId);
-                    insertNewOptionCapability(contactId, capability);
+                if (c != null && c.moveToNext()) {
+                    int contactId = getIntValue(c, EabProvider.ContactColumns._ID);
+                    if (capability.getCapabilityMechanism() == CAPABILITY_MECHANISM_PRESENCE) {
+                        Log.d(TAG, "Insert presence capability");
+                        deleteOldPresenceCapability(contactId);
+                        insertNewPresenceCapability(contactId, capability);
+                    } else if (capability.getCapabilityMechanism()
+                            == CAPABILITY_MECHANISM_OPTIONS) {
+                        Log.d(TAG, "Insert options capability");
+                        deleteOldOptionCapability(contactId);
+                        insertNewOptionCapability(contactId, capability);
+                    }
+                } else {
+                    Log.e(TAG, "The phone number can't find in contact table. ");
+                    int contactId = insertNewContact(phoneNumber);
+                    if (capability.getCapabilityMechanism() == CAPABILITY_MECHANISM_PRESENCE) {
+                        insertNewPresenceCapability(contactId, capability);
+                    } else if (capability.getCapabilityMechanism()
+                            == CAPABILITY_MECHANISM_OPTIONS) {
+                        insertNewOptionCapability(contactId, capability);
+                    }
                 }
-            } else {
-                Log.e(TAG, "The phone number can't find in contact table. ");
-                int contactId = insertNewContact(phoneNumber);
-                if (capability.getCapabilityMechanism() == CAPABILITY_MECHANISM_PRESENCE) {
-                    insertNewPresenceCapability(contactId, capability);
-                } else if (capability.getCapabilityMechanism() == CAPABILITY_MECHANISM_OPTIONS) {
-                    insertNewOptionCapability(contactId, capability);
+
+                if (c != null) {
+                    c.close();
                 }
             }
-
-            if (c != null) {
-                c.close();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
