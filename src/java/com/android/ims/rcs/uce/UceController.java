@@ -17,6 +17,7 @@
 package com.android.ims.rcs.uce;
 
 import android.annotation.NonNull;
+import android.annotation.Nullable;
 import android.content.Context;
 import android.net.Uri;
 import android.os.HandlerThread;
@@ -45,11 +46,9 @@ import com.android.ims.rcs.uce.presence.publish.PublishControllerImpl;
 import com.android.ims.rcs.uce.presence.subscribe.SubscribeController;
 import com.android.ims.rcs.uce.presence.subscribe.SubscribeControllerImpl;
 import com.android.ims.rcs.uce.request.UceRequestManager;
+import com.android.ims.rcs.uce.util.UceUtils;
 import com.android.internal.annotations.VisibleForTesting;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -59,7 +58,7 @@ import java.util.List;
  */
 public class UceController {
 
-    private static final String LOG_TAG = "UceController";
+    private static final String LOG_TAG = UceUtils.getLogPrefix() + "UceController";
 
     /**
      * The callback interface is called by the internal controllers to receive information from
@@ -89,21 +88,15 @@ public class UceController {
         /**
          * The network reply that the request is forbidden.
          * @param isForbidden If UCE requests are forbidden by the network.
-         * @param retryAfterMillis The time to wait for the retry.
+         * @param errorCode The {@link RcsUceAdapter#ErrorCode} of the forbidden reason.
          */
-        void updateRequestForbidden(boolean isForbidden, long retryAfterMillis);
+        void updateRequestForbidden(boolean isForbidden, @Nullable Integer errorCode);
 
         /**
          * Check if UCE request is forbidden by the network.
          * @return true when the UCE is forbidden by the network
          */
         boolean isRequestForbiddenByNetwork();
-
-        /**
-         * Get the milliseconds need to wait for retry.
-         * @return The milliseconds need to wait
-         */
-        long getRetryAfterMillis();
 
         /**
          * Trigger the capabilities request with OPTIONS
@@ -211,7 +204,7 @@ public class UceController {
     private UceRequestManager mRequestManager;
 
     // The server state for UCE requests.
-    private ServerState mServerState;
+    private final ServerState mServerState;
 
     public UceController(Context context, int subId) {
         mSubId = subId;
@@ -340,18 +333,13 @@ public class UceController {
         }
 
         @Override
-        public void updateRequestForbidden(boolean isForbidden, long retryAfterMillis) {
-            onRequestForbidden(isForbidden, retryAfterMillis);
+        public void updateRequestForbidden(boolean isForbidden, @Nullable Integer errorCode) {
+            mServerState.updateRequestForbidden(isForbidden, errorCode);
         }
 
         @Override
         public boolean isRequestForbiddenByNetwork() {
-            return mServerState.isRequestForbidden();
-        }
-
-        @Override
-        public long getRetryAfterMillis() {
-            return mServerState.getRetryAfterMillis();
+            return (mServerState.getForbiddenErrorCode() != null) ? true : false;
         }
 
         @Override
@@ -365,7 +353,7 @@ public class UceController {
         public void refreshCapabilities(@NonNull List<Uri> contactNumbers,
                 @NonNull IRcsUceControllerCallback callback) throws RemoteException{
             logd("refreshCapabilities: " + contactNumbers.size());
-            UceController.this.requestCapabilities(contactNumbers, callback);
+            UceController.this.requestCapabilitiesInternal(contactNumbers, true, callback);
         }
 
         @Override
@@ -416,7 +404,12 @@ public class UceController {
      */
     public void requestCapabilities(@NonNull List<Uri> uriList,
             @NonNull IRcsUceControllerCallback c) throws RemoteException {
-        if (uriList == null || c == null) {
+        requestCapabilitiesInternal(uriList, false, c);
+    }
+
+    private void requestCapabilitiesInternal(@NonNull List<Uri> uriList, boolean skipFromCache,
+            @NonNull IRcsUceControllerCallback c) throws RemoteException {
+        if (uriList == null || uriList.isEmpty() || c == null) {
             logw("requestCapabilities: parameter is empty");
             if (c != null) {
                 c.onError(RcsUceAdapter.ERROR_GENERIC_FAILURE, 0L);
@@ -431,16 +424,16 @@ public class UceController {
         }
 
         // Check if UCE requests are forbidden by the network.
-        if (mServerState.isRequestForbidden()) {
-            long retryAfter = mServerState.getRetryAfterMillis();
-            logw("requestCapabilities: The request is forbidden, retryAfter=" + retryAfter);
-            c.onError(RcsUceAdapter.ERROR_FORBIDDEN, retryAfter);
+        Integer forbidden = mServerState.getForbiddenErrorCode();
+        if (forbidden != null) {
+            logw("requestCapabilities: The request is forbidden, errorCode=" + forbidden);
+            c.onError(forbidden, 0L);
             return;
         }
 
         // Trigger the capabilities request task
         logd("requestCapabilities: " + uriList.size());
-        mRequestManager.sendCapabilityRequest(uriList, c);
+        mRequestManager.sendCapabilityRequest(uriList, skipFromCache, c);
     }
 
     /**
@@ -465,10 +458,10 @@ public class UceController {
         }
 
         // Check if UCE requests are forbidden by the network.
-        if (mServerState.isRequestForbidden()) {
-            long retryAfter = mServerState.getRetryAfterMillis();
-            logw("requestAvailability: The request is forbidden, retryAfter=" + retryAfter);
-            c.onError(RcsUceAdapter.ERROR_FORBIDDEN, retryAfter);
+        Integer forbidden = mServerState.getForbiddenErrorCode();
+        if (forbidden != null) {
+            logw("requestAvailability: The request is forbidden, errorCode=" + forbidden);
+            c.onError(forbidden, 0L);
             return;
         }
 
@@ -482,6 +475,9 @@ public class UceController {
      */
     public void onRequestPublishCapabilitiesFromService(@StackPublishTriggerType int triggerType) {
         logd("onRequestPublishCapabilitiesFromService: " + triggerType);
+        // Reset the forbidden status if the service request to publish device's capabilities.
+        mServerState.updateRequestForbidden(false, null);
+        // Send the publish request to the PublishController
         mPublishController.requestPublishCapabilitiesFromService(triggerType);
     }
 
@@ -502,14 +498,6 @@ public class UceController {
             @NonNull List<String> remoteCapabilities, @NonNull IOptionsRequestCallback c) {
         logi("retrieveOptionsCapabilitiesForRemote");
         mOptionsController.retrieveCapabilitiesForRemote(contactUri, remoteCapabilities, c);
-    }
-
-    /**
-     * Update the Request forbidden state.
-     */
-    public void onRequestForbidden(boolean isForbidden, long retryAfterMillis) {
-        logi("onRequestForbidden: forbidden=" + isForbidden + ", retry=" + retryAfterMillis);
-        mServerState.forbidUceRequest(isForbidden, retryAfterMillis);
     }
 
     /**
@@ -559,51 +547,35 @@ public class UceController {
     public static class ServerState {
         // If UCE requests are forbidden by the network.
         private boolean mIsForbidden;
+        private Integer mForbiddenErrorCode;
 
-        // The timestamp when the network allows the UCE requests. This value may be null if the
-        // network doesn't specified any retryAfter info.
-        private Instant mAllowedTimestamp;
-
-        private final Object mNetworkStateLock = new Object();
+        private final Object mServerStateLock = new Object();
 
         public ServerState() {
             mIsForbidden = false;
-            mAllowedTimestamp = null;
+            mForbiddenErrorCode = null;
         }
 
-        public void forbidUceRequest(boolean isForbidden, long retryAfterMillis) {
-            synchronized (mNetworkStateLock) {
+        public void updateRequestForbidden(boolean isForbidden, @Nullable Integer errorCode) {
+            synchronized (mServerStateLock) {
                 mIsForbidden = isForbidden;
                 if (!mIsForbidden) {
-                    mAllowedTimestamp = null;
+                    mForbiddenErrorCode = null;
                 } else {
-                    mAllowedTimestamp = Instant.now().plus(retryAfterMillis, ChronoUnit.MILLIS);
+                    mForbiddenErrorCode =
+                        (errorCode == null) ? RcsUceAdapter.ERROR_FORBIDDEN : errorCode;
                 }
-                Log.d(LOG_TAG, "forbidUceRequest: " + mIsForbidden
-                        + ", time=" + mAllowedTimestamp);
+                Log.i(LOG_TAG, "updateRequestForbidden: isForbidden=" + mIsForbidden
+                    + ", errorCode=" + mForbiddenErrorCode);
             }
         }
 
-        public boolean isRequestForbidden() {
-            synchronized (mNetworkStateLock) {
-                if (mIsForbidden && mAllowedTimestamp != null) {
-                    return Instant.now().isBefore(mAllowedTimestamp);
+        public @Nullable Integer getForbiddenErrorCode() {
+            synchronized (mServerStateLock) {
+                if (!mIsForbidden) {
+                    return null;
                 }
-                return mIsForbidden;
-            }
-        }
-
-        public long getRetryAfterMillis() {
-            synchronized (mNetworkStateLock) {
-                if (!mIsForbidden || mAllowedTimestamp == null) {
-                    return 0L;
-                }
-                Duration duration = Duration.between(Instant.now(), mAllowedTimestamp);
-                long retryAfterMillis = duration.toMillis();
-                if (retryAfterMillis < 0) {
-                    return 0L;
-                }
-                return retryAfterMillis;
+                return mForbiddenErrorCode;
             }
         }
     }
