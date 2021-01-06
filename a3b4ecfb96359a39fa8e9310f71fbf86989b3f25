@@ -450,6 +450,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5dc6b7bc_b874bcee",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-06T20:26:09Z",
+      "side": 1,
+      "message": "We need the request itself from EAB to include this jitter because the bulk request to network itself needs to have some randomness built into the time or else all requests will happen at exactly 7 days (or however it is configured.)",
+      "parentUuid": "3f62e8f0_283aa0c4",
+      "range": {
+        "startLine": 253,
+        "startChar": 40,
+        "endLine": 253,
+        "endChar": 50
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2d091236_b97c0633",
         "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
         "patchSetId": 2
@@ -485,6 +509,30 @@
       "side": 1,
       "message": "This will return the default value of KEY_RCS_BULK_CAPABILITY_EXCHANGE_BOOL(false) if device can\u0027t get the value, should we return false directly in here?",
       "parentUuid": "2d091236_b97c0633",
+      "range": {
+        "startLine": 272,
+        "startChar": 12,
+        "endLine": 272,
+        "endChar": 75
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1f0963f_759fb035",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-06T20:26:09Z",
+      "side": 1,
+      "message": "Actually, looking at this again, it should be fine to use the default. Just so that it is obvious in the logs, can you also print a warning log here mentioning that the default value was used?",
+      "parentUuid": "eb76dfdc_85119af7",
       "range": {
         "startLine": 272,
         "startChar": 12,
