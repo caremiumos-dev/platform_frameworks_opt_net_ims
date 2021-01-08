@@ -1,0 +1,10 @@
+Open-Source-Licensing+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Code-Review+2: Shuo Qian <shuoq@google.com>
+Code-Review+2: Hall Liu <hallliu@google.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Presubmit-Verified+2: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Shuo Qian <shuoq@google.com>
+Submitted-at: Fri, 08 Jan 2021 02:21:31 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1542032
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
