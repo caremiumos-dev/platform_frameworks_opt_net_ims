@@ -472,6 +472,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5e48ddd_4294ea75",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2021-01-08T06:41:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5dc6b7bc_b874bcee",
+      "range": {
+        "startLine": 253,
+        "startChar": 40,
+        "endLine": 253,
+        "endChar": 50
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d091236_b97c0633",
@@ -533,6 +557,30 @@
       "side": 1,
       "message": "Actually, looking at this again, it should be fine to use the default. Just so that it is obvious in the logs, can you also print a warning log here mentioning that the default value was used?",
       "parentUuid": "eb76dfdc_85119af7",
+      "range": {
+        "startLine": 272,
+        "startChar": 12,
+        "endLine": 272,
+        "endChar": 75
+      },
+      "revId": "a3b4ecfb96359a39fa8e9310f71fbf86989b3f25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fd88009_27ff9d0f",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2021-01-08T06:41:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1f0963f_759fb035",
       "range": {
         "startLine": 272,
         "startChar": 12,

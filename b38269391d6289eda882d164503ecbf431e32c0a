@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "735d7f3d_621b97df",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2021-01-08T06:41:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b38fc157_e6a46d63",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 0
+      },
+      "revId": "b38269391d6289eda882d164503ecbf431e32c0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05909c86_894472b8",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-01-06T20:26:09Z",
       "side": 1,
       "message": "Hmm tests should not need to read contacts.. why is this required?",
+      "range": {
+        "startLine": 21,
+        "startChar": 3,
+        "endLine": 21,
+        "endChar": 70
+      },
+      "revId": "b38269391d6289eda882d164503ecbf431e32c0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9e71c38_8b4e3ff1",
+        "filename": "tests/AndroidManifest.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2021-01-08T06:41:00Z",
+      "side": 1,
+      "message": "Removed. We use a fake contact provider, so it is unnecessary.",
+      "parentUuid": "05909c86_894472b8",
       "range": {
         "startLine": 21,
         "startChar": 3,
