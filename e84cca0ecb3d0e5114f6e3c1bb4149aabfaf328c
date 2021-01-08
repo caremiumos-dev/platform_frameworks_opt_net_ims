@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b337c22_c90c1bcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-08T19:12:18Z",
+      "side": 1,
+      "message": "Please also check unit tests - they look to be failing",
+      "revId": "e84cca0ecb3d0e5114f6e3c1bb4149aabfaf328c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9159f620_872701fa",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-08T19:12:18Z",
+      "side": 1,
+      "message": "Nit: can the time unit also be specified in this variable, i.e \"wakeupTimeMs\"?",
+      "range": {
+        "startLine": 348,
+        "startChar": 52,
+        "endLine": 348,
+        "endChar": 62
+      },
+      "revId": "e84cca0ecb3d0e5114f6e3c1bb4149aabfaf328c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ebbd082_1afcaf72",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-08T19:12:18Z",
+      "side": 1,
+      "message": "nit: can you make this jitterTimeSec",
+      "range": {
+        "startLine": 353,
+        "startChar": 12,
+        "endLine": 353,
+        "endChar": 22
+      },
+      "revId": "e84cca0ecb3d0e5114f6e3c1bb4149aabfaf328c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf3c1cc2_4056f82d",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-08T19:12:18Z",
+      "side": 1,
+      "message": "Can this be defined as a static var in the top of the file that can be modified. Have you also verified this number with carrier specs? I think one or more carriers may specify the jitter time.",
+      "range": {
+        "startLine": 353,
+        "startChar": 49,
+        "endLine": 353,
+        "endChar": 54
+      },
+      "revId": "e84cca0ecb3d0e5114f6e3c1bb4149aabfaf328c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
