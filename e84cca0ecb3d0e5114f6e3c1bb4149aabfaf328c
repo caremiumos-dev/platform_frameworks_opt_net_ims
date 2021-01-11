@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df1c24b_54e1e291",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2021-01-11T08:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9159f620_872701fa",
+      "range": {
+        "startLine": 348,
+        "startChar": 52,
+        "endLine": 348,
+        "endChar": 62
+      },
+      "revId": "e84cca0ecb3d0e5114f6e3c1bb4149aabfaf328c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ebbd082_1afcaf72",
@@ -77,6 +101,54 @@
       "writtenOn": "2021-01-08T19:12:18Z",
       "side": 1,
       "message": "Can this be defined as a static var in the top of the file that can be modified. Have you also verified this number with carrier specs? I think one or more carriers may specify the jitter time.",
+      "range": {
+        "startLine": 353,
+        "startChar": 49,
+        "endLine": 353,
+        "endChar": 54
+      },
+      "revId": "e84cca0ecb3d0e5114f6e3c1bb4149aabfaf328c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "240101f3_6e9a8ef0",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2021-01-11T08:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ebbd082_1afcaf72",
+      "range": {
+        "startLine": 353,
+        "startChar": 12,
+        "endLine": 353,
+        "endChar": 22
+      },
+      "revId": "e84cca0ecb3d0e5114f6e3c1bb4149aabfaf328c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e5635b8_c6d6a60d",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2021-01-11T08:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf3c1cc2_4056f82d",
       "range": {
         "startLine": 353,
         "startChar": 49,

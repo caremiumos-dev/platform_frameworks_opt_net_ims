@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1679ed17_6faeda7e",
+        "filename": "tests/AndroidManifest.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2021-01-11T08:47:04Z",
+      "side": 1,
+      "message": "The EabBulkCapabilityUpdater will register ContentObserver and the ContentResolver.registerContentObserver() is final, so we can\u0027t mock/override the method to register fake contact observer, we will register the observer to real contact provider while testing.\n\nI think the only way to test registerContentObserver() is using Robolectric but seems Robolectric is ready to deprecated(go/android-platform-robolectric-cleanup), so i prefer to add permission in here and we can do nothing when robolectric removed.",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 70
+      },
+      "revId": "206e7654e63b76a9a310d0484d2d88a12eaca0bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
