@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4586648_8cb123be",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-11T20:19:16Z",
+      "side": 1,
+      "message": "Where is this actually registered?",
+      "range": {
+        "startLine": 106,
+        "startChar": 18,
+        "endLine": 106,
+        "endChar": 40
+      },
+      "revId": "206e7654e63b76a9a310d0484d2d88a12eaca0bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1679ed17_6faeda7e",
         "filename": "tests/AndroidManifest.xml",
         "patchSetId": 10
@@ -19,6 +42,53 @@
         "startChar": 4,
         "endLine": 21,
         "endChar": 70
+      },
+      "revId": "206e7654e63b76a9a310d0484d2d88a12eaca0bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9859601_bf1c9bb6",
+        "filename": "tests/AndroidManifest.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-11T20:19:16Z",
+      "side": 1,
+      "message": "How would this be triggered during the tests? Seems like the only way to do this would be to mock and replace the entire ContentObserver during testing anyway",
+      "parentUuid": "1679ed17_6faeda7e",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 70
+      },
+      "revId": "206e7654e63b76a9a310d0484d2d88a12eaca0bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a943295c_821e99c9",
+        "filename": "tests/src/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdaterTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-11T20:19:16Z",
+      "side": 1,
+      "message": "How is this used in the Updater?",
+      "range": {
+        "startLine": 184,
+        "startChar": 24,
+        "endLine": 184,
+        "endChar": 43
       },
       "revId": "206e7654e63b76a9a310d0484d2d88a12eaca0bb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
