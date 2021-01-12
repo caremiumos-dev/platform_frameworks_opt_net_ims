@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e34aa627_2d15a999",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabBulkCapabilityUpdater.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-12T21:07:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "310b5251_95b586b5",
+      "range": {
+        "startLine": 106,
+        "startChar": 18,
+        "endLine": 106,
+        "endChar": 40
+      },
+      "revId": "206e7654e63b76a9a310d0484d2d88a12eaca0bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1679ed17_6faeda7e",
@@ -109,6 +133,30 @@
       "side": 1,
       "message": "I think mock and replace the entire ContentObserver is still not working since the framework will still register the mock observer to contact provider and it still need the permission. I found that has similar topic on chatty (see https://groups.google.com/a/google.com/g/android-chatty-eng/c/FRiQBFwz_2Q/m/zjUpr4kyAwAJ).\n\nI think the possible option is:\n- Require the READ_CONTACTS in test APK\nor \n- Add a parameter to the EabBulkCapabilityUpdater constructor. If it is null, EabBulkCapabilityUpdater will not register ContentObserver.",
       "parentUuid": "a9859601_bf1c9bb6",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 70
+      },
+      "revId": "206e7654e63b76a9a310d0484d2d88a12eaca0bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84f13aa0_bb65f213",
+        "filename": "tests/AndroidManifest.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-12T21:07:36Z",
+      "side": 1,
+      "message": "Sure, as long as this doesnt have any side effects, then we can just include the permission in the test apk.\n\nCan you put a comment as to why this is declared here?",
+      "parentUuid": "00912a7a_44f30222",
       "range": {
         "startLine": 21,
         "startChar": 4,
