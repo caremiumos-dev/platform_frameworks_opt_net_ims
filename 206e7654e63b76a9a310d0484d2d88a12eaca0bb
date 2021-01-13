@@ -167,6 +167,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fcf2d54_dca2fd45",
+        "filename": "tests/AndroidManifest.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2021-01-13T01:20:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84f13aa0_bb65f213",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 70
+      },
+      "revId": "206e7654e63b76a9a310d0484d2d88a12eaca0bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a943295c_821e99c9",
