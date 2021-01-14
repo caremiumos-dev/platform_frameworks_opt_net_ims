@@ -31,7 +31,6 @@ import android.telephony.ims.RcsContactPresenceTuple.ServiceCapabilities;
 import android.telephony.ims.RcsContactUceCapability;
 import android.telephony.ims.RcsContactUceCapability.OptionsBuilder;
 import android.telephony.ims.RcsContactUceCapability.PresenceBuilder;
-import android.telephony.ims.RcsContactUceCapability.RcsUcsCapabilityBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -201,7 +200,7 @@ public class EabControllerImpl implements EabController {
 
     private EabCapabilityResult generateEabResult(Uri contactUri,
             Predicate<Cursor> isExpiredMethod) {
-        RcsContactUceCapability.RcsUcsCapabilityBuilder builder = null;
+        RcsUcsCapabilityBuilderWrapper builder = null;
         EabCapabilityResult result;
 
         // query EAB provider
@@ -231,9 +230,18 @@ public class EabControllerImpl implements EabController {
                         EabCapabilityResult.EAB_CONTACT_EXPIRED_FAILURE,
                         null);
             } else {
-                result = new EabCapabilityResult(contactUri,
-                        EabCapabilityResult.EAB_QUERY_SUCCESSFUL,
-                        builder.build());
+                if (builder.getMechanism() == CAPABILITY_MECHANISM_PRESENCE) {
+                    PresenceBuilder presenceBuilder = builder.getPresenceBuilder();
+                    result = new EabCapabilityResult(contactUri,
+                            EabCapabilityResult.EAB_QUERY_SUCCESSFUL,
+                            presenceBuilder.build());
+                } else {
+                    OptionsBuilder optionsBuilder = builder.getOptionsBuilder();
+                    result = new EabCapabilityResult(contactUri,
+                            EabCapabilityResult.EAB_QUERY_SUCCESSFUL,
+                            optionsBuilder.build());
+                }
+
             }
         } else {
             result = new EabCapabilityResult(contactUri,
@@ -242,26 +250,36 @@ public class EabControllerImpl implements EabController {
         return result;
     }
 
-    private void updateCapability(Uri contactUri, Cursor cursor, RcsUcsCapabilityBuilder builder) {
-        if (builder instanceof PresenceBuilder) {
-            ((PresenceBuilder) builder).addCapabilityTuple(createPresenceTuple(contactUri, cursor));
+    private void updateCapability(Uri contactUri, Cursor cursor,
+                RcsUcsCapabilityBuilderWrapper builderWrapper) {
+        if (builderWrapper.getMechanism() == CAPABILITY_MECHANISM_PRESENCE) {
+            PresenceBuilder builder = builderWrapper.getPresenceBuilder();
+            if (builder != null) {
+                builder.addCapabilityTuple(createPresenceTuple(contactUri, cursor));
+            }
         } else {
-            ((OptionsBuilder) builder).addFeatureTag(createOptionTuple(cursor));
+            OptionsBuilder builder = builderWrapper.getOptionsBuilder();
+            if (builder != null) {
+                builder.addFeatureTag(createOptionTuple(cursor));
+            }
         }
     }
 
-    private RcsUcsCapabilityBuilder createNewBuilder(Uri contactUri, Cursor cursor) {
+    private RcsUcsCapabilityBuilderWrapper createNewBuilder(Uri contactUri, Cursor cursor) {
         int mechanism = getIntValue(cursor, EabProvider.EabCommonColumns.MECHANISM);
         int result = getIntValue(cursor, EabProvider.EabCommonColumns.REQUEST_RESULT);
+        RcsUcsCapabilityBuilderWrapper builderWrapper =
+                new RcsUcsCapabilityBuilderWrapper(mechanism);
 
         if (mechanism == CAPABILITY_MECHANISM_PRESENCE) {
             PresenceBuilder builder = new PresenceBuilder(
                     contactUri, CAPABILITY_MECHANISM_PRESENCE, result);
             builder.addCapabilityTuple(createPresenceTuple(contactUri, cursor));
-            return builder;
+            builderWrapper.setPresenceBuilder(builder);
         } else {
-            return new OptionsBuilder(contactUri);
+            builderWrapper.setOptionsBuilder(new OptionsBuilder(contactUri));
         }
+        return builderWrapper;
     }
 
     private String createOptionTuple(Cursor cursor) {
@@ -323,16 +341,16 @@ public class EabControllerImpl implements EabController {
         RcsContactPresenceTuple.Builder rcsContactPresenceTupleBuilder =
                 new RcsContactPresenceTuple.Builder(status, serviceId, version);
         if (description != null) {
-            rcsContactPresenceTupleBuilder.addDescription(description);
+            rcsContactPresenceTupleBuilder.setServiceDescription(description);
         }
         if (contactUri != null) {
-            rcsContactPresenceTupleBuilder.addContactUri(contactUri);
+            rcsContactPresenceTupleBuilder.setContactUri(contactUri);
         }
         if (serviceCapabilities != null) {
-            rcsContactPresenceTupleBuilder.addServiceCapabilities(serviceCapabilities);
+            rcsContactPresenceTupleBuilder.setServiceCapabilities(serviceCapabilities);
         }
         if (timeStamp != null) {
-            rcsContactPresenceTupleBuilder.addTimeStamp(timeStamp);
+            rcsContactPresenceTupleBuilder.setTimeStamp(timeStamp);
         }
 
         return rcsContactPresenceTupleBuilder.build();
