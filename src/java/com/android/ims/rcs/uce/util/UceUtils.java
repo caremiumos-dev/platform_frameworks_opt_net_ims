@@ -83,7 +83,7 @@ public class UceUtils {
         if (config == null) {
             return false;
         }
-        return config.getBoolean(CarrierConfigManager.KEY_USE_RCS_PRESENCE_BOOL);
+        return config.getBoolean(CarrierConfigManager.Ims.KEY_ENABLE_PRESENCE_PUBLISH_BOOL);
     }
 
     /**

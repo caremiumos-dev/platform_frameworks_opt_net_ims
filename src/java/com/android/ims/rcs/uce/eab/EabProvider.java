@@ -450,8 +450,6 @@ public class EabProvider extends ContentProvider {
         int subId;
         String subIdString;
 
-        Log.d(TAG, "Query URI: " + match);
-
         switch (match) {
             case URL_CONTACT:
                 qb.setTables(EAB_CONTACT_TABLE_NAME);
