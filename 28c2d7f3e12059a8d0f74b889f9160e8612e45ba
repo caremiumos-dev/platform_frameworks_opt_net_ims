@@ -1,0 +1,9 @@
+Open-Source-Licensing+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Code-Review+2: Brad Ebinger <breadley@google.com>
+Presubmit-Verified+2: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Submitted-by: Hui Wang <huiwang@google.com>
+Submitted-at: Fri, 15 Jan 2021 17:36:48 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1550109
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
