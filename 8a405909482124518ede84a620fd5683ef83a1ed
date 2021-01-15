@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52ec8f1a_011989a3",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-15T19:20:31Z",
+      "side": 0,
+      "message": "If I remember correctly, there is a retryAfter time returned from the network.. I thought the idea was to send this retryAfter to the app so that they could retry after X seconds\n\n(see CapabilitiesCallback#onError(@ErrorCode int errorCode, long retryAfterMilliseconds))",
+      "range": {
+        "startLine": 92,
+        "startChar": 18,
+        "endLine": 92,
+        "endChar": 66
+      },
+      "revId": "8a405909482124518ede84a620fd5683ef83a1ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

@@ -39,6 +39,75 @@
       "message": "Adding Calvin to review EAB changes as well",
       "revId": "0846d10f18e1357ca15c69e9984002c933650a6f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24fdbffb_dc4e0801",
+        "filename": "src/java/com/android/ims/rcs/uce/request/UceRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-15T19:20:31Z",
+      "side": 1,
+      "message": "nit grammar: should be getting",
+      "range": {
+        "startLine": 118,
+        "startChar": 36,
+        "endLine": 118,
+        "endChar": 51
+      },
+      "revId": "0846d10f18e1357ca15c69e9984002c933650a6f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c9f43b6_d609b5dc",
+        "filename": "src/java/com/android/ims/rcs/uce/request/UceRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-15T19:20:31Z",
+      "side": 1,
+      "message": "Is this for availability use case? can this be mentioned in the javadoc? same with getter below",
+      "range": {
+        "startLine": 120,
+        "startChar": 16,
+        "endLine": 120,
+        "endChar": 39
+      },
+      "revId": "0846d10f18e1357ca15c69e9984002c933650a6f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f3d0303_b33a655d",
+        "filename": "src/java/com/android/ims/rcs/uce/util/NetworkSipCode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-15T19:20:31Z",
+      "side": 1,
+      "message": "Maybe we can parse these with equalsIgnoreCase() so we are not having to do this type of stuff?",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 95
+      },
+      "revId": "0846d10f18e1357ca15c69e9984002c933650a6f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
