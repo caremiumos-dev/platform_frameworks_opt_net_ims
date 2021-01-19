@@ -22,6 +22,30 @@
       },
       "revId": "8a405909482124518ede84a620fd5683ef83a1ed",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a4079a8_32cf8589",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-01-19T17:48:36Z",
+      "side": 0,
+      "message": "In my original thought, when the request is forbidden by the network, the device should not retry until network trigger to publish or the publish is successfully.\nTherefore, I remove the parameter retryAfter from this callback method and add the error code to indicate what cause the device is forbidden.",
+      "parentUuid": "52ec8f1a_011989a3",
+      "range": {
+        "startLine": 92,
+        "startChar": 18,
+        "endLine": 92,
+        "endChar": 66
+      },
+      "revId": "8a405909482124518ede84a620fd5683ef83a1ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
