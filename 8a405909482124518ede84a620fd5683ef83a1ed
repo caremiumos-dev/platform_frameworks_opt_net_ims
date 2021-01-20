@@ -46,6 +46,30 @@
       },
       "revId": "8a405909482124518ede84a620fd5683ef83a1ed",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e9277b8_54a6dd21",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-20T03:09:05Z",
+      "side": 0,
+      "message": "So, if the network sends back a retryAfter of 5 seconds, we will still stay blocked until the next publish is triggered? Even if it is greater than 5 seconds?",
+      "parentUuid": "6a4079a8_32cf8589",
+      "range": {
+        "startLine": 92,
+        "startChar": 18,
+        "endLine": 92,
+        "endChar": 66
+      },
+      "revId": "8a405909482124518ede84a620fd5683ef83a1ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
