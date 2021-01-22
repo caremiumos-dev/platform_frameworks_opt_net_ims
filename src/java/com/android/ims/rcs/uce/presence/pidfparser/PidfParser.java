@@ -227,7 +227,7 @@ public class PidfParser {
                 }
 
                 if (notSupportedTypes != null && !notSupportedTypes.isEmpty()) {
-                    for (String notSupportedType : supportedTypes) {
+                    for (String notSupportedType : notSupportedTypes) {
                         capabilitiesBuilder.addUnsupportedDuplexMode(notSupportedType);
                     }
                 }
