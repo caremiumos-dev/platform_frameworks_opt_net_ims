@@ -1,0 +1,14 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Verified+1: Sonalika Paul <quic_psonalik@quicinc.com>
+Code-Review+1: Sonalika Paul <quic_psonalik@quicinc.com>
+Code-Review+2: Hall Liu <hallliu@google.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Qualcomm-Review+1: Garik Badalyan <garikb@quicinc.com>
+Autosubmit+1: Hall Liu <hallliu@google.com>
+Presubmit-Verified-1: Treehugger Robot <treehugger-gerrit@google.com>
+Bypass-Presubmit+1: Hall Liu <hallliu@google.com>
+Submitted-by: Hall Liu <hallliu@google.com>
+Submitted-at: Fri, 22 Jan 2021 18:28:08 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1409887
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
