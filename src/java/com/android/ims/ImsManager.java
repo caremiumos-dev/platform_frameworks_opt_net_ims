@@ -1696,18 +1696,23 @@ public class ImsManager implements FeatureUpdates {
     }
 
     /**
-     * Opens the IMS service for making calls and/or receiving generic IMS calls.
+     * Opens the IMS service for making calls and/or receiving generic IMS calls as well as
+     * register listeners for ECBM, Multiendpoint, and UT if the ImsService supports it.
+     * <p>
      * The caller may make subsequent calls through {@link #makeCall}.
      * The IMS service will register the device to the operator's network with the credentials
      * (from ISIM) periodically in order to receive calls from the operator's network.
      * When the IMS service receives a new call, it will call
      * {@link MmTelFeature.Listener#onIncomingCall}
      * @param listener A {@link MmTelFeature.Listener}, which is the interface the
-     * {@link MmTelFeature} uses to notify the framework of updates
+     * {@link MmTelFeature} uses to notify the framework of updates.
+     * @param ecbmListener Listener used for ECBM indications.
+     * @param multiendpointListener Listener used for multiendpoint indications.
      * @throws NullPointerException if {@code listener} is null
      * @throws ImsException if calling the IMS service results in an error
      */
-    public void open(MmTelFeature.Listener listener) throws ImsException {
+    public void open(MmTelFeature.Listener listener, ImsEcbmStateListener ecbmListener,
+            ImsExternalCallStateListener multiendpointListener) throws ImsException {
         MmTelFeatureConnection c = getOrThrowExceptionIfServiceUnavailable();
 
         if (listener == null) {
@@ -1715,7 +1720,7 @@ public class ImsManager implements FeatureUpdates {
         }
 
         try {
-            c.openConnection(listener);
+            c.openConnection(listener, ecbmListener, multiendpointListener);
         } catch (RemoteException e) {
             throw new ImsException("open()", e, ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
         }
@@ -1860,16 +1865,18 @@ public class ImsManager implements FeatureUpdates {
 
     /**
      * Removes a previously registered {@link ImsMmTelManager.CapabilityCallback} callback.
-     * @throws ImsException when the ImsService connection is not available.
      */
-    public void removeCapabilitiesCallback(ImsMmTelManager.CapabilityCallback callback)
-            throws ImsException {
+    public void removeCapabilitiesCallback(ImsMmTelManager.CapabilityCallback callback) {
         if (callback == null) {
             throw new NullPointerException("capabilities callback can't be null");
         }
 
-        MmTelFeatureConnection c = getOrThrowExceptionIfServiceUnavailable();
-        c.removeCapabilityCallback(callback.getBinder());
+        try {
+            MmTelFeatureConnection c = getOrThrowExceptionIfServiceUnavailable();
+            c.removeCapabilityCallback(callback.getBinder());
+        } catch (ImsException e) {
+            log("Exception removing Capability , exception=" + e);
+        }
     }
 
     /**
@@ -1974,8 +1981,7 @@ public class ImsManager implements FeatureUpdates {
     }
 
     /**
-     * Closes the connection and removes all active callbacks.
-     * All the resources that were allocated to the service are also released.
+     * Closes the connection opened in {@link #open} and removes the associated listeners.
      */
     public void close() {
         mMmTelConnectionRef.get().closeConnection();
@@ -1983,6 +1989,8 @@ public class ImsManager implements FeatureUpdates {
 
     /**
      * Gets the configuration interface to provision / withdraw the supplementary service settings.
+     *<p>
+     * This should only be called after {@link #open} has been called.
      *
      * @return the Ut interface instance
      * @throws ImsException if getting the Ut interface results in an error
@@ -2614,23 +2622,19 @@ public class ImsManager implements FeatureUpdates {
 
     /**
      * Gets the ECBM interface to request ECBM exit.
+     * <p>
+     * This should only be called after {@link #open} has been called.
      *
      * @return the ECBM interface instance
      * @throws ImsException if getting the ECBM interface results in an error
      */
     public ImsEcbm getEcbmInterface() throws ImsException {
-        ImsEcbm iEcbm = null;
         MmTelFeatureConnection c = getOrThrowExceptionIfServiceUnavailable();
-        try {
-            iEcbm = c.getEcbmInterface();
+        ImsEcbm iEcbm = c.getEcbmInterface();
 
-            if (iEcbm == null) {
-                throw new ImsException("getEcbmInterface()",
-                        ImsReasonInfo.CODE_ECBM_NOT_SUPPORTED);
-            }
-        } catch (RemoteException e) {
-            throw new ImsException("getEcbmInterface()", e,
-                    ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
+        if (iEcbm == null) {
+            throw new ImsException("getEcbmInterface()",
+                    ImsReasonInfo.CODE_ECBM_NOT_SUPPORTED);
         }
         return iEcbm;
     }
@@ -2709,29 +2713,6 @@ public class ImsManager implements FeatureUpdates {
             throw new ImsException("shouldProcessCall()", e,
                     ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
         }
-    }
-
-    /**
-     * Gets the Multi-Endpoint interface to subscribe to multi-enpoint notifications..
-     *
-     * @return the multi-endpoint interface instance
-     * @throws ImsException if getting the multi-endpoint interface results in an error
-     */
-    public ImsMultiEndpoint getMultiEndpointInterface() throws ImsException {
-        ImsMultiEndpoint iImsMultiEndpoint;
-        try {
-            iImsMultiEndpoint = mMmTelConnectionRef.get().getMultiEndpointInterface();
-
-            if (iImsMultiEndpoint == null) {
-                throw new ImsException("getMultiEndpointInterface()",
-                        ImsReasonInfo.CODE_MULTIENDPOINT_NOT_SUPPORTED);
-            }
-        } catch (RemoteException e) {
-            throw new ImsException("getMultiEndpointInterface()", e,
-                    ImsReasonInfo.CODE_LOCAL_IMS_SERVICE_DOWN);
-        }
-
-        return iImsMultiEndpoint;
     }
 
     /**

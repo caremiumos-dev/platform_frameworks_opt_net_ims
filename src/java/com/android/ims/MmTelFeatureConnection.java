@@ -16,12 +16,10 @@
 
 package com.android.ims;
 
-import android.annotation.NonNull;
 import android.content.Context;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
-import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsCallProfile;
 import android.telephony.ims.ImsService;
 import android.telephony.ims.RtpHeaderExtensionType;
@@ -35,8 +33,8 @@ import android.telephony.ims.aidl.IImsSmsListener;
 import android.telephony.ims.aidl.IRcsConfigCallback;
 import android.telephony.ims.aidl.ISipTransport;
 import android.telephony.ims.feature.CapabilityChangeRequest;
-import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.feature.MmTelFeature;
+import android.telephony.ims.stub.ImsEcbmImplBase;
 import android.telephony.ims.stub.ImsSmsImplBase;
 import android.util.Log;
 
@@ -44,9 +42,9 @@ import com.android.ims.internal.IImsCallSession;
 import com.android.ims.internal.IImsEcbm;
 import com.android.ims.internal.IImsMultiEndpoint;
 import com.android.ims.internal.IImsUt;
-import com.android.telephony.Rlog;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -246,10 +244,13 @@ public class MmTelFeatureConnection extends FeatureConnection {
 
     // Updated by IImsServiceFeatureCallback when FEATURE_EMERGENCY_MMTEL is sent.
     private boolean mSupportsEmergencyCalling = false;
-    // MMTEL specific binder Interfaces
+    // MMTEL specific binder Interfaces. null -> haven't tried to set, empty -> not supported, and
+    // present -> supported.
+    private Optional<ImsEcbm> mEcbm;
+    private Optional<ImsMultiEndpoint> mMultiEndpoint;
+
+    private MmTelFeature.Listener mMmTelFeatureListener;
     private ImsUt mUt;
-    private ImsEcbm mEcbm;
-    private ImsMultiEndpoint mMultiEndpoint;
 
     private final ImsRegistrationCallbackAdapter mRegistrationCallbackManager;
     private final CapabilityCallbackManager mCapabilityCallbackManager;
@@ -269,8 +270,22 @@ public class MmTelFeatureConnection extends FeatureConnection {
 
     @Override
     protected void onRemovedOrDied() {
-        closeConnection();
-        super.onRemovedOrDied();
+        // Release all callbacks being tracked and unregister them from the connected MmTelFeature.
+        mRegistrationCallbackManager.close();
+        mCapabilityCallbackManager.close();
+        mProvisioningCallbackManager.close();
+        // Close mUt interface separately from other listeners, as it is not tied directly to
+        // calling. There is still a limitation currently that only one UT listener can be set
+        // (through ImsPhoneCallTracker), but this could be relaxed in the future via the ability
+        // to register multiple callbacks.
+        synchronized (mLock) {
+            if (mUt != null) {
+                mUt.close();
+                mUt = null;
+            }
+            closeConnection();
+            super.onRemovedOrDied();
+        }
     }
 
     public boolean isEmergencyMmTelAvailable() {
@@ -281,37 +296,45 @@ public class MmTelFeatureConnection extends FeatureConnection {
      * Opens the connection to the {@link MmTelFeature} and establishes a listener back to the
      * framework. Calling this method multiple times will reset the listener attached to the
      * {@link MmTelFeature}.
-     * @param listener A {@link MmTelFeature.Listener} that will be used by the {@link MmTelFeature}
-     * to notify the framework of updates.
+     * @param mmTelListener A {@link MmTelFeature.Listener} that will be used by the
+     *         {@link MmTelFeature} to notify the framework of mmtel calling updates.
+     * @param ecbmListener Listener used to listen for ECBM updates from {@link ImsEcbmImplBase}
+     *         implementation.
      */
-    public void openConnection(MmTelFeature.Listener listener) throws RemoteException {
+    public void openConnection(MmTelFeature.Listener mmTelListener,
+            ImsEcbmStateListener ecbmListener,
+            ImsExternalCallStateListener multiendpointListener) throws RemoteException {
         synchronized (mLock) {
             checkServiceIsReady();
-            getServiceInterface(mBinder).setListener(listener);
+            mMmTelFeatureListener = mmTelListener;
+            getServiceInterface(mBinder).setListener(mmTelListener);
+            setEcbmInterface(ecbmListener);
+            setMultiEndpointInterface(multiendpointListener);
         }
     }
 
     /**
-     * Clean up all caches as well as any callbacks that are currently associated with the
-     * MmTelFeature.
+     * Closes the connection to the {@link MmTelFeature} if it was previously opened via
+     * {@link #openConnection} by removing all listeners.
      */
     public void closeConnection() {
-        mRegistrationCallbackManager.close();
-        mCapabilityCallbackManager.close();
-        mProvisioningCallbackManager.close();
         synchronized (mLock) {
-            if (mUt != null) {
-                mUt.close();
-                mUt = null;
-            }
-            mEcbm = null;
-            mMultiEndpoint = null;
+            if (!isBinderAlive()) return;
             try {
-                if (isBinderAlive()) {
+                if (mMmTelFeatureListener != null) {
+                    mMmTelFeatureListener = null;
                     getServiceInterface(mBinder).setListener(null);
                 }
+                if (mEcbm != null && mEcbm.isPresent()) {
+                    mEcbm.get().setEcbmStateListener(null);
+                    mEcbm = null;
+                }
+                if (mMultiEndpoint != null && mMultiEndpoint.isPresent()) {
+                    mMultiEndpoint.get().setExternalCallStateListener(null);
+                    mMultiEndpoint = null;
+                }
             } catch (RemoteException e) {
-                Log.w(TAG + " [" + mSlotId + "]", "closeConnection: couldn't remove listener!");
+                Log.w(TAG + " [" + mSlotId + "]", "closeConnection: couldn't remove listeners!");
             }
         }
     }
@@ -423,14 +446,28 @@ public class MmTelFeatureConnection extends FeatureConnection {
         }
     }
 
-    public ImsEcbm getEcbmInterface() throws RemoteException {
+    private void setEcbmInterface(ImsEcbmStateListener ecbmListener) throws RemoteException {
         synchronized (mLock) {
-            if (mEcbm != null) return mEcbm;
+            if (mEcbm != null) {
+                throw new IllegalStateException("ECBM interface already open");
+            }
 
             checkServiceIsReady();
             IImsEcbm imsEcbm = getServiceInterface(mBinder).getEcbmInterface();
-            mEcbm = (imsEcbm != null) ? new ImsEcbm(imsEcbm) : null;
-            return mEcbm;
+            mEcbm = (imsEcbm != null) ? Optional.of(new ImsEcbm(imsEcbm)) : null;
+            if (mEcbm.isPresent()) {
+                mEcbm.get().setEcbmStateListener(ecbmListener);
+            }
+        }
+    }
+
+    public ImsEcbm getEcbmInterface() {
+        synchronized (mLock) {
+            if (mEcbm == null) {
+                throw new IllegalStateException("ECBM interface has not been opened");
+            }
+
+            return mEcbm.orElse(null);
         }
     }
 
@@ -442,14 +479,20 @@ public class MmTelFeatureConnection extends FeatureConnection {
         }
     }
 
-    public ImsMultiEndpoint getMultiEndpointInterface() throws RemoteException {
+    private void setMultiEndpointInterface(ImsExternalCallStateListener listener)
+            throws RemoteException {
         synchronized (mLock) {
-            if(mMultiEndpoint != null) return mMultiEndpoint;
+            if (mMultiEndpoint != null) {
+                throw new IllegalStateException("multiendpoint interface is already open");
+            }
 
             checkServiceIsReady();
             IImsMultiEndpoint imEndpoint = getServiceInterface(mBinder).getMultiEndpointInterface();
-            mMultiEndpoint = (imEndpoint != null) ? new ImsMultiEndpoint(imEndpoint) : null;
-            return mMultiEndpoint;
+            mMultiEndpoint = (imEndpoint != null)
+                    ? Optional.of(new ImsMultiEndpoint(imEndpoint)) : null;
+            if (mMultiEndpoint.isPresent()) {
+                mMultiEndpoint.get().setExternalCallStateListener(listener);
+            }
         }
     }
 
