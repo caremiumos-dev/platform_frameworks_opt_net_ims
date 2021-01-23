@@ -21,8 +21,6 @@ import static android.telephony.ims.RcsContactUceCapability.SOURCE_TYPE_NETWORK;
 
 import static com.android.ims.rcs.uce.eab.EabProvider.CONTACT_URI;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Looper;
@@ -41,8 +39,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.time.Instant;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
@@ -126,8 +126,17 @@ public class EabControllerTest extends ImsTestBase {
     }
 
     private RcsContactUceCapability createPresenceCapability(boolean isExpired) {
-        long timeStamp = isExpired ? Instant.now().minus(100, DAYS).getEpochSecond()
-                : Instant.now().plus(100, DAYS).getEpochSecond();
+        String timeStamp;
+        GregorianCalendar date = new GregorianCalendar();
+        if (isExpired) {
+            date.add(Calendar.DATE, -120);
+        } else {
+            date.add(Calendar.DATE, 120);
+        }
+
+        timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX")
+                .format(date.getTime());
+
         RcsContactPresenceTuple.ServiceCapabilities.Builder serviceCapabilitiesBuilder =
                 new RcsContactPresenceTuple.ServiceCapabilities.Builder(TEST_AUDIO_CAPABLE,
                         TEST_VIDEO_CAPABLE);
@@ -137,7 +146,7 @@ public class EabControllerTest extends ImsTestBase {
                         .addDescription(TEST_SERVICE_DESCRIPTION)
                         .addContactUri(TEST_CONTACT_URI)
                         .addServiceCapabilities(serviceCapabilitiesBuilder.build())
-                        .addTimeStamp(String.valueOf(timeStamp))
+                        .addTimeStamp(timeStamp)
                         .build();
 
         RcsContactPresenceTuple tupleWithEmptyServiceCapabilities =
@@ -145,7 +154,7 @@ public class EabControllerTest extends ImsTestBase {
                         TEST_SERVICE_VERSION)
                         .addDescription(TEST_SERVICE_DESCRIPTION)
                         .addContactUri(TEST_CONTACT_URI)
-                        .addTimeStamp(String.valueOf(timeStamp))
+                        .addTimeStamp(timeStamp)
                         .build();
 
         RcsContactUceCapability.PresenceBuilder builder =
