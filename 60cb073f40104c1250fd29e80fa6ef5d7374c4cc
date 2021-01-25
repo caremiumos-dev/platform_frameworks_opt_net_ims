@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d212fa7_0aeba100",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishControllerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-25T19:01:45Z",
+      "side": 1,
+      "message": "I do not see any checks here to ensure the stack is ready before triggering a publish, for example ensuring RcsFeature is reporting PRESENCE is ready via RcsFeature#notifyCapabilitiesStatusChanged",
+      "range": {
+        "startLine": 147,
+        "startChar": 24,
+        "endLine": 147,
+        "endChar": 38
+      },
+      "revId": "60cb073f40104c1250fd29e80fa6ef5d7374c4cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
