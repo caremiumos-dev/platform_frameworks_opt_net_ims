@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f892ecb2_8457f115",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-25T19:59:57Z",
+      "side": 1,
+      "message": "Looks good, but needs to be rebased on top of other cl",
+      "revId": "f354f08bc2bfb4f5b6e0db13fdb12296fd52726d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
