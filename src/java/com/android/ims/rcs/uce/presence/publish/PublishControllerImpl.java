@@ -143,6 +143,8 @@ public class PublishControllerImpl implements PublishController {
     public void onRcsConnected(RcsFeatureManager manager) {
         logd("onRcsConnected");
         mPublishProcessor.onRcsConnected(manager);
+        // Trigger the publish request when the RCS is connected.
+        mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_SERVICE);
     }
 
     @Override
