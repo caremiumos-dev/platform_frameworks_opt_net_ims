@@ -53,6 +53,11 @@ public class SubscribeRequest extends UceRequest {
                     SubscribeRequest.this.onNetworkResponse(code, reason);
                 }
                 @Override
+                public void onNetworkRespHeader(int code, String reasonPhrase,
+                        int reasonHeaderCause, String reasonHeaderText) {
+
+                }
+                @Override
                 public void onNotifyCapabilitiesUpdate(List<String> pidfXmls) {
                     SubscribeRequest.this.onCapabilitiesUpdate(pidfXmls);
                 }

@@ -58,6 +58,12 @@ public class PublishRequestResponse {
         public void onNetworkResponse(int code, String reason) {
             PublishRequestResponse.this.onNetworkResponse(code, reason);
         }
+
+        @Override
+        public void onNetworkRespHeader(int code, String reasonPhrase, int reasonHeaderCause,
+                String reasonHeaderText) {
+
+        }
     };
 
     public IPublishResponseCallback getResponseCallback() {
