@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6a8b72d_c7dda3be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-26T20:47:45Z",
+      "side": 1,
+      "message": "Pending a bigger change, which will further enforce these limitations on the ImsService as to no longer silently create bugs",
+      "revId": "95b6639ea8c3df8151e2f1c0c46e1b8865670890",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
