@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3ff91a1_c84c5d61",
+        "filename": "src/java/com/android/ims/MmTelFeatureConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-26T01:40:31Z",
+      "side": 1,
+      "message": "nullable optionals seem odd. Any thoughts on a custom data structure to handle this? (maybe a fancy enum?)",
+      "range": {
+        "startLine": 247,
+        "startChar": 42,
+        "endLine": 248,
+        "endChar": 28
+      },
+      "revId": "ae8e171298fbcf143ece838e5de650f99a1f774b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de51a87d_90d8b172",
+        "filename": "src/java/com/android/ims/MmTelFeatureConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-26T01:40:31Z",
+      "side": 1,
+      "message": "nit: decide whether multi endpoint should be one word or two for capitalization purposes (other files spell it as Multiendpoint)",
+      "range": {
+        "startLine": 250,
+        "startChar": 39,
+        "endLine": 250,
+        "endChar": 53
+      },
+      "revId": "ae8e171298fbcf143ece838e5de650f99a1f774b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
