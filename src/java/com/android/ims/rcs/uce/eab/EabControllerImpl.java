@@ -18,6 +18,7 @@ package com.android.ims.rcs.uce.eab;
 
 import static android.telephony.ims.RcsContactUceCapability.CAPABILITY_MECHANISM_OPTIONS;
 import static android.telephony.ims.RcsContactUceCapability.CAPABILITY_MECHANISM_PRESENCE;
+import static android.telephony.ims.RcsContactUceCapability.REQUEST_RESULT_FOUND;
 import static android.telephony.ims.RcsContactUceCapability.SOURCE_TYPE_CACHED;
 
 import android.annotation.NonNull;
@@ -26,6 +27,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Looper;
+import android.os.PersistableBundle;
+import android.telephony.CarrierConfigManager;
 import android.telephony.ims.ProvisioningManager;
 import android.telephony.ims.RcsContactPresenceTuple;
 import android.telephony.ims.RcsContactPresenceTuple.ServiceCapabilities;
@@ -358,18 +361,31 @@ public class EabControllerImpl implements EabController {
     private boolean isCapabilityExpired(Cursor cursor) {
         boolean expired = false;
         String requestTimeStamp = getRequestTimestamp(cursor);
+        int capabilityCacheExpiration;
+
+        if (isNonRcsCapability(cursor)) {
+            capabilityCacheExpiration = getNonRcsCapabilityCacheExpiration(mSubId);
+        } else {
+            capabilityCacheExpiration = getCapabilityCacheExpiration(mSubId);
+        }
 
         if (requestTimeStamp != null) {
             Instant expiredTimestamp = Instant
                     .ofEpochSecond(Long.parseLong(requestTimeStamp))
-                    .plus(getCapabilityCacheExpiration(mSubId), ChronoUnit.SECONDS);
+                    .plus(capabilityCacheExpiration, ChronoUnit.SECONDS);
             expired = expiredTimestamp.isBefore(Instant.now());
-            Log.d(TAG, "Capability expiredTimestamp: "
-                    + expiredTimestamp.getEpochSecond() + ", expired:" + expired);
+            Log.d(TAG, "Capability expiredTimestamp: " + expiredTimestamp.getEpochSecond() +
+                    ", expired:" + expired +
+                    ", capabilityCacheExpiration: " + capabilityCacheExpiration);
         } else {
             Log.d(TAG, "Capability requestTimeStamp is null");
         }
         return expired;
+    }
+
+    private boolean isNonRcsCapability(Cursor cursor) {
+        int result = getIntValue(cursor, EabProvider.EabCommonColumns.REQUEST_RESULT);
+        return result == REQUEST_RESULT_FOUND;
     }
 
     private boolean isAvailabilityExpired(Cursor cursor) {
@@ -402,8 +418,23 @@ public class EabControllerImpl implements EabController {
         return expiredTimestamp;
     }
 
-    protected static long getCapabilityCacheExpiration(int subId) {
-        long value = -1;
+    private int getNonRcsCapabilityCacheExpiration(int subId) {
+        int value = -1;
+        PersistableBundle carrierConfig =
+                mContext.getSystemService(CarrierConfigManager.class).getConfigForSubId(subId);
+
+        if (carrierConfig != null) {
+            value = carrierConfig.getInt(
+                    CarrierConfigManager.Ims.KEY_NON_RCS_CAPABILITIES_CACHE_EXPIRATION_SEC_INT);
+        } else {
+            value = DEFAULT_CAPABILITY_CACHE_EXPIRATION_SEC;
+            Log.e(TAG, "CarrierConfig is null.");
+        }
+        return value;
+    }
+
+    protected static int getCapabilityCacheExpiration(int subId) {
+        int value = -1;
         try {
             ProvisioningManager pm = ProvisioningManager.createForSubscriptionId(subId);
             value = pm.getProvisioningIntValue(
