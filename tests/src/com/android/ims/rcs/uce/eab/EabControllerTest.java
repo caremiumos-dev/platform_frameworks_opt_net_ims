@@ -16,17 +16,26 @@
 
 package com.android.ims.rcs.uce.eab;
 
+import static android.telephony.ims.RcsContactUceCapability.CAPABILITY_MECHANISM_PRESENCE;
 import static android.telephony.ims.RcsContactUceCapability.REQUEST_RESULT_FOUND;
 import static android.telephony.ims.RcsContactUceCapability.SOURCE_TYPE_NETWORK;
 
+import static com.android.ims.rcs.uce.eab.EabProvider.COMMON_URI;
 import static com.android.ims.rcs.uce.eab.EabProvider.CONTACT_URI;
+import static com.android.ims.rcs.uce.eab.EabProvider.OPTIONS_URI;
+import static com.android.ims.rcs.uce.eab.EabProvider.PRESENCE_URI;
+
+import static org.junit.Assert.fail;
 
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Looper;
 import android.telephony.ims.RcsContactPresenceTuple;
 import android.telephony.ims.RcsContactUceCapability;
 import android.test.mock.MockContentResolver;
+import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
@@ -44,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 @RunWith(AndroidJUnit4.class)
 public class EabControllerTest extends ImsTestBase {
@@ -125,9 +135,94 @@ public class EabControllerTest extends ImsTestBase {
                 mEabController.getCapabilities(contactUriList).get(0).getStatus());
     }
 
+    @Test
+    @SmallTest
+    public void testCleanupInvalidDataInCommonTable() {
+        // Insert invalid data in common table
+        ContentValues data = new ContentValues();
+        data.put(EabProvider.EabCommonColumns.EAB_CONTACT_ID, -1);
+        data.put(EabProvider.EabCommonColumns.MECHANISM, CAPABILITY_MECHANISM_PRESENCE);
+        data.put(EabProvider.EabCommonColumns.REQUEST_RESULT, REQUEST_RESULT_FOUND);
+        data.put(EabProvider.EabCommonColumns.SUBSCRIPTION_ID, -1);
+        mContext.getContentResolver().insert(COMMON_URI, data);
+
+        List<RcsContactUceCapability> contactList = new ArrayList<>();
+        contactList.add(createPresenceCapability(true));
+        mEabController.saveCapabilities(contactList);
+
+        // Verify the entry that cannot map to presence/option table has been removed
+        Cursor cursor = mContext.getContentResolver().query(COMMON_URI, null, null, null, null);
+        while(cursor.moveToNext()) {
+            int contactId = cursor.getInt(
+                    cursor.getColumnIndex(EabProvider.EabCommonColumns.EAB_CONTACT_ID));
+            if (contactId == -1) {
+                fail("Invalid data didn't been cleared");
+            }
+        }
+    }
+
+    @Test
+    @SmallTest
+    public void testCleanupInvalidDataInPresenceTable() {
+        String expiredContact = "expiredContact";
+        GregorianCalendar expiredDate = new GregorianCalendar();
+        expiredDate.setTimeZone(TimeZone.getTimeZone("UTC"));
+        expiredDate.add(Calendar.DATE, -120);
+        // Insert invalid data in presence table
+        ContentValues data = new ContentValues();
+        data.put(EabProvider.PresenceTupleColumns.CONTACT_URI, expiredContact);
+        data.put(EabProvider.PresenceTupleColumns.REQUEST_TIMESTAMP,
+                expiredDate.getTime().getTime() / 1000);
+        mContext.getContentResolver().insert(PRESENCE_URI, data);
+
+        List<RcsContactUceCapability> contactList = new ArrayList<>();
+        contactList.add(createPresenceCapability(true));
+        mEabController.saveCapabilities(contactList);
+
+        // Verify the invalid data has been removed after save capabilities
+        Cursor cursor = mContext.getContentResolver().query(PRESENCE_URI, null, null, null, null);
+        while(cursor.moveToNext()) {
+            String contactUri = cursor.getString(
+                    cursor.getColumnIndex(EabProvider.PresenceTupleColumns.CONTACT_URI));
+            if (contactUri.equals(expiredContact)) {
+                fail("Invalid data didn't been cleared");
+            }
+        }
+    }
+
+    @Test
+    @SmallTest
+    public void testCleanupInvalidDataInOptionTable() {
+        String expiredFeatureTag = "expiredFeatureTag";
+        GregorianCalendar expiredDate = new GregorianCalendar();
+        expiredDate.setTimeZone(TimeZone.getTimeZone("UTC"));
+        expiredDate.add(Calendar.DATE, -120);
+        // Insert invalid data in presence table
+        ContentValues data = new ContentValues();
+        data.put(EabProvider.OptionsColumns.FEATURE_TAG, expiredFeatureTag);
+        data.put(EabProvider.OptionsColumns.REQUEST_TIMESTAMP,
+                expiredDate.getTime().getTime() / 1000);
+        mContext.getContentResolver().insert(OPTIONS_URI, data);
+
+        List<RcsContactUceCapability> contactList = new ArrayList<>();
+        contactList.add(createPresenceCapability(true));
+        mEabController.saveCapabilities(contactList);
+
+        // Verify the invalid data has been removed after save capabilities
+        Cursor cursor = mContext.getContentResolver().query(OPTIONS_URI, null, null, null, null);
+        while(cursor.moveToNext()) {
+            String featureTag = cursor.getString(
+                    cursor.getColumnIndex(EabProvider.OptionsColumns.FEATURE_TAG));
+            if (featureTag.equals(expiredFeatureTag)) {
+                fail("Invalid data didn't been cleared");
+            }
+        }
+    }
+
     private RcsContactUceCapability createPresenceCapability(boolean isExpired) {
         String timeStamp;
         GregorianCalendar date = new GregorianCalendar();
+        date.setTimeZone(TimeZone.getTimeZone("UTC"));
         if (isExpired) {
             date.add(Calendar.DATE, -120);
         } else {
@@ -146,7 +241,7 @@ public class EabControllerTest extends ImsTestBase {
                         .setServiceDescription(TEST_SERVICE_DESCRIPTION)
                         .setContactUri(TEST_CONTACT_URI)
                         .setServiceCapabilities(serviceCapabilitiesBuilder.build())
-                        .setTimestamp(String.valueOf(timeStamp))
+                        .setTimestamp(timeStamp)
                         .build();
 
         RcsContactPresenceTuple tupleWithEmptyServiceCapabilities =
@@ -154,7 +249,7 @@ public class EabControllerTest extends ImsTestBase {
                         TEST_SERVICE_VERSION)
                         .setServiceDescription(TEST_SERVICE_DESCRIPTION)
                         .setContactUri(TEST_CONTACT_URI)
-                        .setTimestamp(String.valueOf(timeStamp))
+                        .setTimestamp(timeStamp)
                         .build();
 
         RcsContactUceCapability.PresenceBuilder builder =
