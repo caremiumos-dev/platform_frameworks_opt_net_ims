@@ -20,6 +20,9 @@ import static android.telephony.ims.RcsContactUceCapability.CAPABILITY_MECHANISM
 import static android.telephony.ims.RcsContactUceCapability.CAPABILITY_MECHANISM_PRESENCE;
 import static android.telephony.ims.RcsContactUceCapability.SOURCE_TYPE_CACHED;
 
+import static com.android.ims.rcs.uce.eab.EabProvider.EAB_OPTIONS_TABLE_NAME;
+import static com.android.ims.rcs.uce.eab.EabProvider.EAB_PRESENCE_TUPLE_TABLE_NAME;
+
 import android.annotation.NonNull;
 import android.content.ContentValues;
 import android.content.Context;
@@ -57,6 +60,9 @@ public class EabControllerImpl implements EabController {
     // 90 days
     private static final int DEFAULT_CAPABILITY_CACHE_EXPIRATION_SEC = 90 * 24 * 60 * 60;
     private static final int DEFAULT_AVAILABILITY_CACHE_EXPIRATION_SEC = 60;
+
+    // 1 week
+    private static final int CLEAN_UP_LEGACY_CAPABILITY_SEC = 7 * 24 * 60 * 60;
 
     private final Context mContext;
     private final int mSubId;
@@ -152,6 +158,8 @@ public class EabControllerImpl implements EabController {
             Log.d(TAG, "EabController destroyed.");
             return;
         }
+
+        cleanupLegacyCapabilities();
 
         Log.d(TAG, "Save capabilities: " + contactCapabilities.size());
 
@@ -590,6 +598,39 @@ public class EabControllerImpl implements EabController {
             optionContent[i] = contentValues;
         }
         mContext.getContentResolver().bulkInsert(EabProvider.OPTIONS_URI, optionContent);
+    }
+
+    private void cleanupLegacyCapabilities() {
+        long timestamp = Instant.now().getEpochSecond() - (CLEAN_UP_LEGACY_CAPABILITY_SEC);
+
+        // Delete the presence capabilities that expired more than 1 week
+        mContext.getContentResolver().delete(
+                EabProvider.PRESENCE_URI,
+                EabProvider.PresenceTupleColumns.REQUEST_TIMESTAMP + "<?",
+                new String[]{String.valueOf(timestamp)});
+
+        // Delete the option capabilities that expired more than 1 week
+        mContext.getContentResolver().delete(
+                EabProvider.OPTIONS_URI,
+                EabProvider.OptionsColumns.REQUEST_TIMESTAMP + "<?",
+                new String[]{String.valueOf(timestamp)});
+
+        String presenceSelection =
+                " (SELECT " +
+                EabProvider.PresenceTupleColumns.EAB_COMMON_ID +
+                " FROM " +
+                EAB_PRESENCE_TUPLE_TABLE_NAME + ") ";
+        String optionSelection =
+                " (SELECT " +
+                EabProvider.OptionsColumns.EAB_COMMON_ID +
+                " FROM " + EAB_OPTIONS_TABLE_NAME + ") ";
+
+        // Clean up the entry that can't map to presence or option table
+        mContext.getContentResolver().delete(
+                EabProvider.COMMON_URI,
+                EabProvider.EabCommonColumns._ID + " NOT IN " + presenceSelection +
+                        " AND " + EabProvider.EabCommonColumns._ID+ " NOT IN " + optionSelection,
+                null);
     }
 
     private String getStringValue(Cursor cursor, String column) {
