@@ -20,11 +20,15 @@ import static android.telephony.ims.RcsContactUceCapability.CAPABILITY_MECHANISM
 import static android.telephony.ims.RcsContactUceCapability.CAPABILITY_MECHANISM_PRESENCE;
 import static android.telephony.ims.RcsContactUceCapability.SOURCE_TYPE_CACHED;
 
+import static com.android.ims.rcs.uce.eab.EabProvider.EAB_OPTIONS_TABLE_NAME;
+import static com.android.ims.rcs.uce.eab.EabProvider.EAB_PRESENCE_TUPLE_TABLE_NAME;
+
 import android.annotation.NonNull;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.Looper;
 import android.telephony.ims.ProvisioningManager;
 import android.telephony.ims.RcsContactPresenceTuple;
@@ -39,6 +43,7 @@ import android.util.TimeFormatException;
 
 import com.android.ims.RcsFeatureManager;
 import com.android.ims.rcs.uce.UceController.UceControllerCallback;
+import com.android.internal.annotations.VisibleForTesting;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -58,17 +63,29 @@ public class EabControllerImpl implements EabController {
     private static final int DEFAULT_CAPABILITY_CACHE_EXPIRATION_SEC = 90 * 24 * 60 * 60;
     private static final int DEFAULT_AVAILABILITY_CACHE_EXPIRATION_SEC = 60;
 
+    // 1 week
+    private static final int CLEAN_UP_LEGACY_CAPABILITY_SEC = 7 * 24 * 60 * 60;
+    private static final int CLEAN_UP_LEGACY_CAPABILITY_DELAY_MILLI_SEC = 30 * 1000;
+
     private final Context mContext;
     private final int mSubId;
     private final EabBulkCapabilityUpdater mEabBulkCapabilityUpdater;
+    private final Handler mHandler;
 
     private UceControllerCallback mUceControllerCallback;
     private volatile boolean mIsSetDestroyedFlag = false;
+
+    @VisibleForTesting
+    public final Runnable mCapabilityCleanupRunnable = () -> {
+        Log.d(TAG, "Cleanup Capabilities");
+        cleanupLegacyCapabilities();
+    };
 
     public EabControllerImpl(Context context, int subId, UceControllerCallback c, Looper looper) {
         mContext = context;
         mSubId = subId;
         mUceControllerCallback = c;
+        mHandler = new Handler(looper);
         mEabBulkCapabilityUpdater = new EabBulkCapabilityUpdater(mContext, mSubId,
                 this,
                 new EabContactSyncController(),
@@ -190,6 +207,12 @@ public class EabControllerImpl implements EabController {
         }
 
         mEabBulkCapabilityUpdater.updateExpiredTimeAlert();
+
+        if (mHandler.hasCallbacks(mCapabilityCleanupRunnable)) {
+            mHandler.removeCallbacks(mCapabilityCleanupRunnable);
+        }
+        mHandler.postDelayed(mCapabilityCleanupRunnable,
+                CLEAN_UP_LEGACY_CAPABILITY_DELAY_MILLI_SEC);
     }
 
     private List<EabCapabilityResult> generateDestroyedResult(List<Uri> contactUri) {
@@ -590,6 +613,39 @@ public class EabControllerImpl implements EabController {
             optionContent[i] = contentValues;
         }
         mContext.getContentResolver().bulkInsert(EabProvider.OPTIONS_URI, optionContent);
+    }
+
+    private void cleanupLegacyCapabilities() {
+        long timestamp = Instant.now().getEpochSecond() - (CLEAN_UP_LEGACY_CAPABILITY_SEC);
+
+        // Delete the presence capabilities that expired more than 1 week
+        mContext.getContentResolver().delete(
+                EabProvider.PRESENCE_URI,
+                EabProvider.PresenceTupleColumns.REQUEST_TIMESTAMP + "<?",
+                new String[]{String.valueOf(timestamp)});
+
+        // Delete the option capabilities that expired more than 1 week
+        mContext.getContentResolver().delete(
+                EabProvider.OPTIONS_URI,
+                EabProvider.OptionsColumns.REQUEST_TIMESTAMP + "<?",
+                new String[]{String.valueOf(timestamp)});
+
+        String presenceSelection =
+                " (SELECT " +
+                EabProvider.PresenceTupleColumns.EAB_COMMON_ID +
+                " FROM " +
+                EAB_PRESENCE_TUPLE_TABLE_NAME + ") ";
+        String optionSelection =
+                " (SELECT " +
+                EabProvider.OptionsColumns.EAB_COMMON_ID +
+                " FROM " + EAB_OPTIONS_TABLE_NAME + ") ";
+
+        // Clean up the entry that can't map to presence or option table
+        mContext.getContentResolver().delete(
+                EabProvider.COMMON_URI,
+                EabProvider.EabCommonColumns._ID + " NOT IN " + presenceSelection +
+                        " AND " + EabProvider.EabCommonColumns._ID+ " NOT IN " + optionSelection,
+                null);
     }
 
     private String getStringValue(Cursor cursor, String column) {
