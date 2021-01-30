@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c28bf3b_363ca244",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-30T02:06:25Z",
+      "side": 1,
+      "message": "I dont want to potentially block saving caps if possible... Perhaps this can be scheduled on the looper for 30 sec after the latest saveCapabilities call (and if saveCapabilities is called before previous 30 seconds elapses, reschedule for 30 sec)?",
+      "range": {
+        "startLine": 162,
+        "startChar": 8,
+        "endLine": 162,
+        "endChar": 33
+      },
+      "revId": "b780cd3cf06bdcbf0e55c4707f16be924a651496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
