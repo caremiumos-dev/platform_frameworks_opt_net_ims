@@ -21,11 +21,11 @@ import android.annotation.Nullable;
 import android.os.RemoteException;
 import android.telephony.ims.ImsService;
 import android.telephony.ims.feature.ImsFeature;
-import android.util.LocalLog;
 import android.util.Log;
 
 import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.internal.annotations.GuardedBy;
+import com.android.modules.utils.LocalLog;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
