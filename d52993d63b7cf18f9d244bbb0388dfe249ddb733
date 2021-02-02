@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f306efb_6c48246c",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-02T01:07:58Z",
+      "side": 1,
+      "message": "there is a Handler#hasCallbacks method. Can you create a final private member variable instead:\n\nprivate Runnable mCapabilityCleanupRunnable \u003d new Runnable() {...\n\nand then use Handler#hasCallbacks and  Handler#postAtTime?",
+      "range": {
+        "startLine": 215,
+        "startChar": 21,
+        "endLine": 215,
+        "endChar": 32
+      },
+      "revId": "d52993d63b7cf18f9d244bbb0388dfe249ddb733",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
