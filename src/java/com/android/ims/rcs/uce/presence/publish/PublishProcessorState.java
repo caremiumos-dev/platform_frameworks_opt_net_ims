@@ -36,7 +36,7 @@ public class PublishProcessorState {
     private static final int RETRY_BASE_PERIOD = 1;   // minute
 
     // The maximum number of the publication retries.
-    private static final int PUBLISH_MAXIMUM_NUM_RETRIES = 4;
+    private static final int PUBLISH_MAXIMUM_NUM_RETRIES = 1; //4;
 
     private long mTaskId;
     private volatile boolean mIsPublishing;
