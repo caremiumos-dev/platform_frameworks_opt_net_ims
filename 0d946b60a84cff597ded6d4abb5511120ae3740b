@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "395d0bd1_f51b80ee",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-02T22:38:38Z",
+      "side": 1,
+      "message": "My understanding about the reason header is that they take precedence over the sip response code. So, if the reason header is present, you should use that sip code/reason and not the sip response code.\n\ninstead of checking for forbidden for both, this logic should check if Reason header sip code exists and if it does, use the reason header sip code. If it doesnt, then use the response sip code.",
+      "range": {
+        "startLine": 189,
+        "startChar": 19,
+        "endLine": 189,
+        "endChar": 37
+      },
+      "revId": "0d946b60a84cff597ded6d4abb5511120ae3740b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
