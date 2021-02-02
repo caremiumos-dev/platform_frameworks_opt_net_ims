@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e768d44f_2483cdc3",
+        "filename": "src/java/com/android/ims/rcs/uce/eab/EabControllerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-02T19:00:55Z",
+      "side": 1,
+      "message": "Hm... so we should be keeping these capabilities cached based on the network caching rules for RCS/non-rcs.. This looks to be using 7 days as a basis to clean up caches.",
+      "range": {
+        "startLine": 625,
+        "startChar": 44,
+        "endLine": 625,
+        "endChar": 53
+      },
+      "revId": "eaf9e87946e6ef45d610c483d3b786b45d2f75e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
