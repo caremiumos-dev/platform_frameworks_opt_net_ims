@@ -17,18 +17,26 @@
 package com.android.ims.rcs.uce.util;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.PersistableBundle;
 import android.telephony.CarrierConfigManager;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.telephony.ims.ProvisioningManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class UceUtils {
 
     private static final String LOG_PREFIX = "RcsUce.";
+    private static final String LOG_TAG = LOG_PREFIX + "UceUtils";
 
-    private static final String LOG_TAG = "UceUtils";
+    private static final String SCHEME_SIP = "sip";
+    private static final String SCHEME_TEL = "tel";
+    private static final String DOMAIN_SEPARATOR = "@";
 
+    // The task ID of the UCE request
     private static long TASK_ID = 0L;
 
     /**

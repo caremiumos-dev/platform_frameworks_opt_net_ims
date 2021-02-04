@@ -16,6 +16,7 @@
 
 package com.android.ims.rcs.uce.request;
 
+import android.net.Uri;
 import android.os.RemoteException;
 import android.telephony.ims.RcsContactTerminatedReason;
 import android.telephony.ims.RcsContactUceCapability;
@@ -69,12 +70,16 @@ public class CapabilityRequestResponse {
     // "onNotifyCapabilitiesUpdate"
     private final List<RcsContactUceCapability> mUpdatedCapabilityList;
 
+    // The list of the remote contact's capability.
+    private final List<String> mRemoteCaps;
+
     // The callback to notify the result of this request.
     public IRcsUceControllerCallback mCapabilitiesCallback;
 
     public CapabilityRequestResponse() {
         mTerminatedResource = new ArrayList<>();
         mUpdatedCapabilityList = new ArrayList<>();
+        mRemoteCaps = new ArrayList<>();
     }
 
     /**
@@ -208,6 +213,27 @@ public class CapabilityRequestResponse {
         synchronized (mTerminatedResource) {
             mTerminatedResource.removeAll(terminatedResourceList);
         }
+    }
+
+    /**
+     * Set the remote's capabilities which are sent from the network.
+     */
+    public void setRemoteCapabilities(Uri contact, List<String> remoteCaps) {
+        // Set the remote capabilities
+        if (remoteCaps != null) {
+            remoteCaps.stream().filter(Objects::nonNull).forEach(cap -> mRemoteCaps.add(cap));
+        }
+
+        RcsContactUceCapability.OptionsBuilder optionsBuilder
+                = new RcsContactUceCapability.OptionsBuilder(contact);
+        int requestResult = (mRemoteCaps.isEmpty()) ?
+                RcsContactUceCapability.REQUEST_RESULT_NOT_FOUND :
+                RcsContactUceCapability.REQUEST_RESULT_FOUND;
+        optionsBuilder.setRequestResult(requestResult);
+        optionsBuilder.addFeatureTags(mRemoteCaps);
+
+        // Add the remote's capabilities to the updated capability list
+        addUpdatedCapabilities(Collections.singletonList(optionsBuilder.build()));
     }
 
     /**
@@ -375,6 +401,9 @@ public class CapabilityRequestResponse {
                 .append(", NetworkResponseReason=").append(mNetworkResponseReason)
                 .append(", RetryAfter=").append(mRetryAfterMillis)
                 .append(", TerminatedReason=").append(mTerminatedReason)
+                .append(", RemoteCaps size=" + mRemoteCaps.size())
+                .append(", Updated capability size=" + mUpdatedCapabilityList.size())
+                .append(", Terminated resource size=" + mTerminatedResource.size())
                 .toString();
     }
 }
