@@ -18,6 +18,7 @@ package com.android.ims.rcs.uce.options;
 
 import android.annotation.NonNull;
 import android.net.Uri;
+import android.os.RemoteException;
 import android.telephony.ims.RcsContactUceCapability;
 import android.telephony.ims.aidl.IOptionsRequestCallback;
 import android.telephony.ims.aidl.IOptionsResponseCallback;
@@ -31,15 +32,11 @@ import java.util.List;
  */
 public interface OptionsController extends ControllerBase {
     /**
-     * Request the capabilities for the requested contact.
+     * Request the contact's capabilities of the given contact.
+     * @param contactUri The contact of the capabilities is being requested for.
+     * @param deviceFeatureTags The feature tags of the device's capabilities.
+     * @param c The response callback of the OPTIONS capabilities request.
      */
-    void sendCapabilitiesRequest(@NonNull Uri contactUri,
-            @NonNull RcsContactUceCapability ownCapabilities, @NonNull IOptionsResponseCallback c);
-
-    /**
-     * Retrieve the device's capabilities. This request is from the ImsService to send the
-     * capabilities to the remote side.
-     */
-    void retrieveCapabilitiesForRemote(@NonNull Uri contactUri,
-            @NonNull List<String> remoteCapabilities, @NonNull IOptionsRequestCallback c);
+    void sendCapabilitiesRequest(@NonNull Uri contactUri, @NonNull List<String> deviceFeatureTags,
+            @NonNull IOptionsResponseCallback c) throws RemoteException;
 }
