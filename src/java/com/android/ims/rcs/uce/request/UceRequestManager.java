@@ -23,12 +23,15 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.telephony.ims.RcsContactUceCapability;
+import android.telephony.ims.RcsContactUceCapability.CapabilityMechanism;
 import android.telephony.ims.RcsUceAdapter;
+import android.telephony.ims.aidl.IOptionsRequestCallback;
 import android.telephony.ims.aidl.IRcsUceControllerCallback;
 import android.util.Log;
 
 import com.android.ims.rcs.uce.UceController.UceControllerCallback;
 import com.android.ims.rcs.uce.eab.EabCapabilityResult;
+import com.android.ims.rcs.uce.options.OptionsController;
 import com.android.ims.rcs.uce.presence.subscribe.SubscribeController;
 import com.android.ims.rcs.uce.util.UceUtils;
 import com.android.internal.annotations.VisibleForTesting;
@@ -105,9 +108,14 @@ public class UceRequestManager {
         EabCapabilityResult getAvailabilityFromCache(Uri uri);
 
         /**
-         * Store the given capabilities to the cache.
+         * Store the given contact capabilities to the cache.
          */
         void saveCapabilities(List<RcsContactUceCapability> contactCapabilities);
+
+        /**
+         * Retrieve the device's capabilities.
+         */
+        RcsContactUceCapability getDeviceCapabilities(@CapabilityMechanism int capMechanism);
 
         /**
          * Notify that the request is finish. It only removed this request from the collections.
@@ -173,6 +181,11 @@ public class UceRequestManager {
         }
 
         @Override
+        public RcsContactUceCapability getDeviceCapabilities(@CapabilityMechanism int mechanism) {
+            return mControllerCallback.getDeviceCapabilities(mechanism);
+        }
+
+        @Override
         public void onRequestFinished(Long taskId) {
             mHandler.sendRequestFinishedMessage(taskId);
         }
@@ -227,6 +240,7 @@ public class UceRequestManager {
     private volatile boolean mIsDestroyed;
 
     private SubscribeController mSubscribeCtrl;
+    private OptionsController mOptionsCtrl;
     private UceControllerCallback mControllerCallback;
 
     public UceRequestManager(Context context, int subId, Looper looper, UceControllerCallback c) {
@@ -253,6 +267,13 @@ public class UceRequestManager {
      */
     public void setSubscribeController(SubscribeController controller) {
         mSubscribeCtrl = controller;
+    }
+
+    /**
+     * Set the OptionsController for requestiong capabilities by OPTIONS mechanism.
+     */
+    public void setOptionsController(OptionsController controller) {
+        mOptionsCtrl = controller;
     }
 
     /**
@@ -303,7 +324,9 @@ public class UceRequestManager {
             request.setSkipGettingFromCache(skipFromCache);
             request.setCapabilitiesCallback(callback);
         } else if (sUceUtilsProxy.isSipOptionsSupported(mContext, mSubId)) {
-            // TODO: Implement the OPTIONS request
+            request = new OptionsRequest(mSubId, type, mRequestMgrCallback, mOptionsCtrl);
+            request.setContactUri(uriList);
+            request.setCapabilitiesCallback(callback);
         }
 
         if (request == null) {
@@ -319,6 +342,22 @@ public class UceRequestManager {
 
         // Send this request to the message queue.
         mHandler.sendRequestMessage(request.getTaskId());
+    }
+
+    /**
+     * Retrieve the device's capabilities. This request is from the ImsService to send the
+     * capabilities to the remote side.
+     */
+    public void retrieveCapabilitiesForRemote(Uri contactUri, List<String> remoteCapabilities,
+            IOptionsRequestCallback requestCallback) {
+        RemoteOptionsRequest request = new RemoteOptionsRequest(mSubId,
+                UceRequest.REQUEST_TYPE_AVAILABILITY, mRequestMgrCallback, requestCallback);
+        request.setContactUri(Collections.singletonList(contactUri));
+        request.setRemoteFeatureTags(remoteCapabilities);
+
+        logd("retrieveCapabilitiesForRemote: taskId=" + request.getTaskId());
+        addRequestToCollection(request);
+        mHandler.sendRemoteRequestMessage(request.getTaskId());
     }
 
     private void addRequestToCollection(UceRequest request) {
@@ -351,6 +390,7 @@ public class UceRequestManager {
         private static final int EVENT_REQUEST_FINISHED = 4;
         private static final int EVENT_RESOURCE_TERMINATED = 5;
         private static final int EVENT_CAPABILITIES_UPDATE = 6;
+        private static final int EVENT_RETRIEVE_CAP_FOR_REMOTE = 7;
 
         private final WeakReference<UceRequestManager> mUceRequestMgrRef;
 
@@ -365,6 +405,16 @@ public class UceRequestManager {
         public void sendRequestMessage(Long taskId) {
             Message message = obtainMessage();
             message.what = EVENT_REQUEST_CAPABILITIES;
+            message.obj = taskId;
+            sendMessage(message);
+        }
+
+        /**
+         * Send the remote capabilities request message
+         */
+        public void sendRemoteRequestMessage(Long taskId) {
+            Message message = obtainMessage();
+            message.what = EVENT_RETRIEVE_CAP_FOR_REMOTE;
             message.obj = taskId;
             sendMessage(message);
         }
@@ -518,6 +568,14 @@ public class UceRequestManager {
                     }
                     break;
                 }
+                case EVENT_RETRIEVE_CAP_FOR_REMOTE:
+                    UceRequest request = requestManager.getRequestFromCollection(taskId);
+                    if (request == null) {
+                        requestManager.logw("handleMessage: cannot find request,taskId=" + taskId);
+                        return;
+                    }
+                    request.executeRequest();
+                    break;
                 default:
                     break;
             }
@@ -531,6 +589,7 @@ public class UceRequestManager {
             EVENT_DESCRIPTION.put(EVENT_REQUEST_FINISHED, "REQUEST_FINISHED");
             EVENT_DESCRIPTION.put(EVENT_RESOURCE_TERMINATED, "RESOURCE_TERMINATED");
             EVENT_DESCRIPTION.put(EVENT_CAPABILITIES_UPDATE, "CAPABILITIES_UPDATE");
+            EVENT_DESCRIPTION.put(EVENT_RETRIEVE_CAP_FOR_REMOTE, "RETRIEVE_CAP_FOR_REMOTE");
         }
     }
 

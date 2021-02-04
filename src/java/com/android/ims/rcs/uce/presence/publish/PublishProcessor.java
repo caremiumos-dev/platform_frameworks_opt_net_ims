@@ -16,6 +16,8 @@
 
 package com.android.ims.rcs.uce.presence.publish;
 
+import static android.telephony.ims.RcsContactUceCapability.CAPABILITY_MECHANISM_PRESENCE;
+
 import android.content.Context;
 import android.os.RemoteException;
 import android.telephony.ims.RcsContactUceCapability;
@@ -118,7 +120,7 @@ public class PublishProcessor {
 
         // Get the latest device's capabilities.
         RcsContactUceCapability deviceCapability =
-                mDeviceCapabilities.getDeviceCapabilities(mContext);
+                mDeviceCapabilities.getDeviceCapabilities(CAPABILITY_MECHANISM_PRESENCE, mContext);
         if (deviceCapability == null) {
             logw("doPublish: device capability is null");
             return;
