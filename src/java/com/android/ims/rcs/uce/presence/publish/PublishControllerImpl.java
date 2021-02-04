@@ -24,6 +24,7 @@ import android.os.Message;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.telephony.ims.RcsContactUceCapability;
+import android.telephony.ims.RcsContactUceCapability.CapabilityMechanism;
 import android.telephony.ims.RcsUceAdapter;
 import android.telephony.ims.RcsUceAdapter.PublishState;
 import android.telephony.ims.aidl.IRcsUcePublishStateCallback;
@@ -221,8 +222,8 @@ public class PublishControllerImpl implements PublishController {
     }
 
     @Override
-    public RcsContactUceCapability getDeviceCapabilities() {
-        return mDeviceCapabilityInfo.getDeviceCapabilities(mContext);
+    public RcsContactUceCapability getDeviceCapabilities(@CapabilityMechanism int mechanism) {
+        return mDeviceCapabilityInfo.getDeviceCapabilities(mechanism, mContext);
     }
 
     // The local publish request from the sub-components which interact with PublishController.
