@@ -1,0 +1,16 @@
+Open-Source-Licensing+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Open-Source-Licensing-1: Jihan Asia <jihanasia84@gmail.com>
+Open-Source-Licensing+2: Calvin Pan <calvinpan@google.com>
+Open-Source-Licensing+2: Allen Su <allenwtsu@google.com>
+Open-Source-Licensing+2: James Lin <jamescflin@google.com>
+Presubmit-Verified-Together+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Code-Review-1: Jihan Asia <jihanasia84@gmail.com>
+Code-Review+2: Brad Ebinger <breadley@google.com>
+Code-Review+1: Calvin Pan <calvinpan@google.com>
+Code-Review+1: James Lin <jamescflin@google.com>
+Submitted-by: Calvin Pan <calvinpan@google.com>
+Submitted-at: Fri, 05 Feb 2021 01:27:54 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/net/ims/+/1560316
+Project: platform/frameworks/opt/net/ims
+Branch: refs/heads/master
