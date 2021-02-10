@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72208be1_4d098eda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-10T01:50:54Z",
+      "side": 1,
+      "message": "Adding notes of things to improve - i will handle the fixes myself",
+      "revId": "3f3851745dcf527bfcd15fd4cde1651a0d925757",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "423fc41f_965ee27d",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityInfo.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-10T01:50:54Z",
+      "side": 1,
+      "message": "These need to be appended together with the same feature tag key \"+g.3gpp.icsi-ref\" if required.",
+      "range": {
+        "startLine": 322,
+        "startChar": 20,
+        "endLine": 322,
+        "endChar": 39
+      },
+      "revId": "3f3851745dcf527bfcd15fd4cde1651a0d925757",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0509e151_1ea619bb",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityInfo.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-10T01:50:54Z",
+      "side": 1,
+      "message": "This will become difficult to manage once we also include RCS features here.",
+      "range": {
+        "startLine": 323,
+        "startChar": 15,
+        "endLine": 323,
+        "endChar": 55
+      },
+      "revId": "3f3851745dcf527bfcd15fd4cde1651a0d925757",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eba1a3e_092c95c2",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-10T01:50:54Z",
+      "side": 1,
+      "message": "This is more than the remoteCaps themselves, the sip code itself will be different and will result in different result codes.",
+      "range": {
+        "startLine": 293,
+        "startChar": 29,
+        "endLine": 295,
+        "endChar": 61
+      },
+      "revId": "3f3851745dcf527bfcd15fd4cde1651a0d925757",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2d59c17_458a7609",
+        "filename": "src/java/com/android/ims/rcs/uce/request/RemoteOptionsRequest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-10T01:50:54Z",
+      "side": 1,
+      "message": "Need to also check if the request is from a blocked number",
+      "range": {
+        "startLine": 67,
+        "startChar": 17,
+        "endLine": 67,
+        "endChar": 39
+      },
+      "revId": "3f3851745dcf527bfcd15fd4cde1651a0d925757",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
