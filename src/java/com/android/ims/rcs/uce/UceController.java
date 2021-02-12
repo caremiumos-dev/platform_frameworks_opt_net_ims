@@ -545,6 +545,22 @@ public class UceController {
     }
 
     /**
+     * Override the existing capabilities in the ongoing PUBLISH.
+     * @return the new capabilities that will be used for PUBLISH.
+     */
+    public String overridePublishCapabilities(String operation, String capabilities) {
+        return mPublishController.overridePublishCapabilities(operation, capabilities);
+    }
+
+    /**
+     * Get the PIDF XML associated with the last successful publish or null if not PUBLISHed to the
+     * network.
+     */
+    public String getLastPidfXml() {
+        return mPublishController.getLastPidfXml();
+    }
+
+    /**
      * Get the subscription ID.
      */
     public int getSubId() {
