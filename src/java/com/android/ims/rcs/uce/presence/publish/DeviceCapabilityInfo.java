@@ -30,11 +30,40 @@ import android.util.Log;
 
 import com.android.ims.rcs.uce.util.UceUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.function.Supplier;
+
 /**
  * Stores the device's capabilities information.
  */
 public class DeviceCapabilityInfo {
     private static final String LOG_TAG = UceUtils.getLogPrefix() + "DeviceCapabilityInfo";
+
+    private static final String OVERRIDE_ADD_OPERATION = "add";
+    private static final String OVERRIDE_REMOVE_OPERATION = "remove";
+    private static final String OVERRIDE_CLEAR_OPERATION = "clear";
+    private static final String OVERRIDE_LIST_OPERATION = "list";
+
+    private static final HashMap<String, String> TEST_CAPABILITY_MAP = new HashMap<>();
+    static {
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_MMTEL, "mmtel");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_CHAT_V1, "chat_v1");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_CHAT_V2, "chat_v2");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_FT, "ft");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_FT_OVER_SMS, "ft_sms");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_GEO_PUSH, "geo_push");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_GEO_PUSH_VIA_SMS,
+                "geo_push_sms");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_CALL_COMPOSER, "call_comp");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_POST_CALL, "call_post");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_SHARED_MAP, "map");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_SHARED_SKETCH, "sketch");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_CHATBOT, "chatbot");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_CHATBOT_STANDALONE,
+                "chatbot_sa");
+        TEST_CAPABILITY_MAP.put(RcsContactPresenceTuple.SERVICE_ID_CHATBOT_ROLE, "chatbot_role");
+    }
 
     private final int mSubId;
 
@@ -52,6 +81,12 @@ public class DeviceCapabilityInfo {
 
     // The MMTel capabilities of this subscription Id
     private MmTelFeature.MmTelCapabilities mMmTelCapabilities;
+
+    // Caps to add to the existing PUBLISH if they do not already exist (see TEST_CAPABILITY_MAP)
+    private final ArrayList<String> mOverrideAddCaps = new ArrayList<>();
+    // Caps to remove from the existing PUBLISH (see TEST_CAPABILITY_MAP)
+    private final ArrayList<String> mOverrideRemoveCaps = new ArrayList<>();
+
 
     // Whether the settings are changed or not
     private int mTtyPreferredMode;
@@ -231,6 +266,77 @@ public class DeviceCapabilityInfo {
         return false;
     }
 
+    /**
+     * Override the capabilities that the device reports to the network for testing purposes.
+     * @param command A command, either: "add", "remove", "list", or "clear".
+     * @param capabilities The capabilities (defined in TEST_CAPABILITY_MAP) that will be used in
+     * the modification of the device capabilities state.
+     * @return A String readable representation of the new state.
+     */
+    public synchronized String overrideCapabilitiesChanged(Context context, String command,
+            String capabilties) {
+        ArrayList<String> overrideList = null;
+        switch (command) {
+            case OVERRIDE_ADD_OPERATION:
+                overrideList = mOverrideAddCaps;
+                break;
+            case OVERRIDE_REMOVE_OPERATION:
+                overrideList = mOverrideRemoveCaps;
+                break;
+            case OVERRIDE_LIST_OPERATION:
+                // Intentionally nothing here
+                break;
+            case OVERRIDE_CLEAR_OPERATION:
+                mOverrideAddCaps.clear();
+                mOverrideRemoveCaps.clear();
+                break;
+        }
+        if (overrideList != null) {
+            overrideList.clear();
+            String[] caps = capabilties.split(",");
+            for (String cap : caps) {
+                if (TEST_CAPABILITY_MAP.containsValue(cap)) {
+                    overrideList.add(cap);
+                }
+            }
+        }
+
+        // Update mCurrentCaps and return it.
+        RcsContactUceCapability caps = getDeviceCapabilities(context);
+        return getReadableServiceIds(caps);
+    }
+
+    /**
+     * @return a readable version of the capabilities that are enabled.
+     */
+    private String getReadableServiceIds(RcsContactUceCapability c) {
+        StringBuilder builder = new StringBuilder(" [");
+        for (RcsContactPresenceTuple tuple : c.getCapabilityTuples()) {
+            builder.append("(");
+            String id = TEST_CAPABILITY_MAP.getOrDefault(tuple.getServiceId(),
+                    tuple.getServiceId());
+            String version = tuple.getServiceVersion();
+            builder.append("id=");
+            builder.append(id);
+            builder.append(", v=");
+            builder.append(version);
+            ServiceCapabilities servCaps = tuple.getServiceCapabilities();
+            if(servCaps != null) {
+                builder.append(", aud=");
+                builder.append(servCaps.isAudioCapable());
+                builder.append(", vid=");
+                builder.append(servCaps.isVideoCapable());
+                builder.append(", suppDup=");
+                builder.append(servCaps.getSupportedDuplexModes());
+                builder.append(", unsuppDup=");
+                builder.append(servCaps.getUnsupportedDuplexModes());
+            }
+            builder.append(") ");
+        }
+        builder.append("] ");
+        return builder.toString();
+    }
+
     private boolean isVolteAvailable(int networkRegType, MmTelCapabilities capabilities) {
         return (networkRegType == AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
                 && capabilities.isCapable(MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE);
@@ -265,58 +371,134 @@ public class DeviceCapabilityInfo {
             logw("getDeviceCapabilities: uri is empty");
             return null;
         }
-        ServiceCapabilities.Builder servCapsBuilder = new ServiceCapabilities.Builder(
-            hasVolteCapability(), hasVtCapability());
-        servCapsBuilder.addSupportedDuplexMode(ServiceCapabilities.DUPLEX_MODE_FULL);
-
-        RcsContactPresenceTuple.Builder tupleBuilder = new RcsContactPresenceTuple.Builder(
-                RcsContactPresenceTuple.TUPLE_BASIC_STATUS_OPEN,
-                RcsContactPresenceTuple.SERVICE_ID_MMTEL, "1.0");
-        tupleBuilder.setContactUri(uri).setServiceCapabilities(servCapsBuilder.build());
-
-        RcsContactPresenceTuple.Builder callComposerTupleBuilder =
-                new RcsContactPresenceTuple.Builder(
-                        RcsContactPresenceTuple.TUPLE_BASIC_STATUS_OPEN,
-                        RcsContactPresenceTuple.SERVICE_ID_CALL_COMPOSER, "2.0");
-        callComposerTupleBuilder.setContactUri(uri).setServiceCapabilities(
-                servCapsBuilder.build());
-
         PresenceBuilder presenceBuilder = new PresenceBuilder(uri,
                 RcsContactUceCapability.SOURCE_TYPE_CACHED,
                 RcsContactUceCapability.REQUEST_RESULT_FOUND);
-        presenceBuilder.addCapabilityTuple(tupleBuilder.build());
-        if (hasCallComposerCapability()) {
-            presenceBuilder.addCapabilityTuple(callComposerTupleBuilder.build());
-        }
+
+        //MMTEL
+        addMmTelCapability(presenceBuilder, uri);
+
+        // Call Composer
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_CALL_COMPOSER, "2.0", uri,
+                () -> mMmTelCapabilities != null && mMmTelCapabilities.isCapable(
+                MmTelCapabilities.CAPABILITY_TYPE_CALL_COMPOSER));
+
+        // Chat V1
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_CHAT_V1, "1.0", uri,
+                () -> false /*do not support this yet*/);
+
+        // Chat V2
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_CHAT_V2, "2.0", uri,
+                () -> false /*do not support this yet*/);
+
+        // File Transfer
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_FT, "1.0", uri,
+                () -> false /*do not support this yet*/);
+
+        // File Transfer over SMS
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_FT_OVER_SMS, "1.0", uri,
+                () -> false /*do not support this yet*/);
+
+        // GEO push
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_GEO_PUSH, "1.0", uri,
+                () -> false /*do not support this yet*/);
+
+        // GEO push over SMS
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_GEO_PUSH_VIA_SMS, "1.0",
+                uri, () -> false /*do not support this yet*/);
+
+        // post call communication
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_POST_CALL, "1.0", uri,
+                () -> false /*do not support this yet*/);
+
+        // shared map
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_SHARED_MAP, "1.0", uri,
+                () -> false /*do not support this yet*/);
+
+        // shared sketch
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_SHARED_SKETCH, "1.0",
+                uri, () -> false /*do not support this yet*/);
+
+        // chatbot
+        // Assume 1.0 right now, upgrade to detecting version based on botversion tag
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_CHATBOT, "1.0", uri,
+                () -> false /*do not support this yet*/);
+
+        // chatbot standalone
+        // Assume 1.0 right now, upgrade to detecting version based on botversion tag
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_CHATBOT_STANDALONE, "1.0",
+                uri, () -> false /*do not support this yet*/);
+
+        // chatbot role
+        // Assume 1.0 right now, upgrade to detecting version based on botversion tag
+        addCapability(presenceBuilder, RcsContactPresenceTuple.SERVICE_ID_CHATBOT_ROLE, "1.0",
+                uri, () -> false /*do not support this yet*/);
 
         return presenceBuilder.build();
     }
 
+    private synchronized void addMmTelCapability(
+            RcsContactUceCapability.PresenceBuilder presenceBuilder, Uri contactUri) {
+        if (isRemovedOverride(RcsContactPresenceTuple.SERVICE_ID_MMTEL)) {
+            return;
+        }
+
+        ServiceCapabilities.Builder servCapsBuilder = new ServiceCapabilities.Builder(
+                hasVolteCapability(), hasVtCapability());
+        servCapsBuilder.addSupportedDuplexMode(ServiceCapabilities.DUPLEX_MODE_FULL);
+        RcsContactPresenceTuple.Builder tupleBuilder = new RcsContactPresenceTuple.Builder(
+                RcsContactPresenceTuple.TUPLE_BASIC_STATUS_OPEN,
+                RcsContactPresenceTuple.SERVICE_ID_MMTEL, "1.0");
+        tupleBuilder.setContactUri(contactUri).setServiceCapabilities(servCapsBuilder.build());
+        presenceBuilder.addCapabilityTuple(tupleBuilder.build());
+    }
+
     // Check if the device has the VoLTE capability
     private synchronized boolean hasVolteCapability() {
-        if (mMmTelCapabilities != null
-                && mMmTelCapabilities.isCapable(MmTelCapabilities.CAPABILITY_TYPE_VOICE)) {
-            return true;
-        }
-        return false;
+        boolean isCapable = mMmTelCapabilities != null
+                && mMmTelCapabilities.isCapable(MmTelCapabilities.CAPABILITY_TYPE_VOICE);
+
+        return isCapableWithOverride(isCapable, RcsContactPresenceTuple.SERVICE_ID_MMTEL);
     }
 
     // Check if the device has the VT capability
     private synchronized boolean hasVtCapability() {
-        if (mMmTelCapabilities != null
-                && mMmTelCapabilities.isCapable(MmTelCapabilities.CAPABILITY_TYPE_VIDEO)) {
-            return true;
-        }
-        return false;
+        boolean isCapable = mMmTelCapabilities != null
+                && mMmTelCapabilities.isCapable(MmTelCapabilities.CAPABILITY_TYPE_VIDEO);
+
+        return isCapableWithOverride(isCapable, RcsContactPresenceTuple.SERVICE_ID_MMTEL);
     }
 
-    // Check if the device has the Call Composer capability
-    private synchronized boolean hasCallComposerCapability() {
-        if (mMmTelCapabilities != null && mMmTelCapabilities.isCapable(
-                MmTelCapabilities.CAPABILITY_TYPE_CALL_COMPOSER)) {
+    private synchronized void addCapability(RcsContactUceCapability.PresenceBuilder presenceBuilder,
+            String serviceId, String version, Uri contactUri, Supplier<Boolean> capableCheck) {
+        boolean isCapable = isCapableWithOverride(capableCheck.get(), serviceId);
+        if (!isCapable) return;
+
+        RcsContactPresenceTuple.Builder builder = new RcsContactPresenceTuple.Builder(
+                RcsContactPresenceTuple.TUPLE_BASIC_STATUS_OPEN, serviceId, version);
+        presenceBuilder.addCapabilityTuple(builder.setContactUri(contactUri).build());
+    }
+
+    /**
+     * Checks override testing values and returns whether or not the service iD should be incldued
+     * in the PIDF XML.
+     * @param isCapable Is the serviceId capable
+     * @param serviceId The service ID that the check should be performed for.
+     * @return true if the capability should be added to PIDF XML, false if it should not be.
+     */
+    private boolean isCapableWithOverride(boolean isCapable, String serviceId) {
+        if (isAddedOverride(serviceId)) {
             return true;
         }
-        return false;
+        return isCapable && !isRemovedOverride(serviceId);
+    }
+
+    private boolean isRemovedOverride(String serviceId) {
+        return mOverrideRemoveCaps.contains(TEST_CAPABILITY_MAP.get(serviceId));
+    }
+
+    private boolean isAddedOverride(String serviceId) {
+        return mOverrideAddCaps.contains(TEST_CAPABILITY_MAP.get(serviceId));
     }
 
     private synchronized MmTelCapabilities deepCopyCapabilities(MmTelCapabilities capabilities) {

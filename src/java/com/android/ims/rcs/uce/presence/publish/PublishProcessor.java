@@ -207,7 +207,7 @@ public class PublishProcessor {
 
             // Generate a unique taskId to track this request.
             long taskId = mProcessorState.generatePublishTaskId();
-            requestResponse = new PublishRequestResponse(mPublishCtrlCallback, taskId);
+            requestResponse = new PublishRequestResponse(mPublishCtrlCallback, taskId, pidfXml);
 
             mLocalLog.log("publish capabilities: taskId=" + taskId);
             logi("publishCapabilities: taskId=" + taskId);
@@ -258,7 +258,9 @@ public class PublishProcessor {
             // Update the publish state if the request is failed and doesn't need to retry.
             int publishState = requestResponse.getPublishStateByCmdErrorCode();
             Instant responseTimestamp = requestResponse.getResponseTimestamp();
-            mPublishCtrlCallback.updatePublishRequestResult(publishState, responseTimestamp);
+            String pidfXml = requestResponse.getPidfXml();
+            mPublishCtrlCallback.updatePublishRequestResult(publishState, responseTimestamp,
+                    pidfXml);
 
             // Check if there is a pending request
             checkAndSendPendingRequest();
@@ -303,7 +305,9 @@ public class PublishProcessor {
             // Update the publish state if the request doesn't need to retry.
             int publishResult = requestResponse.getPublishStateByNetworkResponse();
             Instant responseTimestamp = requestResponse.getResponseTimestamp();
-            mPublishCtrlCallback.updatePublishRequestResult(publishResult, responseTimestamp);
+            String pidfXml = requestResponse.getPidfXml();
+            mPublishCtrlCallback.updatePublishRequestResult(publishResult, responseTimestamp,
+                    pidfXml);
 
             // Check if there is a pending request
             checkAndSendPendingRequest();

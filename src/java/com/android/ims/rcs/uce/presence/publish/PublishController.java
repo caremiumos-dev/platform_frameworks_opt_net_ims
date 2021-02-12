@@ -69,6 +69,9 @@ public interface PublishController extends ControllerBase {
     /** Publish trigger type: provisioning changes */
     int PUBLISH_TRIGGER_PROVISIONING_CHANGE = 12;
 
+    /**The caps have been overridden for a test*/
+    int PUBLISH_TRIGGER_OVERRIDE_CAPS = 13;
+
     @IntDef(value = {
             PUBLISH_TRIGGER_SERVICE,
             PUBLISH_TRIGGER_RETRY,
@@ -81,7 +84,8 @@ public interface PublishController extends ControllerBase {
             PUBLISH_TRIGGER_MMTEL_CAPABILITY_CHANGE,
             PUBLISH_TRIGGER_RCS_REGISTERED,
             PUBLISH_TRIGGER_RCS_UNREGISTERED,
-            PUBLISH_TRIGGER_PROVISIONING_CHANGE
+            PUBLISH_TRIGGER_PROVISIONING_CHANGE,
+            PUBLISH_TRIGGER_OVERRIDE_CAPS
     }, prefix="PUBLISH_TRIGGER_")
     @Retention(RetentionPolicy.SOURCE)
     @interface PublishTriggerType {}
@@ -119,13 +123,26 @@ public interface PublishController extends ControllerBase {
         /**
          * Update the publish request result.
          */
-        void updatePublishRequestResult(int publishState, Instant updatedTimestamp);
+        void updatePublishRequestResult(int publishState, Instant updatedTimestamp, String pidfXml);
     }
+
+    /**
+     * Override the existing capabilities in the ongoing PUBLISH.
+     * <p>
+     * Used for testing ONLY.
+     * @return the new capabilities that will be used for PUBLISH.
+     */
+    String overridePublishCapabilities(String operation, String capabilities);
 
     /**
      * Retrieve the RCS UCE Publish state.
      */
     @PublishState int getUcePublishState();
+
+    /**
+     * @return the last PIDF XML used for publish or {@code null} if the device is not published.
+     */
+    String getLastPidfXml();
 
     /**
      * Notify that the device's capabilities have been unpublished from the network.

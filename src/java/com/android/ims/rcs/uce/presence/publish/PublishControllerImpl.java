@@ -36,6 +36,7 @@ import com.android.ims.RcsFeatureManager;
 import com.android.ims.rcs.uce.UceController.UceControllerCallback;
 import com.android.ims.rcs.uce.util.UceUtils;
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.os.SomeArgs;
 
 import java.lang.ref.WeakReference;
 import java.time.Instant;
@@ -79,6 +80,8 @@ public class PublishControllerImpl implements PublishController {
     private @PublishState int mPublishState;
     // The timestamp of updating the publish state
     private Instant mPublishStateUpdatedTime = Instant.now();
+    // The last PIDF XML used in the publish
+    private String mPidfXml;
 
     // The callbacks to notify publish state changed.
     private RemoteCallbackList<IRcsUcePublishStateCallback> mPublishStateCallbacks;
@@ -206,6 +209,19 @@ public class PublishControllerImpl implements PublishController {
         }
     }
 
+    @Override
+    public String overridePublishCapabilities(String operation, String capabilities) {
+        String newCaps = mDeviceCapabilityInfo.overrideCapabilitiesChanged(mContext, operation,
+                capabilities);
+        mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_OVERRIDE_CAPS);
+        return newCaps;
+    }
+
+    @Override
+    public String getLastPidfXml() {
+        return mPidfXml;
+    }
+
     /**
      * Register a {@link PublishStateCallback} to listen to the published state changed.
      */
@@ -253,7 +269,7 @@ public class PublishControllerImpl implements PublishController {
         logd("onUnpublish");
         if (mIsDestroyedFlag) return;
         mPublishHandler.onPublishStateChanged(RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED,
-                Instant.now());
+                Instant.now(), null);
     }
 
     @Override
@@ -316,9 +332,9 @@ public class PublishControllerImpl implements PublishController {
 
                 @Override
                 public void updatePublishRequestResult(@PublishState int publishState,
-                        Instant updatedTime) {
+                        Instant updatedTime, String pidfXml) {
                     logd("updatePublishRequestResult: " + publishState + ", time=" + updatedTime);
-                    mPublishHandler.onPublishStateChanged(publishState, updatedTime);
+                    mPublishHandler.onPublishStateChanged(publishState, updatedTime, pidfXml);
                 }
             };
 
@@ -356,9 +372,13 @@ public class PublishControllerImpl implements PublishController {
             publishCtrl.logd("handleMessage: " + EVENT_DESCRIPTION.get(message.what));
             switch (message.what) {
                 case MSG_PUBLISH_STATE_CHANGED:
-                    int newPublishState = message.arg1;
-                    Instant updatedTimestamp = (Instant) message.obj;
-                    publishCtrl.handlePublishStateChangedMessage(newPublishState, updatedTimestamp);
+                    SomeArgs args = (SomeArgs) message.obj;
+                    int newPublishState = (Integer) args.arg1;
+                    Instant updatedTimestamp = (Instant) args.arg2;
+                    String pidfXml = (String) args.arg3;
+                    args.recycle();
+                    publishCtrl.handlePublishStateChangedMessage(newPublishState, updatedTimestamp,
+                            pidfXml);
                     break;
 
                 case MSG_NOTIFY_CURRENT_PUBLISH_STATE:
@@ -399,11 +419,15 @@ public class PublishControllerImpl implements PublishController {
          * Send the message to notify the publish state is changed.
          */
         public void onPublishStateChanged(@PublishState int publishState,
-                @NonNull Instant updatedTimestamp) {
+                @NonNull Instant updatedTimestamp, String pidfXml) {
             Message message = obtainMessage();
+            SomeArgs args = SomeArgs.obtain();
+            args.arg1 = publishState;
+            args.arg2 = updatedTimestamp;
+            args.arg3 = pidfXml;
+
             message.what = MSG_PUBLISH_STATE_CHANGED;
-            message.arg1 = publishState;
-            message.obj = updatedTimestamp;
+            message.obj = args;
             sendMessage(message);
         }
 
@@ -519,7 +543,7 @@ public class PublishControllerImpl implements PublishController {
      * from original state.
      */
     private void handlePublishStateChangedMessage(@PublishState int newPublishState,
-            Instant updatedTimestamp) {
+            Instant updatedTimestamp, String pidfXml) {
         synchronized (mPublishStateLock) {
             if (mIsDestroyedFlag) return;
             // Check if the time of the given publish state is not earlier than existing time.
@@ -534,6 +558,7 @@ public class PublishControllerImpl implements PublishController {
             if (mPublishState == newPublishState) return;
             mPublishState = newPublishState;
             mPublishStateUpdatedTime = updatedTimestamp;
+            mPidfXml = pidfXml;
         }
 
         // Trigger the publish state changed in handler thread since it may take time.
