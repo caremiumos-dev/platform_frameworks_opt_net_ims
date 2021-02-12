@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb0ed044_a9ac64bb",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityInfo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-02-12T21:31:21Z",
+      "side": 1,
+      "message": "these shortened strings are only used by the shell commmands, right? If so can the translation layer go in TelephonyShellCommand instead?",
+      "range": {
+        "startLine": 50,
+        "startChar": 75,
+        "endLine": 50,
+        "endChar": 80
+      },
+      "revId": "a45ddabd2f5b9fa0938896ef078e60065d538c1a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3fff0bc_8d4c1177",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityInfo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-02-12T21:31:21Z",
+      "side": 1,
+      "message": "Can this be a plain boolean named something like \"isOriginallyCapable\"? I don\u0027t see any sort of functional magic going on that\u0027d necessitate a supplier",
+      "range": {
+        "startLine": 473,
+        "startChar": 62,
+        "endLine": 473,
+        "endChar": 92
+      },
+      "revId": "a45ddabd2f5b9fa0938896ef078e60065d538c1a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
