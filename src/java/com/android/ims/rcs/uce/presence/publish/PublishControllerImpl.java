@@ -440,11 +440,20 @@ public class PublishControllerImpl implements PublishController {
                 return;
             }
 
-            // Don't send duplicated publish request because it always publish the latest device
-            // capabilities.
-            if (hasMessages(MSG_REQUEST_PUBLISH)) {
-                publishCtrl.logd("requestPublish: Skip. there is already a request in the queue");
-                return;
+            // If the trigger type is not RETRY, it means that the device capabilities have been
+            // changed. Since the queue allows only one publish request, remove the existing one if
+            // it is waiting for a retry delay to make sure that the publish request can be sent
+            // immediately.
+            if (type != PublishController.PUBLISH_TRIGGER_RETRY) {
+                removeMessages(MSG_REQUEST_PUBLISH);
+            } else {
+                // Skip this request if the trigger type is RETRY and there's alreay a publish
+                // request in the queue.
+                if (hasMessages(MSG_REQUEST_PUBLISH)) {
+                    publishCtrl.logd(
+                            "requestPublish: Skip. There's already a request in the queue");
+                    return;
+                }
             }
 
             Message message = obtainMessage();
@@ -585,6 +594,11 @@ public class PublishControllerImpl implements PublishController {
     @VisibleForTesting
     public IImsCapabilityCallback getRcsCapabilitiesCallback() {
         return mRcsCapabilitiesCallback;
+    }
+
+    @VisibleForTesting
+    public PublishControllerCallback getPublishControllerCallback() {
+        return mPublishControllerCallback;
     }
 
     private void logd(String log) {
