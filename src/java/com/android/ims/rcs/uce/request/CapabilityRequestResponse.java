@@ -178,7 +178,9 @@ public class CapabilityRequestResponse {
      */
     public boolean isNetworkResponseOK() {
         final int sipCodeOk = NetworkSipCode.SIP_CODE_OK;
-        if (getNetworkRespSipCode().filter(c -> c == sipCodeOk).isPresent() &&
+        final int sipCodeAccept = NetworkSipCode.SIP_CODE_ACCEPT;
+        Optional<Integer> respSipCode = getNetworkRespSipCode();
+        if (respSipCode.filter(c -> (c == sipCodeOk || c == sipCodeAccept)).isPresent() &&
                 (!getReasonHeaderCause().isPresent()
                         || getReasonHeaderCause().filter(c -> c == sipCodeOk).isPresent())) {
             return true;
