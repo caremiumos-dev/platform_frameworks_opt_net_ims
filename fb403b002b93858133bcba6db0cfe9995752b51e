@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fa3b04a_964af5e1",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishControllerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-19T00:09:40Z",
+      "side": 1,
+      "message": "As long as this eventually takes into account the minimum publish throttling time, this should be okay.",
+      "range": {
+        "startLine": 444,
+        "startChar": 24,
+        "endLine": 444,
+        "endChar": 90
+      },
+      "revId": "fb403b002b93858133bcba6db0cfe9995752b51e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
