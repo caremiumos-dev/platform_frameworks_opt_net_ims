@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4710592f_1e5855e6",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1373692
+      },
+      "writtenOn": "2021-02-19T14:19:57Z",
+      "side": 1,
+      "message": "nit: OK or Accepted",
+      "range": {
+        "startLine": 176,
+        "startChar": 52,
+        "endLine": 176,
+        "endChar": 54
+      },
+      "revId": "74eb679c6bab9d36eed7449c11c32c066c2d0070",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24381f70_8d520bfc",
+        "filename": "src/java/com/android/ims/rcs/uce/util/NetworkSipCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1373692
+      },
+      "writtenOn": "2021-02-19T14:19:57Z",
+      "side": 1,
+      "message": "nit: formal naming is \"Accepted\"",
+      "range": {
+        "startLine": 24,
+        "startChar": 28,
+        "endLine": 24,
+        "endChar": 44
+      },
+      "revId": "74eb679c6bab9d36eed7449c11c32c066c2d0070",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
