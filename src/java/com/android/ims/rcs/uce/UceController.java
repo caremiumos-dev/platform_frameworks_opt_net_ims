@@ -39,7 +39,6 @@ import com.android.ims.RcsFeatureManager;
 import com.android.ims.rcs.uce.eab.EabCapabilityResult;
 import com.android.ims.rcs.uce.eab.EabController;
 import com.android.ims.rcs.uce.eab.EabControllerImpl;
-import com.android.ims.rcs.uce.eab.EabUtil;
 import com.android.ims.rcs.uce.options.OptionsController;
 import com.android.ims.rcs.uce.options.OptionsControllerImpl;
 import com.android.ims.rcs.uce.presence.publish.PublishController;
@@ -116,17 +115,6 @@ public class UceController {
          */
         void refreshCapabilities(@NonNull List<Uri> contactNumbers,
                 @NonNull IRcsUceControllerCallback callback) throws RemoteException;
-
-        /**
-         * The method is called when the EabController and the PublishController want to receive
-         * published state changes.
-         */
-        void registerPublishStateCallback(@NonNull IRcsUcePublishStateCallback c);
-
-        /**
-         * Remove the existing PublishStateCallback.
-         */
-        void unregisterPublishStateCallback(@NonNull IRcsUcePublishStateCallback c);
     }
 
     /**
@@ -356,18 +344,6 @@ public class UceController {
                 @NonNull IRcsUceControllerCallback callback) throws RemoteException{
             logd("refreshCapabilities: " + contactNumbers.size());
             UceController.this.requestCapabilitiesInternal(contactNumbers, true, callback);
-        }
-
-        @Override
-        public void registerPublishStateCallback(@NonNull IRcsUcePublishStateCallback c) {
-            logd("UceControllerCallback: registerPublishStateCallback");
-            UceController.this.registerPublishStateCallback(c);
-        }
-
-        @Override
-        public void unregisterPublishStateCallback(@NonNull IRcsUcePublishStateCallback c) {
-            logd("UceControllerCallback: unregisterPublishStateCallback");
-            UceController.this.unregisterPublishStateCallback(c);
         }
     };
 
