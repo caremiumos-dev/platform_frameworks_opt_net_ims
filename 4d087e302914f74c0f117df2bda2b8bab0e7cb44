@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a162671_66dcee35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-22T22:05:17Z",
+      "side": 1,
+      "message": "Looks like this should be rebased on aosp/1597653?\n\n\nThere is a big change here and not many testing changes... Can you also provide some unit testing for this? Looks good in general though - hard to follow some of the edge cases however so testing would provide more confidence.\n",
+      "revId": "4d087e302914f74c0f117df2bda2b8bab0e7cb44",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7a43719_1ee9d4f2",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityListener.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-22T22:05:17Z",
+      "side": 1,
+      "message": "Should this also remove EVENT_UNREGISTER_IMS_CHANGE?",
+      "range": {
+        "startLine": 107,
+        "startChar": 20,
+        "endLine": 107,
+        "endChar": 56
+      },
+      "revId": "4d087e302914f74c0f117df2bda2b8bab0e7cb44",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
