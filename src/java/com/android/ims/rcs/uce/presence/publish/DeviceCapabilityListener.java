@@ -28,6 +28,8 @@ import android.os.Message;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.telecom.TelecomManager;
+import android.telephony.AccessNetworkConstants;
+import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.ims.ImsException;
 import android.telephony.ims.ImsManager;
 import android.telephony.ims.ImsMmTelManager;
@@ -52,9 +54,7 @@ public class DeviceCapabilityListener {
 
     private static final String LOG_TAG = UceUtils.getLogPrefix() + "DeviceCapListener";
 
-    // Delay to send the registered changed because the registered state changed of MMTEL and RCS
-    // may be called at the same time.
-    private static final long DELAY_SEND_IMS_REGISTERED_CHANGED_MSG = 500L;
+    private static final long REGISTER_IMS_CHANGED_DELAY = 15000L;  // 15 seconds
 
     /**
      * Used to inject ImsMmTelManager instances for testing.
@@ -83,7 +83,7 @@ public class DeviceCapabilityListener {
     // The handler to re-register ims provision callback.
     private class RegisterCallbackHandler extends Handler {
         private static final int EVENT_REGISTER_IMS_CONTENT_CHANGE = 1;
-        private static final long REGISTER_IMS_CHANGED_DELAY = 5000L;  // 5 seconds
+        private static final int EVENT_UNREGISTER_IMS_CHANGE = 2;
 
         RegisterCallbackHandler(Looper looper) {
             super(looper);
@@ -96,27 +96,35 @@ public class DeviceCapabilityListener {
                 case EVENT_REGISTER_IMS_CONTENT_CHANGE:
                     registerImsProvisionCallback();
                     break;
+                case EVENT_UNREGISTER_IMS_CHANGE:
+                    unregisterImsProvisionCallback();
+                    break;
             }
         }
 
-        public void sendRegisterImsContentChangedMessage() {
+        public void sendRegisterImsContentChangedMessage(long registerDelay) {
             // Remove the existing message and send a new one with the delayed time.
             removeMessages(EVENT_REGISTER_IMS_CONTENT_CHANGE);
             Message msg = obtainMessage(EVENT_REGISTER_IMS_CONTENT_CHANGE);
-            sendMessageDelayed(msg, REGISTER_IMS_CHANGED_DELAY);
+            sendMessageDelayed(msg, registerDelay);
         }
 
         public void removeRegisterImsContentChangedMessage() {
             removeMessages(EVENT_REGISTER_IMS_CONTENT_CHANGE);
+        }
+
+        public void sendUnregisterImsCallbackMessage() {
+            removeMessages(EVENT_REGISTER_IMS_CONTENT_CHANGE);
+            sendEmptyMessage(EVENT_UNREGISTER_IMS_CHANGE);
         }
     }
 
     private final int mSubId;
     private final Context mContext;
     private volatile boolean mInitialized;
-
-    // The listener is destroyed
     private volatile boolean mIsDestroyed;
+    private volatile boolean mIsRcsConnected;
+    private volatile boolean mIsImsCallbackRegistered;
 
     // The callback to trigger the internal publish request
     private final PublishControllerCallback mCallback;
@@ -174,6 +182,18 @@ public class DeviceCapabilityListener {
         }
     }
 
+    // The RcsFeature has been connected to the framework
+    public void onRcsConnected() {
+        mIsRcsConnected = true;
+        mHandler.sendRegisterImsContentChangedMessage(0L);
+    }
+
+    // The framework has lost the binding to the RcsFeature.
+    public void onRcsDisconnected() {
+        mIsRcsConnected = false;
+        mHandler.sendUnregisterImsCallbackMessage();
+    }
+
     /**
      * Notify the instance is destroyed
      */
@@ -222,6 +242,11 @@ public class DeviceCapabilityListener {
     }
 
     private void registerImsProvisionCallback() {
+        if (mIsImsCallbackRegistered) {
+            logd("registerImsProvisionCallback: already registered.");
+            return;
+        }
+
         logd("registerImsProvisionCallback");
         try {
             // Register mmtel callback
@@ -241,12 +266,18 @@ public class DeviceCapabilityListener {
             // Register provisioning changed callback
             mProvisioningManager.registerProvisioningChangedCallback(mHandlerExecutor,
                     mProvisionChangedCallback);
+
+            // Set the IMS callback is registered flag.
+            mIsImsCallbackRegistered = true;
         } catch (ImsException e) {
             logw("registerImsProvisionCallback error: " + e);
             // Unregister the callback
             unregisterImsProvisionCallback();
-            // Retry registering IMS content change callback
-            mHandler.sendRegisterImsContentChangedMessage();
+
+            // Retry registering IMS content change callback when the RCS is connected.
+            if (mIsRcsConnected) {
+                mHandler.sendRegisterImsContentChangedMessage(REGISTER_IMS_CHANGED_DELAY);
+            }
         }
     }
 
@@ -285,6 +316,8 @@ public class DeviceCapabilityListener {
         } catch (RuntimeException e) {
             logw("unregister provisioning callback error: " + e.getMessage());
         }
+
+        mIsImsCallbackRegistered = false;
     }
 
     @VisibleForTesting
@@ -373,10 +406,12 @@ public class DeviceCapabilityListener {
     public final RegistrationManager.RegistrationCallback mRcsRegistrationCallback =
             new RegistrationManager.RegistrationCallback() {
                 @Override
-                public void onRegistered(int imsTransportType) {
+                public void onRegistered(@TransportType int transportType) {
                     synchronized (mLock) {
-                        logi("onRcsRegistered: " + imsTransportType);
-                        handleImsRcsRegistered(imsTransportType);
+                        String type = AccessNetworkConstants.transportTypeToString(transportType);
+                        logi("onRcsRegistered: " + type);
+                        if (!mIsImsCallbackRegistered) return;
+                        handleImsRcsRegistered(transportType);
                     }
                 }
 
@@ -384,6 +419,7 @@ public class DeviceCapabilityListener {
                 public void onUnregistered(ImsReasonInfo info) {
                     synchronized (mLock) {
                         logi("onRcsUnregistered: " + info);
+                        if (!mIsImsCallbackRegistered) return;
                         handleImsRcsUnregistered();
                     }
                 }
@@ -393,10 +429,12 @@ public class DeviceCapabilityListener {
     public final RegistrationManager.RegistrationCallback mMmtelRegistrationCallback =
             new RegistrationManager.RegistrationCallback() {
                 @Override
-                public void onRegistered(int imsTransportType) {
+                public void onRegistered(@TransportType int transportType) {
                     synchronized (mLock) {
-                        logi("onMmTelRegistered: " + imsTransportType);
-                        handleImsMmtelRegistered(imsTransportType);
+                        String type = AccessNetworkConstants.transportTypeToString(transportType);
+                        logi("onMmTelRegistered: " + type);
+                        if (!mIsImsCallbackRegistered) return;
+                        handleImsMmtelRegistered(transportType);
                     }
                 }
 
@@ -404,6 +442,7 @@ public class DeviceCapabilityListener {
                 public void onUnregistered(ImsReasonInfo info) {
                     synchronized (mLock) {
                         logi("onMmTelUnregistered: " + info);
+                        if (!mIsImsCallbackRegistered) return;
                         handleImsMmtelUnregistered();
                     }
                 }
@@ -435,6 +474,8 @@ public class DeviceCapabilityListener {
                         case ProvisioningManager.KEY_VOLTE_PROVISIONING_STATUS:
                         case ProvisioningManager.KEY_VT_PROVISIONING_STATUS:
                             handleProvisioningChanged();
+                        case ProvisioningManager.KEY_RCS_PUBLISH_SOURCE_THROTTLE_MS:
+                            handlePublishThrottleChanged(value);
                             break;
                     }
                 }
@@ -445,7 +486,7 @@ public class DeviceCapabilityListener {
         boolean isChanged = mCapabilityInfo.updateTtyPreferredMode(preferredMode);
         if (isChanged) {
             mCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_TTY_PREFERRED_CHANGE, 0L);
+                    PublishController.PUBLISH_TRIGGER_TTY_PREFERRED_CHANGE);
         }
     }
 
@@ -454,7 +495,7 @@ public class DeviceCapabilityListener {
         boolean isChanged = mCapabilityInfo.updateAirplaneMode(state);
         if (isChanged) {
             mCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_AIRPLANE_MODE_CHANGE, 0L);
+                    PublishController.PUBLISH_TRIGGER_AIRPLANE_MODE_CHANGE);
         }
     }
 
@@ -463,7 +504,7 @@ public class DeviceCapabilityListener {
         boolean isChanged = mCapabilityInfo.updateMobileData(isEnabled);
         if (isChanged) {
             mCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_MOBILE_DATA_CHANGE, 0L);
+                    PublishController.PUBLISH_TRIGGER_MOBILE_DATA_CHANGE);
         }
     }
 
@@ -472,7 +513,7 @@ public class DeviceCapabilityListener {
         boolean isChanged = mCapabilityInfo.updateVtSetting(isEnabled);
         if (isChanged) {
             mCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_VT_SETTING_CHANGE, 0L);
+                    PublishController.PUBLISH_TRIGGER_VT_SETTING_CHANGE);
         }
     }
 
@@ -482,8 +523,7 @@ public class DeviceCapabilityListener {
     private void handleImsMmtelRegistered(int imsTransportType) {
         mCapabilityInfo.updateImsMmtelRegistered(imsTransportType);
         mCallback.requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_MMTEL_REGISTERED,
-                DELAY_SEND_IMS_REGISTERED_CHANGED_MSG);
+                PublishController.PUBLISH_TRIGGER_MMTEL_REGISTERED);
     }
 
     /*
@@ -492,7 +532,7 @@ public class DeviceCapabilityListener {
     private void handleImsMmtelUnregistered() {
         mCapabilityInfo.updateImsMmtelUnregistered();
         mCallback.requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_MMTEL_UNREGISTERED, 0L);
+                PublishController.PUBLISH_TRIGGER_MMTEL_UNREGISTERED);
     }
 
     private void handleMmtelCapabilitiesStatusChanged(MmTelCapabilities capabilities) {
@@ -500,7 +540,7 @@ public class DeviceCapabilityListener {
         logi("MMTel capabilities status changed: isChanged=" + isChanged);
         if (isChanged) {
             mCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_MMTEL_CAPABILITY_CHANGE, 0L);
+                    PublishController.PUBLISH_TRIGGER_MMTEL_CAPABILITY_CHANGE);
         }
     }
 
@@ -510,8 +550,7 @@ public class DeviceCapabilityListener {
     private void handleImsRcsRegistered(int imsTransportType) {
         mCapabilityInfo.updateImsRcsRegistered(imsTransportType);
         mCallback.requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_RCS_REGISTERED,
-                DELAY_SEND_IMS_REGISTERED_CHANGED_MSG);
+                PublishController.PUBLISH_TRIGGER_RCS_REGISTERED);
     }
 
     /*
@@ -520,12 +559,16 @@ public class DeviceCapabilityListener {
     private void handleImsRcsUnregistered() {
         mCapabilityInfo.updateImsRcsUnregistered();
         mCallback.requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_RCS_UNREGISTERED, 0L);
+                PublishController.PUBLISH_TRIGGER_RCS_UNREGISTERED);
     }
 
     private void handleProvisioningChanged() {
         mCallback.requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_PROVISIONING_CHANGE, 0L);
+                PublishController.PUBLISH_TRIGGER_PROVISIONING_CHANGE);
+    }
+
+    private void handlePublishThrottleChanged(int value) {
+        mCallback.updatePublishThrottle(value);
     }
 
     @VisibleForTesting
@@ -541,6 +584,11 @@ public class DeviceCapabilityListener {
     @VisibleForTesting
     public void setProvisioningMgrFactory(ProvisioningManagerFactory factory) {
         mProvisioningMgrFactory = factory;
+    }
+
+    @VisibleForTesting
+    public void setImsCallbackRegistered(boolean registered) {
+        mIsImsCallbackRegistered = registered;
     }
 
     private void logd(String log) {

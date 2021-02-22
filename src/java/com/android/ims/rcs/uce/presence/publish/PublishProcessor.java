@@ -35,6 +35,7 @@ import com.android.internal.annotations.VisibleForTesting;
 
 import java.io.PrintWriter;
 import java.time.Instant;
+import java.util.Optional;
 
 /**
  * Send the publish request and handle the response of the publish request result.
@@ -68,7 +69,7 @@ public class PublishProcessor {
         mContext = context;
         mDeviceCapabilities = capabilityInfo;
         mPublishCtrlCallback = publishCtrlCallback;
-        mProcessorState = new PublishProcessorState();
+        mProcessorState = new PublishProcessorState(subId);
     }
 
     /**
@@ -78,6 +79,8 @@ public class PublishProcessor {
         mLocalLog.log("onRcsConnected");
         logi("onRcsConnected");
         mRcsFeatureManager = featureManager;
+        // Check if there is a pending request
+        checkAndSendPendingRequest();
     }
 
     /**
@@ -108,13 +111,8 @@ public class PublishProcessor {
         mLocalLog.log("doPublish: trigger type=" + triggerType);
         logi("doPublish: trigger type=" + triggerType);
 
-        // Check if it should reset the retry count.
-        if (isResetRetryNeeded(triggerType)) {
-            mProcessorState.resetRetryCount();
-        }
-
         // Return if this request is not allowed to execute.
-        if (!isRequestAllowed()) {
+        if (!isRequestAllowed(triggerType)) {
             mLocalLog.log("doPublish: The request is not allowed");
             return;
         }
@@ -134,11 +132,12 @@ public class PublishProcessor {
             return;
         }
 
-        // Set the pending request and return if RCS is not connected.
+        // Set the pending request and return directly if RCS is disconnected. When the RCS is
+        // connected afterward, it will send a new request if there's a pending request.
         RcsFeatureManager featureManager = mRcsFeatureManager;
         if (featureManager == null) {
             logw("doPublish: NOT connected");
-            setPendingRequest(true);
+            setPendingRequest(triggerType);
             return;
         }
 
@@ -146,17 +145,8 @@ public class PublishProcessor {
         publishCapabilities(featureManager, pidfXml);
     }
 
-    // Check if the giving trigger type should reset the retry count.
-    private boolean isResetRetryNeeded(@PublishTriggerType int triggerType) {
-        // Do no reset the retry count if the request is triggered by the previous failed retry.
-        if (triggerType == PublishController.PUBLISH_TRIGGER_RETRY) {
-            return false;
-        }
-        return true;
-    }
-
     // Check if the publish request is allowed to execute.
-    private boolean isRequestAllowed() {
+    private boolean isRequestAllowed(@PublishTriggerType int triggerType) {
         // Check if the instance is destroyed.
         if (mIsDestroyed) {
             logd("isPublishAllowed: This instance is already destroyed");
@@ -177,20 +167,19 @@ public class PublishProcessor {
             return false;
         }
 
-        // Set the pending flag if there's already a request running now.
+        // Set the pending flag if there's already a request running now. When the running request
+        // is finished and there is a pending request, it will send a new request.
         if (mProcessorState.isPublishingNow()) {
             logd("isPublishAllowed: There is already a request running now");
-            setPendingRequest(true);
+            setPendingRequest(triggerType);
             return false;
         }
 
-        // Skip this request and re-send the request with the delay time if the publish request
-        // executes too frequently.
-        if (!mProcessorState.isCurrentTimeAllowed()) {
+        // Skip this request if the PUBLISH is not allowed at current time. Resend the PUBLISH
+        // request and it will be triggered with an appropriate delay time.
+        if (!mProcessorState.isPublishAllowedAtThisTime()) {
             logd("isPublishAllowed: Current time is not allowed, resend this request");
-            long delayTime = mProcessorState.getDelayTimeToAllowPublish();
-            mPublishCtrlCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+            mPublishCtrlCallback.requestPublishFromInternal(triggerType);
             return false;
         }
         return true;
@@ -204,8 +193,8 @@ public class PublishProcessor {
             // Set publishing flag
             mProcessorState.setPublishingFlag(true);
 
-            // Clear the pending request flag since we're publishing the latest device's capability
-            setPendingRequest(false);
+            // Clear the pending flag since we're publishing the latest device's capability
+            mProcessorState.clearPendingRequest();
 
             // Generate a unique taskId to track this request.
             long taskId = mProcessorState.generatePublishTaskId();
@@ -249,25 +238,27 @@ public class PublishProcessor {
             // Increase the retry count
             mProcessorState.increaseRetryCount();
 
-            // Reset the pending flag since it is going to resend a publish request.
-            setPendingRequest(false);
+            // Reset the pending flag since it is going to resend a retry request.
+            mProcessorState.clearPendingRequest();
+
+            // Set the request has finished.
+            setRequestEnded(requestResponse);
 
             // Resend a publish request
-            long delayTime = mProcessorState.getDelayTimeToAllowPublish();
             mPublishCtrlCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+                    PublishController.PUBLISH_TRIGGER_RETRY);
         } else {
-            // Update the publish state if the request is failed and doesn't need to retry.
+            // Update the publish state if the request doesn't need to retry.
             int publishState = requestResponse.getPublishStateByCmdErrorCode();
             Instant responseTimestamp = requestResponse.getResponseTimestamp();
             mPublishCtrlCallback.updatePublishRequestResult(publishState, responseTimestamp);
 
+            // Set the request has finished.
+            setRequestEnded(requestResponse);
+
             // Check if there is a pending request
             checkAndSendPendingRequest();
         }
-
-        // End this request
-        setRequestEnded(requestResponse);
     }
 
     /**
@@ -291,28 +282,32 @@ public class PublishProcessor {
             mProcessorState.increaseRetryCount();
 
             // Reset the pending flag since it is going to resend a publish request.
-            setPendingRequest(false);
+            mProcessorState.clearPendingRequest();
+
+            // Set this request has finished.
+            setRequestEnded(requestResponse);
 
             // Resend a publish request
-            long delayTime = mProcessorState.getDelayTimeToAllowPublish();
             mPublishCtrlCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+                    PublishController.PUBLISH_TRIGGER_RETRY);
         } else {
-            // Reset the retry count if the publish is success.
+            Instant responseTimestamp = requestResponse.getResponseTimestamp();
+            // Set the last published time and reset the retry count if the request is success.
             if (requestResponse.isRequestSuccess()) {
+                mProcessorState.setLastPublishedTime(responseTimestamp);
                 mProcessorState.resetRetryCount();
             }
+
             // Update the publish state if the request doesn't need to retry.
             int publishResult = requestResponse.getPublishStateByNetworkResponse();
-            Instant responseTimestamp = requestResponse.getResponseTimestamp();
             mPublishCtrlCallback.updatePublishRequestResult(publishResult, responseTimestamp);
+
+            // Set this request has finished.
+            setRequestEnded(requestResponse);
 
             // Check if there is a pending request
             checkAndSendPendingRequest();
         }
-
-        // End this request
-        setRequestEnded(requestResponse);
     }
 
     // Check if the request response callback is valid.
@@ -345,6 +340,14 @@ public class PublishProcessor {
     }
 
     /**
+     * Update the PUBLISH allowed time with the given trigger type.
+     * @param triggerType The trigger type of this PUBLISH request
+     */
+    public void updateAllowedTimeWithTriggerType(@PublishTriggerType int triggerType) {
+        mProcessorState.updateAllowedTimeWithTriggerType(triggerType);
+    }
+
+    /**
      * Cancel the publishing request since it has token too long for waiting the response callback.
      * This method is called by the handler of the PublishController.
      */
@@ -368,20 +371,38 @@ public class PublishProcessor {
         logd("setRequestEnded: taskId=" + taskId);
     }
 
-    public void setPendingRequest(boolean pendingRequest) {
-        mProcessorState.setPendingRequest(pendingRequest);
+    /*
+     * Set the pending request flag when the PUBLISH request cannot be executed now.
+     */
+    public void setPendingRequest(@PublishTriggerType int triggerType) {
+        mProcessorState.setPendingRequest(triggerType);
     }
 
     public void checkAndSendPendingRequest() {
         if (mIsDestroyed) return;
         if (mProcessorState.hasPendingRequest()) {
-            logd("checkAndSendPendingRequest: send pending request");
-            mProcessorState.setPublishingFlag(false);
+            // Retrieve the trigger type of the pending request
+            int type = mProcessorState.getPendingRequestTriggerType()
+                    .orElse(PublishController.PUBLISH_TRIGGER_RETRY);
+            logd("checkAndSendPendingRequest: send pending request: type=" + type);
 
-            long delayTime = mProcessorState.getDelayTimeToAllowPublish();
-            mPublishCtrlCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+            // Clear the pending flag since we're going to send a PUBLISH request.
+            mProcessorState.clearPendingRequest();
+
+            mPublishCtrlCallback.requestPublishFromInternal(type);
         }
+    }
+
+    /**
+     * Get the delay time to allow to execute the PUBLISH request.
+     */
+    public Optional<Long> getPublishRequestDelayTime() {
+        return mProcessorState.getPublishRequestDelayTime();
+    }
+
+    // Update the publish throttle
+    public void updatePublishThrottle(int publishThrottle) {
+        mProcessorState.updatePublishThrottle(publishThrottle);
     }
 
     @VisibleForTesting

@@ -92,9 +92,10 @@ public interface PublishController extends ControllerBase {
      */
     interface PublishControllerCallback {
         /**
-         * Request publish from local.
+         * When the device capabilities have changed, the device capability listener will call
+         * this API to send PUBLISH request to the network.
          */
-        void requestPublishFromInternal(@PublishTriggerType int type, long delay);
+        void requestPublishFromInternal(@PublishTriggerType int type);
 
         /**
          * Receive the command error callback of the request from ImsService.
@@ -121,6 +122,11 @@ public interface PublishController extends ControllerBase {
          * Update the publish request result.
          */
         void updatePublishRequestResult(int publishState, Instant updatedTimestamp);
+
+        /**
+         * Update the value of publish throttle.
+         */
+        void updatePublishThrottle(int value);
     }
 
     /**
