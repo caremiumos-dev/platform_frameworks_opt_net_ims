@@ -42,6 +42,7 @@ import java.lang.ref.WeakReference;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * The implementation of PublishController.
@@ -73,6 +74,7 @@ public class PublishControllerImpl implements PublishController {
     private PublishHandler mPublishHandler;
     private volatile boolean mIsDestroyedFlag;
     private volatile boolean mCapabilityPresenceEnabled;
+    private volatile boolean mReceivePublishFromService;
     private volatile RcsFeatureManager mRcsFeatureManager;
     private final UceControllerCallback mUceCtrlCallback;
 
@@ -233,7 +235,7 @@ public class PublishControllerImpl implements PublishController {
         }
     }
 
-    // Clear the publish state callback since the publish controller instance is destroyed.
+    // Clear all the publish state callbacks since the publish controller instance is destroyed.
     private void clearPublishStateCallbacks() {
         synchronized (mPublishStateLock) {
             logd("clearPublishStateCallbacks");
@@ -262,6 +264,10 @@ public class PublishControllerImpl implements PublishController {
         return mDeviceCapabilityInfo.getDeviceCapabilities(mechanism, mContext);
     }
 
+    /*
+     * Register the callback to receive the RCS capabilities change. This method is called when
+     * the RCS is connected.
+     */
     private void registerRcsAvailabilityChanged(RcsFeatureManager manager) {
         try {
             manager.registerRcsAvailabilityCallback(mSubId, mRcsCapabilitiesCallback);
@@ -270,6 +276,10 @@ public class PublishControllerImpl implements PublishController {
         }
     }
 
+    /*
+     * Unregister the callback. This method is called when the PublishController instance
+     * is destroyed.
+     */
     private void unregisterRcsAvailabilityChanged() {
         RcsFeatureManager manager = mRcsFeatureManager;
         if (manager == null) return;
@@ -284,9 +294,9 @@ public class PublishControllerImpl implements PublishController {
     private final PublishControllerCallback mPublishControllerCallback =
             new PublishControllerCallback() {
                 @Override
-                public void requestPublishFromInternal(@PublishTriggerType int type, long delay) {
-                    logd("requestPublishFromInternal: type=" + type + ", delay=" + delay);
-                    mPublishHandler.requestPublish(type, delay);
+                public void requestPublishFromInternal(@PublishTriggerType int type) {
+                    logd("requestPublishFromInternal: type=" + type);
+                    mPublishHandler.requestPublish(type);
                 }
 
                 @Override
@@ -329,6 +339,7 @@ public class PublishControllerImpl implements PublishController {
     @Override
     public void requestPublishCapabilitiesFromService(int triggerType) {
         logi("Receive the publish request from service: service trigger type=" + triggerType);
+        mReceivePublishFromService = true;
         mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_SERVICE);
     }
 
@@ -408,6 +419,9 @@ public class PublishControllerImpl implements PublishController {
             sendMessage(message);
         }
 
+        /**
+         * Notify the new added callback that the latest publish state.
+         */
         public void onNotifyCurrentPublishState(IRcsUcePublishStateCallback callback) {
             Message message = obtainMessage();
             message.what = MSG_NOTIFY_CURRENT_PUBLISH_STATE;
@@ -416,53 +430,43 @@ public class PublishControllerImpl implements PublishController {
         }
 
         /**
-         * Send the request publish message without delay.
+         * Send the PUBLISH message with the given trigger type.
          */
         public void requestPublish(@PublishTriggerType int type) {
-            requestPublish(type, 0L);
-        }
-
-        /**
-         * Send the request publish message with the delay.
-         */
-        public void requestPublish(@PublishTriggerType int type, long delay) {
             PublishControllerImpl publishCtrl = mPublishControllerRef.get();
             if (publishCtrl == null) {
                 return;
             }
             if (publishCtrl.mIsDestroyedFlag) return;
-            publishCtrl.logd("requestPublish: " + type + ", delay=" + delay);
 
-            // Return if the RCS capabilities presence uce is not enabled.
-            if (!publishCtrl.mCapabilityPresenceEnabled) {
-                publishCtrl.logd("requestPublish: Skip. capability presence uce is not enabled.");
-                publishCtrl.mPublishProcessor.setPendingRequest(true);
+            // Update the PUBLISH allowed time with the given trigger type.
+            publishCtrl.mPublishProcessor.updateAllowedTimeWithTriggerType(type);
+
+            // Check if the PUBLISH request is allowed.
+            if (!publishCtrl.isPublishRequestAllowed()) {
+                publishCtrl.logd("requestPublish: SKIP. The publish is not allowed. type=" + type);
+                publishCtrl.mPublishProcessor.setPendingRequest(type);
                 return;
             }
 
-            // If the trigger type is not RETRY, it means that the device capabilities have been
-            // changed. To make sure that the publish request can be processed immediately, remove
-            // the existing one and send a new publish request without delayed.
-            if (type != PublishController.PUBLISH_TRIGGER_RETRY) {
-                removeMessages(MSG_REQUEST_PUBLISH);
-            } else {
-                // Skip this request if the trigger type is RETRY and there's alreay a publish
-                // request in the queue.
-                if (hasMessages(MSG_REQUEST_PUBLISH)) {
-                    publishCtrl.logd(
-                            "requestPublish: Skip. There's already a request in the queue");
-                    return;
-                }
+            // Get the publish request delay time. If the delay is not present, the first PUBLISH
+            // is not allowed to execute; If the delay time is 0, it means that this request can
+            // be executed immediately.
+            Optional<Long> delay = publishCtrl.mPublishProcessor.getPublishRequestDelayTime();
+            if (!delay.isPresent()) {
+                publishCtrl.logw("requestPublish: The delay time is not present. type=" + type);
+                return;
             }
+            publishCtrl.logd("requestPublish: " + type + ", delay=" + delay.get());
 
+            // Remove the existing PUBLISH message.
+            removeMessages(MSG_REQUEST_PUBLISH);
+
+            // Send a new PUBLISH message with the latest delay time.
             Message message = obtainMessage();
             message.what = MSG_REQUEST_PUBLISH;
             message.obj = (Integer) type;
-            if (delay > 0) {
-                sendMessageDelayed(message, delay);
-            } else {
-                sendMessage(message);
-            }
+            sendMessageDelayed(message, delay.get());
         }
 
         public void onRequestCommandError(PublishRequestResponse requestResponse) {
@@ -524,6 +528,23 @@ public class PublishControllerImpl implements PublishController {
     }
 
     /**
+     * Check if the PUBLISH request is allowed.
+     */
+    private boolean isPublishRequestAllowed() {
+        // The PUBLISH request requires that the RCS PRESENCE is capable.
+        if (!mCapabilityPresenceEnabled) {
+            logd("isPublishRequestAllowed: capability presence uce is not enabled.");
+            return false;
+        }
+        // The first PUBLISH request is required to be triggered from the service.
+        if (!mReceivePublishFromService) {
+            logd("requestPublish: Have not received the first PUBLISH request from the service.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Update the publish state and notify the publish state callback if the new state is different
      * from original state.
      */
@@ -566,7 +587,7 @@ public class PublishControllerImpl implements PublishController {
         }
     }
 
-    public void handleRequestPublishMessage(@PublishTriggerType int type) {
+    private void handleRequestPublishMessage(@PublishTriggerType int type) {
         if (mIsDestroyedFlag) return;
         if (mUceCtrlCallback.isRequestForbiddenByNetwork()) {
             logd("handleRequestPublishMessage: UCE request is forbidden by the network");
@@ -575,7 +596,7 @@ public class PublishControllerImpl implements PublishController {
         mPublishProcessor.doPublish(type);
     }
 
-    public void handleRequestCanceledMessage(long taskId) {
+    private void handleRequestCanceledMessage(long taskId) {
         if (mIsDestroyedFlag) return;
         mPublishProcessor.cancelPublishRequest(taskId);
     }

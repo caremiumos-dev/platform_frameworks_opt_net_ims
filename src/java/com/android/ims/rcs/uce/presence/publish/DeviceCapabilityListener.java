@@ -445,7 +445,7 @@ public class DeviceCapabilityListener {
         boolean isChanged = mCapabilityInfo.updateTtyPreferredMode(preferredMode);
         if (isChanged) {
             mCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_TTY_PREFERRED_CHANGE, 0L);
+                    PublishController.PUBLISH_TRIGGER_TTY_PREFERRED_CHANGE);
         }
     }
 
@@ -454,7 +454,7 @@ public class DeviceCapabilityListener {
         boolean isChanged = mCapabilityInfo.updateAirplaneMode(state);
         if (isChanged) {
             mCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_AIRPLANE_MODE_CHANGE, 0L);
+                    PublishController.PUBLISH_TRIGGER_AIRPLANE_MODE_CHANGE);
         }
     }
 
@@ -463,7 +463,7 @@ public class DeviceCapabilityListener {
         boolean isChanged = mCapabilityInfo.updateMobileData(isEnabled);
         if (isChanged) {
             mCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_MOBILE_DATA_CHANGE, 0L);
+                    PublishController.PUBLISH_TRIGGER_MOBILE_DATA_CHANGE);
         }
     }
 
@@ -472,7 +472,7 @@ public class DeviceCapabilityListener {
         boolean isChanged = mCapabilityInfo.updateVtSetting(isEnabled);
         if (isChanged) {
             mCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_VT_SETTING_CHANGE, 0L);
+                    PublishController.PUBLISH_TRIGGER_VT_SETTING_CHANGE);
         }
     }
 
@@ -482,8 +482,7 @@ public class DeviceCapabilityListener {
     private void handleImsMmtelRegistered(int imsTransportType) {
         mCapabilityInfo.updateImsMmtelRegistered(imsTransportType);
         mCallback.requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_MMTEL_REGISTERED,
-                DELAY_SEND_IMS_REGISTERED_CHANGED_MSG);
+                PublishController.PUBLISH_TRIGGER_MMTEL_REGISTERED);
     }
 
     /*
@@ -492,7 +491,7 @@ public class DeviceCapabilityListener {
     private void handleImsMmtelUnregistered() {
         mCapabilityInfo.updateImsMmtelUnregistered();
         mCallback.requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_MMTEL_UNREGISTERED, 0L);
+                PublishController.PUBLISH_TRIGGER_MMTEL_UNREGISTERED);
     }
 
     private void handleMmtelCapabilitiesStatusChanged(MmTelCapabilities capabilities) {
@@ -500,7 +499,7 @@ public class DeviceCapabilityListener {
         logi("MMTel capabilities status changed: isChanged=" + isChanged);
         if (isChanged) {
             mCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_MMTEL_CAPABILITY_CHANGE, 0L);
+                    PublishController.PUBLISH_TRIGGER_MMTEL_CAPABILITY_CHANGE);
         }
     }
 
@@ -510,8 +509,7 @@ public class DeviceCapabilityListener {
     private void handleImsRcsRegistered(int imsTransportType) {
         mCapabilityInfo.updateImsRcsRegistered(imsTransportType);
         mCallback.requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_RCS_REGISTERED,
-                DELAY_SEND_IMS_REGISTERED_CHANGED_MSG);
+                PublishController.PUBLISH_TRIGGER_RCS_REGISTERED);
     }
 
     /*
@@ -520,12 +518,12 @@ public class DeviceCapabilityListener {
     private void handleImsRcsUnregistered() {
         mCapabilityInfo.updateImsRcsUnregistered();
         mCallback.requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_RCS_UNREGISTERED, 0L);
+                PublishController.PUBLISH_TRIGGER_RCS_UNREGISTERED);
     }
 
     private void handleProvisioningChanged() {
         mCallback.requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_PROVISIONING_CHANGE, 0L);
+                PublishController.PUBLISH_TRIGGER_PROVISIONING_CHANGE);
     }
 
     @VisibleForTesting
