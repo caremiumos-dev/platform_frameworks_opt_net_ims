@@ -117,7 +117,7 @@ public class DeviceCapabilityListenerTest extends ImsTestBase {
 
         verify(mDeviceCapability).updateTtyPreferredMode(anyInt());
         verify(mCallback).requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_TTY_PREFERRED_CHANGE, 0L);
+                PublishController.PUBLISH_TRIGGER_TTY_PREFERRED_CHANGE);
     }
 
     @Test
@@ -131,61 +131,65 @@ public class DeviceCapabilityListenerTest extends ImsTestBase {
 
         verify(mDeviceCapability).updateAirplaneMode(anyBoolean());
         verify(mCallback).requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_AIRPLANE_MODE_CHANGE, 0L);
+                PublishController.PUBLISH_TRIGGER_AIRPLANE_MODE_CHANGE);
     }
 
     @Test
     @SmallTest
     public void testMmtelRegistration() throws Exception {
         DeviceCapabilityListener deviceCapListener = createDeviceCapabilityListener();
+        deviceCapListener.setImsCallbackRegistered(true);
+
         RegistrationCallback registrationCallback = deviceCapListener.mMmtelRegistrationCallback;
+        registrationCallback.onRegistered(1);
 
-        registrationCallback.onRegistered(anyInt());
-
-        verify(mDeviceCapability).updateImsMmtelRegistered(anyInt());
+        verify(mDeviceCapability).updateImsMmtelRegistered(1);
         verify(mCallback).requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_MMTEL_REGISTERED, 500L);
+                PublishController.PUBLISH_TRIGGER_MMTEL_REGISTERED);
     }
 
     @Test
     @SmallTest
     public void testMmTelUnregistration() throws Exception {
         DeviceCapabilityListener deviceCapListener = createDeviceCapabilityListener();
-        RegistrationCallback registrationCallback = deviceCapListener.mMmtelRegistrationCallback;
+        deviceCapListener.setImsCallbackRegistered(true);
 
+        RegistrationCallback registrationCallback = deviceCapListener.mMmtelRegistrationCallback;
         ImsReasonInfo info = new ImsReasonInfo();
         registrationCallback.onUnregistered(info);
 
         verify(mDeviceCapability).updateImsMmtelUnregistered();
         verify(mCallback).requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_MMTEL_UNREGISTERED, 0L);
+                PublishController.PUBLISH_TRIGGER_MMTEL_UNREGISTERED);
     }
 
     @Test
     @SmallTest
     public void testRcsRegistration() throws Exception {
         DeviceCapabilityListener deviceCapListener = createDeviceCapabilityListener();
-        RegistrationCallback registrationCallback = deviceCapListener.mRcsRegistrationCallback;
+        deviceCapListener.setImsCallbackRegistered(true);
 
+        RegistrationCallback registrationCallback = deviceCapListener.mRcsRegistrationCallback;
         registrationCallback.onRegistered(anyInt());
 
         verify(mDeviceCapability).updateImsRcsRegistered(anyInt());
         verify(mCallback).requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_RCS_REGISTERED, 500L);
+                PublishController.PUBLISH_TRIGGER_RCS_REGISTERED);
     }
 
     @Test
     @SmallTest
     public void testRcsUnregistration() throws Exception {
         DeviceCapabilityListener deviceCapListener = createDeviceCapabilityListener();
-        RegistrationCallback registrationCallback = deviceCapListener.mRcsRegistrationCallback;
+        deviceCapListener.setImsCallbackRegistered(true);
 
+        RegistrationCallback registrationCallback = deviceCapListener.mRcsRegistrationCallback;
         ImsReasonInfo info = new ImsReasonInfo();
         registrationCallback.onUnregistered(info);
 
         verify(mDeviceCapability).updateImsRcsUnregistered();
         verify(mCallback).requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_RCS_UNREGISTERED, 0L);
+                PublishController.PUBLISH_TRIGGER_RCS_UNREGISTERED);
     }
 
     @Test
@@ -199,7 +203,7 @@ public class DeviceCapabilityListenerTest extends ImsTestBase {
 
         verify(mDeviceCapability).updateMmtelCapabilitiesChanged(capabilities);
         verify(mCallback).requestPublishFromInternal(
-                PublishController.PUBLISH_TRIGGER_MMTEL_CAPABILITY_CHANGE, 0L);
+                PublishController.PUBLISH_TRIGGER_MMTEL_CAPABILITY_CHANGE);
     }
 
     private DeviceCapabilityListener createDeviceCapabilityListener() {
