@@ -39,7 +39,6 @@ import com.android.ims.RcsFeatureManager;
 import com.android.ims.rcs.uce.eab.EabCapabilityResult;
 import com.android.ims.rcs.uce.eab.EabController;
 import com.android.ims.rcs.uce.eab.EabControllerImpl;
-import com.android.ims.rcs.uce.eab.EabUtil;
 import com.android.ims.rcs.uce.options.OptionsController;
 import com.android.ims.rcs.uce.options.OptionsControllerImpl;
 import com.android.ims.rcs.uce.presence.publish.PublishController;
