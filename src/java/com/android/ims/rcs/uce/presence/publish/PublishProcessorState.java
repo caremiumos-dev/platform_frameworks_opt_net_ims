@@ -45,7 +45,7 @@ public class PublishProcessorState {
     private int mRetryCount;
 
     // The timestamp to allow to execute the publishing request.
-    private Instant mAllowedTimestamp;
+    private Instant mAllowedTimestamp = Instant.now();
 
     private final Object mLock = new Object();
 

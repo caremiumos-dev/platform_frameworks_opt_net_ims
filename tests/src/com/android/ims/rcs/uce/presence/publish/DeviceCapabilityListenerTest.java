@@ -167,6 +167,8 @@ public class DeviceCapabilityListenerTest extends ImsTestBase {
         RegistrationCallback registrationCallback = deviceCapListener.mRcsRegistrationCallback;
         ImsRegistrationAttributes attr = new ImsRegistrationAttributes.Builder(
                 ImsRegistrationImplBase.REGISTRATION_TECH_LTE).build();
+        // Notify DeviceCapabilityListener that registered has caused a change and requires publish
+        doReturn(true).when(mDeviceCapability).updateImsRcsRegistered(attr);
 
         registrationCallback.onRegistered(attr);
 
@@ -180,6 +182,9 @@ public class DeviceCapabilityListenerTest extends ImsTestBase {
     public void testRcsUnregistration() throws Exception {
         DeviceCapabilityListener deviceCapListener = createDeviceCapabilityListener();
         RegistrationCallback registrationCallback = deviceCapListener.mRcsRegistrationCallback;
+        // Notify DeviceCapabilityListener that unregistered has caused a change and requires
+        // publish.
+        doReturn(true).when(mDeviceCapability).updateImsRcsUnregistered();
 
         ImsReasonInfo info = new ImsReasonInfo();
         registrationCallback.onUnregistered(info);
