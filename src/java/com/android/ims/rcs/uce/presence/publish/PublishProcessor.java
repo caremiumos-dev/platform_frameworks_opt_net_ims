@@ -246,26 +246,10 @@ public class PublishProcessor {
         logd("onCommandError: " + requestResponse.toString());
 
         if (!mProcessorState.isReachMaximumRetries() && requestResponse.needRetry()) {
-            // Increase the retry count
-            mProcessorState.increaseRetryCount();
-
-            // Reset the pending flag since it is going to resend a publish request.
-            setPendingRequest(false);
-
-            // Resend a publish request
-            long delayTime = mProcessorState.getDelayTimeToAllowPublish();
-            mPublishCtrlCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+            handlePublishRetry();
         } else {
-            // Update the publish state if the request is failed and doesn't need to retry.
-            int publishState = requestResponse.getPublishStateByCmdErrorCode();
-            Instant responseTimestamp = requestResponse.getResponseTimestamp();
-            mPublishCtrlCallback.updatePublishRequestResult(publishState, responseTimestamp);
-
-            // Check if there is a pending request
-            checkAndSendPendingRequest();
+            handlePublishFinish(requestResponse);
         }
-
         // End this request
         setRequestEnded(requestResponse);
     }
@@ -287,30 +271,10 @@ public class PublishProcessor {
         logd("onNetworkResponse: " + requestResponse.toString());
 
         if (!mProcessorState.isReachMaximumRetries() && requestResponse.needRetry()) {
-            // Increase the retry count
-            mProcessorState.increaseRetryCount();
-
-            // Reset the pending flag since it is going to resend a publish request.
-            setPendingRequest(false);
-
-            // Resend a publish request
-            long delayTime = mProcessorState.getDelayTimeToAllowPublish();
-            mPublishCtrlCallback.requestPublishFromInternal(
-                    PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+            handlePublishRetry();
         } else {
-            // Reset the retry count if the publish is success.
-            if (requestResponse.isRequestSuccess()) {
-                mProcessorState.resetRetryCount();
-            }
-            // Update the publish state if the request doesn't need to retry.
-            int publishResult = requestResponse.getPublishStateByNetworkResponse();
-            Instant responseTimestamp = requestResponse.getResponseTimestamp();
-            mPublishCtrlCallback.updatePublishRequestResult(publishResult, responseTimestamp);
-
-            // Check if there is a pending request
-            checkAndSendPendingRequest();
+            handlePublishFinish(requestResponse);
         }
-
         // End this request
         setRequestEnded(requestResponse);
     }
@@ -342,6 +306,33 @@ public class PublishProcessor {
             return false;
         }
         return true;
+    }
+
+    private void handlePublishRetry() {
+        // Increase the retry count
+        mProcessorState.increaseRetryCount();
+
+        // Reset the pending flag since it is going to resend a publish request.
+        setPendingRequest(false);
+
+        // Resend a publish request
+        long delayTime = mProcessorState.getDelayTimeToAllowPublish();
+        mPublishCtrlCallback.requestPublishFromInternal(
+                PublishController.PUBLISH_TRIGGER_RETRY, delayTime);
+    }
+
+    private void handlePublishFinish(PublishRequestResponse requestResponse) {
+        // Reset the retry count if the publish is success.
+        if (requestResponse.isRequestSuccess()) {
+            mProcessorState.resetRetryCount();
+        }
+        // Update the publish state when the publish request is finished.
+        int publishState = requestResponse.getPublishState();
+        Instant responseTimestamp = requestResponse.getResponseTimestamp();
+        mPublishCtrlCallback.updatePublishRequestResult(publishState, responseTimestamp);
+
+        // Check if there is a pending request
+        checkAndSendPendingRequest();
     }
 
     /**

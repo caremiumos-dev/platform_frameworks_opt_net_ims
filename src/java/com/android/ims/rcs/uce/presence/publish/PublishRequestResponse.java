@@ -91,6 +91,19 @@ public class PublishRequestResponse {
     }
 
     /**
+     * Check if the PUBLISH request failed with receiving the command error.
+     * @return true if the command error code is present and the value is not "NO_CHANGE"
+     */
+    public boolean isCommandError() {
+        // We consider the request as success if the command error code is NO_CHANGE.
+        if (getCmdErrorCode().filter(c ->
+                c == RcsCapabilityExchangeImplBase.COMMAND_CODE_NO_CHANGE).isPresent()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Retrieve the network response sip code which received from the network.
      */
     public Optional<Integer> getNetworkRespSipCode() {
@@ -200,6 +213,11 @@ public class PublishRequestResponse {
      * Check whether the publishing request is successful.
      */
     public boolean isRequestSuccess() {
+        // The request is failed if service respond the command error code.
+        if (isCommandError()) {
+            return false;
+        }
+
         final int sipCodeOk = NetworkSipCode.SIP_CODE_OK;
         if (getNetworkRespSipCode().filter(c -> c == sipCodeOk).isPresent() &&
                 (!getReasonHeaderCause().isPresent()
@@ -217,9 +235,21 @@ public class PublishRequestResponse {
     }
 
     /**
+     * Get the publish state when the publish request is finished.
+     * @return
+     */
+    public int getPublishState() {
+        if (isCommandError()) {
+            return getPublishStateByCmdErrorCode();
+        } else {
+            return getPublishStateByNetworkResponse();
+        }
+    }
+
+    /**
      * Convert the command error code to the publish state
      */
-    public int getPublishStateByCmdErrorCode() {
+    private int getPublishStateByCmdErrorCode() {
         if (getCmdErrorCode().orElse(-1) ==
                 RcsCapabilityExchangeImplBase.COMMAND_CODE_REQUEST_TIMEOUT) {
             return RcsUceAdapter.PUBLISH_STATE_REQUEST_TIMEOUT;
@@ -230,7 +260,7 @@ public class PublishRequestResponse {
     /**
      * Convert the network sip code to the publish state
      */
-    public int getPublishStateByNetworkResponse() {
+    private int getPublishStateByNetworkResponse() {
         int respSipCode;
         if (getReasonHeaderCause().isPresent()) {
             respSipCode = getReasonHeaderCause().get();
