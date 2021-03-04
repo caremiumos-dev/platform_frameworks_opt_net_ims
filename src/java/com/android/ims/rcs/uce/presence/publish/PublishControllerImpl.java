@@ -162,12 +162,7 @@ public class PublishControllerImpl implements PublishController {
 
         mPublishHandler = new PublishHandler(this, looper);
 
-        CarrierConfigManager manager = mContext.getSystemService(CarrierConfigManager.class);
-        PersistableBundle bundle = manager != null ? manager.getConfigForSubId(mSubId) :
-                CarrierConfigManager.getDefaultConfig();
-        String[] serviceDescFeatureTagMap = bundle.getStringArray(
-                CarrierConfigManager.Ims.
-                        KEY_PUBLISH_SERVICE_DESC_FEATURE_TAG_MAP_OVERRIDE_STRING_ARRAY);
+        String[] serviceDescFeatureTagMap = getCarrierServiceDescriptionFeatureTagMap();
         mDeviceCapabilityInfo = new DeviceCapabilityInfo(mSubId, serviceDescFeatureTagMap);
 
         initPublishProcessor();
@@ -214,6 +209,15 @@ public class PublishControllerImpl implements PublishController {
         mPublishProcessor.onDestroy();
         synchronized (mPublishStateLock) {
             clearPublishStateCallbacks();
+        }
+    }
+
+    @Override
+    public void onCarrierConfigChanged() {
+        String[] newMap = getCarrierServiceDescriptionFeatureTagMap();
+        if (mDeviceCapabilityInfo.updateCapabilityRegistrationTrackerMap(newMap)) {
+            mPublishHandler.requestPublish(
+                    PublishController.PUBLISH_TRIGGER_CARRIER_CONFIG_CHANGED);
         }
     }
 
@@ -286,6 +290,14 @@ public class PublishControllerImpl implements PublishController {
             if (mIsDestroyedFlag) return;
             mPublishStateCallbacks.unregister(c);
         }
+    }
+
+    private String[] getCarrierServiceDescriptionFeatureTagMap() {
+        CarrierConfigManager manager = mContext.getSystemService(CarrierConfigManager.class);
+        PersistableBundle bundle = manager != null ? manager.getConfigForSubId(mSubId) :
+                CarrierConfigManager.getDefaultConfig();
+        return bundle.getStringArray(CarrierConfigManager.Ims.
+                KEY_PUBLISH_SERVICE_DESC_FEATURE_TAG_MAP_OVERRIDE_STRING_ARRAY);
     }
 
     // Clear all the publish state callbacks since the publish controller instance is destroyed.
