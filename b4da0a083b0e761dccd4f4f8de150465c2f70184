@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b11f4d80_ae563b38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-03-06T01:35:52Z",
+      "side": 1,
+      "message": "Already reviewed internally, clean CP - applying +2",
+      "revId": "b4da0a083b0e761dccd4f4f8de150465c2f70184",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
