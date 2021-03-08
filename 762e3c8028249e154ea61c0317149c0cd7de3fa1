@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c6a77bc_abc842b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349878
+      },
+      "writtenOn": "2021-03-08T17:39:17Z",
+      "side": 1,
+      "message": "Local test passed and the presubmit failed on b/181932317",
+      "revId": "762e3c8028249e154ea61c0317149c0cd7de3fa1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
