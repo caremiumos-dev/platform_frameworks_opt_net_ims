@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8674e6dd_522ba9fb",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityInfo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-03-15T19:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb0ed044_a9ac64bb",
+      "range": {
+        "startLine": 50,
+        "startChar": 75,
+        "endLine": 50,
+        "endChar": 80
+      },
+      "revId": "a45ddabd2f5b9fa0938896ef078e60065d538c1a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3fff0bc_8d4c1177",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-02-12T21:31:21Z",
       "side": 1,
       "message": "Can this be a plain boolean named something like \"isOriginallyCapable\"? I don\u0027t see any sort of functional magic going on that\u0027d necessitate a supplier",
+      "range": {
+        "startLine": 473,
+        "startChar": 62,
+        "endLine": 473,
+        "endChar": 92
+      },
+      "revId": "a45ddabd2f5b9fa0938896ef078e60065d538c1a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "569ccf72_ba10a10f",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityInfo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-03-15T19:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3fff0bc_8d4c1177",
       "range": {
         "startLine": 473,
         "startChar": 62,
