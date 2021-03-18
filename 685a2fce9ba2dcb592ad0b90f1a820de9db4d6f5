@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cb8ac34_22c0f956",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-03-18T16:11:44Z",
+      "side": 1,
+      "message": "Reviewed internally and submitted - cherry-picking to AOSP and Applying +2",
+      "revId": "685a2fce9ba2dcb592ad0b90f1a820de9db4d6f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
