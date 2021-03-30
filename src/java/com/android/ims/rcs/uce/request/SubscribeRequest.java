@@ -38,10 +38,10 @@ import java.util.stream.Collectors;
  * The UceRequest to request the capabilities when the presence mechanism is supported by the
  * network.
  */
-public class SubscribeRequest extends UceRequest {
+public class SubscribeRequest extends CapabilityRequest {
 
     // The result callback of the capabilities request from IMS service.
-    private ISubscribeResponseCallback mResponseCallback =
+    private final ISubscribeResponseCallback mResponseCallback =
             new ISubscribeResponseCallback.Stub() {
                 @Override
                 public void onCommandError(int code) {
@@ -86,7 +86,6 @@ public class SubscribeRequest extends UceRequest {
             CapabilityRequestResponse requestResponse) {
         super(subId, requestType, taskMgrCallback, requestResponse);
         mSubscribeController = subscribeController;
-        logd("SubscribeRequest created");
     }
 
     @Override
@@ -102,11 +101,9 @@ public class SubscribeRequest extends UceRequest {
         if (subscribeController == null) {
             logw("requestCapabilities: request is finished");
             mRequestResponse.setErrorCode(RcsUceAdapter.ERROR_GENERIC_FAILURE);
-            handleRequestFailed(true);
+            mRequestManagerCallback.notifyRequestError(mCoordinatorId, mTaskId);
             return;
         }
-
-        // TODO: Check if the network supports group subscribe or a bunch of individual subscribe.
 
         logi("requestCapabilities: size=" + requestCapUris.size());
         try {
@@ -114,46 +111,31 @@ public class SubscribeRequest extends UceRequest {
         } catch (RemoteException e) {
             logw("requestCapabilities exception: " + e);
             mRequestResponse.setErrorCode(RcsUceAdapter.ERROR_GENERIC_FAILURE);
-            handleRequestFailed(true);
+            mRequestManagerCallback.notifyRequestError(mCoordinatorId, mTaskId);
         }
     }
 
-    @VisibleForTesting
-    public ISubscribeResponseCallback getResponseCallback() {
-        return mResponseCallback;
-    }
-
-    // Handle the command error which is triggered by ISubscribeResponseCallback.
+    // Receive the command error callback which is triggered by ISubscribeResponseCallback.
     private void onCommandError(@CommandCode int cmdError) {
         logd("onCommandError: error code=" + cmdError);
         if (mIsFinished) {
             return;
         }
         mRequestResponse.setCommandError(cmdError);
-        // Set the capability error code and notify RequestManager that this request is failed.
-        int capError = CapabilityRequestResponse.convertCommandErrorToCapabilityError(cmdError);
-        mRequestResponse.setErrorCode(capError);
-        mRequestManagerCallback.onRequestFailed(mTaskId);
+        mRequestManagerCallback.notifyCommandError(mCoordinatorId, mTaskId);
     }
 
-    // Handle the network response callback which is triggered by ISubscribeResponseCallback.
+    // Receive the network response callback which is triggered by ISubscribeResponseCallback.
     private void onNetworkResponse(int sipCode, String reason) {
         logd("onNetworkResponse: code=" + sipCode + ", reason=" + reason);
         if (mIsFinished) {
             return;
         }
         mRequestResponse.setNetworkResponseCode(sipCode, reason);
-
-        // Set the capability error code and notify RequestManager if the SIP code is not success.
-        // Otherwise, waiting for the onNotifyCapabilitiesUpdate callback.
-        if (!mRequestResponse.isNetworkResponseOK()) {
-            int capErrorCode = mRequestResponse.getCapabilityErrorFromSipError();
-            mRequestResponse.setErrorCode(capErrorCode);
-            mRequestManagerCallback.onRequestFailed(mTaskId);
-        }
+        mRequestManagerCallback.notifyNetworkResponse(mCoordinatorId, mTaskId);
     }
 
-    // Handle the network response callback which is triggered by ISubscribeResponseCallback.
+    // Receive the network response callback which is triggered by ISubscribeResponseCallback.
     private void onNetworkResponse(int sipCode, String reasonPhrase,
         int reasonHeaderCause, String reasonHeaderText) {
         logd("onNetworkResponse: code=" + sipCode + ", reasonPhrase=" + reasonPhrase +
@@ -164,17 +146,10 @@ public class SubscribeRequest extends UceRequest {
         }
         mRequestResponse.setNetworkResponseCode(sipCode, reasonPhrase, reasonHeaderCause,
                 reasonHeaderText);
-
-        // Set the capability error code and notify RequestManager if the SIP code is not success.
-        // Otherwise, waiting for the onNotifyCapabilitiesUpdate callback.
-        if (!mRequestResponse.isNetworkResponseOK()) {
-            int capErrorCode = mRequestResponse.getCapabilityErrorFromSipError();
-            mRequestResponse.setErrorCode(capErrorCode);
-            mRequestManagerCallback.onRequestFailed(mTaskId);
-        }
+        mRequestManagerCallback.notifyNetworkResponse(mCoordinatorId, mTaskId);
     }
 
-    // Handle the onResourceTerminated callback which is triggered by ISubscribeResponseCallback.
+    // Receive the resource terminated callback which is triggered by ISubscribeResponseCallback.
     private void onResourceTerminated(final List<RcsContactTerminatedReason> terminatedResource) {
         if (mIsFinished) {
             logw("onResourceTerminated: request is already finished");
@@ -184,7 +159,7 @@ public class SubscribeRequest extends UceRequest {
         if (terminatedResource == null || terminatedResource.isEmpty()) {
             logw("onResourceTerminated: parameter is empty");
             mRequestResponse.setErrorCode(RcsUceAdapter.ERROR_GENERIC_FAILURE);
-            mRequestManagerCallback.onRequestFailed(mTaskId);
+            mRequestManagerCallback.notifyRequestError(mCoordinatorId, mTaskId);
             return;
         }
 
@@ -193,10 +168,10 @@ public class SubscribeRequest extends UceRequest {
         // Add the terminated resource into the RequestResponse and notify the RequestManager
         // to process the RcsContactUceCapabilities update.
         mRequestResponse.addTerminatedResource(terminatedResource);
-        mRequestManagerCallback.onResourceTerminated(mTaskId);
+        mRequestManagerCallback.notifyResourceTerminated(mCoordinatorId, mTaskId);
     }
 
-    // Handle the CapabilitiesUpdate callback which is triggered by ISubscribeResponseCallback
+    // Receive the capabilities update callback which is triggered by ISubscribeResponseCallback.
     private void onCapabilitiesUpdate(final List<String> pidfXml) {
         if (mIsFinished) {
             logw("onCapabilitiesUpdate: request is already finished");
@@ -206,7 +181,7 @@ public class SubscribeRequest extends UceRequest {
         if (pidfXml == null || pidfXml.isEmpty()) {
             logw("onCapabilitiesUpdate: parameter is empty");
             mRequestResponse.setErrorCode(RcsUceAdapter.ERROR_GENERIC_FAILURE);
-            mRequestManagerCallback.onRequestFailed(mTaskId);
+            mRequestManagerCallback.notifyRequestError(mCoordinatorId, mTaskId);
             return;
         }
 
@@ -220,28 +195,23 @@ public class SubscribeRequest extends UceRequest {
                 + ", contact capability size=" + capabilityList.size());
 
         // Add these updated RcsContactUceCapability into the RequestResponse and notify
-        // the RequestManager to process the RcsContactUceCapabilities update.
+        // the RequestManager to process the RcsContactUceCapabilities updated.
         mRequestResponse.addUpdatedCapabilities(capabilityList);
-        mRequestManagerCallback.onCapabilityUpdate(mTaskId);
+        mRequestManagerCallback.notifyCapabilitiesUpdated(mCoordinatorId, mTaskId);
     }
 
-    // Handle the terminated callback which is triggered by ISubscribeResponseCallback.
+    // Receive the terminated callback which is triggered by ISubscribeResponseCallback.
     private void onTerminated(String reason, long retryAfterMillis) {
         logd("onTerminated: reason=" + reason + ", retryAfter=" + retryAfterMillis);
         if (mIsFinished) {
             return;
         }
+        mRequestResponse.setTerminated(reason, retryAfterMillis);
+        mRequestManagerCallback.notifyTerminated(mCoordinatorId, mTaskId);
+    }
 
-        // The subscribe request is success when receive the network response code 200(OK) and
-        // the parameter "retryAfter" is zero. Otherwise, this request is failed.
-        if (mRequestResponse.isNetworkResponseOK() && (retryAfterMillis == 0)) {
-            mRequestManagerCallback.onRequestSuccess(mTaskId);
-        } else {
-            // This request is failed. Store the retryAfter info and notify UceRequestManager.
-            mRequestResponse.setRequestTerminated(reason, retryAfterMillis);
-            int capErrorCode = mRequestResponse.getCapabilityErrorFromSipError();
-            mRequestResponse.setErrorCode(capErrorCode);
-            mRequestManagerCallback.onRequestFailed(mTaskId);
-        }
+    @VisibleForTesting
+    public ISubscribeResponseCallback getResponseCallback() {
+        return mResponseCallback;
     }
 }
