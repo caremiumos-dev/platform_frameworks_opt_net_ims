@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54196f5c_0f044a8f",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-01T19:49:48Z",
+      "side": 1,
+      "message": "Usually Optionals are only used as return arguments in methods:\n\nprivate X mXInstance;\n\nOptional\u003cX\u003e getX() {\n    return Optional.ofNullable(mXInstance);\n}\n\nOptionals as parameters adds overhead. What problem are you trying to solve by using Optionals as the parameters?",
+      "range": {
+        "startLine": 51,
+        "startChar": 16,
+        "endLine": 51,
+        "endChar": 24
+      },
+      "revId": "a576d15011066193a5ec181336b004a31dbdd659",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6162579_d788c011",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-01T19:49:48Z",
+      "side": 1,
+      "message": "I see that ResponseRecord is synchronized due to this being called from a binder thread, however this is not. getErrorCode looks to be accessed from another thread. \n\nCan you please ensure that we do not run into multiple thread access issues here as well as in other setters/accessors? Would it be easier to throw the binders calls from vendor on the same looper to avoid such pitfalls?",
+      "range": {
+        "startLine": 239,
+        "startChar": 16,
+        "endLine": 239,
+        "endChar": 28
+      },
+      "revId": "a576d15011066193a5ec181336b004a31dbdd659",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15e3d710_557cd764",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-01T19:49:48Z",
+      "side": 1,
+      "message": "Can this method be moved into OptionsRequest and the generic addUpdatedCapability be used to update with RcsContactUceCapability here?",
+      "range": {
+        "startLine": 427,
+        "startChar": 16,
+        "endLine": 427,
+        "endChar": 37
+      },
+      "revId": "a576d15011066193a5ec181336b004a31dbdd659",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1ff27d3_b22ece1b",
+        "filename": "src/java/com/android/ims/rcs/uce/request/OptionsRequestCoordinator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-01T19:49:48Z",
+      "side": 1,
+      "message": "nit: update name",
+      "range": {
+        "startLine": 37,
+        "startChar": 26,
+        "endLine": 37,
+        "endChar": 53
+      },
+      "revId": "a576d15011066193a5ec181336b004a31dbdd659",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3bfec2b_c36c39f0",
+        "filename": "src/java/com/android/ims/rcs/uce/util/UceUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-01T19:49:48Z",
+      "side": 1,
+      "message": "This is usually 100",
+      "range": {
+        "startLine": 40,
+        "startChar": 59,
+        "endLine": 40,
+        "endChar": 61
+      },
+      "revId": "a576d15011066193a5ec181336b004a31dbdd659",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
