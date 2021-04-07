@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d1ac96e_cc65f318",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-07T18:59:13Z",
+      "side": 1,
+      "message": "This is okay for now but eventually this should probably be refacored.. this class seems very susceptible to concurrency issues. ResponseRecord should either be internal state accessed by multiple threads through locked method calls on CapabilityRequestResponse (or a lock object) or a read-only final class that is created whenever getResponseRecord is called and all of this state is stored in CapabilityRequestResponse itself.\n\nIt is fine to use ResponseRecord as a data container, but it should not also be used as a data store without a copy mechanism",
+      "range": {
+        "startLine": 41,
+        "startChar": 13,
+        "endLine": 41,
+        "endChar": 38
+      },
+      "revId": "80d97ca74cd949f487559acc50392f44d44c1395",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a331c49_2291d25b",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-07T18:59:13Z",
+      "side": 1,
+      "message": "This should probably be done now, it would not be good to be accessing fields of this method while another thread is potentially modifying it.",
+      "range": {
+        "startLine": 251,
+        "startChar": 4,
+        "endLine": 251,
+        "endChar": 17
+      },
+      "revId": "80d97ca74cd949f487559acc50392f44d44c1395",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "783f049a_0d8f70ef",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-07T18:59:13Z",
+      "side": 1,
+      "message": "This entire method should be synchronized because another thread could be modifying the contents of ResponseRecord between each call here.\n\nSame with other methods",
+      "range": {
+        "startLine": 302,
+        "startChar": 40,
+        "endLine": 302,
+        "endChar": 55
+      },
+      "revId": "80d97ca74cd949f487559acc50392f44d44c1395",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d790da8_119985e1",
+        "filename": "src/java/com/android/ims/rcs/uce/request/UceRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-07T18:59:13Z",
+      "side": 1,
+      "message": "This is indicating to me that there are no similarities here and the instanceof checks in the RequestResultCreatorFactory is indicating to me that this should jsut be absorbed in the individual coordinators.\n\nUceRequestCoordinator#setRequestResultCreator and getRequestResult are only used by the subclasses, so creating this abstraction doesnt really make sense, since they share no similar methods (thus the empty class).\n\nInstead, I think it is okay to keep the RequestResultCreator pattern if you would like, but move the individual creators into the subclasses and get rid of RequestResultCreatorFactory.",
+      "range": {
+        "startLine": 34,
+        "startChar": 19,
+        "endLine": 34,
+        "endChar": 34
+      },
+      "revId": "80d97ca74cd949f487559acc50392f44d44c1395",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
