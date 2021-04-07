@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63d25439_c57e8e23",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-07T17:12:47Z",
+      "side": 1,
+      "message": "One of the benefit of the Optional is that it can provide a state that has not been set. Because the value of the network response is set by the network. It is possible that it has not been set and this may be information that outer classes want to know.",
+      "parentUuid": "54196f5c_0f044a8f",
+      "range": {
+        "startLine": 51,
+        "startChar": 16,
+        "endLine": 51,
+        "endChar": 24
+      },
+      "revId": "a576d15011066193a5ec181336b004a31dbdd659",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6162579_d788c011",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-04-01T19:49:48Z",
       "side": 1,
       "message": "I see that ResponseRecord is synchronized due to this being called from a binder thread, however this is not. getErrorCode looks to be accessed from another thread. \n\nCan you please ensure that we do not run into multiple thread access issues here as well as in other setters/accessors? Would it be easier to throw the binders calls from vendor on the same looper to avoid such pitfalls?",
+      "range": {
+        "startLine": 239,
+        "startChar": 16,
+        "endLine": 239,
+        "endChar": 28
+      },
+      "revId": "a576d15011066193a5ec181336b004a31dbdd659",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b9d0734_99f43c9a",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-07T17:12:47Z",
+      "side": 1,
+      "message": "Yes, actually I rethink the appropriateness of the error code being defined in the class \"CapabilityRequestResponse\".\n\nThe responsibility of this class is to record the capabilities request result. It can have some simple logic check like \"isNetworkRespOk\". However, it should not have the responsibility to judge the error code and also store it.\n\nI remove the variable error code in this class and the value of the error code is judged in each *coordinator class.",
+      "parentUuid": "c6162579_d788c011",
       "range": {
         "startLine": 239,
         "startChar": 16,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c9649d9_c6e05ca0",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-07T17:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15e3d710_557cd764",
+      "range": {
+        "startLine": 427,
+        "startChar": 16,
+        "endLine": 427,
+        "endChar": 37
+      },
+      "revId": "a576d15011066193a5ec181336b004a31dbdd659",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1ff27d3_b22ece1b",
@@ -93,6 +165,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58a728da_bba993bf",
+        "filename": "src/java/com/android/ims/rcs/uce/request/OptionsRequestCoordinator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-07T17:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1ff27d3_b22ece1b",
+      "range": {
+        "startLine": 37,
+        "startChar": 26,
+        "endLine": 37,
+        "endChar": 53
+      },
+      "revId": "a576d15011066193a5ec181336b004a31dbdd659",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3bfec2b_c36c39f0",
@@ -106,6 +202,30 @@
       "writtenOn": "2021-04-01T19:49:48Z",
       "side": 1,
       "message": "This is usually 100",
+      "range": {
+        "startLine": 40,
+        "startChar": 59,
+        "endLine": 40,
+        "endChar": 61
+      },
+      "revId": "a576d15011066193a5ec181336b004a31dbdd659",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62a70062_43ab8ee6",
+        "filename": "src/java/com/android/ims/rcs/uce/util/UceUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-07T17:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3bfec2b_c36c39f0",
       "range": {
         "startLine": 40,
         "startChar": 59,
