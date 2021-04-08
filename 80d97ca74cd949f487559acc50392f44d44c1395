@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26c40739_13e616e0",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-08T11:41:14Z",
+      "side": 1,
+      "message": "The class CapabilityRequestResponse has only one member variable which is ResponseRecord and most of the methods in CapabilityRequestResponse are setter/getter of ResponseRecord. As a network response data container in current design, it seems that the inner class ResponseRecord is unnecessary.\n\nI move all network response data to CapabilityRequestResponse and synchronized when access them and provide a method to get a copy of this instance.",
+      "parentUuid": "3d1ac96e_cc65f318",
+      "range": {
+        "startLine": 41,
+        "startChar": 13,
+        "endLine": 41,
+        "endChar": 38
+      },
+      "revId": "80d97ca74cd949f487559acc50392f44d44c1395",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a331c49_2291d25b",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-04-07T18:59:13Z",
       "side": 1,
       "message": "This should probably be done now, it would not be good to be accessing fields of this method while another thread is potentially modifying it.",
+      "range": {
+        "startLine": 251,
+        "startChar": 4,
+        "endLine": 251,
+        "endChar": 17
+      },
+      "revId": "80d97ca74cd949f487559acc50392f44d44c1395",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb4db673_514e6007",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-08T11:41:14Z",
+      "side": 1,
+      "message": "Remove this method",
+      "parentUuid": "0a331c49_2291d25b",
       "range": {
         "startLine": 251,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a4a817d_712553b1",
+        "filename": "src/java/com/android/ims/rcs/uce/request/CapabilityRequestResponse.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-08T11:41:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "783f049a_0d8f70ef",
+      "range": {
+        "startLine": 302,
+        "startChar": 40,
+        "endLine": 302,
+        "endChar": 55
+      },
+      "revId": "80d97ca74cd949f487559acc50392f44d44c1395",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d790da8_119985e1",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-04-07T18:59:13Z",
       "side": 1,
       "message": "This is indicating to me that there are no similarities here and the instanceof checks in the RequestResultCreatorFactory is indicating to me that this should jsut be absorbed in the individual coordinators.\n\nUceRequestCoordinator#setRequestResultCreator and getRequestResult are only used by the subclasses, so creating this abstraction doesnt really make sense, since they share no similar methods (thus the empty class).\n\nInstead, I think it is okay to keep the RequestResultCreator pattern if you would like, but move the individual creators into the subclasses and get rid of RequestResultCreatorFactory.",
+      "range": {
+        "startLine": 34,
+        "startChar": 19,
+        "endLine": 34,
+        "endChar": 34
+      },
+      "revId": "80d97ca74cd949f487559acc50392f44d44c1395",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38dceb1b_9ef891ee",
+        "filename": "src/java/com/android/ims/rcs/uce/request/UceRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-08T11:41:14Z",
+      "side": 1,
+      "message": "Because RemoteOptionsRequest and SubscribeRequest/OptionRequest use different RequestionResponse class, the interface RequestResultCreator cannot be applied to all the three Coordinators. However, it\u0027s indeed a little bit strange that declare a empty abstract class.\n\nI move the individual creators into the subclass and remove the RequestResultCreatorFactory.",
+      "parentUuid": "1d790da8_119985e1",
       "range": {
         "startLine": 34,
         "startChar": 19,
