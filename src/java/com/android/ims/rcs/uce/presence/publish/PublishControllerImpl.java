@@ -160,7 +160,6 @@ public class PublishControllerImpl implements PublishController {
     private void initPublishController(Looper looper) {
         mPublishState = RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED;
         mPublishStateCallbacks = new RemoteCallbackList<>();
-
         mPublishHandler = new PublishHandler(this, looper);
 
         String[] serviceDescFeatureTagMap = getCarrierServiceDescriptionFeatureTagMap();
@@ -220,7 +219,7 @@ public class PublishControllerImpl implements PublishController {
     public void onCarrierConfigChanged() {
         String[] newMap = getCarrierServiceDescriptionFeatureTagMap();
         if (mDeviceCapabilityInfo.updateCapabilityRegistrationTrackerMap(newMap)) {
-            mPublishHandler.requestPublish(
+            mPublishHandler.sendPublishMessage(
                     PublishController.PUBLISH_TRIGGER_CARRIER_CONFIG_CHANGED);
         }
     }
@@ -235,7 +234,7 @@ public class PublishControllerImpl implements PublishController {
     @Override
     public RcsContactUceCapability addRegistrationOverrideCapabilities(Set<String> featureTags) {
         if (mDeviceCapabilityInfo.addRegistrationOverrideCapabilities(featureTags)) {
-            mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_OVERRIDE_CAPS);
+            mPublishHandler.sendPublishMessage(PublishController.PUBLISH_TRIGGER_OVERRIDE_CAPS);
         }
         return mDeviceCapabilityInfo.getDeviceCapabilities(
                 RcsContactUceCapability.CAPABILITY_MECHANISM_PRESENCE, mContext);
@@ -244,7 +243,7 @@ public class PublishControllerImpl implements PublishController {
     @Override
     public RcsContactUceCapability removeRegistrationOverrideCapabilities(Set<String> featureTags) {
         if (mDeviceCapabilityInfo.removeRegistrationOverrideCapabilities(featureTags)) {
-            mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_OVERRIDE_CAPS);
+            mPublishHandler.sendPublishMessage(PublishController.PUBLISH_TRIGGER_OVERRIDE_CAPS);
         }
         return mDeviceCapabilityInfo.getDeviceCapabilities(
                 RcsContactUceCapability.CAPABILITY_MECHANISM_PRESENCE, mContext);
@@ -253,7 +252,7 @@ public class PublishControllerImpl implements PublishController {
     @Override
     public RcsContactUceCapability clearRegistrationOverrideCapabilities() {
         if (mDeviceCapabilityInfo.clearRegistrationOverrideCapabilities()) {
-            mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_OVERRIDE_CAPS);
+            mPublishHandler.sendPublishMessage(PublishController.PUBLISH_TRIGGER_OVERRIDE_CAPS);
         }
         return mDeviceCapabilityInfo.getDeviceCapabilities(
                 RcsContactUceCapability.CAPABILITY_MECHANISM_PRESENCE, mContext);
@@ -282,7 +281,7 @@ public class PublishControllerImpl implements PublishController {
                     + mPublishStateCallbacks.getRegisteredCallbackCount());
         }
         // Notify the current publish state
-        mPublishHandler.onNotifyCurrentPublishState(c);
+        mPublishHandler.sendNotifyCurrentPublishStateMessage(c);
     }
 
     /**
@@ -324,7 +323,7 @@ public class PublishControllerImpl implements PublishController {
     public void onUnpublish() {
         logd("onUnpublish");
         if (mIsDestroyedFlag) return;
-        mPublishHandler.onPublishStateChanged(RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED,
+        mPublishHandler.sendPublishStateChangedMessage(RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED,
                 Instant.now(), null /*pidfXml*/);
     }
 
@@ -365,27 +364,27 @@ public class PublishControllerImpl implements PublishController {
                 @Override
                 public void requestPublishFromInternal(@PublishTriggerType int type) {
                     logd("requestPublishFromInternal: type=" + type);
-                    mPublishHandler.requestPublish(type);
+                    mPublishHandler.sendPublishMessage(type);
                 }
 
                 @Override
                 public void onRequestCommandError(PublishRequestResponse requestResponse) {
                     logd("onRequestCommandError: taskId=" + requestResponse.getTaskId()
                             + ", time=" + requestResponse.getResponseTimestamp());
-                    mPublishHandler.onRequestCommandError(requestResponse);
+                    mPublishHandler.sendRequestCommandErrorMessage(requestResponse);
                 }
 
                 @Override
                 public void onRequestNetworkResp(PublishRequestResponse requestResponse) {
                     logd("onRequestNetworkResp: taskId=" + requestResponse.getTaskId()
                             + ", time=" + requestResponse.getResponseTimestamp());
-                    mPublishHandler.onRequestNetworkResponse(requestResponse);
+                    mPublishHandler.sendRequestNetworkRespMessage(requestResponse);
                 }
 
                 @Override
                 public void setupRequestCanceledTimer(long taskId, long delay) {
                     logd("setupRequestCanceledTimer: taskId=" + taskId + ", delay=" + delay);
-                    mPublishHandler.setRequestCanceledTimer(taskId, delay);
+                    mPublishHandler.sendRequestCanceledTimerMessage(taskId, delay);
                 }
 
                 @Override
@@ -395,10 +394,10 @@ public class PublishControllerImpl implements PublishController {
                 }
 
                 @Override
-                public void updatePublishRequestResult(@PublishState int publishState,
+                public void updatePublishRequestResult(@PublishState int state,
                         Instant updatedTime, String pidfXml) {
-                    logd("updatePublishRequestResult: " + publishState + ", time=" + updatedTime);
-                    mPublishHandler.onPublishStateChanged(publishState, updatedTime, pidfXml);
+                    logd("updatePublishRequestResult: " + state + ", time=" + updatedTime);
+                    mPublishHandler.sendPublishStateChangedMessage(state, updatedTime, pidfXml);
                 }
 
                 @Override
@@ -414,8 +413,7 @@ public class PublishControllerImpl implements PublishController {
     @Override
     public void requestPublishCapabilitiesFromService(int triggerType) {
         logi("Receive the publish request from service: service trigger type=" + triggerType);
-        mReceivePublishFromService = true;
-        mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_SERVICE);
+        mPublishHandler.sendPublishMessage(PublishController.PUBLISH_TRIGGER_SERVICE);
     }
 
     private static class PublishHandler extends Handler {
@@ -482,14 +480,14 @@ public class PublishControllerImpl implements PublishController {
         /**
          * Remove all the messages from the handler.
          */
-        public void onDestroy() {
+        public synchronized void onDestroy() {
             removeCallbacksAndMessages(null);
         }
 
         /**
          * Send the message to notify the publish state is changed.
          */
-        public void onPublishStateChanged(@PublishState int publishState,
+        public synchronized void sendPublishStateChangedMessage(@PublishState int publishState,
                 @NonNull Instant updatedTimestamp, String pidfXml) {
             Message message = obtainMessage();
             SomeArgs args = SomeArgs.obtain();
@@ -503,9 +501,10 @@ public class PublishControllerImpl implements PublishController {
         }
 
         /**
-         * Notify the new added callback of the latest publish state.
+         * Send the message to notify the new added callback of the latest publish state.
          */
-        public void onNotifyCurrentPublishState(IRcsUcePublishStateCallback callback) {
+        public synchronized void sendNotifyCurrentPublishStateMessage(
+                IRcsUcePublishStateCallback callback) {
             Message message = obtainMessage();
             message.what = MSG_NOTIFY_CURRENT_PUBLISH_STATE;
             message.obj = callback;
@@ -515,34 +514,39 @@ public class PublishControllerImpl implements PublishController {
         /**
          * Send the PUBLISH message with the given trigger type.
          */
-        public void requestPublish(@PublishTriggerType int type) {
+        public synchronized void sendPublishMessage(@PublishTriggerType int type) {
             PublishControllerImpl publishCtrl = mPublishControllerRef.get();
             if (publishCtrl == null) {
                 return;
             }
             if (publishCtrl.mIsDestroyedFlag) return;
 
+            // Set the flag if the publish is triggered by the ImsService.
+            if (type == PublishController.PUBLISH_TRIGGER_SERVICE &&
+                    !publishCtrl.mReceivePublishFromService) {
+                publishCtrl.mReceivePublishFromService = true;
+            }
+
+            // Set the pending flag and return if the request is not allowed.
+            if (!publishCtrl.isPublishRequestAllowed()) {
+                publishCtrl.logd("sendPublishMessage: SKIP. Request is not allowed. type=" + type);
+                publishCtrl.mPublishProcessor.setPendingRequest(type);
+                return;
+            }
+
             // Update the latest PUBLISH allowed time according to the given trigger type.
             publishCtrl.mPublishProcessor.updatePublishingAllowedTime(type);
 
-            // Set the pending flag and return if the RCS capabilities presence uce is not enabled
-            // or the first publish is not triggered from the service.
-            if (!publishCtrl.isPublishRequestAllowed()) {
-                publishCtrl.logd("requestPublish: SKIP. The publish is not allowed. type=" + type);
-                publishCtrl.mPublishProcessor.setPendingRequest(type);
-                return;
-            }
-
-            // Get the publish request delay time. If the delay is not present, the first PUBLISH
-            // is not allowed to be executed; If the delay time is 0, it means that this request
-            // can be executed immediately.
+            // Get the publish request delay time. If the delay is not present, the first
+            // PUBLISH is not allowed to be executed; If the delay time is 0, it means that
+            // this request can be executed immediately.
             Optional<Long> delay = publishCtrl.mPublishProcessor.getPublishingDelayTime();
             if (!delay.isPresent()) {
-                publishCtrl.logd("requestPublish: SKIP. The delay is not present. type=" + type);
+                publishCtrl.logd("sendPublishMessage: SKIP. The delay is empty. type=" + type);
                 publishCtrl.mPublishProcessor.setPendingRequest(type);
                 return;
             }
-            publishCtrl.logd("requestPublish: " + type + ", delay=" + delay.get());
+            publishCtrl.logd("sendPublishMessage: " + type + ", delay=" + delay.get());
 
             // Remove the existing PUBLISH message.
             removeMessages(MSG_REQUEST_PUBLISH);
@@ -554,7 +558,7 @@ public class PublishControllerImpl implements PublishController {
             sendMessageDelayed(message, delay.get());
         }
 
-        public void onRequestCommandError(PublishRequestResponse requestResponse) {
+        public synchronized void sendRequestCommandErrorMessage(PublishRequestResponse response) {
             PublishControllerImpl publishCtrl = mPublishControllerRef.get();
             if (publishCtrl == null) {
                 return;
@@ -562,11 +566,11 @@ public class PublishControllerImpl implements PublishController {
             if (publishCtrl.mIsDestroyedFlag) return;
             Message message = obtainMessage();
             message.what = MSG_REQUEST_CMD_ERROR;
-            message.obj = requestResponse;
+            message.obj = response;
             sendMessage(message);
         }
 
-        public void onRequestNetworkResponse(PublishRequestResponse requestResponse) {
+        public synchronized void sendRequestNetworkRespMessage(PublishRequestResponse response) {
             PublishControllerImpl publishCtrl = mPublishControllerRef.get();
             if (publishCtrl == null) {
                 return;
@@ -574,11 +578,11 @@ public class PublishControllerImpl implements PublishController {
             if (publishCtrl.mIsDestroyedFlag) return;
             Message message = obtainMessage();
             message.what = MSG_REQUEST_NETWORK_RESPONSE;
-            message.obj = requestResponse;
+            message.obj = response;
             sendMessage(message);
         }
 
-        public void setRequestCanceledTimer(long taskId, long delay) {
+        public synchronized void sendRequestCanceledTimerMessage(long taskId, long delay) {
             PublishControllerImpl publishCtrl = mPublishControllerRef.get();
             if (publishCtrl == null) {
                 return;
@@ -592,7 +596,7 @@ public class PublishControllerImpl implements PublishController {
             sendMessageDelayed(message, delay);
         }
 
-        public void clearRequestCanceledTimer() {
+        public synchronized void clearRequestCanceledTimer() {
             PublishControllerImpl publishCtrl = mPublishControllerRef.get();
             if (publishCtrl == null) {
                 return;
@@ -624,6 +628,12 @@ public class PublishControllerImpl implements PublishController {
         // The first PUBLISH request is required to be triggered from the service.
         if (!mReceivePublishFromService) {
             logd("isPublishRequestAllowed: Have not received the first PUBLISH from the service.");
+            return false;
+        }
+        // Check whether there is already a publish request running or not. When the running
+        // request is finished and there is a pending request, it will send a new request.
+        if (mPublishProcessor.isPublishingNow()) {
+            logd("isPublishRequestAllowed: There is already a publish request running now.");
             return false;
         }
         return true;
