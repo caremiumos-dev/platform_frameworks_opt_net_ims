@@ -96,8 +96,6 @@ public class PublishControllerImpl implements PublishController {
     // The callbacks to notify publish state changed.
     private RemoteCallbackList<IRcsUcePublishStateCallback> mPublishStateCallbacks;
 
-    private final Object mPublishStateLock = new Object();
-
     // The information of the device's capabilities.
     private DeviceCapabilityInfo mDeviceCapabilityInfo;
 
@@ -136,6 +134,12 @@ public class PublishControllerImpl implements PublishController {
         }
     };
 
+    // The lock of the publish state
+    private final Object mPublishStateLock = new Object();
+
+    // The lock of the publish request.
+    private final Object mPublishRequestLock = new Object();
+
     public PublishControllerImpl(Context context, int subId, UceControllerCallback callback,
             Looper looper) {
         mSubId = subId;
@@ -160,7 +164,6 @@ public class PublishControllerImpl implements PublishController {
     private void initPublishController(Looper looper) {
         mPublishState = RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED;
         mPublishStateCallbacks = new RemoteCallbackList<>();
-
         mPublishHandler = new PublishHandler(this, looper);
 
         String[] serviceDescFeatureTagMap = getCarrierServiceDescriptionFeatureTagMap();
@@ -413,9 +416,11 @@ public class PublishControllerImpl implements PublishController {
      */
     @Override
     public void requestPublishCapabilitiesFromService(int triggerType) {
-        logi("Receive the publish request from service: service trigger type=" + triggerType);
-        mReceivePublishFromService = true;
-        mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_SERVICE);
+        synchronized (mPublishRequestLock) {
+            logi("Receive the publish request from service: service trigger type=" + triggerType);
+            mReceivePublishFromService = true;
+            mPublishHandler.requestPublish(PublishController.PUBLISH_TRIGGER_SERVICE);
+        }
     }
 
     private static class PublishHandler extends Handler {
@@ -522,36 +527,38 @@ public class PublishControllerImpl implements PublishController {
             }
             if (publishCtrl.mIsDestroyedFlag) return;
 
-            // Update the latest PUBLISH allowed time according to the given trigger type.
-            publishCtrl.mPublishProcessor.updatePublishingAllowedTime(type);
+            synchronized (publishCtrl.mPublishRequestLock) {
+                // Update the latest PUBLISH allowed time according to the given trigger type.
+                publishCtrl.mPublishProcessor.updatePublishingAllowedTime(type);
 
-            // Set the pending flag and return if the RCS capabilities presence uce is not enabled
-            // or the first publish is not triggered from the service.
-            if (!publishCtrl.isPublishRequestAllowed()) {
-                publishCtrl.logd("requestPublish: SKIP. The publish is not allowed. type=" + type);
-                publishCtrl.mPublishProcessor.setPendingRequest(type);
-                return;
+                // Set the pending flag and return if the RCS capabilities presence uce is not
+                // enabled or the first publish is not triggered from the service.
+                if (!publishCtrl.isPublishRequestAllowed()) {
+                    publishCtrl.logd("requestPublish: SKIP. Request is not allowed. type=" + type);
+                    publishCtrl.mPublishProcessor.setPendingRequest(type);
+                    return;
+                }
+
+                // Get the publish request delay time. If the delay is not present, the first
+                // PUBLISH is not allowed to be executed; If the delay time is 0, it means that
+                // this request can be executed immediately.
+                Optional<Long> delay = publishCtrl.mPublishProcessor.getPublishingDelayTime();
+                if (!delay.isPresent()) {
+                    publishCtrl.logd("requestPublish: SKIP. The delay is empty. type=" + type);
+                    publishCtrl.mPublishProcessor.setPendingRequest(type);
+                    return;
+                }
+                publishCtrl.logd("requestPublish: " + type + ", delay=" + delay.get());
+
+                // Remove the existing PUBLISH message.
+                removeMessages(MSG_REQUEST_PUBLISH);
+
+                // Send a new PUBLISH message with the latest delay time.
+                Message message = obtainMessage();
+                message.what = MSG_REQUEST_PUBLISH;
+                message.obj = (Integer) type;
+                sendMessageDelayed(message, delay.get());
             }
-
-            // Get the publish request delay time. If the delay is not present, the first PUBLISH
-            // is not allowed to be executed; If the delay time is 0, it means that this request
-            // can be executed immediately.
-            Optional<Long> delay = publishCtrl.mPublishProcessor.getPublishingDelayTime();
-            if (!delay.isPresent()) {
-                publishCtrl.logd("requestPublish: SKIP. The delay is not present. type=" + type);
-                publishCtrl.mPublishProcessor.setPendingRequest(type);
-                return;
-            }
-            publishCtrl.logd("requestPublish: " + type + ", delay=" + delay.get());
-
-            // Remove the existing PUBLISH message.
-            removeMessages(MSG_REQUEST_PUBLISH);
-
-            // Send a new PUBLISH message with the latest delay time.
-            Message message = obtainMessage();
-            message.what = MSG_REQUEST_PUBLISH;
-            message.obj = (Integer) type;
-            sendMessageDelayed(message, delay.get());
         }
 
         public void onRequestCommandError(PublishRequestResponse requestResponse) {

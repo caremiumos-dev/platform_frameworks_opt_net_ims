@@ -57,10 +57,13 @@ public class PublishProcessor {
     private PublishProcessorState mProcessorState;
 
     // The information of the device's capabilities.
-    private DeviceCapabilityInfo mDeviceCapabilities;
+    private final DeviceCapabilityInfo mDeviceCapabilities;
 
     // The callback of the PublishController
-    private PublishControllerCallback mPublishCtrlCallback;
+    private final PublishControllerCallback mPublishCtrlCallback;
+
+    // The lock of processing the pending request.
+    private final Object mPendingRequestLock = new Object();
 
     private final LocalLog mLocalLog = new LocalLog(UceUtils.LOG_SIZE);
 
@@ -199,7 +202,7 @@ public class PublishProcessor {
             mProcessorState.setPublishingFlag(true);
 
             // Clear the pending flag because it is going to send the latest device's capabilities.
-            mProcessorState.clearPendingRequest();
+            clearPendingRequest();
 
             // Generate a unique taskId to track this request.
             long taskId = mProcessorState.generatePublishTaskId();
@@ -307,7 +310,7 @@ public class PublishProcessor {
         mProcessorState.increaseRetryCount();
 
         // Reset the pending flag because it is going to resend a request.
-        mProcessorState.clearPendingRequest();
+        clearPendingRequest();
 
         // Finish this request and resend a new publish request
         setRequestEnded(requestResponse);
@@ -369,23 +372,37 @@ public class PublishProcessor {
      * Set the pending flag when it cannot be executed now.
      */
     public void setPendingRequest(@PublishTriggerType int triggerType) {
-        mProcessorState.setPendingRequest(triggerType);
+        synchronized (mPendingRequestLock) {
+            mProcessorState.setPendingRequest(triggerType);
+        }
     }
 
     /**
      * Check and trigger a new publish request if there is a pending request.
      */
     public void checkAndSendPendingRequest() {
-        if (mIsDestroyed) return;
-        if (mProcessorState.hasPendingRequest()) {
-            // Retrieve the trigger type of the pending request
-            int type = mProcessorState.getPendingRequestTriggerType()
-                    .orElse(PublishController.PUBLISH_TRIGGER_RETRY);
-            logd("checkAndSendPendingRequest: send pending request, type=" + type);
+        synchronized (mPendingRequestLock) {
+            if (mIsDestroyed) return;
+            if (mProcessorState.hasPendingRequest()) {
+                // Retrieve the trigger type of the pending request
+                int type = mProcessorState.getPendingRequestTriggerType()
+                        .orElse(PublishController.PUBLISH_TRIGGER_RETRY);
+                logd("checkAndSendPendingRequest: send pending request, type=" + type);
 
-            // Clear the pending flag because it is going to send a PUBLISH request.
+                // Clear the pending flag because it is going to send a PUBLISH request.
+                mProcessorState.clearPendingRequest();
+                mPublishCtrlCallback.requestPublishFromInternal(type);
+            }
+        }
+    }
+
+    /**
+     * Clear the pending request. It means that the publish request is triggered and this flag can
+     * be removed.
+     */
+    private void clearPendingRequest() {
+        synchronized (mPendingRequestLock) {
             mProcessorState.clearPendingRequest();
-            mPublishCtrlCallback.requestPublishFromInternal(type);
         }
     }
 
