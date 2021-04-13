@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d181e98_1ccce2e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-13T16:54:57Z",
+      "side": 1,
+      "message": "This is okay, but the original idea of the Executor/Looper design was to be able to schedule all these requests from different threads onto a singular thread for processing... Would this no longer be possible in the current impl?",
+      "revId": "7a31a69a0fefdf6b67bc5c2388934968e2b500b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
