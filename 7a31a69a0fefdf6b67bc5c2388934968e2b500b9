@@ -16,6 +16,24 @@
       "message": "This is okay, but the original idea of the Executor/Looper design was to be able to schedule all these requests from different threads onto a singular thread for processing... Would this no longer be possible in the current impl?",
       "revId": "7a31a69a0fefdf6b67bc5c2388934968e2b500b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20054574_fec9805d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-14T08:38:19Z",
+      "side": 1,
+      "message": "When the UCE framework receives the publish request, some pre-check and re-calculate the publish allowed time will be done and then sent the publish request to the looper.\n\nIn this bug, the UCE framework received two consecutive publishing request in a short period of time. It caused that the two publish requests were simultaneously processing pre-check before sent to the looper caused unexpected behaviors. Therefore, the lock is to protect the checks before sending to the looper.",
+      "parentUuid": "1d181e98_1ccce2e8",
+      "revId": "7a31a69a0fefdf6b67bc5c2388934968e2b500b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
