@@ -34,6 +34,24 @@
       "parentUuid": "1d181e98_1ccce2e8",
       "revId": "7a31a69a0fefdf6b67bc5c2388934968e2b500b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e551c9a_0731036a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-14T18:51:16Z",
+      "side": 1,
+      "message": "The original idea was to have everything from other threads put onto the looper first so that we do not run into these types of locking issues, but it looks to be too late to refactor this code. I hope we do not run into more synchronization issues.",
+      "parentUuid": "20054574_fec9805d",
+      "revId": "7a31a69a0fefdf6b67bc5c2388934968e2b500b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
