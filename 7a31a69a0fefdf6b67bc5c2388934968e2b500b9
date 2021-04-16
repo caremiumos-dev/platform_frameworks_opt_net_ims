@@ -52,6 +52,24 @@
       "parentUuid": "20054574_fec9805d",
       "revId": "7a31a69a0fefdf6b67bc5c2388934968e2b500b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f7b0d9d_53239741",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-04-16T09:50:37Z",
+      "side": 1,
+      "message": "Yes, to prevent run into more synchronization issues, it would be better put the onto the looper first.\nI update the change list again.\nIn the patchset 4 of this change list, when PublishControllerImpl receives requests/status updated, it will be put into the looper first before process it.",
+      "parentUuid": "7e551c9a_0731036a",
+      "revId": "7a31a69a0fefdf6b67bc5c2388934968e2b500b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
