@@ -172,8 +172,8 @@ public class PidfParserUtils {
         // Duplex element
         List<String> supportedDuplexModes = serviceCaps.getSupportedDuplexModes();
         List<String> UnsupportedDuplexModes = serviceCaps.getUnsupportedDuplexModes();
-        if (supportedDuplexModes != null && !supportedDuplexModes.isEmpty() &&
-                UnsupportedDuplexModes != null && !UnsupportedDuplexModes.isEmpty()) {
+        if ((supportedDuplexModes != null && !supportedDuplexModes.isEmpty()) ||
+                (UnsupportedDuplexModes != null && !UnsupportedDuplexModes.isEmpty())) {
             Duplex duplex = new Duplex();
             if (!supportedDuplexModes.isEmpty()) {
                 duplex.addSupportedType(supportedDuplexModes.get(0));
