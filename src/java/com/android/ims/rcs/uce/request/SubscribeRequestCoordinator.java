@@ -23,6 +23,7 @@ import android.os.RemoteException;
 import android.telephony.ims.RcsContactUceCapability;
 import android.telephony.ims.aidl.IRcsUceControllerCallback;
 
+import com.android.ims.rcs.uce.DeviceState;
 import com.android.ims.rcs.uce.presence.pidfparser.PidfParserUtils;
 import com.android.ims.rcs.uce.request.UceRequestManager.RequestManagerCallback;
 import com.android.internal.annotations.VisibleForTesting;
@@ -220,6 +221,12 @@ public class SubscribeRequestCoordinator extends UceRequestCoordinator {
         CapabilityRequestResponse response = request.getRequestResponse();
         logd("handleNetworkResponse: " + response.toString());
 
+        // Refresh the device state with the request result.
+        response.getResponseSipCode().ifPresent(sipCode -> {
+            String reason = response.getResponseReason().orElse("");
+            mRequestManagerCallback.refreshDeviceState(sipCode, reason);
+        });
+
         // When the network response is unsuccessful, there is no subsequent callback for this
         // request. Check the forbidden state and finish this request. Otherwise, keep waiting for
         // the subsequent callback of this request.
@@ -249,13 +256,6 @@ public class SubscribeRequestCoordinator extends UceRequestCoordinator {
 
     private void handleNetworkResponseFailed(SubscribeRequest request, RequestResult result) {
         CapabilityRequestResponse response = request.getRequestResponse();
-
-        // Update the forbidden state when the sip code is forbidden
-        if (response.isRequestForbidden()) {
-            Long retryMillis =  result.getRetryMillis().orElse(0L);
-            int errorCode = result.getErrorCode().orElse(DEFAULT_ERROR_CODE);
-            mRequestManagerCallback.onRequestForbidden(true, errorCode, retryMillis);
-        }
 
         if (response.isNotFound()) {
             List<Uri> uriList = request.getContactUri();
