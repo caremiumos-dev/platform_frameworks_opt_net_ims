@@ -17,19 +17,14 @@
 package com.android.ims.rcs.uce.util;
 
 import android.content.Context;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.BlockedNumberContract;
 import android.telephony.CarrierConfigManager;
-import android.telephony.PhoneNumberUtils;
 import android.telephony.SubscriptionManager;
-import android.telephony.TelephonyManager;
 import android.telephony.ims.ProvisioningManager;
-import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.telephony.Rlog;
+import java.util.concurrent.TimeUnit;
 
 public class UceUtils {
 
@@ -39,6 +34,8 @@ public class UceUtils {
 
     private static final int DEFAULT_RCL_MAX_NUM_ENTRIES = 100;
     private static final long DEFAULT_RCS_PUBLISH_SOURCE_THROTTLE_MS = 60000L;
+    private static final long DEFAULT_NON_RCS_CAPABILITIES_CACHE_EXPIRATION_MS =
+            TimeUnit.DAYS.toMillis(30);
 
     // The task ID of the UCE request
     private static long TASK_ID = 0L;
@@ -215,5 +212,18 @@ public class UceUtils {
             Log.w(LOG_TAG, "getRclMaxNumberEntries: exception=" + e.getMessage());
         }
         return maxNumEntries;
+    }
+
+    public static long getNonRcsCapabilitiesCacheExpiration(Context context, int subId) {
+        CarrierConfigManager configManager = context.getSystemService(CarrierConfigManager.class);
+        if (configManager == null) {
+            return DEFAULT_NON_RCS_CAPABILITIES_CACHE_EXPIRATION_MS;
+        }
+        PersistableBundle config = configManager.getConfigForSubId(subId);
+        if (config == null) {
+            return DEFAULT_NON_RCS_CAPABILITIES_CACHE_EXPIRATION_MS;
+        }
+        return config.getLong(
+                CarrierConfigManager.Ims.KEY_NON_RCS_CAPABILITIES_CACHE_EXPIRATION_SEC_INT);
     }
 }
