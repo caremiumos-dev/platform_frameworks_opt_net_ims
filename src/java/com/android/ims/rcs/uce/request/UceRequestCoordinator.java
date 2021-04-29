@@ -19,6 +19,7 @@ package com.android.ims.rcs.uce.request;
 import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.net.Uri;
 import android.telephony.ims.RcsUceAdapter;
 import android.util.Log;
 

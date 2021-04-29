@@ -22,6 +22,7 @@ import android.os.RemoteException;
 import android.telephony.ims.RcsContactUceCapability;
 import android.telephony.ims.aidl.IRcsUceControllerCallback;
 
+import com.android.ims.rcs.uce.DeviceState;
 import com.android.ims.rcs.uce.request.UceRequestManager.RequestManagerCallback;
 import com.android.internal.annotations.VisibleForTesting;
 
@@ -181,6 +182,12 @@ public class OptionsRequestCoordinator extends UceRequestCoordinator {
     private void handleNetworkResponse(OptionsRequest request) {
         CapabilityRequestResponse response = request.getRequestResponse();
         logd("handleNetworkResponse: " + response.toString());
+
+        // Refresh the device state with the request result.
+        response.getResponseSipCode().ifPresent(sipCode -> {
+            String reason = response.getResponseReason().orElse("");
+            mRequestManagerCallback.refreshDeviceState(sipCode, reason);
+        });
 
         List<RcsContactUceCapability> updatedCapList = response.getUpdatedContactCapability();
         if (!updatedCapList.isEmpty()) {

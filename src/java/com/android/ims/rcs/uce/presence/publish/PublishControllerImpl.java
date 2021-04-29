@@ -270,6 +270,18 @@ public class PublishControllerImpl implements PublishController {
         }
     }
 
+    @Override
+    public void setupResetDeviceStateTimer(long resetAfterMillis) {
+        logd("setupResetDeviceStateTimer: resetAfter=" + resetAfterMillis);
+        mPublishHandler.sendResetDeviceStateTimerMessage(resetAfterMillis);
+    }
+
+    @Override
+    public void clearResetDeviceStateTimer() {
+        logd("clearResetDeviceStateTimer");
+        mPublishHandler.clearResetDeviceStateTimer();
+    }
+
     // Clear all the publish state callbacks since the publish controller instance is destroyed.
     private void clearPublishStateCallbacks() {
         synchronized (mPublishStateLock) {
@@ -346,6 +358,11 @@ public class PublishControllerImpl implements PublishController {
                     logd("updatePublishThrottle: value=" + value);
                     mPublishProcessor.updatePublishThrottle(value);
                 }
+
+                @Override
+                public void refreshDeviceState(int sipCode, String reason) {
+                    mUceCtrlCallback.refreshDeviceState(sipCode, reason);
+                }
             };
 
     /**
@@ -369,6 +386,7 @@ public class PublishControllerImpl implements PublishController {
         private static final int MSG_REQUEST_CMD_ERROR = 9;
         private static final int MSG_REQUEST_NETWORK_RESPONSE = 10;
         private static final int MSG_REQUEST_CANCELED = 11;
+        private static final int MSG_RESET_DEVICE_STATE = 12;
 
         private final WeakReference<PublishControllerImpl> mPublishControllerRef;
 
@@ -443,6 +461,10 @@ public class PublishControllerImpl implements PublishController {
                 case MSG_REQUEST_CANCELED:
                     long taskId = (Long) message.obj;
                     publishCtrl.handleRequestCanceledMessage(taskId);
+                    break;
+
+                case MSG_RESET_DEVICE_STATE:
+                    publishCtrl.handleResetDeviceStateMessage();
                     break;
             }
         }
@@ -611,6 +633,26 @@ public class PublishControllerImpl implements PublishController {
             removeMessages(MSG_REQUEST_CANCELED);
         }
 
+        public void sendResetDeviceStateTimerMessage(long resetAfterMillis) {
+            PublishControllerImpl publishCtrl = mPublishControllerRef.get();
+            if (publishCtrl == null) {
+                return;
+            }
+            if (publishCtrl.mIsDestroyedFlag) return;
+            Message message = obtainMessage();
+            message.what = MSG_RESET_DEVICE_STATE;
+            sendMessageDelayed(message, resetAfterMillis);
+        }
+
+        public void clearResetDeviceStateTimer() {
+            PublishControllerImpl publishCtrl = mPublishControllerRef.get();
+            if (publishCtrl == null) {
+                return;
+            }
+            if (publishCtrl.mIsDestroyedFlag) return;
+            removeMessages(MSG_RESET_DEVICE_STATE);
+        }
+
         private static Map<Integer, String> EVENT_DESCRIPTION = new HashMap<>();
         static {
             EVENT_DESCRIPTION.put(MSG_RCS_CONNECTED, "RCS_CONNECTED");
@@ -624,6 +666,7 @@ public class PublishControllerImpl implements PublishController {
             EVENT_DESCRIPTION.put(MSG_REQUEST_CMD_ERROR, "REQUEST_CMD_ERROR");
             EVENT_DESCRIPTION.put(MSG_REQUEST_NETWORK_RESPONSE, "REQUEST_NETWORK_RESPONSE");
             EVENT_DESCRIPTION.put(MSG_REQUEST_CANCELED, "REQUEST_CANCELED");
+            EVENT_DESCRIPTION.put(MSG_RESET_DEVICE_STATE, "RESET_DEVICE_STATE");
         }
     }
 
@@ -780,8 +823,9 @@ public class PublishControllerImpl implements PublishController {
 
     private void handleRequestPublishMessage(@PublishTriggerType int type) {
         if (mIsDestroyedFlag) return;
-        if (mUceCtrlCallback.isRequestForbiddenByNetwork()) {
-            logd("handleRequestPublishMessage: The network forbids UCE requests: type=" + type);
+        // Return if this device is not allowed to publish device capabilities.
+        if (mUceCtrlCallback.getDeviceState().isDisallowed()) {
+            logd("handleRequestPublishMessage: SKIP. The device is disallowed. type=" + type);
             return;
         }
         logd("handleRequestPublishMessage: type=" + type);
@@ -822,6 +866,11 @@ public class PublishControllerImpl implements PublishController {
     private void handleRequestCanceledMessage(long taskId) {
         if (mIsDestroyedFlag) return;
         mPublishProcessor.cancelPublishRequest(taskId);
+    }
+
+    private void handleResetDeviceStateMessage() {
+        if(mIsDestroyedFlag) return;
+        mUceCtrlCallback.resetDeviceState();
     }
 
     @VisibleForTesting

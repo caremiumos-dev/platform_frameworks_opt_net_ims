@@ -121,6 +121,14 @@ public class PublishRequestResponse {
         return mReasonHeaderText;
     }
 
+    public Optional<Integer> getResponseSipCode() {
+        return (mReasonHeaderCause.isPresent()) ? mReasonHeaderCause : mNetworkRespSipCode;
+    }
+
+    public Optional<String> getResponseReason() {
+        return (mReasonHeaderText.isPresent()) ? mReasonHeaderText : mReasonPhrase;
+    }
+
     /**
      * Get the timestamp of receiving the network response callback.
      */
