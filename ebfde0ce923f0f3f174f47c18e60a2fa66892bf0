@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a333d13_8834df83",
+        "filename": "src/java/com/android/ims/rcs/uce/DeviceState.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-29T18:41:32Z",
+      "side": 1,
+      "message": "Do we want to de-dupe events here - for example if you get a refreshDeviceState with 489 and the device state is already in DEVICE_STATE_BAD_EVENT, should you just return instead of resetting the exit state timer:\n\n\npublic synchronized void refreshDeviceState(int sipCode, String reason) {\n    int deviceState \u003d getDeviceState(sipCode);\n    if (deviceState \u003d\u003d mDeviceState) {\n        Log.d(..., \"refreshDeviceSate: device already in this state, ignoring. State: \" + deviceState);\n        return;\n    } else {\n        mDeviceState \u003d getDeviceState(sipCode);\n    }\n...",
+      "range": {
+        "startLine": 129,
+        "startChar": 8,
+        "endLine": 129,
+        "endChar": 47
+      },
+      "revId": "ebfde0ce923f0f3f174f47c18e60a2fa66892bf0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dbaa1a7_1e146b46",
+        "filename": "src/java/com/android/ims/rcs/uce/DeviceState.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-29T18:41:32Z",
+      "side": 1,
+      "message": "There seems to be a per-carrier difference here... Other carriers do not use the non-rcs caps timer and instead expect the PUBLISH to retry based on the contents of the retry-After header value (or if there is none, retry based on publish refresh interval (~20 min)).\n\nDo you think a carrier config here would be better for switching between these methods on a per carrier basis?",
+      "range": {
+        "startLine": 138,
+        "startChar": 12,
+        "endLine": 138,
+        "endChar": 31
+      },
+      "revId": "ebfde0ce923f0f3f174f47c18e60a2fa66892bf0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2dfcf08_cb5af66f",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-29T18:41:32Z",
+      "side": 1,
+      "message": "Looking at the old version of the code, Wasn\u0027t there potentially a retry-after in the forbidden case? Why is this being hardcoded to 0? Is it set non-zero elsewhere?",
+      "range": {
+        "startLine": 575,
+        "startChar": 33,
+        "endLine": 575,
+        "endChar": 35
+      },
+      "revId": "ebfde0ce923f0f3f174f47c18e60a2fa66892bf0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
