@@ -22,6 +22,7 @@ import android.os.RemoteException;
 import android.telephony.ims.RcsContactUceCapability;
 import android.telephony.ims.aidl.IRcsUceControllerCallback;
 
+import com.android.ims.rcs.uce.DeviceState;
 import com.android.ims.rcs.uce.request.UceRequestManager.RequestManagerCallback;
 import com.android.internal.annotations.VisibleForTesting;
 
