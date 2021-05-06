@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f76ff971_418992af",
+        "filename": "src/java/com/android/ims/rcs/uce/DeviceState.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-05-06T11:32:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a333d13_8834df83",
+      "range": {
+        "startLine": 129,
+        "startChar": 8,
+        "endLine": 129,
+        "endChar": 47
+      },
+      "revId": "ebfde0ce923f0f3f174f47c18e60a2fa66892bf0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6dbaa1a7_1e146b46",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8124787_9e631a5f",
+        "filename": "src/java/com/android/ims/rcs/uce/DeviceState.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-05-06T11:32:46Z",
+      "side": 1,
+      "message": "Done. I add a carrier config \"KEY_RCS_REQUEST_FORBIDDEN_BY_SIP_489_BOOL\" to determine whether the SIP 489 should be handled.",
+      "parentUuid": "6dbaa1a7_1e146b46",
+      "range": {
+        "startLine": 138,
+        "startChar": 12,
+        "endLine": 138,
+        "endChar": 31
+      },
+      "revId": "ebfde0ce923f0f3f174f47c18e60a2fa66892bf0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2dfcf08_cb5af66f",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-04-29T18:41:32Z",
       "side": 1,
       "message": "Looking at the old version of the code, Wasn\u0027t there potentially a retry-after in the forbidden case? Why is this being hardcoded to 0? Is it set non-zero elsewhere?",
+      "range": {
+        "startLine": 575,
+        "startChar": 33,
+        "endLine": 575,
+        "endChar": 35
+      },
+      "revId": "ebfde0ce923f0f3f174f47c18e60a2fa66892bf0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c3373df_5ea07a44",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-05-06T11:32:46Z",
+      "side": 1,
+      "message": "There is another new added config to determine the retry time for sip 489",
+      "parentUuid": "b2dfcf08_cb5af66f",
       "range": {
         "startLine": 575,
         "startChar": 33,

@@ -22,6 +22,30 @@
       },
       "revId": "9ae240362b214d4e7d36e78937cf84818c45117e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b86bc85e_b10569b1",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-05-06T11:32:46Z",
+      "side": 0,
+      "message": "The retry after logic is in the new added class UceDeviceState.",
+      "parentUuid": "097fd3fd_9b1f24e1",
+      "range": {
+        "startLine": 762,
+        "startChar": 21,
+        "endLine": 762,
+        "endChar": 96
+      },
+      "revId": "9ae240362b214d4e7d36e78937cf84818c45117e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
