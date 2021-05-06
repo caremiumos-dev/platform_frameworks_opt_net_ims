@@ -1,0 +1,99 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000010532449",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1688249?revision\u003d6",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "d00a2938_d5a11c5e",
+        "filename": "src/java/com/android/ims/rcs/uce/UceDeviceState.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-05-06T08:24:31Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 102
+      },
+      "revId": "db39c271013084410685b62cc3221793323cffcf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000010532451",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1688249?revision\u003d6",
+      "fixSuggestions": [
+        {
+          "fixId": "81841eb0_69c8cbe7",
+          "description": "Change to \"src/java/com/android/ims/rcs/uce/UceDeviceState.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/ims/rcs/uce/UceDeviceState.java",
+              "range": {
+                "startLine": 341,
+                "startChar": 31,
+                "endLine": 341,
+                "endChar": 41
+              },
+              "replacement": "information"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "ba93a40b_785e9339",
+        "filename": "src/java/com/android/ims/rcs/uce/UceDeviceState.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-05-06T08:24:31Z",
+      "side": 1,
+      "message": "Common typo found: \"informtion\" -- should it be \"information\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027No-Typo-Check: \u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 341,
+        "startChar": 31,
+        "endLine": 341,
+        "endChar": 41
+      },
+      "revId": "db39c271013084410685b62cc3221793323cffcf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000010532449",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1688249?revision\u003d6",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "15dc5e69_92287cb9",
+        "filename": "src/java/com/android/ims/rcs/uce/util/UceUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-05-06T08:24:31Z",
+      "side": 1,
+      "message": "Wrong casing for \"sSharedPreDeviceState\". static final variables should be ALL_UPPERCASE.",
+      "range": {
+        "startLine": 42,
+        "startChar": 12,
+        "endLine": 42,
+        "endChar": 72
+      },
+      "revId": "db39c271013084410685b62cc3221793323cffcf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
