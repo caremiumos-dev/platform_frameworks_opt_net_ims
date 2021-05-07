@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ab45a21_2403df93",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishRequestResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-05-07T16:46:07Z",
+      "side": 0,
+      "message": "I can see that retry mechanisms for network response errors would be handled by the UCE stack on the modem, but for things like COMMAND_CODE_SERVICE_UNAVAILABLE or COMMAND_CODE_REQUEST_TIMEOUT, we may still need a framework retry trigger, since these are command errors from the modem UCE stack itself. Any reason why we need to remove these as well as the network responses?",
+      "range": {
+        "startLine": 180,
+        "startChar": 17,
+        "endLine": 180,
+        "endChar": 46
+      },
+      "revId": "8f9d048e15efb5c86da8fad71d43788b47ecbdc1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
