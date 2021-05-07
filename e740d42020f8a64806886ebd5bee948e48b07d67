@@ -22,6 +22,30 @@
       },
       "revId": "e740d42020f8a64806886ebd5bee948e48b07d67",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a89f0eb5_910e0675",
+        "filename": "src/java/com/android/ims/rcs/uce/UceDeviceState.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-05-07T01:41:26Z",
+      "side": 1,
+      "message": "This method is for the callback \"CapabilitiesCallback#onError(int errorCode, long retryIntervalMillis)\"\n\nhttps://source.corp.google.com/android/frameworks/base/telephony/java/android/telephony/ims/RcsUceAdapter.java;l\u003d447\"\n\nWhen applications request contact capabilities and the device is in the 489 BAD EVENT state, the UCE framework will trigger this onError callback and fills the parameter retryIntervalMillis.\n\nThe method \"setupRequestRetryTime\" is to setup the retryIntervalMillis for the onError callback.\n\nThe timer to exit 489 state is setup in the method UceDeviceState#setupExitStateTimer",
+      "parentUuid": "26f00eef_8de30174",
+      "range": {
+        "startLine": 302,
+        "startChar": 17,
+        "endLine": 302,
+        "endChar": 38
+      },
+      "revId": "e740d42020f8a64806886ebd5bee948e48b07d67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
