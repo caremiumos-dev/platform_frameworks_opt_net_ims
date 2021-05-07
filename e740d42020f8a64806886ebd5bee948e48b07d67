@@ -46,6 +46,30 @@
       },
       "revId": "e740d42020f8a64806886ebd5bee948e48b07d67",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4069277_92613f21",
+        "filename": "src/java/com/android/ims/rcs/uce/UceDeviceState.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-05-07T19:17:27Z",
+      "side": 1,
+      "message": "Okay - we can discuss this more in chat - i would like to get this change in as soon as possible so we can test",
+      "parentUuid": "a89f0eb5_910e0675",
+      "range": {
+        "startLine": 302,
+        "startChar": 17,
+        "endLine": 302,
+        "endChar": 38
+      },
+      "revId": "e740d42020f8a64806886ebd5bee948e48b07d67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
