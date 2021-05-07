@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26f00eef_8de30174",
+        "filename": "src/java/com/android/ims/rcs/uce/UceDeviceState.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-05-07T00:27:29Z",
+      "side": 1,
+      "message": "Is this the 20 minute PUBLISH refresh timer? I believe that this should not be active during the 489 bad event timer. The only time PUBLISH should be retried is either when the device is turned on, out of airplane mode (triggered by modem) or we detect that the 489 timer has elapsed and we should remove the block and try a PUBLISH then.",
+      "range": {
+        "startLine": 302,
+        "startChar": 17,
+        "endLine": 302,
+        "endChar": 38
+      },
+      "revId": "e740d42020f8a64806886ebd5bee948e48b07d67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
