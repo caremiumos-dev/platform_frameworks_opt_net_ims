@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a179f455_ee9affba",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-05-11T20:21:01Z",
+      "side": 1,
+      "message": "This may be a little bit of overkill - it looks like the only potential issue here would be the PublishController because it is the only one that sends a message to the handler to destroy...\n\nI think you should be able to just queue all messages as you were doing before and then call mLooper.quitSafely, which will process all pending messages before quitting. For extra safety, you could also drain all pending messages in mPublishController and then queue the destroy message.",
+      "range": {
+        "startLine": 422,
+        "startChar": 30,
+        "endLine": 422,
+        "endChar": 47
+      },
+      "revId": "bb0dd4bf81debd4200007ffa9b566ad689d90c32",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
