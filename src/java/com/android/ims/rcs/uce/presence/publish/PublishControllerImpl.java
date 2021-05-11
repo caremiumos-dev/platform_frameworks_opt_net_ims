@@ -196,6 +196,15 @@ public class PublishControllerImpl implements PublishController {
     }
 
     @Override
+    public boolean isDestroyed() {
+        if (mIsDestroyedFlag && mDeviceCapListener.isDestroyed()
+                && mPublishProcessor.isDestroyed()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void onCarrierConfigChanged() {
         logi("onCarrierConfigChanged");
         mPublishHandler.sendCarrierConfigChangedMsg();
@@ -725,6 +734,7 @@ public class PublishControllerImpl implements PublishController {
     }
 
     private void handleDestroyedMessage() {
+        logi("handleDestroyedMessage");
         mIsDestroyedFlag = true;
         mDeviceCapabilityInfo.updatePresenceCapable(false);
         unregisterRcsAvailabilityChanged();
@@ -734,6 +744,9 @@ public class PublishControllerImpl implements PublishController {
         synchronized (mPublishStateLock) {
             clearPublishStateCallbacks();
         }
+
+        // Notify the UceController that the PublishController has completed the destruction process
+        mUceCtrlCallback.notifyDestructionCompleted();
     }
 
     /*

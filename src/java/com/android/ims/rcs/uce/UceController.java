@@ -125,6 +125,8 @@ public class UceController {
          */
         void refreshCapabilities(@NonNull List<Uri> contactNumbers,
                 @NonNull IRcsUceControllerCallback callback) throws RemoteException;
+
+        void notifyDestructionCompleted();
     }
 
     /**
@@ -159,12 +161,14 @@ public class UceController {
         /**
          * @return an {@link SubscribeController} associated with the subscription id specified.
          */
-        SubscribeController createSubscribeController(Context context, int subId);
+        SubscribeController createSubscribeController(Context context, int subId,
+                UceControllerCallback c);
 
         /**
          * @return an {@link OptionsController} associated with the subscription id specified.
          */
-        OptionsController createOptionsController(Context context, int subId);
+        OptionsController createOptionsController(Context context, int subId,
+                UceControllerCallback c);
     }
 
     private ControllerFactory mControllerFactory = new ControllerFactory() {
@@ -181,13 +185,15 @@ public class UceController {
         }
 
         @Override
-        public SubscribeController createSubscribeController(Context context, int subId) {
-            return new SubscribeControllerImpl(context, subId);
+        public SubscribeController createSubscribeController(Context context, int subId,
+                UceControllerCallback c) {
+            return new SubscribeControllerImpl(context, subId, c);
         }
 
         @Override
-        public OptionsController createOptionsController(Context context, int subId) {
-            return new OptionsControllerImpl(context, subId);
+        public OptionsController createOptionsController(Context context, int subId,
+                UceControllerCallback c) {
+            return new OptionsControllerImpl(context, subId, c);
         }
     };
 
@@ -331,8 +337,10 @@ public class UceController {
                 mLooper);
         mPublishController = mControllerFactory.createPublishController(mContext, mSubId,
                 mCtrlCallback, mLooper);
-        mSubscribeController = mControllerFactory.createSubscribeController(mContext, mSubId);
-        mOptionsController = mControllerFactory.createOptionsController(mContext, mSubId);
+        mSubscribeController = mControllerFactory.createSubscribeController(mContext, mSubId,
+                mCtrlCallback);
+        mOptionsController = mControllerFactory.createOptionsController(mContext, mSubId,
+                mCtrlCallback);
     }
 
     private void initRequestManager() {
@@ -406,13 +414,29 @@ public class UceController {
         mPublishController.onDestroy();
         mSubscribeController.onDestroy();
         mOptionsController.onDestroy();
-        mLooper.quit();
+    }
+
+    /**
+     * Check and quit the looper if all the controllers are destroyed.
+     */
+    private synchronized void checkToQuitLooper() {
+        boolean isDestroyed = mRequestManager.isDestroyed();
+        isDestroyed &= mEabController.isDestroyed();
+        isDestroyed &= mPublishController.isDestroyed();
+        isDestroyed &= mSubscribeController.isDestroyed();
+        isDestroyed &= mOptionsController.isDestroyed();
+
+        logi("checkToQuitLooper: All components are destroyed=" + isDestroyed);
+        if (isDestroyed) {
+            mLooper.quit();
+        }
     }
 
     /**
      * Notify all associated classes that the carrier configuration has changed for the subId.
      */
     public void onCarrierConfigChanged() {
+        logi("onCarrierConfigChanged");
         mEabController.onCarrierConfigChanged();
         mPublishController.onCarrierConfigChanged();
         mSubscribeController.onCarrierConfigChanged();
@@ -432,7 +456,11 @@ public class UceController {
             Uri contactUri = (Uri) args.arg1;
             List<String> remoteCapabilities = (List<String>) args.arg2;
             IOptionsRequestCallback callback = (IOptionsRequestCallback) args.arg3;
-            retrieveOptionsCapabilitiesForRemote(contactUri, remoteCapabilities, callback);
+            try {
+                retrieveOptionsCapabilitiesForRemote(contactUri, remoteCapabilities, callback);
+            } catch (RemoteException e) {
+                Log.w(LOG_TAG, "handleCachedCapabilityEvent: " + e);
+            }
         });
         mCachedCapabilityEvent.clear();
     }
@@ -493,6 +521,11 @@ public class UceController {
             logd("refreshCapabilities: " + contactNumbers.size());
             UceController.this.requestCapabilitiesInternal(contactNumbers, true, callback);
         }
+
+        @Override
+        public void notifyDestructionCompleted() {
+            UceController.this.checkToQuitLooper();
+        }
     };
 
     @VisibleForTesting
@@ -536,7 +569,11 @@ public class UceController {
                                 remoteCapabilities, cb);
                         return;
                     }
-                    retrieveOptionsCapabilitiesForRemote(contactUri, remoteCapabilities, cb);
+                    try {
+                        retrieveOptionsCapabilitiesForRemote(contactUri, remoteCapabilities, cb);
+                    } catch (RemoteException e) {
+                        Log.w(LOG_TAG, "onRemoteCapabilityRequest: " + e);
+                    }
                 }
             };
 
@@ -648,7 +685,8 @@ public class UceController {
      * capabilities to the remote side.
      */
     public void retrieveOptionsCapabilitiesForRemote(@NonNull Uri contactUri,
-            @NonNull List<String> remoteCapabilities, @NonNull IOptionsRequestCallback c) {
+            @NonNull List<String> remoteCapabilities, @NonNull IOptionsRequestCallback c)
+            throws RemoteException {
         logi("retrieveOptionsCapabilitiesForRemote");
         mRequestManager.retrieveCapabilitiesForRemote(contactUri, remoteCapabilities, c);
     }

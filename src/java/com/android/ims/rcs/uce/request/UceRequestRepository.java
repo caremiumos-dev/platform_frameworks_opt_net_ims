@@ -50,6 +50,13 @@ public class UceRequestRepository {
     }
 
     /**
+     * @return true if the RequestRepository is destroyed.
+     */
+    public synchronized boolean isDestroyed() {
+        return mDestroyed;
+    }
+
+    /**
      * Add new UceRequestCoordinator and notify the RequestDispatcher to check whether the given
      * requests can be executed or not.
      */

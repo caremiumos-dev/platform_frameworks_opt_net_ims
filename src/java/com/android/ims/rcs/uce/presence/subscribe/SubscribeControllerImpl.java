@@ -24,6 +24,7 @@ import android.telephony.ims.stub.RcsCapabilityExchangeImplBase;
 import android.util.Log;
 
 import com.android.ims.RcsFeatureManager;
+import com.android.ims.rcs.uce.UceController.UceControllerCallback;
 import com.android.ims.rcs.uce.util.UceUtils;
 
 import java.util.List;
@@ -37,12 +38,14 @@ public class SubscribeControllerImpl implements SubscribeController {
 
     private final int mSubId;
     private final Context mContext;
+    private final UceControllerCallback mUceCtrlCallback;
     private volatile boolean mIsDestroyedFlag;
     private volatile RcsFeatureManager mRcsFeatureManager;
 
-    public SubscribeControllerImpl(Context context, int subId) {
+    public SubscribeControllerImpl(Context context, int subId, UceControllerCallback c) {
         mSubId = subId;
         mContext = context;
+        mUceCtrlCallback = c;
     }
 
     @Override
@@ -58,6 +61,13 @@ public class SubscribeControllerImpl implements SubscribeController {
     @Override
     public void onDestroy() {
         mIsDestroyedFlag = true;
+        mRcsFeatureManager = null;
+        mUceCtrlCallback.notifyDestructionCompleted();
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return (mIsDestroyedFlag) ? true : false;
     }
 
     @Override

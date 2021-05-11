@@ -38,6 +38,11 @@ public interface ControllerBase {
     void onDestroy();
 
     /**
+     * @return true if the controller instance is destroyed.
+     */
+    boolean isDestroyed();
+
+    /**
      * Notify the controller that the Carrier Config has changed.
      */
     void onCarrierConfigChanged();

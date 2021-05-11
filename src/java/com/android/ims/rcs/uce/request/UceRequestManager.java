@@ -37,6 +37,7 @@ import com.android.ims.rcs.uce.options.OptionsController;
 import com.android.ims.rcs.uce.presence.subscribe.SubscribeController;
 import com.android.ims.rcs.uce.request.UceRequest.UceRequestType;
 import com.android.ims.rcs.uce.request.UceRequestCoordinator.UceRequestUpdate;
+import com.android.ims.rcs.uce.util.NetworkSipCode;
 import com.android.ims.rcs.uce.util.UceUtils;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.os.SomeArgs;
@@ -383,6 +384,16 @@ public class UceRequestManager {
     }
 
     /**
+     * @return true if the UceRequestManager instance is destroyed.
+     */
+    public boolean isDestroyed() {
+        if(mIsDestroyed && mRequestRepository.isDestroyed()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Send a new capability request. It is called by UceController.
      */
     public void sendCapabilityRequest(List<Uri> uriList, boolean skipFromCache,
@@ -516,7 +527,13 @@ public class UceRequestManager {
      * capabilities to the remote side.
      */
     public void retrieveCapabilitiesForRemote(Uri contactUri, List<String> remoteCapabilities,
-            IOptionsRequestCallback requestCallback) {
+            IOptionsRequestCallback requestCallback) throws RemoteException {
+        if (mIsDestroyed) {
+            requestCallback.respondToCapabilityRequestWithError(
+                    NetworkSipCode.SIP_CODE_SERVICE_UNAVAILABLE,
+                    NetworkSipCode.SIP_SERVICE_UNAVAILABLE);
+            return;
+        }
         RemoteOptionsRequest request = new RemoteOptionsRequest(mSubId, mRequestMgrCallback);
         request.setContactUri(Collections.singletonList(contactUri));
         request.setRemoteFeatureTags(remoteCapabilities);
@@ -528,10 +545,10 @@ public class UceRequestManager {
         }
 
         // Create the RemoteOptionsCoordinator instance
-        RemoteOptionsCoordinator.Builder CoordBuilder = new RemoteOptionsCoordinator.Builder(
+        RemoteOptionsCoordinator.Builder coordBuilder = new RemoteOptionsCoordinator.Builder(
                 mSubId, Collections.singletonList(request), mRequestMgrCallback);
-        CoordBuilder.setOptionsRequestCallback(requestCallback);
-        RemoteOptionsCoordinator requestCoordinator = CoordBuilder.build();
+        coordBuilder.setOptionsRequestCallback(requestCallback);
+        RemoteOptionsCoordinator requestCoordinator = coordBuilder.build();
 
         StringBuilder builder = new StringBuilder("retrieveCapabilitiesForRemote: ");
         builder.append("requestCoordinatorId ").append(requestCoordinator.getCoordinatorId())

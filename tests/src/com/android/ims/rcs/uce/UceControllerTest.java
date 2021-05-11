@@ -81,9 +81,9 @@ public class UceControllerTest extends ImsTestBase {
         doReturn(mPublishController).when(mControllerFactory).createPublishController(any(),
                 eq(mSubId), any(), any());
         doReturn(mSubscribeController).when(mControllerFactory).createSubscribeController(any(),
-                eq(mSubId));
+                eq(mSubId), any());
         doReturn(mOptionsController).when(mControllerFactory).createOptionsController(any(),
-                eq(mSubId));
+                eq(mSubId), any());
         doReturn(mTaskManager).when(mTaskManagerFactory).createRequestManager(any(), eq(mSubId),
                 any(), any());
         doReturn(mDeviceStateResult).when(mDeviceState).getCurrentState();

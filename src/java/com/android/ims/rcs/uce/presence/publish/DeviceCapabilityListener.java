@@ -243,6 +243,10 @@ public class DeviceCapabilityListener {
         }
     }
 
+    public boolean isDestroyed() {
+        return mIsDestroyed;
+    }
+
     /*
      * Register receivers to listen to the data changes.
      */

@@ -427,6 +427,15 @@ public final class EabBulkCapabilityUpdater {
         unRegisterCarrierConfigChanged();
     }
 
+    public boolean isDestroyed() {
+        if (!mIsContactProviderListenerRegistered &&
+                !mIsEabSettingListenerRegistered &&
+                !mIsCarrierConfigListenerRegistered) {
+            return true;
+        }
+        return false;
+    }
+
     private void registerContactProviderListener() {
         Log.d(TAG, "registerContactProviderListener");
         mIsContactProviderListenerRegistered = true;

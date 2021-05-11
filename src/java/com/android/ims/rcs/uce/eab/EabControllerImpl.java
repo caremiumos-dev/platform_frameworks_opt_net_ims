@@ -111,6 +111,15 @@ public class EabControllerImpl implements EabController {
         Log.d(TAG, "onDestroy");
         mIsSetDestroyedFlag = true;
         mEabBulkCapabilityUpdater.onDestroy();
+        mUceControllerCallback.notifyDestructionCompleted();
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        if (mIsSetDestroyedFlag && mEabBulkCapabilityUpdater.isDestroyed()) {
+            return true;
+        }
+        return false;
     }
 
     @Override

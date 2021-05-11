@@ -106,6 +106,10 @@ public class PublishProcessor {
         mIsDestroyed = true;
     }
 
+    public boolean isDestroyed() {
+        return mIsDestroyed;
+    }
+
     /**
      * Execute the publish request. This method is called by the handler of the PublishController.
      * @param triggerType The type of triggering the publish request.
