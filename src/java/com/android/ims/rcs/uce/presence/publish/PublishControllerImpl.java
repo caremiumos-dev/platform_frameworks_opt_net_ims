@@ -52,7 +52,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The implementation of PublishController.
@@ -177,28 +176,82 @@ public class PublishControllerImpl implements PublishController {
                 mDeviceCapabilityInfo, mPublishControllerCallback);
     }
 
+    /**
+     * The RcsFeature has been connected to the framework.
+     * <p>
+     * This method is called from the handler in the UceController. It doesn't need to be queued in
+     * the looper again.
+     */
     @Override
     public void onRcsConnected(RcsFeatureManager manager) {
         logd("onRcsConnected");
-        mPublishHandler.sendRcsConnectedMsg(manager);
+        if (mIsDestroyedFlag) return;
+        mRcsFeatureManager = manager;
+        mDeviceCapListener.onRcsConnected();
+        mPublishProcessor.onRcsConnected(manager);
+        registerRcsAvailabilityChanged(manager);
     }
 
+    /**
+     * The framework has lost the binding to the RcsFeature.
+     * <p>
+     * This method is called from the handler in the UceController. It doesn't need to be queued in
+     * the looper again.
+     */
     @Override
     public void onRcsDisconnected() {
         logd("onRcsDisconnected");
-        mPublishHandler.sendRcsDisconnectedMsg();
+        if (mIsDestroyedFlag) return;
+        mRcsFeatureManager = null;
+        onUnpublish();
+        mDeviceCapabilityInfo.updatePresenceCapable(false);
+        mDeviceCapListener.onRcsDisconnected();
+        mPublishProcessor.onRcsDisconnected();
     }
 
+    /**
+     * Notify to destroy this instance.
+     * <p>
+     * This method is called from the handler in the UceController. It doesn't need to be queued in
+     * the looper again.
+     */
     @Override
     public void onDestroy() {
         logi("onDestroy");
-        mPublishHandler.sendDestroyedMsg();
+        mIsDestroyedFlag = true;
+        mDeviceCapabilityInfo.updatePresenceCapable(false);
+        unregisterRcsAvailabilityChanged();
+        mDeviceCapListener.onDestroy();   // It will turn off the listener automatically.
+        mPublishHandler.onDestroy();
+        mPublishProcessor.onDestroy();
+        synchronized (mPublishStateLock) {
+            clearPublishStateCallbacks();
+        }
     }
 
+    /**
+     * Notify that the carrier config has changed.
+     * <p>
+     * This method is called from the handler in the UceController. It doesn't need to be queued in
+     * the looper again.
+     */
     @Override
     public void onCarrierConfigChanged() {
         logi("onCarrierConfigChanged");
-        mPublishHandler.sendCarrierConfigChangedMsg();
+        if (mIsDestroyedFlag) return;
+        String[] newMap = getCarrierServiceDescriptionFeatureTagMap();
+        if (mDeviceCapabilityInfo.updateCapabilityRegistrationTrackerMap(newMap)) {
+            mPublishHandler.sendPublishMessage(
+                    PublishController.PUBLISH_TRIGGER_CARRIER_CONFIG_CHANGED);
+        }
+    }
+
+    private String[] getCarrierServiceDescriptionFeatureTagMap() {
+        CarrierConfigManager manager = mContext.getSystemService(CarrierConfigManager.class);
+        PersistableBundle bundle = manager != null ? manager.getConfigForSubId(mSubId) :
+                CarrierConfigManager.getDefaultConfig();
+        return bundle.getStringArray(CarrierConfigManager.Ims.
+                KEY_PUBLISH_SERVICE_DESC_FEATURE_TAG_MAP_OVERRIDE_STRING_ARRAY);
     }
 
     @Override
@@ -270,18 +323,6 @@ public class PublishControllerImpl implements PublishController {
             if (mIsDestroyedFlag) return;
             mPublishStateCallbacks.unregister(c);
         }
-    }
-
-    @Override
-    public void setupResetDeviceStateTimer(long resetAfterSec) {
-        logd("setupResetDeviceStateTimer: resetAfterSec=" + resetAfterSec);
-        mPublishHandler.sendResetDeviceStateTimerMessage(resetAfterSec);
-    }
-
-    @Override
-    public void clearResetDeviceStateTimer() {
-        logd("clearResetDeviceStateTimer");
-        mPublishHandler.clearResetDeviceStateTimer();
     }
 
     // Clear all the publish state callbacks since the publish controller instance is destroyed.
@@ -377,18 +418,13 @@ public class PublishControllerImpl implements PublishController {
     }
 
     private static class PublishHandler extends Handler {
-        private static final int MSG_RCS_CONNECTED = 1;
-        private static final int MSG_RCS_DISCONNECTED = 2;
-        private static final int MSG_DESTROYED = 3;
-        private static final int MSG_CARRIER_CONFIG_CHANGED = 4;
-        private static final int MSG_RCS_CAPABILITIES_CHANGED = 5;
-        private static final int MSG_PUBLISH_STATE_CHANGED = 6;
-        private static final int MSG_NOTIFY_CURRENT_PUBLISH_STATE = 7;
-        private static final int MSG_REQUEST_PUBLISH = 8;
-        private static final int MSG_REQUEST_CMD_ERROR = 9;
-        private static final int MSG_REQUEST_NETWORK_RESPONSE = 10;
-        private static final int MSG_REQUEST_CANCELED = 11;
-        private static final int MSG_RESET_DEVICE_STATE = 12;
+        private static final int MSG_RCS_CAPABILITIES_CHANGED = 1;
+        private static final int MSG_PUBLISH_STATE_CHANGED = 2;
+        private static final int MSG_NOTIFY_CURRENT_PUBLISH_STATE = 3;
+        private static final int MSG_REQUEST_PUBLISH = 4;
+        private static final int MSG_REQUEST_CMD_ERROR = 5;
+        private static final int MSG_REQUEST_NETWORK_RESPONSE = 6;
+        private static final int MSG_REQUEST_CANCELED = 7;
 
         private final WeakReference<PublishControllerImpl> mPublishControllerRef;
 
@@ -406,25 +442,6 @@ public class PublishControllerImpl implements PublishController {
             if (publishCtrl.mIsDestroyedFlag) return;
             publishCtrl.logd("handleMessage: " + EVENT_DESCRIPTION.get(message.what));
             switch (message.what) {
-                case MSG_RCS_CONNECTED: {
-                    SomeArgs args = (SomeArgs) message.obj;
-                    RcsFeatureManager manager = (RcsFeatureManager) args.arg1;
-                    args.recycle();
-                    publishCtrl.handleRcsConnectedMessage(manager);
-                    break;
-                }
-                case MSG_RCS_DISCONNECTED:
-                    publishCtrl.handleRcsDisconnectedMessage();
-                    break;
-
-                case MSG_DESTROYED:
-                    publishCtrl.handleDestroyedMessage();
-                    break;
-
-                case MSG_CARRIER_CONFIG_CHANGED:
-                    publishCtrl.handleCarrierConfigChangedMessage();
-                    break;
-
                 case MSG_RCS_CAPABILITIES_CHANGED:
                     int RcsCapabilities = message.arg1;
                     publishCtrl.handleRcsCapabilitiesChangedMessage(RcsCapabilities);
@@ -464,11 +481,8 @@ public class PublishControllerImpl implements PublishController {
                     long taskId = (Long) message.obj;
                     publishCtrl.handleRequestCanceledMessage(taskId);
                     break;
-
-                case MSG_RESET_DEVICE_STATE:
-                    publishCtrl.handleResetDeviceStateMessage();
-                    break;
             }
+            publishCtrl.logd("handleMessage: " + EVENT_DESCRIPTION.get(message.what) + " finish");
         }
 
         /**
@@ -476,49 +490,6 @@ public class PublishControllerImpl implements PublishController {
          */
         public void onDestroy() {
             removeCallbacksAndMessages(null);
-        }
-
-        public void sendRcsConnectedMsg(RcsFeatureManager manager) {
-            PublishControllerImpl publishCtrl = mPublishControllerRef.get();
-            if (publishCtrl == null) return;
-            if (publishCtrl.mIsDestroyedFlag) return;
-
-            SomeArgs args = SomeArgs.obtain();
-            args.arg1 = manager;
-            Message message = obtainMessage();
-            message.what = MSG_RCS_CONNECTED;
-            message.obj = args;
-            sendMessage(message);
-        }
-
-        public void sendRcsDisconnectedMsg() {
-            PublishControllerImpl publishCtrl = mPublishControllerRef.get();
-            if (publishCtrl == null) return;
-            if (publishCtrl.mIsDestroyedFlag) return;
-
-            Message message = obtainMessage();
-            message.what = MSG_RCS_DISCONNECTED;
-            sendMessage(message);
-        }
-
-        public void sendDestroyedMsg() {
-            PublishControllerImpl publishCtrl = mPublishControllerRef.get();
-            if (publishCtrl == null) return;
-            if (publishCtrl.mIsDestroyedFlag) return;
-
-            Message message = obtainMessage();
-            message.what = MSG_DESTROYED;
-            sendMessage(message);
-        }
-
-        public void sendCarrierConfigChangedMsg() {
-            PublishControllerImpl publishCtrl = mPublishControllerRef.get();
-            if (publishCtrl == null) return;
-            if (publishCtrl.mIsDestroyedFlag) return;
-
-            Message message = obtainMessage();
-            message.what = MSG_CARRIER_CONFIG_CHANGED;
-            sendMessage(message);
         }
 
         public void sendRcsCapabilitiesStatusChangedMsg(@RcsImsCapabilityFlag int capabilities) {
@@ -635,34 +606,8 @@ public class PublishControllerImpl implements PublishController {
             removeMessages(MSG_REQUEST_CANCELED);
         }
 
-        public void sendResetDeviceStateTimerMessage(long resetAfterSec) {
-            PublishControllerImpl publishCtrl = mPublishControllerRef.get();
-            if (publishCtrl == null) {
-                return;
-            }
-            if (publishCtrl.mIsDestroyedFlag) return;
-            // Remove old timer and setup the new timer.
-            removeMessages(MSG_RESET_DEVICE_STATE);
-            Message message = obtainMessage();
-            message.what = MSG_RESET_DEVICE_STATE;
-            sendMessageDelayed(message, TimeUnit.SECONDS.toMillis(resetAfterSec));
-        }
-
-        public void clearResetDeviceStateTimer() {
-            PublishControllerImpl publishCtrl = mPublishControllerRef.get();
-            if (publishCtrl == null) {
-                return;
-            }
-            if (publishCtrl.mIsDestroyedFlag) return;
-            removeMessages(MSG_RESET_DEVICE_STATE);
-        }
-
         private static Map<Integer, String> EVENT_DESCRIPTION = new HashMap<>();
         static {
-            EVENT_DESCRIPTION.put(MSG_RCS_CONNECTED, "RCS_CONNECTED");
-            EVENT_DESCRIPTION.put(MSG_RCS_DISCONNECTED, "RCS_DISCONNECTED");
-            EVENT_DESCRIPTION.put(MSG_DESTROYED, "DESTROYED");
-            EVENT_DESCRIPTION.put(MSG_CARRIER_CONFIG_CHANGED, "CARRIER_CONFIG_CHANGED");
             EVENT_DESCRIPTION.put(MSG_RCS_CAPABILITIES_CHANGED, "RCS_CAPABILITIES_CHANGED");
             EVENT_DESCRIPTION.put(MSG_PUBLISH_STATE_CHANGED, "PUBLISH_STATE_CHANGED");
             EVENT_DESCRIPTION.put(MSG_NOTIFY_CURRENT_PUBLISH_STATE, "NOTIFY_PUBLISH_STATE");
@@ -670,7 +615,6 @@ public class PublishControllerImpl implements PublishController {
             EVENT_DESCRIPTION.put(MSG_REQUEST_CMD_ERROR, "REQUEST_CMD_ERROR");
             EVENT_DESCRIPTION.put(MSG_REQUEST_NETWORK_RESPONSE, "REQUEST_NETWORK_RESPONSE");
             EVENT_DESCRIPTION.put(MSG_REQUEST_CANCELED, "REQUEST_CANCELED");
-            EVENT_DESCRIPTION.put(MSG_RESET_DEVICE_STATE, "RESET_DEVICE_STATE");
         }
     }
 
@@ -707,35 +651,6 @@ public class PublishControllerImpl implements PublishController {
         return true;
     }
 
-    private void handleRcsConnectedMessage(RcsFeatureManager manager) {
-        if (mIsDestroyedFlag) return;
-        mRcsFeatureManager = manager;
-        mDeviceCapListener.onRcsConnected();
-        mPublishProcessor.onRcsConnected(manager);
-        registerRcsAvailabilityChanged(manager);
-    }
-
-    private void handleRcsDisconnectedMessage() {
-        if (mIsDestroyedFlag) return;
-        mRcsFeatureManager = null;
-        onUnpublish();
-        mDeviceCapabilityInfo.updatePresenceCapable(false);
-        mDeviceCapListener.onRcsDisconnected();
-        mPublishProcessor.onRcsDisconnected();
-    }
-
-    private void handleDestroyedMessage() {
-        mIsDestroyedFlag = true;
-        mDeviceCapabilityInfo.updatePresenceCapable(false);
-        unregisterRcsAvailabilityChanged();
-        mDeviceCapListener.onDestroy();   // It will turn off the listener automatically.
-        mPublishHandler.onDestroy();
-        mPublishProcessor.onDestroy();
-        synchronized (mPublishStateLock) {
-            clearPublishStateCallbacks();
-        }
-    }
-
     /*
      * Register the availability callback to receive the RCS capabilities change. This method is
      * called when the RCS is connected.
@@ -760,23 +675,6 @@ public class PublishControllerImpl implements PublishController {
         } catch (Exception e) {
             // Do not handle the exception
         }
-    }
-
-    private void handleCarrierConfigChangedMessage() {
-        if (mIsDestroyedFlag) return;
-        String[] newMap = getCarrierServiceDescriptionFeatureTagMap();
-        if (mDeviceCapabilityInfo.updateCapabilityRegistrationTrackerMap(newMap)) {
-            mPublishHandler.sendPublishMessage(
-                    PublishController.PUBLISH_TRIGGER_CARRIER_CONFIG_CHANGED);
-        }
-    }
-
-    private String[] getCarrierServiceDescriptionFeatureTagMap() {
-        CarrierConfigManager manager = mContext.getSystemService(CarrierConfigManager.class);
-        PersistableBundle bundle = manager != null ? manager.getConfigForSubId(mSubId) :
-                CarrierConfigManager.getDefaultConfig();
-        return bundle.getStringArray(CarrierConfigManager.Ims.
-                KEY_PUBLISH_SERVICE_DESC_FEATURE_TAG_MAP_OVERRIDE_STRING_ARRAY);
     }
 
     private void handleRcsCapabilitiesChangedMessage(int capabilities) {
@@ -885,11 +783,6 @@ public class PublishControllerImpl implements PublishController {
     private void handleRequestCanceledMessage(long taskId) {
         if (mIsDestroyedFlag) return;
         mPublishProcessor.cancelPublishRequest(taskId);
-    }
-
-    private void handleResetDeviceStateMessage() {
-        if(mIsDestroyedFlag) return;
-        mUceCtrlCallback.resetDeviceState();
     }
 
     @VisibleForTesting

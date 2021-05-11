@@ -20,8 +20,10 @@ import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.Message;
 import android.os.RemoteException;
 import android.telephony.ims.RcsContactUceCapability;
 import android.telephony.ims.RcsContactUceCapability.CapabilityMechanism;
@@ -54,9 +56,13 @@ import com.android.internal.os.SomeArgs;
 import java.io.PrintWriter;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The UceController will manage the RCS UCE requests on a per subscription basis. When it receives
@@ -286,6 +292,9 @@ public class UceController {
     private SubscribeController mSubscribeController;
     private OptionsController mOptionsController;
     private UceRequestManager mRequestManager;
+
+    // The handler to process each request.
+    private UceControllerHandler mHandler;
     // The device state to execute UCE requests.
     private UceDeviceState mDeviceState;
     // The cache of the capability request event triggered by ImsService
@@ -324,6 +333,8 @@ public class UceController {
         HandlerThread handlerThread = new HandlerThread("UceControllerHandlerThread");
         handlerThread.start();
         mLooper = handlerThread.getLooper();
+        // Init the UceController handler
+        mHandler = new UceControllerHandler(this, mLooper);
     }
 
     private void initControllers() {
@@ -348,45 +359,21 @@ public class UceController {
     }
 
     /**
-     * The RcsFeature has been connected to the framework. This method runs on main thread.
+     * The RcsFeature has been connected to the framework. Handle this message in the
+     * UceControllerHandler.
      */
     public void onRcsConnected(RcsFeatureManager manager) {
         logi("onRcsConnected");
-        // Set the RCS is connecting flag
-        mRcsConnectedState = RCS_STATE_CONNECTING;
-
-        // Listen to the capability exchange event which is triggered by the ImsService
-        mRcsFeatureManager = manager;
-        mRcsFeatureManager.addCapabilityEventCallback(mCapabilityEventListener);
-
-        // Notify each controllers that RCS is connected.
-        mEabController.onRcsConnected(manager);
-        mPublishController.onRcsConnected(manager);
-        mSubscribeController.onRcsConnected(manager);
-        mOptionsController.onRcsConnected(manager);
-
-        // Set the RCS is connected flag and check if there is any capability event received during
-        // the connecting process.
-        mRcsConnectedState = RCS_STATE_CONNECTED;
-        handleCachedCapabilityEvent();
+        mHandler.sendRcsConnectedMessage(manager);
     }
 
     /**
-     * The framework has lost the binding to the RcsFeature. This method runs on main thread.
+     * The framework has lost the binding to the RcsFeature. Handler this message in the
+     * UceControllerHandler.
      */
     public void onRcsDisconnected() {
         logi("onRcsDisconnected");
-        mRcsConnectedState = RCS_STATE_DISCONNECTED;
-        // Remove the listener because RCS is disconnected.
-        if (mRcsFeatureManager != null) {
-            mRcsFeatureManager.removeCapabilityEventCallback(mCapabilityEventListener);
-            mRcsFeatureManager = null;
-        }
-        // Notify each controllers that RCS is disconnected.
-        mEabController.onRcsDisconnected();
-        mPublishController.onRcsDisconnected();
-        mSubscribeController.onRcsDisconnected();
-        mOptionsController.onRcsDisconnected();
+        mHandler.sendRcsDisconnectedMessage();
     }
 
     /**
@@ -394,47 +381,15 @@ public class UceController {
      */
     public void onDestroy() {
         logi("onDestroy");
-        mIsDestroyedFlag = true;
-        // Remove the listener because the UceController instance is destroyed.
-        if (mRcsFeatureManager != null) {
-            mRcsFeatureManager.removeCapabilityEventCallback(mCapabilityEventListener);
-            mRcsFeatureManager = null;
-        }
-        // Destroy all the controllers
-        mRequestManager.onDestroy();
-        mEabController.onDestroy();
-        mPublishController.onDestroy();
-        mSubscribeController.onDestroy();
-        mOptionsController.onDestroy();
-        mLooper.quit();
+        mHandler.sendDestroyMessage();
     }
 
     /**
      * Notify all associated classes that the carrier configuration has changed for the subId.
      */
     public void onCarrierConfigChanged() {
-        mEabController.onCarrierConfigChanged();
-        mPublishController.onCarrierConfigChanged();
-        mSubscribeController.onCarrierConfigChanged();
-        mOptionsController.onCarrierConfigChanged();
-    }
-
-    private void handleCachedCapabilityEvent() {
-        Optional<Integer> requestPublishEvent = mCachedCapabilityEvent.getRequestPublishEvent();
-        requestPublishEvent.ifPresent(triggerType ->
-            onRequestPublishCapabilitiesFromService(triggerType));
-
-        Optional<Boolean> unpublishEvent = mCachedCapabilityEvent.getUnpublishEvent();
-        unpublishEvent.ifPresent(unpublish -> onUnpublish());
-
-        Optional<SomeArgs> remoteRequest = mCachedCapabilityEvent.getRemoteCapabilityRequestEvent();
-        remoteRequest.ifPresent(args -> {
-            Uri contactUri = (Uri) args.arg1;
-            List<String> remoteCapabilities = (List<String>) args.arg2;
-            IOptionsRequestCallback callback = (IOptionsRequestCallback) args.arg3;
-            retrieveOptionsCapabilitiesForRemote(contactUri, remoteCapabilities, callback);
-        });
-        mCachedCapabilityEvent.clear();
+        logi("onCarrierConfigChanged");
+        mHandler.sendCarrierConfigChangedMessage();
     }
 
     /*
@@ -479,12 +434,12 @@ public class UceController {
 
         @Override
         public void setupResetDeviceStateTimer(long resetAfterSec) {
-            mPublishController.setupResetDeviceStateTimer(resetAfterSec);
+            mHandler.sendResetDeviceStateTimerMessage(resetAfterSec);
         }
 
         @Override
         public void clearResetDeviceStateTimer() {
-            mPublishController.clearResetDeviceStateTimer();
+            mHandler.clearResetDeviceStateTimer();
         }
 
         @Override
@@ -544,6 +499,10 @@ public class UceController {
      * Request to get the contacts' capabilities. This method will retrieve the capabilities from
      * the cache If the capabilities are out of date, it will trigger another request to get the
      * latest contact's capabilities from the network.
+     * <p>
+     * This capabilities request request will be stored in the RequestRepository. When this request
+     * is allowed to be executed, it will be put to the handler in the UceRequestManager to queue
+     * up.
      */
     public void requestCapabilities(@NonNull List<Uri> uriList,
             @NonNull IRcsUceControllerCallback c) throws RemoteException {
@@ -579,7 +538,7 @@ public class UceController {
             return;
         }
 
-        // Trigger the capabilities request task
+        // Send this capabilities request to the RequestManager.
         logd("requestCapabilities: size=" + uriList.size());
         mRequestManager.sendCapabilityRequest(uriList, skipFromCache, c);
     }
@@ -588,6 +547,10 @@ public class UceController {
      * Request to get the contact's capabilities. It will check the availability cache first. If
      * the capability in the availability cache is expired then it will retrieve the capability
      * from the network.
+     * <p>
+     * This availability request request will be stored in the RequestRepository. When this request
+     * is allowed to be executed, it will be put to the handler in the UceRequestManager to queue
+     * up.
      */
     public void requestAvailability(@NonNull Uri uri, @NonNull IRcsUceControllerCallback c)
             throws RemoteException {
@@ -618,25 +581,26 @@ public class UceController {
             return;
         }
 
-        // Trigger the availability request task
+        // Send this availability request to the RequestManager.
         logd("requestAvailability");
         mRequestManager.sendAvailabilityRequest(uri, c);
     }
 
     /**
      * Publish the device's capabilities. This request is triggered from the ImsService.
+     * <p>
+     * This publish request will be sent to the handler in the PublishController to queue up.
      */
     public void onRequestPublishCapabilitiesFromService(@StackPublishTriggerType int triggerType) {
         logd("onRequestPublishCapabilitiesFromService: " + triggerType);
-        // Reset the device state when the service triggers to publish the device's capabilities
-        mDeviceState.resetDeviceState();
-        // Send the publish request.
         mPublishController.requestPublishCapabilitiesFromService(triggerType);
     }
 
     /**
      * This method is triggered by the ImsService to notify framework that the device's
      * capabilities has been unpublished from the network.
+     * <p>
+     * This unpublish request will be sent to the handler in the PublishController to queue up.
      */
     public void onUnpublish() {
         logi("onUnpublish");
@@ -646,10 +610,13 @@ public class UceController {
     /**
      * Request publish the device's capabilities. This request is from the ImsService to send the
      * capabilities to the remote side.
+     * <p>
+     * This remote options request will be stored in the RequestRepository. When this request is
+     * allowed to be executed, it will be put to the handler in the UceRequestManager to queue up.
      */
     public void retrieveOptionsCapabilitiesForRemote(@NonNull Uri contactUri,
             @NonNull List<String> remoteCapabilities, @NonNull IOptionsRequestCallback c) {
-        logi("retrieveOptionsCapabilitiesForRemote");
+        logi("retrieveOptionsCapabilitiesForRemote: remoteCaps size=" + remoteCapabilities.size());
         mRequestManager.retrieveCapabilitiesForRemote(contactUri, remoteCapabilities, c);
     }
 
@@ -729,6 +696,217 @@ public class UceController {
         mDeviceState.resetDeviceState();
     }
 
+    private static class UceControllerHandler extends Handler {
+        private static final int MSG_RCS_CONNECTED = 1;
+        private static final int MSG_RCS_DISCONNECTED = 2;
+        private static final int MSG_DESTROY = 3;
+        private static final int MSG_CARRIER_CONFIG_CHANGED = 4;
+        private static final int MSG_RESET_DEVICE_STATE_TIMER = 5;
+
+        private final WeakReference<UceController> mUceControllerRef;
+
+        public UceControllerHandler(UceController uceController, Looper looper) {
+            super(looper);
+            mUceControllerRef = new WeakReference<>(uceController);
+        }
+
+        public void sendRcsConnectedMessage(RcsFeatureManager manager) {
+            UceController uceController = mUceControllerRef.get();
+            if (uceController == null || uceController.mIsDestroyedFlag) {
+                Log.w(LOG_TAG, "sendRcsConnectedMessage: This instance is already destroyed");
+                return;
+            }
+            Message message = obtainMessage();
+            message.what = MSG_RCS_CONNECTED;
+            message.obj = manager;
+            sendMessage(message);
+        }
+
+        public void sendRcsDisconnectedMessage() {
+            UceController uceController = mUceControllerRef.get();
+            if (uceController == null || uceController.mIsDestroyedFlag) {
+                Log.w(LOG_TAG, "sendRcsDisconnectedMessage: This instance is already destroyed");
+                return;
+            }
+            sendEmptyMessage(MSG_RCS_DISCONNECTED);
+        }
+
+        public void sendDestroyMessage() {
+            UceController uceController = mUceControllerRef.get();
+            if (uceController == null || uceController.mIsDestroyedFlag) {
+                Log.w(LOG_TAG, "sendDestroyMessage: This instance is already destroyed");
+                return;
+            }
+            sendEmptyMessage(MSG_DESTROY);
+        }
+
+        public void sendCarrierConfigChangedMessage() {
+            UceController uceController = mUceControllerRef.get();
+            if (uceController == null || uceController.mIsDestroyedFlag) {
+                Log.w(LOG_TAG, "sendCarrierConfigChangedMessage: This instance is destroyed");
+                return;
+            }
+            sendEmptyMessage(MSG_CARRIER_CONFIG_CHANGED);
+        }
+
+        public void sendResetDeviceStateTimerMessage(long resetAfterSec) {
+            UceController uceController = mUceControllerRef.get();
+            if (uceController == null || uceController.mIsDestroyedFlag) {
+                Log.w(LOG_TAG, "sendResetDeviceStateTimerMessage: This instance is destroyed");
+                return;
+            }
+            uceController.logd("sendResetDeviceStateTimerMessage: resetAfterSec=" + resetAfterSec);
+
+            // Remove old timer and setup the new timer.
+            removeMessages(MSG_RESET_DEVICE_STATE_TIMER);
+            Message message = obtainMessage();
+            message.what = MSG_RESET_DEVICE_STATE_TIMER;
+            sendMessageDelayed(message, TimeUnit.SECONDS.toMillis(resetAfterSec));
+        }
+
+        public void clearResetDeviceStateTimer() {
+            UceController uceController = mUceControllerRef.get();
+            if (uceController == null || uceController.mIsDestroyedFlag) {
+                Log.w(LOG_TAG, "clearResetDeviceStateTimer: This instance is already destroyed");
+                return;
+            }
+            uceController.logd("clearResetDeviceStateTimer");
+            removeMessages(MSG_RESET_DEVICE_STATE_TIMER);
+        }
+
+        @Override
+        public void handleMessage(Message message) {
+            UceController uceController = mUceControllerRef.get();
+            if (uceController == null || uceController.mIsDestroyedFlag) {
+                Log.w(LOG_TAG, "handleMessage: This instance is destroyed. msg=" + message.what);
+                return;
+            }
+            uceController.logd("handleMessage: " + EVENT_DESCRIPTION.get(message.what));
+            switch (message.what) {
+                case MSG_RCS_CONNECTED: {
+                    RcsFeatureManager manager = (RcsFeatureManager) message.obj;
+                    uceController.handleRcsConnectedMessage(manager);
+                    break;
+                }
+                case MSG_RCS_DISCONNECTED: {
+                    uceController.handleRcsDisconnectedMessage();
+                    break;
+                }
+                case MSG_DESTROY: {
+                    uceController.handleDestroyMessage();
+                    break;
+                }
+                case MSG_CARRIER_CONFIG_CHANGED: {
+                    uceController.handleCarrierConfigChangedMessage();
+                    break;
+                }
+                case MSG_RESET_DEVICE_STATE_TIMER: {
+                    uceController.handleResetDeviceStateMessage();
+                    break;
+                }
+                default: {
+                    uceController.logw("handleMessage: invalid message " + message.what);
+                    break;
+                }
+            }
+            uceController.logd("handleMessage: " + EVENT_DESCRIPTION.get(message.what) + " finish");
+        }
+
+        private static Map<Integer, String> EVENT_DESCRIPTION = new HashMap<>();
+        static {
+            EVENT_DESCRIPTION.put(MSG_RCS_CONNECTED, "RCS_CONNECTED");
+            EVENT_DESCRIPTION.put(MSG_RCS_DISCONNECTED, "RCS_DISCONNECTED");
+            EVENT_DESCRIPTION.put(MSG_DESTROY, "DESTROY");
+            EVENT_DESCRIPTION.put(MSG_CARRIER_CONFIG_CHANGED, "CARRIER_CONFIG_CHANGED");
+            EVENT_DESCRIPTION.put(MSG_RESET_DEVICE_STATE_TIMER, "RESET_DEVICE_STATE_TIMER");
+        }
+    }
+
+    private void handleRcsConnectedMessage(RcsFeatureManager manager) {
+        logd("handleRcsConnectedMessage");
+        // Set the RCS is connecting flag
+        mRcsConnectedState = RCS_STATE_CONNECTING;
+
+        // Listen to the capability exchange event which is triggered by the ImsService
+        mRcsFeatureManager = manager;
+        mRcsFeatureManager.addCapabilityEventCallback(mCapabilityEventListener);
+
+        // Notify each controllers that RCS is connected.
+        mEabController.onRcsConnected(manager);
+        mPublishController.onRcsConnected(manager);
+        mSubscribeController.onRcsConnected(manager);
+        mOptionsController.onRcsConnected(manager);
+
+        // Set the RCS is connected flag and check if there is any capability event received during
+        // the connecting process.
+        mRcsConnectedState = RCS_STATE_CONNECTED;
+        handleCachedCapabilityEvent();
+    }
+
+    private void handleCachedCapabilityEvent() {
+        Optional<Integer> requestPublishEvent = mCachedCapabilityEvent.getRequestPublishEvent();
+        requestPublishEvent.ifPresent(triggerType ->
+                onRequestPublishCapabilitiesFromService(triggerType));
+
+        Optional<Boolean> unpublishEvent = mCachedCapabilityEvent.getUnpublishEvent();
+        unpublishEvent.ifPresent(unpublish -> onUnpublish());
+
+        Optional<SomeArgs> remoteRequest = mCachedCapabilityEvent.getRemoteCapabilityRequestEvent();
+        remoteRequest.ifPresent(args -> {
+            Uri contactUri = (Uri) args.arg1;
+            List<String> remoteCapabilities = (List<String>) args.arg2;
+            IOptionsRequestCallback callback = (IOptionsRequestCallback) args.arg3;
+            retrieveOptionsCapabilitiesForRemote(contactUri, remoteCapabilities, callback);
+        });
+        mCachedCapabilityEvent.clear();
+    }
+
+    private void handleRcsDisconnectedMessage() {
+        logd("handleRcsDisconnectedMessage");
+        mRcsConnectedState = RCS_STATE_DISCONNECTED;
+        // Remove the listener because RCS is disconnected.
+        if (mRcsFeatureManager != null) {
+            mRcsFeatureManager.removeCapabilityEventCallback(mCapabilityEventListener);
+            mRcsFeatureManager = null;
+        }
+        // Notify each controllers that RCS is disconnected.
+        mEabController.onRcsDisconnected();
+        mPublishController.onRcsDisconnected();
+        mSubscribeController.onRcsDisconnected();
+        mOptionsController.onRcsDisconnected();
+    }
+
+    private void handleDestroyMessage() {
+        logd("handleDestroyMessage");
+        mIsDestroyedFlag = true;
+        // Remove the listener because the UceController instance is destroyed.
+        if (mRcsFeatureManager != null) {
+            mRcsFeatureManager.removeCapabilityEventCallback(mCapabilityEventListener);
+            mRcsFeatureManager = null;
+        }
+        // Destroy all the controllers
+        mRequestManager.onDestroy();
+        mEabController.onDestroy();
+        mPublishController.onDestroy();
+        mSubscribeController.onDestroy();
+        mOptionsController.onDestroy();
+        // Quit the looper safely.
+        mLooper.quitSafely();
+    }
+
+    private void handleCarrierConfigChangedMessage() {
+        logd("handleCarrierConfigChangedMessage");
+        mEabController.onCarrierConfigChanged();
+        mPublishController.onCarrierConfigChanged();
+        mSubscribeController.onCarrierConfigChanged();
+        mOptionsController.onCarrierConfigChanged();
+    }
+
+    private void handleResetDeviceStateMessage() {
+        logd("handleResetDeviceStateMessage");
+        mDeviceState.resetDeviceState();
+    }
+
     /**
      * Get the subscription ID.
      */
@@ -753,6 +931,11 @@ public class UceController {
 
     private boolean isRcsConnected() {
         return mRcsConnectedState == RCS_STATE_CONNECTED;
+    }
+
+    @VisibleForTesting
+    public UceControllerHandler getHandler() {
+        return mHandler;
     }
 
     public void dump(PrintWriter printWriter) {

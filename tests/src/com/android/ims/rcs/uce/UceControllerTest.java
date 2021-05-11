@@ -26,6 +26,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import android.net.Uri;
+import android.os.Handler;
 import android.telephony.ims.RcsUceAdapter;
 import android.telephony.ims.aidl.IOptionsRequestCallback;
 import android.telephony.ims.aidl.IRcsUceControllerCallback;
@@ -98,8 +99,9 @@ public class UceControllerTest extends ImsTestBase {
     @SmallTest
     public void testRcsConnected() throws Exception {
         UceController uceController = createUceController();
-
         uceController.onRcsConnected(mFeatureManager);
+        Handler handler = uceController.getHandler();
+        waitForHandlerAction(handler, 1000);
 
         verify(mEabController).onRcsConnected(mFeatureManager);
         verify(mPublishController).onRcsConnected(mFeatureManager);
@@ -113,8 +115,11 @@ public class UceControllerTest extends ImsTestBase {
     public void testRcsDisconnected() throws Exception {
         UceController uceController = createUceController();
         uceController.onRcsConnected(mFeatureManager);
+        Handler handler = uceController.getHandler();
+        waitForHandlerAction(handler, 1000);
 
         uceController.onRcsDisconnected();
+        waitForHandlerAction(handler, 1000);
 
         verify(mFeatureManager).removeCapabilityEventCallback(any());
         verify(mEabController).onRcsDisconnected();
@@ -127,8 +132,9 @@ public class UceControllerTest extends ImsTestBase {
     @SmallTest
     public void testOnDestroyed() throws Exception {
         UceController uceController = createUceController();
-
         uceController.onDestroy();
+        Handler handler = uceController.getHandler();
+        waitForHandlerAction(handler, 1000);
 
         verify(mTaskManager).onDestroy();
         verify(mEabController).onDestroy();
@@ -142,6 +148,8 @@ public class UceControllerTest extends ImsTestBase {
     public void testRequestCapabilitiesWithRcsDisconnected() throws Exception {
         UceController uceController = createUceController();
         uceController.onRcsDisconnected();
+        Handler handler = uceController.getHandler();
+        waitForHandlerAction(handler, 1000);
 
         List<Uri> uriList = new ArrayList<>();
         uceController.requestCapabilities(uriList, mCapabilitiesCallback);
@@ -153,11 +161,14 @@ public class UceControllerTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testRequestCapabilitiesWithForbidden() throws Exception {
-        UceController uceController = createUceController();
-        uceController.onRcsConnected(mFeatureManager);
         doReturn(true).when(mDeviceStateResult).isRequestForbidden();
         doReturn(Optional.of(RcsUceAdapter.ERROR_FORBIDDEN)).when(mDeviceStateResult)
                 .getErrorCode();
+
+        UceController uceController = createUceController();
+        uceController.onRcsConnected(mFeatureManager);
+        Handler handler = uceController.getHandler();
+        waitForHandlerAction(handler, 1000);
 
         List<Uri> uriList = new ArrayList<>();
         uriList.add(Uri.fromParts("sip", "test", null));
@@ -170,9 +181,12 @@ public class UceControllerTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testRequestCapabilitiesWithRcsConnected() throws Exception {
+        doReturn(false).when(mDeviceStateResult).isRequestForbidden();
+
         UceController uceController = createUceController();
         uceController.onRcsConnected(mFeatureManager);
-        doReturn(false).when(mDeviceStateResult).isRequestForbidden();
+        Handler handler = uceController.getHandler();
+        waitForHandlerAction(handler, 1000);
 
         List<Uri> uriList = new ArrayList<>();
         uriList.add(Uri.fromParts("sip", "test", null));
@@ -186,6 +200,8 @@ public class UceControllerTest extends ImsTestBase {
     public void testRequestAvailabilityWithRcsDisconnected() throws Exception {
         UceController uceController = createUceController();
         uceController.onRcsDisconnected();
+        Handler handler = uceController.getHandler();
+        waitForHandlerAction(handler, 1000);
 
         Uri contact = Uri.fromParts("sip", "test", null);
         uceController.requestAvailability(contact, mCapabilitiesCallback);
@@ -197,11 +213,13 @@ public class UceControllerTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testRequestAvailabilityWithForbidden() throws Exception {
-        UceController uceController = createUceController();
-        uceController.onRcsConnected(mFeatureManager);
         doReturn(true).when(mDeviceStateResult).isRequestForbidden();
         doReturn(Optional.of(RcsUceAdapter.ERROR_FORBIDDEN)).when(mDeviceStateResult)
                 .getErrorCode();
+        UceController uceController = createUceController();
+        uceController.onRcsConnected(mFeatureManager);
+        Handler handler = uceController.getHandler();
+        waitForHandlerAction(handler, 1000);
 
         Uri contact = Uri.fromParts("sip", "test", null);
         uceController.requestAvailability(contact, mCapabilitiesCallback);
@@ -213,9 +231,11 @@ public class UceControllerTest extends ImsTestBase {
     @Test
     @SmallTest
     public void testRequestAvailabilityWithRcsConnected() throws Exception {
+        doReturn(false).when(mDeviceStateResult).isRequestForbidden();
         UceController uceController = createUceController();
         uceController.onRcsConnected(mFeatureManager);
-        doReturn(false).when(mDeviceStateResult).isRequestForbidden();
+        Handler handler = uceController.getHandler();
+        waitForHandlerAction(handler, 1000);
 
         Uri contact = Uri.fromParts("sip", "test", null);
         uceController.requestAvailability(contact, mCapabilitiesCallback);
@@ -226,9 +246,8 @@ public class UceControllerTest extends ImsTestBase {
     @Test
     @SmallTest
     public void TestRequestPublishCapabilitiesFromService() throws Exception {
-        UceController uceController = createUceController();
-
         int triggerType = RcsUceAdapter.CAPABILITY_UPDATE_TRIGGER_MOVE_TO_WLAN;
+        UceController uceController = createUceController();
         uceController.onRequestPublishCapabilitiesFromService(triggerType);
 
         verify(mPublishController).requestPublishCapabilitiesFromService(triggerType);
@@ -238,7 +257,6 @@ public class UceControllerTest extends ImsTestBase {
     @SmallTest
     public void testUnpublish() throws Exception {
         UceController uceController = createUceController();
-
         uceController.onUnpublish();
 
         verify(mPublishController).onUnpublish();
@@ -248,7 +266,6 @@ public class UceControllerTest extends ImsTestBase {
     @SmallTest
     public void testRegisterPublishStateCallback() {
         UceController uceController = createUceController();
-
         uceController.registerPublishStateCallback(any());
 
         verify(mPublishController).registerPublishStateCallback(any());
@@ -258,7 +275,6 @@ public class UceControllerTest extends ImsTestBase {
     @SmallTest
     public void unregisterPublishStateCallback() {
         UceController uceController = createUceController();
-
         uceController.unregisterPublishStateCallback(any());
 
         verify(mPublishController).unregisterPublishStateCallback(any());
@@ -268,7 +284,6 @@ public class UceControllerTest extends ImsTestBase {
     @SmallTest
     public void testGetUcePublishState() {
         UceController uceController = createUceController();
-
         uceController.getUcePublishState();
 
         verify(mPublishController).getUcePublishState();
