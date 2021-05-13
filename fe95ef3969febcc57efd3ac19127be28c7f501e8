@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf641bc1_e7ae504a",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-05-13T01:10:59Z",
+      "side": 1,
+      "message": "Call the mLooper.quitSafely instead mLooper.quit",
+      "parentUuid": "9ab35d32_b16df071",
+      "range": {
+        "startLine": 699,
+        "startChar": 25,
+        "endLine": 699,
+        "endChar": 45
+      },
+      "revId": "fe95ef3969febcc57efd3ac19127be28c7f501e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e388e72_4bb45470",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-05-12T16:54:35Z",
       "side": 1,
       "message": "What is the advantage of using a WeakReference here?",
+      "range": {
+        "startLine": 706,
+        "startChar": 22,
+        "endLine": 706,
+        "endChar": 35
+      },
+      "revId": "fe95ef3969febcc57efd3ac19127be28c7f501e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "004d6b61_5d74e0a3",
+        "filename": "src/java/com/android/ims/rcs/uce/UceController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-05-13T01:10:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e388e72_4bb45470",
       "range": {
         "startLine": 706,
         "startChar": 22,
