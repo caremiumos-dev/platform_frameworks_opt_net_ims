@@ -148,6 +148,7 @@ public class PublishProcessor {
             logw("doPublishInternal: pidfXml is empty");
             return false;
         }
+        logd("doPublishInternal: pidfXMl=" + pidfXml);
 
         // Set the pending request and return if RCS is not connected. When the RCS is connected
         // afterward, it will send a new request if there's a pending request.
