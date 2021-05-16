@@ -25,6 +25,8 @@ import android.util.Log;
 
 import com.android.ims.rcs.uce.util.UceUtils;
 
+import java.util.Arrays;
+
 /**
  * The util class of publishing device's capabilities.
  */
@@ -58,7 +60,21 @@ class PublishUtils {
         String domain = telephonyManager.getIsimDomain();
         String[] impus = telephonyManager.getIsimImpu();
 
+        Log.d(LOG_TAG, "getContactUriFromIsim: domain=" + domain);
+        StringBuilder builder= new StringBuilder();
+        builder.append("getContactUriFromIsim: impus={");
+        if (impus == null || impus.length == 0) {
+            builder.append("null");
+        } else {
+            Arrays.stream(impus).forEach(impu -> builder.append(impu).append(","));
+        }
+        builder.append("}");
+        Log.d(LOG_TAG, builder.toString());
+
         if (TextUtils.isEmpty(domain) || impus == null) {
+            Log.d(LOG_TAG, "getContactUriFromIsim: domain is null=" + TextUtils.isEmpty(domain));
+            Log.d(LOG_TAG, "getContactUriFromIsim: impu is null=" +
+                    ((impus == null || impus.length == 0) ? "true" : "false"));
             return null;
         }
 
@@ -67,9 +83,11 @@ class PublishUtils {
             Uri impuUri = Uri.parse(impu);
             if (SCHEME_SIP.equals(impuUri.getScheme()) &&
                     impuUri.getSchemeSpecificPart().endsWith(domain)) {
+                Log.d(LOG_TAG, "getContactUriFromIsim: find the impu=" + impu);
                 return impuUri;
             }
         }
+        Log.d(LOG_TAG, "getContactUriFromIsim: there is no impu matching the domain");
         return null;
     }
 
