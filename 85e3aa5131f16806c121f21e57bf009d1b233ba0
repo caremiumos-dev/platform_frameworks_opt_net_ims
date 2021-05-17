@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d320eef_c0806b8b",
+        "filename": "src/java/com/android/ims/rcs/uce/request/SubscriptionTerminatedHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-05-17T17:25:53Z",
+      "side": 1,
+      "message": "In b/181041161, the request completes successfully, but we get timeout reason.\n\nAlso in RFC3265 3.1.6.4, \"reason\u003dtimeout\" is expected when the subscription expires. We can remove this as an error condition for the user to handle.",
+      "range": {
+        "startLine": 116,
+        "startChar": 19,
+        "endLine": 116,
+        "endChar": 33
+      },
+      "revId": "85e3aa5131f16806c121f21e57bf009d1b233ba0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "826dfe83_28bc8990",
+        "filename": "src/java/com/android/ims/rcs/uce/util/UceUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-05-17T17:25:53Z",
+      "side": 1,
+      "message": "Any specific reason for this minimum?",
+      "range": {
+        "startLine": 350,
+        "startChar": 15,
+        "endLine": 350,
+        "endChar": 53
+      },
+      "revId": "85e3aa5131f16806c121f21e57bf009d1b233ba0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
