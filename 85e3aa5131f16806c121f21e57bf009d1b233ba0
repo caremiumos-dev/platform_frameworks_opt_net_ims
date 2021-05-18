@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "193eb2e7_338a851a",
+        "filename": "src/java/com/android/ims/rcs/uce/request/SubscriptionTerminatedHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-05-18T05:54:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d320eef_c0806b8b",
+      "range": {
+        "startLine": 116,
+        "startChar": 19,
+        "endLine": 116,
+        "endChar": 33
+      },
+      "revId": "85e3aa5131f16806c121f21e57bf009d1b233ba0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "826dfe83_28bc8990",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-05-17T17:25:53Z",
       "side": 1,
       "message": "Any specific reason for this minimum?",
+      "range": {
+        "startLine": 350,
+        "startChar": 15,
+        "endLine": 350,
+        "endChar": 53
+      },
+      "revId": "85e3aa5131f16806c121f21e57bf009d1b233ba0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f199696_31db72e2",
+        "filename": "src/java/com/android/ims/rcs/uce/util/UceUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1467491
+      },
+      "writtenOn": "2021-05-18T05:54:48Z",
+      "side": 1,
+      "message": "Because the callback cannot distinguish between \"not retry\" and \"retry immediately\"\n\nCapabilitiesCallback#onError(int errorCode, long retryAfterMillis)\n\nTherefore, I set the minimum retryAfter for \"retry immediately\" and 0L for \"not retry\"",
+      "parentUuid": "826dfe83_28bc8990",
       "range": {
         "startLine": 350,
         "startChar": 15,
