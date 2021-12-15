@@ -391,6 +391,12 @@ public class PublishControllerImpl implements PublishController {
                     mUceCtrlCallback.refreshDeviceState(sipCode, reason,
                             UceController.REQUEST_TYPE_PUBLISH);
                 }
+
+                @Override
+                public void updateImsUnregistered() {
+                    logd("updateImsUnregistered");
+                    mPublishHandler.sendImsUnregisteredMessage();
+                }
             };
 
     /**
@@ -416,6 +422,8 @@ public class PublishControllerImpl implements PublishController {
         private static final int MSG_REQUEST_CANCELED = 11;
         private static final int MSG_RESET_DEVICE_STATE = 12;
         private static final int MSG_UNPUBLISHED = 13;
+        // 14,15 added in T, keeping number consistent for cherry-pick
+        private static final int MSG_IMS_UNREGISTERED = 16;
 
         private final WeakReference<PublishControllerImpl> mPublishControllerRef;
 
@@ -504,6 +512,12 @@ public class PublishControllerImpl implements PublishController {
                     publishCtrl.handleUnpublishedMessage(newPublishState, updatedTimestamp);
                     break;
                 }
+
+                case MSG_IMS_UNREGISTERED:
+                    publishCtrl.handleUnpublishedMessage(RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED,
+                            Instant.now());
+                    break;
+
                 default:
                     publishCtrl.logd("invalid message: " + message.what);
                     break;
@@ -713,6 +727,15 @@ public class PublishControllerImpl implements PublishController {
             removeMessages(MSG_RESET_DEVICE_STATE);
         }
 
+        public void sendImsUnregisteredMessage() {
+            PublishControllerImpl publishCtrl = mPublishControllerRef.get();
+            if (publishCtrl == null) return;
+            if (publishCtrl.mIsDestroyedFlag) return;
+            Message message = obtainMessage();
+            message.what = MSG_IMS_UNREGISTERED;
+            sendMessage(message);
+        }
+
         private static Map<Integer, String> EVENT_DESCRIPTION = new HashMap<>();
         static {
             EVENT_DESCRIPTION.put(MSG_RCS_CONNECTED, "RCS_CONNECTED");
@@ -728,6 +751,7 @@ public class PublishControllerImpl implements PublishController {
             EVENT_DESCRIPTION.put(MSG_REQUEST_CANCELED, "REQUEST_CANCELED");
             EVENT_DESCRIPTION.put(MSG_RESET_DEVICE_STATE, "RESET_DEVICE_STATE");
             EVENT_DESCRIPTION.put(MSG_UNPUBLISHED, "MSG_UNPUBLISHED");
+            EVENT_DESCRIPTION.put(MSG_IMS_UNREGISTERED, "MSG_IMS_UNREGISTERED");
         }
     }
 
