@@ -392,6 +392,21 @@ public class PublishControllerImpl implements PublishController {
                     mUceCtrlCallback.refreshDeviceState(sipCode, reason,
                             UceController.REQUEST_TYPE_PUBLISH);
                 }
+<<<<<<< HEAD   (55831d Add state for 413 response of PUBLISH)
+=======
+
+                @Override
+                public void notifyPendingPublishRequest() {
+                    logd("notifyPendingPublishRequest");
+                    mPublishHandler.sendPublishSentMessage();
+                }
+
+                @Override
+                public void updateImsUnregistered() {
+                    logd("updateImsUnregistered");
+                    mPublishHandler.sendImsUnregisteredMessage();
+                }
+>>>>>>> CHANGE (d92ddd When the IMS unregistered, reset the PUBLISH throttle timer)
             };
 
     /**
@@ -416,6 +431,13 @@ public class PublishControllerImpl implements PublishController {
         private static final int MSG_REQUEST_NETWORK_RESPONSE = 10;
         private static final int MSG_REQUEST_CANCELED = 11;
         private static final int MSG_RESET_DEVICE_STATE = 12;
+<<<<<<< HEAD   (55831d Add state for 413 response of PUBLISH)
+=======
+        private static final int MSG_UNPUBLISHED = 13;
+        private static final int MSG_PUBLISH_SENT = 14;
+        private static final int MSG_PUBLISH_UPDATED = 15;
+        private static final int MSG_IMS_UNREGISTERED = 16;
+>>>>>>> CHANGE (d92ddd When the IMS unregistered, reset the PUBLISH throttle timer)
 
         private final WeakReference<PublishControllerImpl> mPublishControllerRef;
 
@@ -496,6 +518,39 @@ public class PublishControllerImpl implements PublishController {
                     publishCtrl.handleResetDeviceStateMessage();
                     break;
 
+<<<<<<< HEAD   (55831d Add state for 413 response of PUBLISH)
+=======
+                case MSG_UNPUBLISHED: {
+                    SomeArgs args = (SomeArgs) message.obj;
+                    int newPublishState = (Integer) args.arg1;
+                    Instant updatedTimestamp = (Instant) args.arg2;
+                    args.recycle();
+                    publishCtrl.handleUnpublishedMessage(newPublishState, updatedTimestamp);
+                    break;
+                }
+
+                case MSG_PUBLISH_SENT:
+                    publishCtrl.handlePublishSentMessage();
+                    break;
+
+                case MSG_PUBLISH_UPDATED: {
+                    SomeArgs args = (SomeArgs) message.obj;
+                    int reasonCode = (Integer) args.arg1;
+                    String reasonPhrase = (String) args.arg2;
+                    int reasonHeaderCause = (Integer) args.arg3;
+                    String reasonHeaderText = (String) args.arg4;
+                    args.recycle();
+                    publishCtrl.handlePublishUpdatedMessage(reasonCode, reasonPhrase,
+                            reasonHeaderCause, reasonHeaderText);
+                    break;
+                }
+
+                case MSG_IMS_UNREGISTERED:
+                    publishCtrl.handleUnpublishedMessage(RcsUceAdapter.PUBLISH_STATE_NOT_PUBLISHED,
+                            Instant.now());
+                    break;
+
+>>>>>>> CHANGE (d92ddd When the IMS unregistered, reset the PUBLISH throttle timer)
                 default:
                     publishCtrl.logd("invalid message: " + message.what);
                     break;
@@ -689,6 +744,15 @@ public class PublishControllerImpl implements PublishController {
             removeMessages(MSG_RESET_DEVICE_STATE);
         }
 
+        public void sendImsUnregisteredMessage() {
+            PublishControllerImpl publishCtrl = mPublishControllerRef.get();
+            if (publishCtrl == null) return;
+            if (publishCtrl.mIsDestroyedFlag) return;
+            Message message = obtainMessage();
+            message.what = MSG_IMS_UNREGISTERED;
+            sendMessage(message);
+        }
+
         private static Map<Integer, String> EVENT_DESCRIPTION = new HashMap<>();
         static {
             EVENT_DESCRIPTION.put(MSG_RCS_CONNECTED, "RCS_CONNECTED");
@@ -703,6 +767,13 @@ public class PublishControllerImpl implements PublishController {
             EVENT_DESCRIPTION.put(MSG_REQUEST_NETWORK_RESPONSE, "REQUEST_NETWORK_RESPONSE");
             EVENT_DESCRIPTION.put(MSG_REQUEST_CANCELED, "REQUEST_CANCELED");
             EVENT_DESCRIPTION.put(MSG_RESET_DEVICE_STATE, "RESET_DEVICE_STATE");
+<<<<<<< HEAD   (55831d Add state for 413 response of PUBLISH)
+=======
+            EVENT_DESCRIPTION.put(MSG_UNPUBLISHED, "MSG_UNPUBLISHED");
+            EVENT_DESCRIPTION.put(MSG_PUBLISH_SENT, "MSG_PUBLISH_SENT");
+            EVENT_DESCRIPTION.put(MSG_PUBLISH_UPDATED, "MSG_PUBLISH_UPDATED");
+            EVENT_DESCRIPTION.put(MSG_IMS_UNREGISTERED, "MSG_IMS_UNREGISTERED");
+>>>>>>> CHANGE (d92ddd When the IMS unregistered, reset the PUBLISH throttle timer)
         }
     }
 

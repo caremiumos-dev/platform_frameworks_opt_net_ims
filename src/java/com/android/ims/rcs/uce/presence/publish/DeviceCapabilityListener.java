@@ -99,6 +99,7 @@ public class DeviceCapabilityListener {
         private static final int EVENT_REGISTER_IMS_CONTENT_CHANGE = 1;
         private static final int EVENT_UNREGISTER_IMS_CHANGE = 2;
         private static final int EVENT_REQUEST_PUBLISH = 3;
+        private static final int EVENT_IMS_UNREGISTERED = 4;
 
         DeviceCapabilityHandler(Looper looper) {
             super(looper);
@@ -118,6 +119,9 @@ public class DeviceCapabilityListener {
                 case EVENT_REQUEST_PUBLISH:
                     int triggerType = msg.arg1;
                     mCallback.requestPublishFromInternal(triggerType);
+                    break;
+                case EVENT_IMS_UNREGISTERED:
+                    mCallback.updateImsUnregistered();
                     break;
             }
         }
@@ -146,6 +150,14 @@ public class DeviceCapabilityListener {
             message.what = EVENT_REQUEST_PUBLISH;
             message.arg1 = type;
             sendMessageDelayed(message, TRIGGER_PUBLISH_REQUEST_DELAY_MS);
+        }
+
+        public void sendImsUnregisteredMessage() {
+            logd("sendImsUnregisteredMessage");
+            // Remove the existing message and resend a new message.
+            removeMessages(EVENT_IMS_UNREGISTERED);
+            Message msg = obtainMessage(EVENT_IMS_UNREGISTERED);
+            sendMessageDelayed(msg, TRIGGER_PUBLISH_REQUEST_DELAY_MS);
         }
     }
 
@@ -585,8 +597,11 @@ public class DeviceCapabilityListener {
         mCapabilityInfo.updateImsMmtelUnregistered();
         // When the MMTEL is unregistered, the mmtel associated uri should be cleared.
         handleMmTelSubscriberAssociatedUriChanged(null, false);
-        mHandler.sendTriggeringPublishMessage(
-                PublishController.PUBLISH_TRIGGER_MMTEL_UNREGISTERED);
+
+        // If the RCS is already unregistered, it informs that the IMS is unregistered.
+        if (mCapabilityInfo.isImsRegistered() == false) {
+            mHandler.sendImsUnregisteredMessage();
+        }
     }
 
     /*
@@ -632,10 +647,9 @@ public class DeviceCapabilityListener {
         boolean hasChanged = mCapabilityInfo.updateImsRcsUnregistered();
         // When the RCS is unregistered, the rcs associated uri should be cleared.
         handleRcsSubscriberAssociatedUriChanged(null, false);
-        // Trigger publish if the state has changed.
-        if (hasChanged) {
-            mHandler.sendTriggeringPublishMessage(
-                    PublishController.PUBLISH_TRIGGER_RCS_UNREGISTERED);
+        // If the MMTEL is already unregistered, it informs that the IMS is unregistered.
+        if (mCapabilityInfo.isImsRegistered() == false) {
+            mHandler.sendImsUnregisteredMessage();
         }
     }
 
