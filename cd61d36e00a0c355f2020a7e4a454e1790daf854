@@ -1,0 +1,56 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000019456401",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1955119?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "ea36bc5a_71c1b8f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2022-01-19T23:59:58Z",
+      "side": 1,
+      "message": "Third-party license (BSD) disallowed in repository platform/frameworks/opt/net/ims:\nBSD license\n",
+      "range": {
+        "startLine": 9,
+        "startChar": 9,
+        "endLine": 9,
+        "endChar": 20
+      },
+      "revId": "cd61d36e00a0c355f2020a7e4a454e1790daf854",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000019456401",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1955119?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "13f04d6a_8a28706a",
+        "filename": "LICENSE_BSD",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2022-01-19T23:59:58Z",
+      "side": 1,
+      "message": "Third-party license (BSD) disallowed in repository platform/frameworks/opt/net/ims:\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:...Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and or other materials provided with the distribution....may be used to endorse or promote products derived from this software without specific prior written permission.\n",
+      "range": {
+        "startLine": 3,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 68
+      },
+      "revId": "cd61d36e00a0c355f2020a7e4a454e1790daf854",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
