@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54ab5f18_35f7e545",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359095
+      },
+      "writtenOn": "2022-01-20T05:08:56Z",
+      "side": 1,
+      "message": "Hi Brad,\n\nCould you provide the 2nd +2 on Open-Source-Licensing for the legacy BSD code?\n\nThe change doesn\u0027t add any new BSD code; it just accurately describes what\u0027s already there.\n\nThanks!\nBob",
+      "revId": "cd61d36e00a0c355f2020a7e4a454e1790daf854",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
