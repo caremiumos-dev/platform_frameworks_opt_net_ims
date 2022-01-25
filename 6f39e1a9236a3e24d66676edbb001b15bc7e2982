@@ -16,6 +16,23 @@
       "message": "Cherry pick from master branch.",
       "revId": "6f39e1a9236a3e24d66676edbb001b15bc7e2982",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c5ac3dc_7810a08f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-01-25T22:31:07Z",
+      "side": 1,
+      "message": "Requires Merged-In Tag",
+      "revId": "6f39e1a9236a3e24d66676edbb001b15bc7e2982",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
