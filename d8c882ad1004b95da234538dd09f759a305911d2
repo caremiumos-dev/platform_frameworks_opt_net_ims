@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7747ef9c_c56b43ef",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishRequestResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-01-27T18:26:06Z",
+      "side": 1,
+      "message": "I asked in the internal bug to remove this line as it is not really necessary in the code. Can you remove?",
+      "range": {
+        "startLine": 205,
+        "startChar": 8,
+        "endLine": 206,
+        "endChar": 76
+      },
+      "revId": "d8c882ad1004b95da234538dd09f759a305911d2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "062eb8f6_83184d47",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/PublishRequestResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-01-27T18:26:06Z",
+      "side": 1,
+      "message": "I asked in the internal bug to remove this line as it is not really necessary in the code. Can you remove?",
+      "range": {
+        "startLine": 229,
+        "startChar": 8,
+        "endLine": 230,
+        "endChar": 76
+      },
+      "revId": "d8c882ad1004b95da234538dd09f759a305911d2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
