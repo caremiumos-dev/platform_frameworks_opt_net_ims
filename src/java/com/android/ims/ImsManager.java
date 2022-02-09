@@ -253,6 +253,7 @@ public class ImsManager implements FeatureUpdates {
         boolean isValidSubscriptionId(int subId);
         int[] getSubscriptionIds(int slotIndex);
         int getDefaultVoicePhoneId();
+        int getDefaultDataSubscriptionId();
         int getIntegerSubscriptionProperty(int subId, String propKey, int defValue);
         void setSubscriptionProperty(int subId, String propKey, String propValue);
         int[] getActiveSubscriptionIdList();
@@ -293,6 +294,11 @@ public class ImsManager implements FeatureUpdates {
         @Override
         public int getDefaultVoicePhoneId() {
             return SubscriptionManager.getDefaultVoicePhoneId();
+        }
+
+        @Override
+        public int getDefaultDataSubscriptionId() {
+            return SubscriptionManager.getDefaultDataSubscriptionId();
         }
 
         @Override
@@ -1765,21 +1771,21 @@ public class ImsManager implements FeatureUpdates {
         boolean available = isVtEnabledByPlatform();
         boolean vtEnabled = isVtEnabledByUser();
         boolean advancedEnabled = isEnhanced4gLteModeSettingEnabledByUser();
-        boolean isDataEnabled = isDataEnabled();
+        boolean isDataEnabledForVt = isDataEnabledForVt();
         boolean ignoreDataEnabledChanged = getBooleanCarrierConfig(
                 CarrierConfigManager.KEY_IGNORE_DATA_ENABLED_CHANGED_FOR_VIDEO_CALLS);
         boolean isProvisioned = isVtProvisionedOnDevice();
         // TODO: Support carrier config setting about if VT settings should be associated with
         //  advanced calling settings.
         boolean isLteFeatureOn = available && vtEnabled && isNonTty && isProvisioned
-                && advancedEnabled && (ignoreDataEnabledChanged || isDataEnabled);
+                && advancedEnabled && (ignoreDataEnabledChanged || isDataEnabledForVt);
         boolean nrAvailable = isImsOverNrEnabledByPlatform();
 
         log("updateVideoCallFeatureValue: available = " + available
                 + ", vtenabled = " + vtEnabled
                 + ", advancedCallEnabled = " + advancedEnabled
                 + ", nonTTY = " + isNonTty
-                + ", data enabled = " + isDataEnabled
+                + ", data enabled = " + isDataEnabledForVt
                 + ", provisioned = " + isProvisioned
                 + ", isLteFeatureOn = " + isLteFeatureOn
                 + ", nrAvailable = " + nrAvailable);
@@ -3097,14 +3103,21 @@ public class ImsManager implements FeatureUpdates {
                 provisionStatus);
     }
 
-    private boolean isDataEnabled() {
+    private boolean isDataEnabledForVt() {
         TelephonyManager tm = mContext.getSystemService(TelephonyManager.class);
         if (tm == null) {
-            loge("isDataEnabled: TelephonyManager not available, returning false...");
+            loge("isDataEnabledForVt: TelephonyManager not available, returning false...");
             return false;
         }
+
         tm = tm.createForSubscriptionId(getSubId());
-        return tm.isDataConnectionAllowed();
+        if (getSubId() == mSubscriptionManagerProxy.getDefaultDataSubscriptionId()) {
+            return tm.isDataConnectionAllowed();
+        } else {
+            // For non-DDS, data for VT is controlled via the 'Data during calls' setting.
+            return tm.isMobileDataPolicyEnabled(
+                    TelephonyManager.MOBILE_DATA_POLICY_DATA_ON_NON_DEFAULT_DURING_VOICE_CALL);
+        }
     }
 
     private boolean isVolteProvisioned() {
@@ -3290,7 +3303,7 @@ public class ImsManager implements FeatureUpdates {
         pw.println("  mPhoneId = " + mPhoneId);
         pw.println("  mConfigUpdated = " + mConfigUpdated);
         pw.println("  mImsServiceProxy = " + mMmTelConnectionRef.get());
-        pw.println("  mDataEnabled = " + isDataEnabled());
+        pw.println("  isDataEnabledForVt = " + isDataEnabledForVt());
         pw.println("  ignoreDataEnabledChanged = " + getBooleanCarrierConfig(
                 CarrierConfigManager.KEY_IGNORE_DATA_ENABLED_CHANGED_FOR_VIDEO_CALLS));
 
