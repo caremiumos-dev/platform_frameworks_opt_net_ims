@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdc9fd65_b0df9a60",
+        "filename": "src/java/com/android/ims/ImsManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3120,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2022-02-23T20:29:57Z",
+      "side": 1,
+      "message": "do we also need to check for global data enabled just like other cases ?",
+      "range": {
+        "startLine": 3117,
+        "startChar": 0,
+        "endLine": 3120,
+        "endChar": 0
+      },
+      "revId": "9828a92f151d56b3f91c36a653e76cbe0eddc730",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
