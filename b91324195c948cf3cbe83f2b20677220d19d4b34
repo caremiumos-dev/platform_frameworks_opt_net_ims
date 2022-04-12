@@ -22,6 +22,30 @@
       },
       "revId": "b91324195c948cf3cbe83f2b20677220d19d4b34",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd8b0616_bd23044b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1330217
+      },
+      "writtenOn": "2022-04-12T00:17:16Z",
+      "side": 1,
+      "message": "Not sure why it can pass presubmit without merged-in tag, I have uploaded the change and run presubmit again.",
+      "parentUuid": "7b71daf1_97cac90c",
+      "range": {
+        "startLine": 18,
+        "startChar": 11,
+        "endLine": 18,
+        "endChar": 52
+      },
+      "revId": "b91324195c948cf3cbe83f2b20677220d19d4b34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
