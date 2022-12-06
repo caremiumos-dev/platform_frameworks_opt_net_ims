@@ -168,13 +168,17 @@ public class DeviceCapabilityInfo {
 
     /**
      * Update the status that IMS MMTEL is unregistered.
+     * @return true if the IMS MMTEL unregistration status changed, false if it did not.
      */
-    public synchronized void updateImsMmtelUnregistered() {
+    public synchronized boolean updateImsMmtelUnregistered() {
         logi("IMS MMTEL unregistered: original state=" + mMmtelRegistered);
+        boolean changed = false;
         if (mMmtelRegistered) {
             mMmtelRegistered = false;
+            changed = true;
         }
         mMmtelNetworkRegType = AccessNetworkConstants.TRANSPORT_TYPE_INVALID;
+        return changed;
     }
 
     /**
