@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d1eb6e2_0cef4256",
+        "filename": "src/java/com/android/ims/rcs/uce/presence/publish/DeviceCapabilityInfo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1887141
+      },
+      "writtenOn": "2023-01-09T04:50:30Z",
+      "side": 1,
+      "message": "need to add description for return value.\n\n@return Mmtel registered status before change",
+      "range": {
+        "startLine": 180,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 23
+      },
+      "revId": "00cda726e0a40805a17974d4501ce1396b7a551e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
