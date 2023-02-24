@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2a3ba6a_a844b911",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1931377
+      },
+      "writtenOn": "2023-02-24T01:38:16Z",
+      "side": 1,
+      "message": "Hi Brad\nCould you review this commit?\nThanks",
+      "revId": "ac281856a68bcf5d5bee5e44a8dc015042308585",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
