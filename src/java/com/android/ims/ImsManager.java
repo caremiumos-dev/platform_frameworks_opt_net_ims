@@ -1486,6 +1486,14 @@ public class ImsManager implements FeatureUpdates {
     }
 
     /**
+     * Returns the user configuration of WFC cross SIM roaming setting for slot.
+     */
+    public boolean isWfcCrossSimRoamingEnabled() {
+        return getBooleanCarrierConfig(
+                CarrierConfigManager.KEY_CARRIER_CROSS_SIM_IMS_ROAMING_AVAILABLE_BOOL);
+    }
+
+    /**
      * Change persistent WFC roaming enabled setting
      */
     public static void setWfcRoamingSetting(Context context, boolean enabled) {
