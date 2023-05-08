@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a282845_23cf2ad5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1986636
+      },
+      "writtenOn": "2023-05-08T13:33:26Z",
+      "side": 1,
+      "message": "android engineer device manager Manangers properties",
+      "revId": "4fc9dd5a4a079a2a244d750481275f50902085f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
