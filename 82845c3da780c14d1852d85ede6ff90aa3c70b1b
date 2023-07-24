@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b106e6d1_dda50284",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1887141
+      },
+      "writtenOn": "2023-07-24T23:04:01Z",
+      "side": 1,
+      "message": "Cherry picked from main to provide patch to partner.",
+      "revId": "82845c3da780c14d1852d85ede6ff90aa3c70b1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
