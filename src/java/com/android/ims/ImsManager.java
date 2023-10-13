@@ -2450,6 +2450,14 @@ public class ImsManager implements FeatureUpdates {
             call.attachSession(new ImsCallSession(session));
             call.setListener(listener);
 
+            // While handling incoming call, the incoming call session might be terminated.
+            // If the call session was terminated before registering callback, framework should
+            // not handle incoming call.
+            if (!ImsCall.isSessionAlive(call.getSession())) {
+                loge("takeCall : ImsCallSession is not alive");
+                throw new ImsException("takeCall() : ImsCallSession is not alive",
+                        ImsReasonInfo.CODE_UNSPECIFIED);
+            }
             return call;
         } catch (Throwable t) {
             loge("takeCall caught: ", t);
