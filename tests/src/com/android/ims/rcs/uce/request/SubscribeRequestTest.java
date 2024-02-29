@@ -18,6 +18,7 @@ package com.android.ims.rcs.uce.request;
 
 import static android.telephony.ims.stub.RcsCapabilityExchangeImplBase.COMMAND_CODE_NOT_SUPPORTED;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -25,6 +26,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import android.net.Uri;
@@ -32,6 +34,7 @@ import android.telephony.ims.RcsContactTerminatedReason;
 import android.telephony.ims.RcsUceAdapter;
 import android.telephony.ims.SipDetails;
 import android.telephony.ims.aidl.ISubscribeResponseCallback;
+import android.telephony.ims.stub.RcsCapabilityExchangeImplBase;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
@@ -44,6 +47,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
@@ -51,6 +55,8 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class SubscribeRequestTest extends ImsTestBase {
+    private static final Uri CONTACT1 = Uri.fromParts("sip", "test1", null);
+    private static final Uri CONTACT2 = Uri.fromParts("sip", "test2", null);
 
     @Mock SubscribeController mSubscribeController;
     @Mock CapabilityRequestResponse mRequestResponse;
@@ -171,6 +177,57 @@ public class SubscribeRequestTest extends ImsTestBase {
         verify(mRequestResponse).setTerminated(reason, retryAfterMillis);
         verify(mRequestResponse, never()).setSipDetails(any());
         verify(mRequestManagerCallback).notifyTerminated(eq(mCoordId), anyLong());
+    }
+
+    @Test
+    @SmallTest
+    public void testSipSbuscribeRetry() throws Exception {
+        SubscribeRequest subscribeRequest = getSubscribeRequest();
+        List<Uri> uriList = new ArrayList<>();
+        uriList.add(CONTACT1);
+        uriList.add(CONTACT2);
+        subscribeRequest.setContactUri(uriList);
+        subscribeRequest.setRetryEnabled(true);
+        subscribeRequest.setRetryCount(0);
+        ISubscribeResponseCallback callback = subscribeRequest.getResponseCallback();
+        int errorCommand = RcsCapabilityExchangeImplBase.COMMAND_CODE_REQUEST_TIMEOUT;
+        callback.onCommandError(errorCommand);
+
+        verify(mRequestResponse).setCommandError(eq(errorCommand));
+        verify(mRequestResponse, never()).setSipDetails(any(SipDetails.class));
+        verify(mRequestManagerCallback).notifyCommandError(eq(mCoordId), anyLong());
+
+        ArgumentCaptor<CapabilityRequest> captor =
+                ArgumentCaptor.forClass(CapabilityRequest.class);
+        verify(mRequestManagerCallback, times(1)).sendSubscribeRetryRequest(captor.capture());
+        CapabilityRequest retrySubscribeRequest = captor.getValue();
+
+        // The number of contacts is the same, but the retryCount is greater than 1.
+        assertEquals(subscribeRequest.getContactUri().size(),
+                retrySubscribeRequest.getContactUri().size());
+        assertEquals(subscribeRequest.getRetryCount() + 1, retrySubscribeRequest.getRetryCount());
+    }
+
+    @Test
+    @SmallTest
+    public void testSipSubscribeReachMaxRetry() throws Exception {
+        // Reach max retry request and received onCommandError with COMMAND_CODE_REQUEST_TIMEOUT.
+        SubscribeRequest subscribeRetryRequest = getSubscribeRequest();
+        List<Uri> uriList = new ArrayList<>();
+        uriList.add(CONTACT1);
+        uriList.add(CONTACT2);
+        subscribeRetryRequest.setContactUri(uriList);
+        subscribeRetryRequest.setRetryEnabled(true);
+        subscribeRetryRequest.setRetryCount(SubscribeRequest.MAX_RETRY_COUNT);
+        ISubscribeResponseCallback callback = subscribeRetryRequest.getResponseCallback();
+        int errorCommand = RcsCapabilityExchangeImplBase.COMMAND_CODE_REQUEST_TIMEOUT;
+        callback.onCommandError(errorCommand);
+
+        verify(mRequestResponse).setCommandError(eq(errorCommand));
+        verify(mRequestResponse, never()).setSipDetails(any(SipDetails.class));
+        verify(mRequestManagerCallback).notifyCommandError(eq(mCoordId), anyLong());
+        // Verify that retry method was not called.
+        verify(mRequestManagerCallback, never()).sendSubscribeRetryRequest(any());
     }
 
     private SubscribeRequest getSubscribeRequest() {
