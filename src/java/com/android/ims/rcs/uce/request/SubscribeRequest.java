@@ -17,14 +17,15 @@
 package com.android.ims.rcs.uce.request;
 
 import android.annotation.NonNull;
-import android.annotation.Nullable;
 import android.net.Uri;
 import android.os.RemoteException;
+import android.telephony.CarrierConfigManager;
 import android.telephony.ims.RcsContactTerminatedReason;
 import android.telephony.ims.RcsContactUceCapability;
 import android.telephony.ims.RcsUceAdapter;
 import android.telephony.ims.SipDetails;
 import android.telephony.ims.aidl.ISubscribeResponseCallback;
+import android.telephony.ims.stub.RcsCapabilityExchangeImplBase;
 import android.telephony.ims.stub.RcsCapabilityExchangeImplBase.CommandCode;
 
 import com.android.ims.rcs.uce.eab.EabCapabilityResult;
@@ -46,6 +47,7 @@ import java.util.stream.Collectors;
  * network.
  */
 public class SubscribeRequest extends CapabilityRequest {
+    public static final int MAX_RETRY_COUNT = 1;
 
     // The result callback of the capabilities request from IMS service.
     private final ISubscribeResponseCallback mResponseCallback =
@@ -126,6 +128,25 @@ public class SubscribeRequest extends CapabilityRequest {
             logw("onCommandError: request is already finished");
             return;
         }
+
+        if (cmdError == RcsCapabilityExchangeImplBase.COMMAND_CODE_REQUEST_TIMEOUT
+                || isRetryEnabled()) {
+            int retryCount = getRetryCount();
+            if (retryCount < MAX_RETRY_COUNT) {
+                CapabilityRequest request = new SubscribeRequest(mSubId, mRequestType,
+                        mRequestManagerCallback, mSubscribeController);
+                request.setContactUri(getContactUri());
+                request.setRetryCount(retryCount + 1);
+                // Do not use the cached capability to retry
+                request.setSkipGettingFromCache(true);
+
+                mRequestManagerCallback.sendSubscribeRetryRequest(request);
+                logd("onCommandError: Retry subscribe request");
+            } else {
+                logd("onCommandError: Reached max retry");
+            }
+        }
+
         mRequestResponse.setCommandError(cmdError);
         mRequestManagerCallback.notifyCommandError(mCoordinatorId, mTaskId);
     }
