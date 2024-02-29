@@ -153,8 +153,9 @@ public class UceController {
                 UceControllerCallback callback);
     }
 
-    private RequestManagerFactory mRequestManagerFactory = (context, subId, looper, callback) ->
-            new UceRequestManager(context, subId, looper, callback);
+    private RequestManagerFactory mRequestManagerFactory =
+            (context, subId, looper, callback) ->
+                    new UceRequestManager(context, subId, looper, callback);
 
     /**
      * Used to inject Controller instances for testing.
