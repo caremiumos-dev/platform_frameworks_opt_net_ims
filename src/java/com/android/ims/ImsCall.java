@@ -627,6 +627,9 @@ public class ImsCall implements ICall {
     // successfully added.
     private boolean mCallSessionMergePending = false;
 
+    // If true, this flag means that this ImsCall became multiparty, false otherwise.
+    private boolean mIsMultiparty = false;
+
     /**
      * If {@code true}, this flag indicates that a request to terminate the call was made by
      * Telephony (could be from the user or some internal telephony logic)
@@ -1014,11 +1017,7 @@ public class ImsCall implements ICall {
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     public boolean isMultiparty() {
         synchronized(mLockObj) {
-            if (mSession == null) {
-                return false;
-            }
-
-            return mSession.isMultiparty();
+            return mIsMultiparty;
         }
     }
 
@@ -1032,7 +1031,7 @@ public class ImsCall implements ICall {
      */
     public boolean isConferenceHost() {
         synchronized(mLockObj) {
-            return isMultiparty() && mIsConferenceHost;
+            return mIsMultiparty && mIsConferenceHost;
         }
     }
 
@@ -1395,6 +1394,7 @@ public class ImsCall implements ICall {
             mHold = false;
             mInCall = false;
             mTerminationRequestPending = true;
+            mIsMultiparty = false;
 
             if (mSession != null) {
                 // TODO: Fix the fact that user invoked call terminations during
@@ -1902,6 +1902,7 @@ public class ImsCall implements ICall {
         mHold = false;
         mUpdateRequest = UPDATE_NONE;
         mLastReasonInfo = lastReasonInfo;
+        mIsMultiparty = false;
     }
 
     /**
@@ -3276,6 +3277,7 @@ public class ImsCall implements ICall {
 
             synchronized(ImsCall.this) {
                 listener = mListener;
+                mIsMultiparty = isMultiParty;
             }
 
             if (listener != null) {
