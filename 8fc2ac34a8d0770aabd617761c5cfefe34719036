@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66994175_308fe1b7",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1927275
+      },
+      "writtenOn": "2025-07-22T19:07:24Z",
+      "side": 1,
+      "message": "My only concern is if the session is actually a mutli-party and the initial status was never computed because the boolean instance value starts off as false.\n\nI\u0027m not familiar with multi-party calling logic but I think we should consider this approach:\n\n```\n    private boolean mWasMutlipartyChecked \u003d false;\n    private boolean mIsMultiparty \u003d false;\n    \n    boolean isMultiparty(){\n      if(!mWasMultipartyChecked){\n         mIsMultiParty \u003d mSession.isMultiparty();\n         mWasMultiPartyChecked \u003d true;\n         return mIsMultiparty\n       }\n       else{\n         return mIsMultiparty\n       } \n\n  \n   \n```",
+      "range": {
+        "startLine": 1020,
+        "startChar": 19,
+        "endLine": 1020,
+        "endChar": 21
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "ba9b8a52_622341fb",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 1020,
+                "startChar": 0,
+                "endLine": 1021,
+                "endChar": 0
+              },
+              "replacement": "            return mIsMultiparty || (mSession !\u003d null \u0026\u0026 mSession.isMultiparty());\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 1034,
+                "startChar": 0,
+                "endLine": 1035,
+                "endChar": 0
+              },
+              "replacement": "            return isMultiparty() \u0026\u0026 mIsConferenceHost;\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 2108,
+                "startChar": 0,
+                "endLine": 2109,
+                "endChar": 0
+              },
+              "replacement": "            if (mIsMultiparty) {\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 2228,
+                "startChar": 0,
+                "endLine": 2229,
+                "endChar": 0
+              },
+              "replacement": "            if (mIsMultiparty) {\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 2504,
+                "startChar": 0,
+                "endLine": 2504,
+                "endChar": 0
+              },
+              "replacement": "\n            if (profile.getCallExtra(ImsCallProfile.EXTRA_IS_MULTIPARTY, false)) {\n                mIsMultiparty \u003d true;\n            }\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 2576,
+                "startChar": 0,
+                "endLine": 2576,
+                "endChar": 0
+              },
+              "replacement": "\n            if (profile.getCallExtra(ImsCallProfile.EXTRA_IS_MULTIPARTY, false)) {\n                mIsMultiparty \u003d true;\n            }\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 2742,
+                "startChar": 0,
+                "endLine": 2742,
+                "endChar": 0
+              },
+              "replacement": "\n            if (profile.getCallExtra(ImsCallProfile.EXTRA_IS_MULTIPARTY, false)) {\n                mIsMultiparty \u003d true;\n            }\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 2842,
+                "startChar": 0,
+                "endLine": 2842,
+                "endChar": 0
+              },
+              "replacement": "\n            if (profile.getCallExtra(ImsCallProfile.EXTRA_IS_MULTIPARTY, false)) {\n                mIsMultiparty \u003d true;\n            }\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 2938,
+                "startChar": 0,
+                "endLine": 2938,
+                "endChar": 0
+              },
+              "replacement": "\n            if (profile.getCallExtra(ImsCallProfile.EXTRA_IS_MULTIPARTY, false)) {\n                mIsMultiparty \u003d true;\n            }\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 2964,
+                "startChar": 0,
+                "endLine": 2964,
+                "endChar": 0
+              },
+              "replacement": "\n            if (profile.getCallExtra(ImsCallProfile.EXTRA_IS_MULTIPARTY, false)) {\n                mIsMultiparty \u003d true;\n            }\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 2990,
+                "startChar": 0,
+                "endLine": 2990,
+                "endChar": 0
+              },
+              "replacement": "\n            if (profile.getCallExtra(ImsCallProfile.EXTRA_IS_MULTIPARTY, false)) {\n                mIsMultiparty \u003d true;\n            }\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 3026,
+                "startChar": 0,
+                "endLine": 3026,
+                "endChar": 0
+              },
+              "replacement": "\n            if (profile.getCallExtra(ImsCallProfile.EXTRA_IS_MULTIPARTY, false)) {\n                mIsMultiparty \u003d true;\n            }\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 3053,
+                "startChar": 0,
+                "endLine": 3053,
+                "endChar": 0
+              },
+              "replacement": "\n            if (profile.getCallExtra(ImsCallProfile.EXTRA_IS_MULTIPARTY, false)) {\n                mIsMultiparty \u003d true;\n            }\n"
+            },
+            {
+              "path": "src/java/com/android/ims/ImsCall.java",
+              "range": {
+                "startLine": 3081,
+                "startChar": 0,
+                "endLine": 3081,
+                "endChar": 0
+              },
+              "replacement": "\n            if (profile.getCallExtra(ImsCallProfile.EXTRA_IS_MULTIPARTY, false)) {\n                mIsMultiparty \u003d true;\n            }\n"
+            }
+          ]
+        }
+      ],
+      "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
