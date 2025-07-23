@@ -170,6 +170,30 @@
       ],
       "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ede5952_0602bef6",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1970636
+      },
+      "writtenOn": "2025-07-23T03:26:46Z",
+      "side": 1,
+      "message": "may i know why callSessionMultipartyStateChanged could not be invoked in the initial status",
+      "parentUuid": "66994175_308fe1b7",
+      "range": {
+        "startLine": 1020,
+        "startChar": 19,
+        "endLine": 1020,
+        "endChar": 21
+      },
+      "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
