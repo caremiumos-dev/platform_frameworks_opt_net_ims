@@ -194,6 +194,30 @@
       },
       "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "295cb3e9_0a51ee27",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1959840
+      },
+      "writtenOn": "2025-07-24T00:23:36Z",
+      "side": 1,
+      "message": "I agree with Thomas\u0027s approach which ensures that we will not return the default value of `mIsMultiparty` without ever having called the aidl.",
+      "parentUuid": "6ede5952_0602bef6",
+      "range": {
+        "startLine": 1020,
+        "startChar": 19,
+        "endLine": 1020,
+        "endChar": 21
+      },
+      "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
