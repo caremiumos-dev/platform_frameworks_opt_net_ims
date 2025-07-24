@@ -218,6 +218,30 @@
       },
       "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f038cbc_e76fa0c8",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1970636
+      },
+      "writtenOn": "2025-07-24T09:44:03Z",
+      "side": 1,
+      "message": "This function will be called multi times for regular call life cycle[1]. So i am afraid even if we add this protection, it will be consumed at very early stage.\n\n[1]\nplease see line#3819: sb.append(isMultiparty() ? \"Y\" : \"N\");",
+      "parentUuid": "295cb3e9_0a51ee27",
+      "range": {
+        "startLine": 1020,
+        "startChar": 19,
+        "endLine": 1020,
+        "endChar": 21
+      },
+      "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
