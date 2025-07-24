@@ -242,6 +242,30 @@
       },
       "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "130271c4_937f6108",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2025-07-24T17:38:26Z",
+      "side": 1,
+      "message": "First, I do acknowledge that this code is extremely inefficient in its current state.\n\nActual changes to this state [are handle in ImsPhoneCallTracker](https://cs.android.com/android/platform/superproject/+/android-latest-release:frameworks/opt/telephony/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java;drc\u003dde83bcf1305f7597c1a6d50a2356bc394e7fc7f6;l\u003d4469) via `callSessionMultipartyStateChanged`.  That is what triggers the ImsConference logic to setup the conference.\n\nHowever, there are [a lot of other calls](https://cs.android.com/android/platform/superproject/main/+/main:frameworks/opt/net/ims/src/java/com/android/ims/ImsCall.java;bpv\u003d1;bpt\u003d1;l\u003d1015?q\u003dImsCall.isMultiparty) to this method.\n\nGiven how intermixed these method calls are with the `ImsCall#merge` method, there is a high risk of introducing a timing issue with conference call merge operations.  The `merge` method works within the `mLockObj` that protects much of the state within the rest of the class. (callSessionMultipartyStateChanged)[https://cs.android.com/android/platform/superproject/main/+/main:frameworks/opt/net/ims/src/java/com/android/ims/ImsCall.java;drc\u003d61197364367c9e404c7da6900658f1b16c42d0da;bpv\u003d1;bpt\u003d1;l\u003d3268?gsn\u003dcallSessionMultipartyStateChanged\u0026gs\u003dKYTHE%3A%2F%2Fkythe%3A%2F%2Fandroid.googlesource.com%2Fplatform%2Fsuperproject%2Fmain%2F%2Fmain%3Flang%3Djava%3Fpath%3Dcom.android.ims.ImsCall.ImsCallSessionListenerProxy%23246b8858d93d3858b9e00cca2a6aa3695f43f3e57f8e7712f1e3d8e403a43818] does not use that lock and instead locks on `ImsCall.this`, which is a different lock.  \n\nAlways querying `isMultiparty` from the call session during the `merge` method means that it is going to benefit from the LATEST most up to date state of the multiparty bit on a session without having to wait for an update via the listener, where if we move to just updating a local var based on `callSessionMultipartyStateChanged` we\u0027re not at the behest of the somewhat inconsistent locking model here. \n\nI don\u0027t know if @tjstuart\u0027s suggestion is going to work since it assumes the multiparty state won\u0027t change.\n\nIn any case, I think there would need to be an extension of the `ImsCallingTest` CTS tests to more comprehensively cover the merge process and all the myriad of failures that can occur.  A change like this would also have to be flagged as there is an extremely high change of regression.  \n\nAs a half measure, how about we add a new method `isCachedMultiparty` that is updated exclusively by `callSessionMultipartyStateChanged`.  This method can be used ONLY for the toString() which is likely causing most of the excess binder method calls.  We can leave the existing behavior intact for the `merge` method since there\u0027s a high chance of regression.  That would address a good majority of the binder calls while not impacting the merge process.",
+      "parentUuid": "6f038cbc_e76fa0c8",
+      "range": {
+        "startLine": 1020,
+        "startChar": 19,
+        "endLine": 1020,
+        "endChar": 21
+      },
+      "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
