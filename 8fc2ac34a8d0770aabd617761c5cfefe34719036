@@ -266,6 +266,30 @@
       },
       "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7b7a639_abe21ea8",
+        "filename": "src/java/com/android/ims/ImsCall.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1970636
+      },
+      "writtenOn": "2025-07-25T09:36:13Z",
+      "side": 1,
+      "message": "I agree the compromise solution which could ensure no regression issue introduced and reduce the binder times, and also we could observe the difference between isCachedMultiparty and isMultiparty in all cases.\nUpdated the change, please help review again.",
+      "parentUuid": "130271c4_937f6108",
+      "range": {
+        "startLine": 1020,
+        "startChar": 19,
+        "endLine": 1020,
+        "endChar": 21
+      },
+      "revId": "8fc2ac34a8d0770aabd617761c5cfefe34719036",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
