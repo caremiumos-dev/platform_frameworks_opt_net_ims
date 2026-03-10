@@ -23,6 +23,7 @@ import android.os.RemoteException;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.ImsService;
 import android.telephony.ims.feature.ImsFeature;
+import android.telephony.SubscriptionManager;
 
 import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.internal.annotations.VisibleForTesting;
@@ -117,6 +118,10 @@ public class FeatureConnector<U extends FeatureUpdates> {
         @Override
         public void imsFeatureCreated(ImsFeatureContainer c, int subId) {
             log("imsFeatureCreated: " + c + ", subId: " + subId);
+            if (!SubscriptionManager.isValidSubscriptionId(subId)) {
+                logw("imsFeatureCreated: invalid subId=" + subId + ", ignore.");
+                return;
+            }
             synchronized (mLock) {
                 mManager.associate(c, subId);
                 mManager.updateFeatureCapabilities(c.getCapabilities());
