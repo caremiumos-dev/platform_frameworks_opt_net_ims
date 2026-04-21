@@ -23,6 +23,7 @@ import android.os.RemoteException;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.ImsService;
 import android.telephony.ims.feature.ImsFeature;
+import android.telephony.SubscriptionManager;
 
 import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.internal.annotations.VisibleForTesting;
@@ -118,6 +119,7 @@ public class FeatureConnector<U extends FeatureUpdates> {
         public void imsFeatureCreated(ImsFeatureContainer c, int subId) {
             log("imsFeatureCreated: " + c + ", subId: " + subId);
             synchronized (mLock) {
+                mCurrentSubId = subId;
                 mManager.associate(c, subId);
                 mManager.updateFeatureCapabilities(c.getCapabilities());
                 mDisconnectedReason = null;
@@ -143,6 +145,8 @@ public class FeatureConnector<U extends FeatureUpdates> {
                 // Ensure that we set ready state back to false so that we do not miss setting ready
                 // later if the initial state when recreated is READY.
                 mLastReadyState = false;
+                // Reset the current connected subId
+                mCurrentSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
             }
             // Allow the listener to do cleanup while the connection still potentially valid (unless
             // the process crashed).
@@ -219,6 +223,10 @@ public class FeatureConnector<U extends FeatureUpdates> {
     // Stop redundant connectionAvailable if the ready filter contains multiple states.
     // Also, do not send the first unavailable until after we have moved to available once.
     private boolean mLastReadyState = false;
+    // Tracks the current subscription ID that is successfully associated. Used to detect
+    // and discard stale notifyReady callbacks that arrive on the executor after the
+    // subId has been changed, preventing race conditions and crash during SIM hot swap.
+    private int mCurrentSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
 
 
 
@@ -285,6 +293,13 @@ public class FeatureConnector<U extends FeatureUpdates> {
 
     // Should be called on executor
     private void notifyReady(U manager, int subId) throws ImsException {
+        synchronized (mLock) {
+            if (mCurrentSubId != subId) {
+                logw("notifyReady: subId mismatch, current=" + mCurrentSubId
+                        + ", expected=" + subId + "; skipping stale connectionReady");
+                return;
+            }
+        }
         try {
             if (DBG) log("notifyReady");
             mListener.connectionReady(manager, subId);
