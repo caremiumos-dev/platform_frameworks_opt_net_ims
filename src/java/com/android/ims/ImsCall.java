@@ -1629,6 +1629,18 @@ public class ImsCall implements ICall {
         }
     }
 
+    // XTC/CAF 差异：带 profile 的 RTT 修改请求（供 QtiImsExtUtils RTT 流程使用）。
+    public void sendRttModifyRequest(ImsCallProfile profile) throws ImsException {
+        logi("RTT: sendRttModifyRequest");
+        synchronized (mLockObj) {
+            if (mSession == null) {
+                loge("RTT: sendRttModifyRequest :: no call session");
+                throw new ImsException("No call session", 148);
+            }
+            mSession.sendRttModifyRequest(profile);
+        }
+    }
+
     /**
      * Sends the user's response to a remotely-issued RTT upgrade request
      *
@@ -1700,6 +1712,8 @@ public class ImsCall implements ICall {
         mediaProfile.mAudioQuality = mCallProfile.mMediaProfile.mAudioQuality;
         mediaProfile.mVideoQuality = mCallProfile.mMediaProfile.mVideoQuality;
         mediaProfile.mAudioDirection = ImsStreamMediaProfile.DIRECTION_SEND;
+        // XTC/CAF 差异：保持 RTT 模式。
+        mediaProfile.mRttMode = mCallProfile.mMediaProfile.mRttMode;
 
         if (mediaProfile.mVideoQuality != ImsStreamMediaProfile.VIDEO_QUALITY_NONE) {
             mediaProfile.mVideoDirection = ImsStreamMediaProfile.DIRECTION_SEND;
@@ -1718,6 +1732,8 @@ public class ImsCall implements ICall {
         mediaProfile.mAudioQuality = mCallProfile.mMediaProfile.mAudioQuality;
         mediaProfile.mVideoQuality = mCallProfile.mMediaProfile.mVideoQuality;
         mediaProfile.mAudioDirection = ImsStreamMediaProfile.DIRECTION_SEND_RECEIVE;
+        // XTC/CAF 差异：保持 RTT 模式。
+        mediaProfile.mRttMode = mCallProfile.mMediaProfile.mRttMode;
 
         if (mediaProfile.mVideoQuality != ImsStreamMediaProfile.VIDEO_QUALITY_NONE) {
             mediaProfile.mVideoDirection = ImsStreamMediaProfile.DIRECTION_SEND_RECEIVE;
